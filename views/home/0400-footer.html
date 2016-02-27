@@ -1,0 +1,11 @@
+<div class="footer">
+    <span class="hidden-xs">
+        &copy; {{ today.strftime ('%Y') }} {{ domain|capitalize }}
+    </span>
+    <span class="hidden-sm hidden-md hidden-lg">
+        &copy; {{ today.strftime ('%Y') }}
+    </span>
+    <span class="pull-right">
+        <a href="mailto:{{ email }}" target="_top">{{ email }}</a>
+    </span>
+</div>

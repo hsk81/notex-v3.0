@@ -1,0 +1,187 @@
+/* ============================================================================
+ * Body:
+ * ========================================================================= */
+
+html {
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    height: 100%;
+    padding: 1em 0 0 0;
+}
+
+/* ============================================================================
+ * Container:
+ * ========================================================================= */
+
+.container-fluid {
+    min-height: 100%;
+    height: 100%;
+}
+
+@media (min-width: 768px) {
+    .container-fluid {
+        margin-right: 256px;
+    }
+}
+
+/* ============================================================================
+ * Header:
+ * ========================================================================= */
+
+.header {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 0.5em;
+}
+.header .nav-pills>li>a {
+    border-radius: 2px;
+}
+.header h3 {
+    line-height: 2em;
+    margin: 0;
+}
+@media (max-width: 480px) {
+    .header h3 {
+        visibility: hidden;
+        width: 0;
+    }
+}
+
+/* ============================================================================
+ * Jumbotron:
+ * ========================================================================= */
+
+.container-fluid .jumbotron {
+    border-radius: 2px;
+    margin-bottom: 0.5em;
+    padding: 2em;
+}
+.container-fluid .jumbotron h1 {
+    font-size: x-large;
+    font-weight: bold;
+    margin: 0;
+}
+
+@media (min-width: 1200px) {
+    .container-fluid .jumbotron h1 {
+        font-size: 48px;
+        height: 100%;
+    }
+}
+
+/* ============================================================================
+ * Well:
+ * ========================================================================= */
+
+.well {
+    border-radius: 2px;
+    margin-bottom: 0.5em;
+    max-height: 7em;
+    padding: 1em;
+    overflow-y: auto;
+}
+.well p {
+    margin: 0;
+    text-align: center;
+}
+.well p:not(:last-of-type) {
+    margin-bottom: 1em;
+}
+
+/* ============================================================================
+ * Panel:
+ * ========================================================================= */
+
+.panel {
+    border-radius: 2px;
+}
+.panel.primary:hover  {
+    border-color: #428bca;
+}
+.panel.success:hover {
+    border-color: #5cb85c;
+}
+.panel.info:hover {
+    border-color: #5bc0de;
+}
+.panel.warning:hover {
+    border-color: #f0ad4e;
+}
+.panel.danger:hover {
+    border-color: #d9534f;
+}
+.panel .panel-body .btn-group {
+    margin-bottom: 1em;
+    width: 100%;
+}
+.panel .panel-body .btn-group .btn {
+    width: 100%;
+}
+.panel .panel-body .btn-group .btn .caret {
+    margin: 8px 0 6px 6px;
+}
+.panel .panel-footer  {
+    font-size: x-small;
+    text-align: center;
+}
+
+/* ============================================================================
+ * Icon:
+ * ========================================================================= */
+
+.icon {
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+}
+
+/* ============================================================================
+ * Footer:
+ * ========================================================================= */
+
+@media (min-width: 1200px) {
+    .footer {
+        position: absolute;
+        border-top: 1px solid #e5e5e5;
+        bottom: 0;
+        color: #777;
+        padding: 0.5em 0;
+        width: calc(100% - 287px);
+    }
+}
+
+@media (max-width: 1200px) {
+    .footer {
+        border-top: 1px solid #e5e5e5;
+        color: #777;
+        padding: 0.5em 0;
+    }
+}
+
+/* ============================================================================
+ * RHS Bar:
+ * ========================================================================= */
+
+.rhs-bar {
+    border-left: 1px solid #e5e5e5;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-height: 100%;
+    padding: 0 1em;
+    margin: 1em 0;
+    width: 256px;
+}
+
+.rhs-bar > .snippet {
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    height: auto;
+    margin-bottom: 1em;
+    width: 100%;
+}
+
+/* ========================================================================= */
