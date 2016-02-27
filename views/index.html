@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% block html_all %}<html>
+    {% block head_all %}<head>
+        <meta charset="utf-8">
+        <meta name="keywords" content="{{ keywords|join(',') }}"/>
+        <meta name="description" content="{{ description }}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/static/ico/favicon.ico">
+        {% block title %}<title>{{ title }}</title>{% endblock %}
+        {% if debug %}
+        <link rel="stylesheet" href="/static/css/bootstrap-3.3.5.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap-theme-3.3.5.min.css">
+        {% else %}
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        {% endif %}
+        {% block head %}{% endblock %}
+    </head>{% endblock %}
+    {% block body_all %}<body>
+        {% block body %}{% endblock %}
+        {% block script_all %}
+        {% if debug %}
+        <script src="/static/js/jquery-1.11.3.min.js"></script>
+        <script src="/static/js/bootstrap-3.3.5.min.js"></script>
+        {% else %}
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        {% endif %}
+        {% block script %}{% endblock %}
+        {% endblock %}
+    </body>{% endblock %}
+</html>{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+{% block title %}
+<title>{{ domain|capitalize }}&nbsp;·&nbsp;Home</title>
+{% endblock %}
+
+{% block head %}
+<link href="/static/css/home.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    {% include 'home/0100-jumbotron.html' %}
+    {% include 'home/0400-footer.html' %}
+</div>
+{% endblock %}
+
