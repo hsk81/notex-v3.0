@@ -12,21 +12,21 @@ setup (
     description='weblog service',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
-    url='http://shuhadaku-hsk81.rhcloud.com',
+    url='https://hsk81@bitbucket.org/hsk81/shuhadaku.git',
     install_requires=[
-        'Beaker>=1.7.0',
-        'bottle>=0.12.8',
+        'Beaker>=1.8.0',
+        'bottle>=0.12.9',
         'compressinja>=0.0.2',
         'Jinja2>=2.8',
-        'marshmallow>=2.0.0b4 ',
+        'marshmallow>=2.6.0 ',
         'psycopg2>=2.6.1',
         'pycrypto>=2.6.1',
-        'requests>=2.7.0',
+        'requests>=2.9.1',
         'redis>=2.10.5',
-        'ujson>=1.33',
-        'SQLAlchemy>=1.0.8',
-        'waitress>=0.8.9',
-        'Werkzeug>=0.10.4'
+        'ujson>=1.35',
+        'SQLAlchemy>=1.0.12',
+        'waitress>=0.8.10',
+        'Werkzeug>=0.11.4'
     ],
 )
 
