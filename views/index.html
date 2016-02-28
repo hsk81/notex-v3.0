@@ -8,11 +8,11 @@
         <link rel="shortcut icon" href="/static/ico/favicon.ico">
         {% block title %}<title>{{ title }}</title>{% endblock %}
         {% if debug %}
-        <link rel="stylesheet" href="/static/css/bootstrap-3.3.5.min.css">
-        <link rel="stylesheet" href="/static/css/bootstrap-theme-3.3.5.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap-3.3.6.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap-theme-3.3.6.min.css">
         {% else %}
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
         {% endif %}
         {% block head %}{% endblock %}
     </head>{% endblock %}
@@ -20,11 +20,11 @@
         {% block body %}{% endblock %}
         {% block script_all %}
         {% if debug %}
-        <script src="/static/js/jquery-1.11.3.min.js"></script>
-        <script src="/static/js/bootstrap-3.3.5.min.js"></script>
+        <script src="/static/js/jquery-1.12.1.min.js"></script>
+        <script src="/static/js/bootstrap-3.3.6.min.js"></script>
         {% else %}
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         {% endif %}
         {% block script %}{% endblock %}
         {% endblock %}
