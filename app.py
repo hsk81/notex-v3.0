@@ -76,6 +76,8 @@ if __name__ == '__main__':
         default=os.environ.get ('SESSION_KEY', 'secret'),
         help='Session key')
 
+    parser.add_argument ('-S', '--no-sass', default=False,
+        help='SASS flag', action='store_true')
     parser.add_argument ('-d', '--debug', default=False,
         help='Debug flag', action='store_true')
     parser.add_argument ('-r', '--reload', default=False,
