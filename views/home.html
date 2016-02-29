@@ -12,3 +12,19 @@
 {% include 'home/0200-center.html' %}
 {% include 'home/0900-footer.html' %}
 {% endblock %}
+
+{% block script_lib %}
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script src="/static/js/marked-0.3.5.min.js"></script>
+{% endblock %}
+
+{% block script_app %}
+<script src="/static/js/app/function/assert.js"></script>
+<script src="/static/js/app/function/buffered.js"></script>
+<script src="/static/js/app/function/mine.js"></script>
+<script src="/static/js/app/function/partial.js"></script>
+<script src="/static/js/app/function/random.js"></script>
+<script src="/static/js/app/function/with.js"></script>
+<script src="/static/js/app/app.js"></script>
+{% endblock %}

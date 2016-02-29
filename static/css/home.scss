@@ -20,10 +20,44 @@ html, body {
  * ========================================================================= */
 
 .center {
-  background: url(../ico/favicon.png) center no-repeat;
-  background-size: 25%;
   height: calc(100% - 52px - 42px);
-  opacity: 0.1;
+
+  .row {
+    height: 100%;
+    .lhs {
+      height: 100%;
+      padding: 0;
+      textarea#md-inp {
+        border: none;
+        box-shadow: inset 0 0 8px #e7e7e7;
+        height: 100%;
+        padding: 1em;
+        width: 100%;
+      }
+      textarea#md-inp {
+        font-family: monospace;
+        font-size: large;
+      }
+    }
+    .rhs {
+      height: 100%;
+      padding: 0;
+      div#md-out {
+        border-left: 4px double #e7e7e7;
+        box-shadow: inset 0 0 8px #e7e7e7;
+        height: 100%;
+        padding: 1em;
+        width: 100%;
+      }
+      div#md-out {
+        font-family: "Linux Libertine", serif;
+        font-size: large;
+      }
+      div#md-out p {
+        text-align: justify;
+      }
+    }
+  }
 }
 
 /* ============================================================================
