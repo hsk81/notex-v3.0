@@ -14,9 +14,9 @@
 {% endblock %}
 
 {% block script_lib %}
-<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['[[',']]']]}});</script>
 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-<script src="/static/js/marked-0.3.5.min.js"></script>
+<script src="/static/js/lib/marked/marked-0.3.5.min.js"></script>
 {% endblock %}
 
 {% block script_app %}
