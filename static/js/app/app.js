@@ -1,5 +1,19 @@
 (function () {
-    var timeout_id, md_old;
+    var timeout_id, md_old, workers = [];
+
+    marked.setOptions({
+        highlight: function (code, language, callback) {
+            if (workers.length === 0) {
+                workers.push(new Worker('/static/js/app/highlight/worker.js'));
+            }
+            var worker = workers.pop();
+            worker.onmessage = function (ev) {
+                callback(ev.data.error, ev.data.code);
+                workers.push(worker);
+            };
+            worker.postMessage({code: code, language: language});
+        }
+    });
 
     $('#md-inp').on('keypress', function (ev) {
         if (timeout_id !== undefined) {
@@ -26,7 +40,10 @@
                 }
             }, 600);
 
-            $md_out.html(marked($md_inp.val()));
+            marked($md_inp.val(), function (error, content) {
+                if (error) throw error;
+                $md_out.html(content);
+            });
         }
     }, 200));
 }());
