@@ -25,9 +25,11 @@
             timeout_id = undefined;
         }
     });
+
     $('#md-inp').on('change keyup paste', buffered(function (ev) {
         var $md_inp = $(ev.target),
-            $md_out = $('#md-out');
+            $md_out = $('#md-out'),
+            $md_tmp;
 
         var md_new = $md_inp.val();
         if (md_new !== md_old) {
@@ -40,11 +42,25 @@
 
             timeout_id = setTimeout(function () {
                 if (MathJax !== undefined) {
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "md-out"]);
+                    MathJax.Hub.Queue([
+                        "Typeset", MathJax.Hub, 'md-out', function () {
+                            $md_tmp.remove();
+                            $md_out.show();
+                        }
+                    ]);
                 }
-            }, 600);
+            }, 0);
 
+            $md_tmp = $('#md-tmp');
+            $md_tmp.remove();
+
+            $md_tmp = $md_out.clone();
+            $md_tmp.prop('id', 'md-tmp');
+            $md_tmp.insertBefore($md_out);
+            $md_tmp.scrollTop($md_out.scrollTop());
+
+            $md_out.hide();
             $md_out.html(md.render(md_new));
         }
-    }, 200));
+    }, 600));
 }());

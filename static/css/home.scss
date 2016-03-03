@@ -43,7 +43,7 @@ html, body {
     .rhs {
       height: 100%;
       padding: 0;
-      div#md-out {
+      div#md-out, div#md-tmp {
         border-left: 4px double #e7e7e7;
         box-shadow: inset 0 0 8px #e7e7e7;
         height: 100%;
@@ -51,11 +51,11 @@ html, body {
         padding: 1em;
         width: 100%;
       }
-      div#md-out {
+      div#md-out, div#md-tmp {
         font-family: "Linux Libertine", serif;
         font-size: large;
       }
-      div#md-out p {
+      div#md-out p, div#md-tmp p {
         text-align: justify;
       }
     }
