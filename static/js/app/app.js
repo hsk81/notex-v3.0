@@ -1,5 +1,5 @@
 (function () {
-    var timeout_id, md_old, md = new Remarkable('commonmark', {
+    var timeout_id, md_old, md = new Remarkable('full', {
         highlight: function (text, language) {
             if (language && hljs.getLanguage(language)) {
                 try {
@@ -18,6 +18,10 @@
         },
         html: true, linkify: true, typographer: true
     });
+
+    md.core.ruler.enable(['abbr']);
+    md.block.ruler.enable(['footnote', 'deflist']);
+    md.inline.ruler.enable(['footnote_inline', 'ins', 'mark', 'sub', 'sup']);
 
     $('#md-inp').on('keypress', function (ev) {
         if (timeout_id !== undefined) {
