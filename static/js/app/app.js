@@ -1,18 +1,22 @@
 (function () {
-    var timeout_id, md_old, workers = [];
-
-    marked.setOptions({
-        highlight: function (code, language, callback) {
-            if (workers.length === 0) {
-                workers.push(new Worker('/static/js/app/highlight/worker.js'));
+    var timeout_id, md_old, md = new Remarkable('commonmark', {
+        highlight: function (text, language) {
+            if (language && hljs.getLanguage(language)) {
+                try {
+                    return hljs.highlight(language, text).value;
+                } catch (ex) {
+                    console.error(ex);
+                }
+            } else {
+                try {
+                    return hljs.highlightAuto(text).value;
+                } catch (ex) {
+                    console.error(ex);
+                }
             }
-            var worker = workers.pop();
-            worker.onmessage = function (ev) {
-                callback(ev.data.error, ev.data.code);
-                workers.push(worker);
-            };
-            worker.postMessage({code: code, language: language});
-        }
+            return null; // escape HTML
+        },
+        html: true, linkify: true, typographer: true
     });
 
     $('#md-inp').on('keypress', function (ev) {
@@ -40,10 +44,7 @@
                 }
             }, 600);
 
-            marked($md_inp.val(), function (error, content) {
-                if (error) throw error;
-                $md_out.html(content);
-            });
+            $md_out.html(md.render(md_new));
         }
     }, 200));
 }());
