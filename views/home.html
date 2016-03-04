@@ -17,8 +17,13 @@
 <!-- MathJax: latest -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['$','$'], ['[[',']]']]},
-    asciimath2jax: {delimiters: [['\{\{','\}\}']]},
+    asciimath2jax: {
+        delimiters: [['\{\{','\}\}']]
+    },
+    tex2jax: {
+        inlineMath: [['$$', '$$']],
+        displayMath: [['$$$', '$$$']]
+    },
     processSectionDelay: 0
 });
 </script>
@@ -28,8 +33,14 @@ MathJax.Hub.Config({
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
 
-<!-- Remarkable: 1.6.2 -->
-<script src="/static/js/lib/remarkable/remarkable-1.6.2.min.js"></script>
+<!-- Markdown It: 6.0.0 -->
+<script src="/static/js/lib/markdown-it/markdown-it-6.0.0.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-abbr-1.0.3.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-footnote-2.0.0.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-math-3.0.2.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-sub-1.0.0.min.js"></script>
+<script src="/static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js"></script>
 {% endblock %}
 
 {% block script_app %}
