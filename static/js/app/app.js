@@ -1,5 +1,5 @@
 (function () {
-    var timeout_id, md_old, md = new Remarkable('full', {
+    var timeout_id, md_old, md = new markdownit({
         highlight: function (text, language) {
             if (language && hljs.getLanguage(language)) {
                 try {
@@ -19,9 +19,23 @@
         html: true, linkify: true, typographer: true
     });
 
-    md.core.ruler.enable(['abbr']);
-    md.block.ruler.enable(['footnote', 'deflist']);
-    md.inline.ruler.enable(['footnote_inline', 'ins', 'mark', 'sub', 'sup']);
+    md.use(markdownitAbbr);
+    md.use(markdownitFootnote);
+    md.use(markdownitMark);
+    md.use(markdownitMath, {
+        inlineOpen: '$$',
+        inlineClose: '$$',
+        inlineRenderer: function (string) {
+            return '$$' + string + '$$';
+        },
+        blockOpen: '$$$',
+        blockClose: '$$$',
+        blockRenderer: function (string) {
+            return '$$$' + string + '$$$';
+        }
+    });
+    md.use(markdownitSub);
+    md.use(markdownitSup);
 
     $('#md-inp').on('keypress', function (ev) {
         if (timeout_id !== undefined) {
