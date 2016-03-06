@@ -31,7 +31,8 @@ html, body {
         box-shadow: inset 0 0 8px #e7e7e7;
         height: calc(100% - 41px);
         overflow-y: auto;
-        padding: 1em;
+        padding: 1em 1em 0;
+        resize: none;
         width: 100%;
       }
       textarea#md-inp {
