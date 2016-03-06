@@ -20,8 +20,7 @@ html, body {
  * ========================================================================= */
 
 .center {
-  height: calc(100% - 52px - 42px);
-
+  height: calc(100% - 52px);
   .row {
     height: 100%;
     .lhs {
@@ -30,7 +29,7 @@ html, body {
       textarea#md-inp {
         border: none;
         box-shadow: inset 0 0 8px #e7e7e7;
-        height: 100%;
+        height: calc(100% - 41px);
         overflow-y: auto;
         padding: 1em;
         width: 100%;
@@ -38,6 +37,13 @@ html, body {
       textarea#md-inp {
         font-family: monospace;
         font-size: large;
+      }
+      div.input-group {
+        border-top: 1px solid #e7e7e7;
+        padding: 3px;
+      }
+      div.input-group {
+        -webkit-margin-before: -5px;
       }
     }
     .rhs {
@@ -66,11 +72,11 @@ html, body {
  * Footer:
  * ========================================================================= */
 
-.footer {
+/*.footer {
   border-top: 1px solid #e5e5e5;
   left: 0;
   padding: 0.75em 0;
   width: 100%;
-}
+}*/
 
 /* ========================================================================= */
