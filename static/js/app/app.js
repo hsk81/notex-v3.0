@@ -81,4 +81,23 @@
             $md_out.html(md.render(md_new));
         }
     }, 600));
+
+    $('#md-src').on('change', function (ev) {
+        var files = ev.target.files;
+        for (var i=0; i<files.length; i++) {
+            if (files[i].type && files[i].type.match(/text/)) {
+                var reader = new FileReader();
+                reader.onload = function (progress_ev) {
+                   if (progress_ev.target &&
+                       progress_ev.target.readyState === 2 &&
+                       typeof progress_ev.target.result === 'string')
+                   {
+                       $('#md-inp').val(progress_ev.target.result)
+                                   .trigger('change');
+                   }
+                };
+                reader.readAsText(files[i]);
+            }
+        }
+    });
 }());
