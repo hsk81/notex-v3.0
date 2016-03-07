@@ -79,6 +79,12 @@
 
             $md_out.hide();
             $md_out.html(md.render(md_new));
+
+            var $a = $('a[name=save]'), $h = $md_out.find(':header');
+            $a.attr("href", window.URL.createObjectURL(
+                new Blob([md_new], {type: 'text/markdown'})));
+            $a.attr("download", ($h.length > 0 ? $($h[0]).text() :
+                    new Date ().toISOString()) + '.md');
         }
     }, 600));
 
