@@ -5,11 +5,11 @@
         </div>
         <ul class="nav navbar-nav">
             <li>
-                <label for="md-src">
+                <label for="md-src" class="md-src">
                     <span class="glyphicon glyphicon-open"
                           aria-hidden="true"></span>&nbsp;Open
                 </label>
-                <input id="md-src" type="file">
+                <input id="md-src" type="file" class="md-src">
             </li>
             <li><a href="#" id="save">
                 <span class="glyphicon glyphicon-save"
@@ -25,10 +25,12 @@
         </ul>
     </div>
     <div class="container-fluid hidden-md hidden-lg">
-        <button type="button" class="btn btn-default navbar-btn">
+        <label for="md-src-mob"
+               class="md-src-mob btn btn-default navbar-btn">
             <span class="glyphicon glyphicon-open"
                   aria-hidden="true"></span>
-        </button>
+            <input id="md-src-mob" type="file" class="md-src-mob">
+        </label>
         <button type="button" class="btn btn-default navbar-btn">
             <span class="glyphicon glyphicon-save"
                   aria-hidden="true"></span>

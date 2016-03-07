@@ -12,19 +12,21 @@ html, body {
  * ========================================================================= */
 
 .header {
-  margin-bottom: 0;
-  input#md-src {
+  input.md-src, input.md-src-mob {
     display: none;
   }
-  label[for=md-src] {
+  label.md-src, label.md-src-mob {
     cursor: pointer;
     font-weight: normal;
     margin: 0;
+  }
+  label[for=md-src] {
     padding: 15px;
   }
-  label[for=md-src]:not(:hover) {
+  label[for=md-src]:not(:hover){
     color: #777;
   }
+  margin-bottom: 0;
 }
 
 /* ============================================================================
