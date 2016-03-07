@@ -106,4 +106,11 @@
             }
         }
     });
+
+    $('button[name=swap]').on('click', function () {
+       $('div.lhs').toggleClass('hidden-xs hidden-sm')
+                   .toggleClass('col-xs-12 col-sm-12');
+       $('div.rhs').toggleClass('hidden-xs hidden-sm')
+                   .toggleClass('col-xs-12 col-sm-12');
+    });
 }());
