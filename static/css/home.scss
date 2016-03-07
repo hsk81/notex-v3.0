@@ -13,6 +13,18 @@ html, body {
 
 .header {
   margin-bottom: 0;
+  input#md-src {
+    display: none;
+  }
+  label[for=md-src] {
+    cursor: pointer;
+    font-weight: normal;
+    margin: 0;
+    padding: 15px;
+  }
+  label[for=md-src]:not(:hover) {
+    color: #777;
+  }
 }
 
 /* ============================================================================
