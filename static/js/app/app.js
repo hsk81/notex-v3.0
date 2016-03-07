@@ -82,7 +82,7 @@
         }
     }, 600));
 
-    $('#md-src').on('change', function (ev) {
+    $('#md-src,#md-src-mob').on('change', function (ev) {
         var files = ev.target.files;
         for (var i=0; i<files.length; i++) {
             if (files[i].type && files[i].type.match(/text/)) {
