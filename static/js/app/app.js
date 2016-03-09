@@ -23,15 +23,15 @@
     md.use(markdownitFootnote);
     md.use(markdownitMark);
     md.use(markdownitMath, {
-        inlineOpen: '$$',
-        inlineClose: '$$',
+        inlineOpen: '$',
+        inlineClose: '$',
         inlineRenderer: function (string) {
-            return '$$' + string + '$$';
+            return '$' + string + '$';
         },
-        blockOpen: '$$$',
-        blockClose: '$$$',
+        blockOpen: '$$',
+        blockClose: '$$',
         blockRenderer: function (string) {
-            return '$$$' + string + '$$$';
+            return '$$' + string + '$$';
         }
     });
     md.use(markdownitSub);
