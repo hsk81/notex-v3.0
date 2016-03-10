@@ -1,4 +1,7 @@
 (function () {
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
     var timeout_id, md_old, md = new markdownit({
         highlight: function (text, language) {
             if (language && hljs.getLanguage(language)) {
@@ -107,10 +110,68 @@
         }
     });
 
-    $('button[name=swap]').on('click', function () {
+    $('[name=swap]').on('click', function () {
        $('div.lhs').toggleClass('hidden-xs hidden-sm')
                    .toggleClass('col-xs-12 col-sm-12');
        $('div.rhs').toggleClass('hidden-xs hidden-sm')
                    .toggleClass('col-xs-12 col-sm-12');
+    });
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    var with_google_api = function (callback) {
+        if (window.gapi === undefined) {
+            window.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
+                if (typeof callback === 'function') {
+                    callback(assert(window.gapi));
+                }
+            };
+
+            var $script = $('<script>', {
+                src: 'https://apis.google.com/js/client.js?onload={0}'.replace(
+                    '{0}', window.onGoogleApiClientLoad.name
+                )
+            });
+
+            $('body').append($script);
+        } else {
+            callback(window.gapi);
+        }
+    };
+
+    $('[name=publish]').on('click', function () {
+        var params = {
+            client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
+            scope: 'https://www.googleapis.com/auth/blogger'
+        };
+
+        with_google_api(function (gapi) {
+            var on_authorization = function (aaa) {
+                if (aaa.error) switch (aaa.error) {
+                    case 'immediate_failed':
+                        gapi.auth.authorize($.extend(
+                            {}, params, {immediate: false}), on_authorization);
+                        break;
+                    default:
+                        console.error(aaa);
+                        return;
+                }
+
+                else gapi.client.load('blogger', 'v3').then(function () {
+                    var req = gapi.client.blogger.posts.insert({
+                        blogId:'4754003765758243534',
+                        title: $('#md-out').find('h1').text(),
+                        content: $('#md-out').html()
+                    });
+                    req.then(function (res) {
+                        console.log('[on:posts.insert]', arguments);
+                    });
+                });
+            };
+
+            gapi.auth.authorize($.extend(
+                {}, params, {immediate: true}), on_authorization);
+        });
     });
 }());
