@@ -37,6 +37,7 @@
             return '$$' + string + '$$';
         }
     });
+
     md.use(markdownitSub);
     md.use(markdownitSup);
 
@@ -159,10 +160,14 @@
                 }
 
                 else gapi.client.load('blogger', 'v3').then(function () {
+                    var html = md.render($('#md-inp').val()),
+                        title = $(html.split('\n').slice(0,1).join('')).text(),
+                        content = html.split('\n').slice(1).join('\n');
+
                     var req = gapi.client.blogger.posts.insert({
                         blogId:'4754003765758243534',
-                        title: $('#md-out').find('h1').text(),
-                        content: $('#md-out').html()
+                        content: content,
+                        title: title
                     });
                     req.then(function (res) {
                         console.log('[on:posts.insert]', arguments);
