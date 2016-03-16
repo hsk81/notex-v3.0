@@ -1,7 +1,12 @@
-(function () {
-    ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
+var global = window;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+(function () {
     var timeout_id, md_old, md = new markdownit({
         highlight: function (text, language) {
             if (language && hljs.getLanguage(language)) {
@@ -85,7 +90,7 @@
             $md_out.html(md.render(md_new));
 
             var $a = $('a[name=save]'), $h = $md_out.find(':header');
-            $a.attr("href", window.URL.createObjectURL(
+            $a.attr("href", global.URL.createObjectURL(
                 new Blob([md_new], {type: 'text/markdown'})));
             $a.attr("download", ($h.length > 0 ? $($h[0]).text() :
                     new Date ().toISOString()) + '.md');
@@ -122,31 +127,27 @@
     ///////////////////////////////////////////////////////////////////////////
 
     var with_google_api = function (callback) {
-        if (window.gapi === undefined) {
-            window.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
+        if (global.gapi === undefined) {
+            global.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
                 if (typeof callback === 'function') {
-                    callback(assert(window.gapi));
+                    callback(global.gapi);
                 }
             };
-
-            var $script = $('<script>', {
+            $('body').append($('<script>', {
                 src: 'https://apis.google.com/js/client.js?onload={0}'.replace(
-                    '{0}', window.onGoogleApiClientLoad.name
+                    '{0}', global.onGoogleApiClientLoad.name
                 )
-            });
-
-            $('body').append($script);
+            }));
         } else {
-            callback(window.gapi);
+            callback(global.gapi);
         }
     };
 
-    $('[name=publish]').on('click', function () {
+    var with_blogger_api = function (callback) {
         var params = {
             client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
             scope: 'https://www.googleapis.com/auth/blogger'
         };
-
         with_google_api(function (gapi) {
             var on_authorization = function (aaa) {
                 if (aaa.error) switch (aaa.error) {
@@ -157,26 +158,74 @@
                     default:
                         console.error(aaa);
                         return;
+                } else if (gapi.client.blogger === undefined) {
+                    gapi.client.load('blogger', 'v3').then(function () {
+                        if (typeof callback === 'function') {
+                            callback(gapi.client.blogger);
+                        }
+                    });
+                } else {
+                    if (typeof callback === 'function') {
+                        callback(gapi.client.blogger);
+                    }
                 }
-
-                else gapi.client.load('blogger', 'v3').then(function () {
-                    var html = md.render($('#md-inp').val()),
-                        title = $(html.split('\n').slice(0,1).join('')).text(),
-                        content = html.split('\n').slice(1).join('\n');
-
-                    var req = gapi.client.blogger.posts.insert({
-                        blogId:'4754003765758243534',
-                        content: content,
-                        title: title
-                    });
-                    req.then(function (res) {
-                        console.log('[on:posts.insert]', arguments);
-                    });
-                });
             };
-
             gapi.auth.authorize($.extend(
                 {}, params, {immediate: true}), on_authorization);
         });
+    };
+
+    $('#publish-dlg').on('show.bs.modal', function (ev) {
+        var $blog_url = $('#blog-url'),
+            $post_title = $('#post-title');
+
+        var blog_url = global.cookie.get('blog-url');
+        if (blog_url && typeof blog_url === 'string') {
+            $blog_url.val(blog_url);
+        }
+
+        var title = $('#md-out').find(':header:first-of-type').text();
+        if (title && typeof title === 'string') {
+            $post_title.val(title);
+        }
+    });
+    $('#publish-dlg').on('shown.bs.modal', function (ev) {
+        var blog_url = global.cookie.get('blog-url');
+        if (blog_url) {
+            $('#post-title').focus();
+        } else {
+            $('#blog-url').focus();
+        }
+    });
+    $('#publish-dlg').find('.btn-primary').on('click', function () {
+        var $blog_url = $('#blog-url'),
+            $post_title = $('#post-title');
+
+        var url = assert($blog_url.val());
+        global.cookie.set('blog-url', url);
+        var title = assert($post_title.val());
+
+        with_blogger_api(function (blogger) {
+            gapi.client.blogger.blogs.getByUrl({url: url}).then(function (xhr) {
+                if (xhr && xhr.status === 200) {
+                    var $content = $('<div>', {
+                        html: md.render($('#md-inp').val())});
+                    $content.find(':header:first-of-type').remove();
+
+                    var req = blogger.posts.insert({
+                        blogId: assert(xhr.result && xhr.result.id),
+                        content: $content.html(), title: title
+                    });
+                    req.then(function (res) {
+                        $('#publish-dlg').modal('hide');
+                    });
+                } else {
+                    console.error(xhr);
+                }
+            });
+        });
     });
 }());
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
