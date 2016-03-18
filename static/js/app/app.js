@@ -177,7 +177,13 @@ var global = window;
 
     $('#publish-dlg').on('show.bs.modal', function (ev) {
         var $blog_url = $('#blog-url'),
-            $post_title = $('#post-title');
+            $blog_url_ig = $blog_url.parent('.input-group');
+        var $post_title = $('#post-title'),
+            $post_title_ig = $post_title.parent('.input-group');
+
+        $blog_url_ig.removeClass('has-error');
+        $post_title_ig.removeClass('has-error');
+        $post_title_ig.find('[type=checkbox]').prop('checked', true);
 
         var blog_url = global.cookie.get('blog-url');
         if (blog_url && typeof blog_url === 'string') {
@@ -188,6 +194,9 @@ var global = window;
         if (title && typeof title === 'string') {
             $post_title.val(title);
         }
+
+        $(this).find('[data-toggle="tooltip"]').tooltip();
+        $(this).find('[data-toggle="popover"]').popover();
     });
 
     $('#publish-dlg').on('shown.bs.modal', function (ev) {
@@ -204,7 +213,7 @@ var global = window;
 
         var $blog_url = $('#blog-url'),
             $blog_url_ig = $blog_url.parent('.input-group');
-        var $post_title = $('#post-title')
+        var $post_title = $('#post-title'),
             $post_title_ig = $post_title.parent('.input-group');
 
         var url = $blog_url.val();

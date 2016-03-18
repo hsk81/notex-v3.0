@@ -42,14 +42,14 @@
     </div>
 </nav>
 
-<div class="modal fade" id="publish-dlg" tabindex="-1" role="dialog">
+<div class="modal fade" id="publish-dlg" role="dialog" tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
             <span>&times;</span>
         </button>
-        <h4 class="modal-title">Publish to Blogger.com</h4>
+        <h4 class="modal-title">Publish to <a href="https://www.blogger.com/">Blogger.com</a></h4>
       </div>
       <div class="modal-body">
         <label for="blog-url">Blog URL</label>
@@ -58,17 +58,32 @@
               <span class="glyphicon glyphicon-link"></span>
           </span>
           <input type="text" class="form-control" id="blog-url"
-                 placeholder="Enter a blog URL: e.g. http://my.blogspot.com">
+                 placeholder="a blog URL like https://my.blogspot.com">
+          <div class="input-group-btn">
+              <button class="btn btn-default" type="button" tabindex="-1" title="Blog URL"
+                      data-container="body" data-toggle="popover" data-placement="left"
+                      data-trigger="focus" data-content="Ensure to provide an existing blog URL with a read and write access to.">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+          </div>
         </div>
         <br/>
         <label for="post-title">Post Title</label>
         <div class="input-group">
           <span class="input-group-addon">
-              <span class="glyphicon glyphicon-header"></span>
+              <input type="checkbox" data-toggle="tooltip" data-placement="top"
+                     title="Update the most recent post with the same title, if any such exists."
+                     style="margin-top: 3px" tabindex="-1" checked>
           </span>
           <input type="text" class="form-control" id="post-title"
-                 placeholder="Enter a new or existing post title">
-            </span>
+                 placeholder="a new or an existing post title">
+          <div class="input-group-btn">
+              <button class="btn btn-default" type="button" tabindex="-1" title="Post Title"
+                      data-container="body" data-toggle="popover" data-placement="left"
+                      data-trigger="focus" data-content="Updates most recent post with same title unless checkbox is unchecked.">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
