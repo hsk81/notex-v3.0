@@ -161,12 +161,12 @@ var global = window;
                 } else if (gapi.client.blogger === undefined) {
                     gapi.client.load('blogger', 'v3').then(function () {
                         if (typeof callback === 'function') {
-                            callback(gapi.client.blogger);
+                            callback(gapi.client.blogger, params);
                         }
                     });
                 } else {
                     if (typeof callback === 'function') {
-                        callback(gapi.client.blogger);
+                        callback(gapi.client.blogger, params);
                     }
                 }
             };
@@ -189,6 +189,7 @@ var global = window;
             $post_title.val(title);
         }
     });
+
     $('#publish-dlg').on('shown.bs.modal', function (ev) {
         var blog_url = global.cookie.get('blog-url');
         if (blog_url) {
@@ -197,33 +198,75 @@ var global = window;
             $('#blog-url').focus();
         }
     });
+
     $('#publish-dlg').find('.btn-primary').on('click', function () {
+        var $publish = $(this);
+
         var $blog_url = $('#blog-url'),
-            $post_title = $('#post-title');
+            $blog_url_ig = $blog_url.parent('.input-group');
+        var $post_title = $('#post-title')
+            $post_title_ig = $post_title.parent('.input-group');
 
-        var url = assert($blog_url.val());
-        global.cookie.set('blog-url', url);
-        var title = assert($post_title.val());
+        var url = $blog_url.val();
+        if (!url) {
+            $blog_url_ig.addClass('has-error');
+            $blog_url.focus().off('blur').on('blur', function () {
+                var url = $blog_url.val();
+                if (url) $blog_url_ig.removeClass('has-error');
+            });
+        }
 
-        with_blogger_api(function (blogger) {
-            gapi.client.blogger.blogs.getByUrl({url: url}).then(function (xhr) {
-                if (xhr && xhr.status === 200) {
-                    var $content = $('<div>', {
-                        html: md.render($('#md-inp').val())});
+        var title = $post_title.val();
+        if (!title) {
+            $post_title_ig.addClass('has-error');
+            $post_title.focus().off('blur').on('blur', function () {
+                var title = $post_title.val();
+                if (title) $post_title_ig.removeClass('has-error');
+            });
+        }
+
+        if ($blog_url_ig.hasClass('has-error')) {
+            $blog_url.focus();
+        } else if ($post_title_ig.hasClass('has-error')) {
+            $post_title.focus();
+        } else {
+            with_blogger_api(function (blogger) {
+                var on_done = function (res) {
+                    global.cookie.set('blog-url', url);
+
+                    var $content =
+                        $('<div>', {html: md.render($('#md-inp').val())});
                     $content.find(':header:first-of-type').remove();
 
                     var req = blogger.posts.insert({
-                        blogId: assert(xhr.result && xhr.result.id),
+                        blogId: assert(res.result && res.result.id),
                         content: $content.html(), title: title
                     });
                     req.then(function (res) {
                         $('#publish-dlg').modal('hide');
+                        $publish.attr('disabled', false);
+                        $publish.button('reset');
                     });
-                } else {
-                    console.error(xhr);
-                }
+                };
+                var on_fail = function (res) {
+                    $publish.attr('disabled', false);
+                    $publish.button('reset');
+
+                    $blog_url_ig.addClass('has-error');
+                    $blog_url.focus().off('blur').on('blur', function () {
+                        var url = $blog_url.val();
+                        if (url) $blog_url_ig.removeClass('has-error');
+                    });
+
+                    console.error(res);
+                };
+                blogger.blogs
+                    .getByUrl({url:url}).then(on_done, on_fail);
             });
-        });
+
+            $publish.attr('disabled', true);
+            $publish.button('publishing');
+        }
     });
 }());
 
