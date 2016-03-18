@@ -208,6 +208,12 @@ var global = window;
         }
     });
 
+    $('#publish-dlg').on('hidden.bs.modal', function (ev) {
+        setTimeout(function () {
+            $('#md-inp').focus();
+        }, 1);
+    });
+
     $('#publish-dlg').find('.btn-primary').on('click', function () {
         var $publish = $(this);
 
