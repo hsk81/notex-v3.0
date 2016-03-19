@@ -263,7 +263,6 @@ var global = window;
                             } else {
                                 do_insert(blogger, blog);
                             }
-                            console.debug('[on:list]', res);
                         };
                         var on_fail = function (res) {
                             console.error('[on:list]', res);
@@ -280,8 +279,6 @@ var global = window;
 
                     global.cookie.set('blog-url', url);
                     $('#publish-dlg').modal('hide');
-
-                    console.debug('[on:get-by-url]', res);
                 };
                 var on_fail = function (res) {
                     $blog_url_ig.addClass('has-error');
@@ -317,7 +314,6 @@ var global = window;
                     id = assert(res.result.id);
                 var tab = global.open(url, 'post:' + id);
                 if (tab !== undefined) tab.focus();
-                console.debug('[on:insert]', res);
             };
             var on_fail = function (res) {
                 console.error('[on:insert]', res);
@@ -335,7 +331,6 @@ var global = window;
                     id = assert(res.result.id);
                 var tab = global.open(url, 'post:' + id);
                 if (tab !== undefined) tab.focus();
-                console.debug('[on:update]', res);
             };
             var on_fail = function (res) {
                 console.error('[on:update]', res);
