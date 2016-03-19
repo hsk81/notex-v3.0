@@ -107,8 +107,9 @@ var global = window;
                        progress_ev.target.readyState === 2 &&
                        typeof progress_ev.target.result === 'string')
                    {
-                       $('#md-inp').val(progress_ev.target.result)
-                                   .trigger('change');
+                       $('#md-inp')
+                           .val(progress_ev.target.result).trigger('change')
+                           .setCursorPosition(0).focus();
                    }
                 };
                 reader.readAsText(files[i]);
