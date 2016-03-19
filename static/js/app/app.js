@@ -220,7 +220,8 @@ var global = window;
         var $blog_url = $('#blog-url'),
             $blog_url_ig = $blog_url.parent('.input-group');
         var $post_title = $('#post-title'),
-            $post_title_ig = $post_title.parent('.input-group');
+            $post_title_ig = $post_title.parent('.input-group'),
+            $post_title_cb = $post_title_ig.find('[type=checkbox]');
 
         var url = $blog_url.val();
         if (!url) {
@@ -230,7 +231,6 @@ var global = window;
                 if (url) $blog_url_ig.removeClass('has-error');
             });
         }
-
         var title = $post_title.val();
         if (!title) {
             $post_title_ig.addClass('has-error');
@@ -247,40 +247,114 @@ var global = window;
         } else {
             with_blogger_api(function (blogger) {
                 var on_done = function (res) {
+                    var blog = assert(res && res.result),
+                        update = $post_title_cb.prop('checked');
+
+                    if (update && blog.posts.totalItems > 0) {
+                        var on_done = function (res) {
+                            var posts = res.result && res.result.items || [],
+                                post = posts.find(function (p) {
+                                    return p.title === title;
+                                });
+
+                            if (post !== undefined) {
+                                do_update(blogger, blog, post);
+                            } else {
+                                do_insert(blogger, blog);
+                            }
+                            console.debug('[on:list]', res);
+                        };
+                        var on_fail = function (res) {
+                            console.error('[on:list]', res);
+                        };
+
+                        var all_request = blogger.posts.list({
+                            blogId: blog.id, fields: 'items(id,title)',
+                            orderBy: 'published'
+                        });
+                        all_request.then(on_done, on_fail);
+                    } else {
+                        do_insert(blogger, blog);
+                    }
+
                     global.cookie.set('blog-url', url);
+                    $('#publish-dlg').modal('hide');
 
-                    var $content =
-                        $('<div>', {html: md.render($('#md-inp').val())});
-                    $content.find(':header:first-of-type').remove();
-
-                    var req = blogger.posts.insert({
-                        blogId: assert(res.result && res.result.id),
-                        content: $content.html(), title: title
-                    });
-                    req.then(function (res) {
-                        $('#publish-dlg').modal('hide');
-                        $publish.attr('disabled', false);
-                        $publish.button('reset');
-                    });
+                    console.debug('[on:get-by-url]', res);
                 };
                 var on_fail = function (res) {
-                    $publish.attr('disabled', false);
-                    $publish.button('reset');
-
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', function () {
                         var url = $blog_url.val();
                         if (url) $blog_url_ig.removeClass('has-error');
                     });
 
-                    console.error(res);
+                    console.error('[on:get-by-url]', res);
                 };
-                blogger.blogs
-                    .getByUrl({url:url}).then(on_done, on_fail);
-            });
 
+                var url_request = blogger.blogs.getByUrl({
+                    url: url, fields: 'id,posts(totalItems)'
+                });
+                url_request.then(
+                    after(on_done, function () {
+                        $publish.attr('disabled', false);
+                        $publish.button('reset');
+                    }),
+                    before(on_fail, function () {
+                        $publish.attr('disabled', false);
+                        $publish.button('reset');
+                    })
+                );
+            });
             $publish.attr('disabled', true);
             $publish.button('publishing');
+        }
+
+        function do_insert (blogger, blog) {
+            var on_done = function (res) {
+                var url = assert(res.result.url),
+                    id = assert(res.result.id);
+                var tab = global.open(url, 'post:' + id);
+                if (tab !== undefined) tab.focus();
+                console.debug('[on:insert]', res);
+            };
+            var on_fail = function (res) {
+                console.error('[on:insert]', res);
+            };
+            var insert_req = blogger.posts.insert({
+                blogId: assert(blog.id),
+                content: md2html($('#md-inp').val()),
+                fields: 'id,url,title', title: assert(title)
+            });
+            insert_req.then(on_done, on_fail);
+        }
+        function do_update (blogger, blog, post) {
+            var on_done = function (res) {
+                var url = assert(res.result.url),
+                    id = assert(res.result.id);
+                var tab = global.open(url, 'post:' + id);
+                if (tab !== undefined) tab.focus();
+                console.debug('[on:update]', res);
+            };
+            var on_fail = function (res) {
+                console.error('[on:update]', res);
+            };
+            var update_req = blogger.posts.update({
+                blogId: assert(blog.id), postId: assert(post.id),
+                content: md2html($('#md-inp').val()),
+                fields: 'id,url,title', title: assert(post.title)
+            });
+            update_req.then(on_done, on_fail);
+        }
+
+        function md2html (md_content, with_header) {
+            var $content = $('<div>', {
+                html: md.render(md_content)
+            });
+            if (!with_header) {
+                $content.find(':header:first-of-type').remove();
+            }
+            return $content.html();
         }
     });
 }());
