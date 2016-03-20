@@ -44,17 +44,7 @@
         {% else %}
         <script src="/static/js/all.min.js"></script>
         {% endif %}
-
         {% block script_mjx %}
-        <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            asciimath2jax:{delimiters:[['\{\{','\}\}']]},
-            tex2jax:{inlineMath:[['$','$']],displayMath:[['$$', '$$']]},
-            processSectionDelay: 0
-        });
-        </script>
-        <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async>
-        </script>
         {% endblock %}
         {% endblock %}
     </body>{% endblock %}
