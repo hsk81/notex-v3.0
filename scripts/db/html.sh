@@ -9,9 +9,9 @@ CREATE sub-group/g:html/g:de
 ###############################################################################
 
 CREATE attribute/g:html:en/a:2e19 \
-     '{"type":"text-value", "data":"NoTex: Blog Editor"}'
+     '{"type":"text-value", "data":"NoTex: Weblog Service"}'
 CREATE attribute/g:html:de/a:2e19 \
-     '{"type":"text-value", "data":"NoTex: Blog Editor"}'
+     '{"type":"text-value", "data":"NoTex: Weblog Dienst"}'
 
 ###############################################################################
 ###############################################################################
