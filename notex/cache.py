@@ -8,7 +8,7 @@ import ARGs, abc, bottle, functools, hashlib, inspect, pickle, redis
 ###############################################################################
 ###############################################################################
 
-class ShuhadakuCache (object):
+class NotexCache (object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractproperty
@@ -137,7 +137,7 @@ class ShuhadakuCache (object):
 
 ###############################################################################
 
-class ShuhadakuRedisPlugin (ShuhadakuCache):
+class NotexRedisPlugin (NotexCache):
 
     name = 'redis'
     api = 2
@@ -265,13 +265,13 @@ class ShuhadakuRedisPlugin (ShuhadakuCache):
 ###############################################################################
 
 ## std: cache for views etc.
-redis_plugin_0 = ShuhadakuRedisPlugin (db=0,
+redis_plugin_0 = NotexRedisPlugin (db=0,
     host=ARGs.get ('redis_host', 'localhost'),
     port=ARGs.get ('redis_port', 6379),
     password=ARGs.get ('redis_password', None))
 
 ## aaa: cache for authentication etc.
-redis_plugin_1 = ShuhadakuRedisPlugin (db=0,
+redis_plugin_1 = NotexRedisPlugin (db=0,
     host=ARGs.get ('redis_host', 'localhost'),
     port=ARGs.get ('redis_port', 6379),
     password=ARGs.get ('redis_password', None))
