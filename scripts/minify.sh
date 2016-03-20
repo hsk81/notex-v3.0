@@ -49,7 +49,7 @@ function minify_app_js () {
 }
 function minify_all_js () {
     uglifyjs static/js/all.js -m -c > static/js/all.min.js && \
-    rm static/js/{all.js,app.js,lib.js}
+    rm static/js/all.js static/js/app.js static/js/lib.js
 }
 
 ###############################################################################
