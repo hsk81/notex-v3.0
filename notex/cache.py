@@ -271,7 +271,7 @@ redis_plugin_0 = ShuhadakuRedisPlugin (db=0,
     password=ARGs.get ('redis_password', None))
 
 ## aaa: cache for authentication etc.
-redis_plugin_1 = ShuhadakuRedisPlugin (db=1,
+redis_plugin_1 = ShuhadakuRedisPlugin (db=0,
     host=ARGs.get ('redis_host', 'localhost'),
     port=ARGs.get ('redis_port', 6379),
     password=ARGs.get ('redis_password', None))
