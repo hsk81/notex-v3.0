@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ###############################################################################
 
-from bottle import Bottle, request
+from bottle import Bottle
 
 from notex.aaa import aaa_plugin as aaa
 from notex.cache import redis_plugin_0 as rdb
