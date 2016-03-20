@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 ###############################################################################
 
-from shuhadaku.db import aliased
-from shuhadaku.models import Attribute as A
-from shuhadaku.models import Group as G
+from notex.db import aliased
+from notex.models import Attribute as A
+from notex.models import Group as G
 
-from shuhadaku.models import TypeValue
-from shuhadaku.models import TextValue
-from shuhadaku.models import RealValue
-from shuhadaku.models import BoolValue
+from notex.models import TypeValue
+from notex.models import TextValue
+from notex.models import RealValue
+from notex.models import BoolValue
 
 from itertools import groupby
 

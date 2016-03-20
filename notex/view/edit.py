@@ -3,13 +3,13 @@
 
 from bottle import Bottle, request
 
-from shuhadaku.aaa import aaa_plugin as aaa
-from shuhadaku.cache import redis_plugin_0 as rdb
-from shuhadaku.db import db_plugin
+from notex.aaa import aaa_plugin as aaa
+from notex.cache import redis_plugin_0 as rdb
+from notex.db import db_plugin
 
-from shuhadaku.view.util.database import html_for
-from shuhadaku.view.util.generic import generic
-from shuhadaku.view.util.language import detect
+from notex.view.util.database import html_for
+from notex.view.util.generic import generic
+from notex.view.util.language import detect
 
 import ARGs
 

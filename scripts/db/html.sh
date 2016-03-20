@@ -8,10 +8,10 @@ CREATE sub-group/g:html/g:de
 
 ###############################################################################
 
-CREATE attribute/g:html:en/a:7e09 \
-     '{"type":"text-value", "data":"Shuhadaku: Weblog Service"}'
-CREATE attribute/g:html:de/a:7e09 \
-     '{"type":"text-value", "data":"Shuhadaku: Weblog Dienst"}'
+CREATE attribute/g:html:en/a:2e19 \
+     '{"type":"text-value", "data":"NoTex: Blog Editor"}'
+CREATE attribute/g:html:de/a:2e19 \
+     '{"type":"text-value", "data":"NoTex: Blog Editor"}'
 
 ###############################################################################
 ###############################################################################

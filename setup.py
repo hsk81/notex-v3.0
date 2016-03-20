@@ -7,12 +7,12 @@ from setuptools import setup
 ###############################################################################
 
 setup (
-    name='shuhadaku',
+    name='notex',
     version='0.0.1',
-    description='weblog service',
+    description='blog editor',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
-    url='https://hsk81@bitbucket.org/hsk81/shuhadaku.git',
+    url='https://hsk81@bitbucket.org/hsk81/notex.git',
     install_requires=[
         'Beaker>=1.8.0',
         'bottle>=0.12.9',

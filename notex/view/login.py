@@ -2,7 +2,7 @@
 ###############################################################################
 
 from bottle import Bottle, request
-from shuhadaku.aaa import aaa_plugin as aaa
+from notex.aaa import aaa_plugin as aaa
 
 import ujson as JSON
 

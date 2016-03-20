@@ -3,7 +3,7 @@
 SCRIPT_PATH=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd) ;
 ###############################################################################
 
-source ${SCRIPT_PATH}/../conf/shuhadaku.sh
+source ${SCRIPT_PATH}/../conf/notex.sh
 source ${SCRIPT_PATH}/../crud/create.sh
 
 ###############################################################################

@@ -30,7 +30,7 @@ except IOError:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser (
-        description="""Shuhadaku Weblog Service""",
+        description="""NoTex Weblog Service""",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument ('--host', metavar='HOST',
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     parser.add_argument ('--db-uri', metavar='OPENSHIFT_POSTGRESQL_DB_URL',
         help='Database connection URL', default=os.environ.get (
-            'OPENSHIFT_POSTGRESQL_DB_URL', 'postgresql://shuhadaku@localhost/shuhadaku'))
+            'OPENSHIFT_POSTGRESQL_DB_URL', 'postgresql://notex@localhost/notex'))
     parser.add_argument ('--db-create', '-c', action='store_true',
         default=os.environ.get ('OPENSHIFT_POSTGRESQL_DB_CREATE', False),
         help='Database table creation')

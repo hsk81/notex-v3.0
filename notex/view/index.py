@@ -2,7 +2,7 @@
 ###############################################################################
 
 from bottle import Bottle, redirect
-from shuhadaku.cache import redis_plugin_0 as rdb
+from notex.cache import redis_plugin_0 as rdb
 
 import ARGs
 

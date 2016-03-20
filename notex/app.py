@@ -5,13 +5,13 @@ __author__ = 'hsk81'
 
 from bottle import Bottle
 
-from shuhadaku.api import app_api
-from shuhadaku.view.debug import app_debug
-from shuhadaku.view.edit import app_edit
-from shuhadaku.view.index import app_index
-from shuhadaku.view.login import app_login
-from shuhadaku.view.now import app_now
-from shuhadaku.view.static import app_static
+from notex.api import app_api
+from notex.view.debug import app_debug
+from notex.view.edit import app_edit
+from notex.view.index import app_index
+from notex.view.login import app_login
+from notex.view.now import app_now
+from notex.view.static import app_static
 
 import ARGs, os, sass
 import csscompressor as cc

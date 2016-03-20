@@ -2,8 +2,8 @@
 ###############################################################################
 
 DEF_VIRTENV='virtualenv2'
-DEF_APPNAME='shuhadaku'
-DEF_IMGNAME='hsk81/shuhadaku:run'
+DEF_APPNAME='notex'
+DEF_IMGNAME='hsk81/notex:run'
 DEF_PORTMAP='8881:8881'
 GIT_REFNAME='HEAD'
 
