@@ -40,13 +40,16 @@ function concat_all_js () {
 }
 
 function minify_lib_js () {
-    uglifyjs static/js/lib.js -m -c > static/js/lib.min.js
+    uglifyjs static/js/lib.js -m -c > static/js/lib.min.js && \
+    rm static/js/lib.js
 }
 function minify_app_js () {
-    uglifyjs static/js/app.js -m -c > static/js/app.min.js
+    uglifyjs static/js/app.js -m -c > static/js/app.min.js && \
+    rm static/js/app.js
 }
 function minify_all_js () {
-    uglifyjs static/js/all.js -m -c > static/js/all.min.js
+    uglifyjs static/js/all.js -m -c > static/js/all.min.js && \
+    rm static/js/{all.js,app.js,lib.js}
 }
 
 ###############################################################################
