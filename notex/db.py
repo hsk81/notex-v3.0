@@ -65,7 +65,7 @@ class UUID (TypeDecorator):
 ###############################################################################
 ###############################################################################
 
-class ShuhadakuSession (orm.Session):
+class NotexSession (orm.Session):
 
     def script (self, path):
 
@@ -76,11 +76,11 @@ class ShuhadakuSession (orm.Session):
 
         self.execute (sql)
 
-class ShuhadakuQuery (orm.Query):
+class NotexQuery (orm.Query):
 
     orm.Query.back = orm.Query.reset_joinpoint
 
-class ShuhadakuBase (object):
+class NotexBase (object):
 
     @declared_attr
     def __tablename__ (cls):
@@ -100,9 +100,9 @@ class ShuhadakuBase (object):
         value = cls.rx_all_cap.sub (r'\1_\2', value)
         return value.lower()
 
-    query_class = ShuhadakuQuery
+    query_class = NotexQuery
 
-class ShuhadakuPolymorphic (object):
+class NotexPolymorphic (object):
     subtype = Column ('subtype', String (32), nullable=False, index=False)
 
     @declared_attr
@@ -110,7 +110,7 @@ class ShuhadakuPolymorphic (object):
         'polymorphic_identity': cls.__name__, 'polymorphic_on': cls.subtype
     }
 
-class ShuhadakuOrmPlugin (object):
+class NotexOrmPlugin (object):
 
     name = 'sqlalchemy'
     api = 2
@@ -118,12 +118,12 @@ class ShuhadakuOrmPlugin (object):
     def __init__ (self, uri, create=True, drop=False, echo=False, keyword='db'):
 
         self.engine = create_engine (uri, echo=echo)
-        self.session_maker = orm.sessionmaker (self.engine, ShuhadakuSession)
+        self.session_maker = orm.sessionmaker (self.engine, NotexSession)
         self.session_manager = orm.scoped_session (self.session_maker)
 
-        self.base = declarative_base (cls=ShuhadakuBase)
+        self.base = declarative_base (cls=NotexBase)
         self.base.query = \
-            self.session_manager.query_property (query_cls=ShuhadakuQuery)
+            self.session_manager.query_property (query_cls=NotexQuery)
 
         self.keyword = keyword
         self.create = create
@@ -132,7 +132,7 @@ class ShuhadakuOrmPlugin (object):
     def setup (self, app):
 
         for plugin in app.plugins:
-            if not isinstance (plugin, ShuhadakuOrmPlugin):
+            if not isinstance (plugin, NotexOrmPlugin):
                 continue
             if plugin.keyword == self.keyword:
                 raise bottle.PluginError ('conflicting plugins')
@@ -184,14 +184,14 @@ class ShuhadakuOrmPlugin (object):
 
 ###############################################################################
 
-db_plugin = ShuhadakuOrmPlugin (
+db_plugin = NotexOrmPlugin (
     uri=ARGs.get ('db_uri', 'sqlite:///:memory:'),
     create=ARGs.get ('db_create', False),
     drop=ARGs.get ('db_drop', False),
     echo=ARGs.get ('db_echo', False))
 
 Base = db_plugin.base
-Polymorphic = ShuhadakuPolymorphic
+Polymorphic = NotexPolymorphic
 
 ###############################################################################
 ###############################################################################
