@@ -19,7 +19,7 @@ app = app_index
 @rdb.memoize (expiry=None, name='view.index', unless=lambda: ARGs.debug)
 def index (*args, **kwargs):
 
-    return redirect ('/home')
+    return redirect ('/edit')
 
 ###############################################################################
 ###############################################################################
