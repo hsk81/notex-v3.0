@@ -6,15 +6,15 @@ __author__ = 'hsk81'
 from bottle import Bottle
 from bottle import request
 
-from shuhadaku.db import aliased
-from shuhadaku.db import db_plugin
-from shuhadaku.models import Group
-from shuhadaku.models import Attribute
+from notex.db import aliased
+from notex.db import db_plugin
+from notex.models import Group
+from notex.models import Attribute
 
-from shuhadaku.models import TypeValue
-from shuhadaku.models import TextValue
-from shuhadaku.models import RealValue
-from shuhadaku.models import BoolValue
+from notex.models import TypeValue
+from notex.models import TextValue
+from notex.models import RealValue
+from notex.models import BoolValue
 
 ###############################################################################
 ###############################################################################

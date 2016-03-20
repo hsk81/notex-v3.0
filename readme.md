@@ -1,4 +1,2 @@
-Shuhadaku: Weblog Service
-=========================
-
-...
+NoTex: Blog Editor
+==================

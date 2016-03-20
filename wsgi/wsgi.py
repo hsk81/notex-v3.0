@@ -3,7 +3,7 @@
 
 from bottle import request
 from beaker.middleware import SessionMiddleware
-from shuhadaku.app import app_main
+from notex.app import app_main
 from werkzeug.debug import DebuggedApplication
 
 import ARGs
