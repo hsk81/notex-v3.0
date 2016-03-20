@@ -10,9 +10,9 @@
         {% if debug %}
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-3.3.6.min.css">
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css">
+        <link rel="stylesheet" href="/static/css/lib/highlight/default-9.2.0.min.css">
         {% else %}
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/static/css/all.min.css">
         {% endif %}
         {% block head %}{% endblock %}
     </head>{% endblock %}
@@ -20,14 +20,42 @@
         {% block body %}{% endblock %}
         {% block script_all %}
         {% if debug %}
+        <!-- /static/js/lib -->
         <script src="/static/js/lib/jquery/jquery-1.12.1.min.js"></script>
+        <script src="/static/js/lib/jquery/jquery.set-cursor-position-1.12.1.min.js"></script>
         <script src="/static/js/lib/bootstrap/bootstrap-3.3.6.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-6.0.0.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-abbr-1.0.3.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-footnote-2.0.0.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-math-3.0.2.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-sub-1.0.0.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js"></script>
+        <script src="/static/js/lib/highlight/highlight-9.2.0.min.js"></script>
+        <!-- /static/js/app -->
+        <script src="/static/js/app/function/assert.js"></script>
+        <script src="/static/js/app/function/buffered.js"></script>
+        <script src="/static/js/app/function/mine.js"></script>
+        <script src="/static/js/app/function/partial.js"></script>
+        <script src="/static/js/app/function/random.js"></script>
+        <script src="/static/js/app/function/with.js"></script>
+        <script src="/static/js/app/cookie/cookie.js"></script>
+        <script src="/static/js/app/app.js"></script>
         {% else %}
-        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="/static/js/all.min.js"></script>
         {% endif %}
-        {% block script_lib %}{% endblock %}
-        {% block script_app %}{% endblock %}
+
+        {% block script_mjx %}
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            asciimath2jax:{delimiters:[['\{\{','\}\}']]},
+            tex2jax:{inlineMath:[['$','$']],displayMath:[['$$', '$$']]},
+            processSectionDelay: 0
+        });
+        </script>
+        <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async>
+        </script>
+        {% endblock %}
         {% endblock %}
     </body>{% endblock %}
 </html>{% endblock %}

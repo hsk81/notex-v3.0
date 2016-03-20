@@ -31,6 +31,15 @@ static/css/home.css.map
 run-dev.sh
 run-pro.sh
 
+## minified
+
+static/css/all.min.css
+static/css/app.min.css
+static/css/lib.min.css
+static/js/all.js
+static/js/all.min.js
+static/js/app.js
+static/js/lib.js
 
 # ##############################################################################
 # global -----------------------------------------------------------------------

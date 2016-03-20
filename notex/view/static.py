@@ -18,5 +18,10 @@ def server_static (path):
 
     return static_file (path, root='./static')
 
+@app.get ('/fonts/<path:path>')
+def server_fonts (path):
+
+    return static_file (path, root='./static/fonts')
+
 ###############################################################################
 ###############################################################################
