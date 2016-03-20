@@ -16,22 +16,22 @@ import ARGs
 ###############################################################################
 ###############################################################################
 
-app_home = Bottle ()
-app_home.install (db_plugin)
-app = app_home
+app_edit = Bottle ()
+app_edit.install (db_plugin)
+app = app_edit
 
 ###############################################################################
 ###############################################################################
 
-@app.get ('/home')
-def home (db):
+@app.get ('/edit')
+def edit (db):
 
     @rdb.memoize (expiry=None, unless=lambda: aaa.current or ARGs.debug ())
     def memoized (*args, **kwargs):
 
-        return generic ('home', html=html_for (db, detect('en')))
+        return generic ('edit', html=html_for (db, detect('en')))
 
-    return memoized (name='views.home:' + detect('en'))
+    return memoized (name='views.edit:' + detect('en'))
 
 ###############################################################################
 ###############################################################################

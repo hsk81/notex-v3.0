@@ -7,7 +7,7 @@ from bottle import Bottle
 
 from shuhadaku.api import app_api
 from shuhadaku.view.debug import app_debug
-from shuhadaku.view.home import app_home
+from shuhadaku.view.edit import app_edit
 from shuhadaku.view.index import app_index
 from shuhadaku.view.login import app_login
 from shuhadaku.view.now import app_now
@@ -20,7 +20,7 @@ import csscompressor as cc
 ###############################################################################
 
 app_main = Bottle ()
-app_main.merge (app_home)
+app_main.merge (app_edit)
 app_main.merge (app_index)
 app_main.merge (app_login)
 app_main.merge (app_now)
