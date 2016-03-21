@@ -53,6 +53,19 @@ if __name__ == '__main__':
         default=os.environ.get ('OPENSHIFT_POSTGRESQL_DB_ECHO', False),
         help='Database verbosity')
 
+    parser.add_argument ('--memcached-servers', metavar='MEMCACHEDCLOUD_SERVERS',
+        default=os.environ.get ('MEMCACHEDCLOUD_SERVERS', 'localhost:11211'),
+        help='Memcached server(s)')
+    parser.add_argument ('--memcached-username', metavar='MEMCACHEDCLOUD_USERNAME',
+        default=os.environ.get ('MEMCACHEDCLOUD_USERNAME', None),
+        help='Memcached username')
+    parser.add_argument ('--memcached-password', metavar='MEMCACHEDCLOUD_PASSWORD',
+        default=os.environ.get ('MEMCACHEDCLOUD_PASSWORD', None),
+        help='Memcached password')
+    parser.add_argument ('--memcached-flush', action='store_true',
+        default=os.environ.get ('MEMCACHEDCLOUD_FLUSH', False),
+        help='Memcached flush flag')
+
     parser.add_argument ('--redis-host', metavar='REDISCLOUD_HOSTNAME',
         default=os.environ.get ('REDISCLOUD_HOSTNAME', 'localhost'),
         help='Redis host')
@@ -62,9 +75,9 @@ if __name__ == '__main__':
     parser.add_argument ('--redis-password', metavar='REDISCLOUD_PASSWORD',
         default=os.environ.get ('REDISCLOUD_PASSWORD', None),
         help='Redis password')
-    parser.add_argument ('--redis-flush-db', '-F', metavar='REDIS_FLUSH_DB',
-        default=os.environ.get ('REDISCLOUD_FLUSH_DB', None), type=list, nargs='?',
-        help='Redis DB(s) to flush', const=map (str, range (2)))
+    parser.add_argument ('--redis-flush-db', metavar='REDIS_FLUSH_DB',
+        default=os.environ.get ('REDISCLOUD_FLUSH_DB', None), type=list,
+        help='Redis DB(s) to flush', const=map (str, range (1)), nargs='?')
 
     parser.add_argument ('--session-expiry', metavar='SESSION_EXPIRY',
         default=os.environ.get ('SESSION_EXPIRY', True),

@@ -4,7 +4,7 @@ __author__ = 'hsk81'
 ###############################################################################
 
 from bottle import request
-from cache import redis_plugin_1 as rdb
+from cache import redis_plugin_0 as rdb
 
 import bottle, hashlib, inspect, re, ujson as JSON, uuid
 

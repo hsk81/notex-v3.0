@@ -22,6 +22,7 @@ setup (
         'marshmallow>=2.6.0 ',
         'psycopg2>=2.6.1',
         'pycrypto>=2.6.1',
+        'pylibmc>=1.5.0',
         'requests>=2.9.1',
         'redis>=2.10.5',
         'sass>=2.3',

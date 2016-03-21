@@ -4,7 +4,7 @@
 from bottle import Bottle
 
 from notex.aaa import aaa_plugin as aaa
-from notex.cache import redis_plugin_0 as rdb
+from notex.cache import memcached_plugin as mdb
 from notex.db import db_plugin
 
 from notex.view.util.database import html_for
@@ -26,7 +26,7 @@ app = app_edit
 @app.get ('/edit')
 def edit (db):
 
-    @rdb.memoize (expiry=None, unless=lambda: aaa.current or ARGs.debug ())
+    @mdb.memoize (expiry=None, unless=lambda: aaa.current or ARGs.debug ())
     def memoized (*args, **kwargs):
 
         return generic ('edit', html=html_for (db, detect('en')))

@@ -2,7 +2,7 @@
 ###############################################################################
 
 from bottle import Bottle, redirect
-from notex.cache import redis_plugin_0 as rdb
+from notex.cache import memcached_plugin as mdb
 
 import ARGs
 
@@ -16,7 +16,7 @@ app = app_index
 ###############################################################################
 
 @app.get ('/')
-@rdb.memoize (expiry=None, name='view.index', unless=lambda: ARGs.debug)
+@mdb.memoize (expiry=None, name='view.index', unless=lambda: ARGs.debug)
 def index (*args, **kwargs):
 
     return redirect ('/edit')
