@@ -26,7 +26,7 @@ app = app_edit
 @app.get ('/edit')
 def edit (db):
 
-    @mdb.memoize (expiry=None, unless=lambda: aaa.current or ARGs.debug ())
+    @mdb.memoize (expiry=mdb.NEVER, unless=lambda: aaa.current or ARGs.debug ())
     def memoized (*args, **kwargs):
 
         return generic ('edit', html=html_for (db, detect('en')))

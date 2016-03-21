@@ -16,7 +16,7 @@ app = app_index
 ###############################################################################
 
 @app.get ('/')
-@mdb.memoize (expiry=None, name='view.index', unless=lambda: ARGs.debug)
+@mdb.memoize (expiry=mdb.NEVER, name='view.index', unless=lambda: ARGs.debug)
 def index (*args, **kwargs):
 
     return redirect ('/edit')
