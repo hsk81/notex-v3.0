@@ -11,9 +11,6 @@ source ${SCRIPT_PATH}/../crud/create.sh
 
 source ${SCRIPT_PATH}/base.sh ;
 source ${SCRIPT_PATH}/html.sh ;
-source ${SCRIPT_PATH}/user.sh ;
-source ${SCRIPT_PATH}/blog.sh ;
-source ${SCRIPT_PATH}/post.sh ;
 
 ###############################################################################
 ###############################################################################
