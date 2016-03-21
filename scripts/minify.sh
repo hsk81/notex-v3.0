@@ -73,6 +73,8 @@ function minify_all_css () {
         static/css/lib.min.css \
         static/css/app.min.css \
       > static/css/all.min.css
+
+    rm static/css/app.min.css static/css/lib.min.css
 }
 
 ###############################################################################
