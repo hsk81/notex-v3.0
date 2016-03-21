@@ -55,8 +55,8 @@ class NotexCache (object):
 
     ###########################################################################
 
-    def cached (
-            self, expiry=None, name=None, keyfunc=None, unless=None, lest=None):
+    def cached (self, expiry=None, name=None, keyfunc=None,
+                unless=None, lest=None):
 
         if expiry is None:
             expiry = self.NEVER
@@ -66,8 +66,8 @@ class NotexCache (object):
 
         return self.memoize (expiry, name, keyfunc, unless, lest)
 
-    def memoize (
-            self, expiry=None, name=None, keyfunc=None, unless=None, lest=None):
+    def memoize (self, expiry=None, name=None, keyfunc=None,
+                 unless=None, lest=None):
 
         if expiry is None:
             expiry = self.NEVER
@@ -143,35 +143,30 @@ class NotexMemcachedPlugin (NotexCache):
         return decorator
 
     def get (self, key):
-        with self.connection.reserve () as mc:
-            return mc.get (self.prefixed (key))
+        return self.connection.get (self.prefixed (key))
 
     def set (self, key, value, expiry=0): ## self.NEVER
-        with self.connection.reserve () as mc:
-            if expiry == self.ASAP:
-                mc.delete (self.prefixed (key))
-            else:
-                mc.set (self.prefixed (key), value, time=expiry)
+        if expiry == self.ASAP:
+            self.connection.delete (self.prefixed (key))
+        else:
+            self.connection.set (self.prefixed (key), value, time=expiry)
 
     def delete (self, key):
-        with self.connection.reserve () as mc:
-            mc.delete (self.prefixed (key))
+        self.connection.delete (self.prefixed (key))
 
     def expire (self, key, expiry=None): ## self.ASAP
-        with self.connection.reserve () as mc:
-            if expiry == self.ASAP:
-                mc.delete (self.prefixed (key))
-            else:
-                mc.set (self.prefixed (key), mc.get(self.prefixed (key)),
-                        time=expiry)
+        if expiry == self.ASAP:
+            self.connection.delete (self.prefixed (key))
+        else:
+            self.connection.set (
+                self.prefixed (key), self.connection.get(self.prefixed (key)),
+                time=expiry)
 
     def exists (self, key):
-        with self.connection.reserve () as mc:
-            return mc.get(self.prefixed (key)) is not None
+        return self.connection.get (self.prefixed (key)) is not None
 
     def flush_all (self):
-        with self.connection.reserve () as mc:
-            mc.flush_all ()
+        self.connection.flush_all ()
 
     ###########################################################################
 
@@ -182,25 +177,8 @@ class NotexMemcachedPlugin (NotexCache):
         return getattr (self, '_connection')
 
     def connect (self):
-        class Connection (object):
-            def __init__ (self, mc):
-                self._mc = mc
-
-            def reserve (self):
-                class ContextManager (object):
-                    def __init__ (self, mc):
-                        self._mc = mc
-
-                    def __enter__ (self):
-                        return self._mc
-
-                    def __exit__ (self, type, value, traceback):
-                        pass
-
-                return ContextManager (self._mc)
-
-        return Connection (bmemcached.Client (
-            self.servers, username=self.username, password=self.password))
+        return bmemcached.Client (
+            self.servers, username=self.username, password=self.password)
 
     def close (self):
         if hasattr (self, '_connection'):
@@ -311,7 +289,6 @@ redis_plugin_0 = NotexRedisPlugin (db=0,
 
 if ARGs.get ('memcached_flush') is not None:
     memcached_plugin.flush_all ()
-
 if ARGs.get ('redis_flush_db') is not None:
     if '0' in ARGs.get ('redis_flush_db'):
         redis_plugin_0.flush_all ()
