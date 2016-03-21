@@ -12,7 +12,7 @@ function READ {
     echo -n ${HEAD} | tr '[:lower:]' '[:upper:]'
     echo ':' $(join "/" ${TAIL[@]:2})
 
-    curl -vs -XGET $SHUHADAKU/api/${path} ;
+    curl -vs -XGET $NOTEX/api/${path} ;
     if [[ $? -eq 0 ]] ; then echo ; else exit -1 ; fi
 }
 

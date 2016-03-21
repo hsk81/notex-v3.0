@@ -9,9 +9,9 @@ source ${SCRIPT_PATH}/../conf/notex.sh
 ## TYPEs: create =========================================================== ##
 ###############################################################################
 
-curl -vs -XPOST $SHUHADAKU/api/group/g:bool-value ;
-curl -vs -XPOST $SHUHADAKU/api/group/g:real-value ;
-curl -vs -XPOST $SHUHADAKU/api/group/g:text-value ;
+curl -vs -XPOST $NOTEX/api/group/g:bool-value ;
+curl -vs -XPOST $NOTEX/api/group/g:real-value ;
+curl -vs -XPOST $NOTEX/api/group/g:text-value ;
 
 ###############################################################################
 
@@ -21,9 +21,9 @@ source ${SCRIPT_PATH}/api.sh ;
 ## TYPEs: delete =========================================================== ##
 ###############################################################################
 
-curl -vs -XDELETE $SHUHADAKU/api/group/g:bool-value ;
-curl -vs -XDELETE $SHUHADAKU/api/group/g:real-value ;
-curl -vs -XDELETE $SHUHADAKU/api/group/g:text-value ;
+curl -vs -XDELETE $NOTEX/api/group/g:bool-value ;
+curl -vs -XDELETE $NOTEX/api/group/g:real-value ;
+curl -vs -XDELETE $NOTEX/api/group/g:text-value ;
 
 ###############################################################################
 ###############################################################################
