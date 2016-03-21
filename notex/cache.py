@@ -3,7 +3,15 @@ __author__ = 'hsk81'
 ###############################################################################
 ###############################################################################
 
-import ARGs, abc, bottle, functools, hashlib, inspect, pickle, redis
+import ARGs
+import abc
+import bottle
+import functools
+import hashlib
+import inspect
+import pickle
+import pylibmc
+import redis
 
 ###############################################################################
 ###############################################################################
@@ -133,7 +141,133 @@ class NotexCache (object):
 
     @staticmethod
     def version_key (*args, **kwargs):
-        return EddbCache.make_key ('version', *args, **kwargs)
+        return NotexCache.make_key ('version', *args, **kwargs)
+
+###############################################################################
+
+class NotexMemcachedPlugin (NotexCache):
+
+    @property
+    def NEVER (self):
+        return 0
+    @property
+    def ASAP (self):
+        return None
+
+    def __init__ (self, servers, username=None, password=None, pool_size=2**8,
+                  keyword='mdb'):
+
+        self.servers = servers
+        self.username = username
+        self.password = password
+        self.pool_size = pool_size
+        self.keyword = keyword
+
+    def setup (self, app):
+
+        for plugin in app.plugins:
+            if not isinstance (plugin, NotexMemcachedPlugin):
+                continue
+            if plugin.keyword == self.keyword:
+                raise bottle.PluginError ('conflicting plugins')
+
+    def apply (self, callback, route):
+
+        config = route.config
+        if 'memcached' in config:
+            get_config = lambda k, d: config.get ('memcached', {}).get (k, d)
+        else:
+            get_config = lambda k, d: config.get ('memcached.' + k, d)
+
+        keyword = get_config ('keyword', self.keyword)
+        argspec = inspect.getargspec (route.callback)
+        if keyword not in argspec.args: return callback
+
+        def decorator (*args, **kwargs):
+            kwargs[keyword] = self
+            return callback (*args, **kwargs)
+
+        return decorator
+
+    def get (self, key, expiry=None):
+        return self.get_value (key, expiry=expiry)
+
+    def get_number (self, key, expiry=None):
+        return self.get_value (key, expiry=expiry)
+
+    def get_value (self, key, expiry=None):
+        with self.connection.reserve () as mc:
+            value = mc.get (self.KEY_PREFIX + key)
+            if expiry: self.expire (key, expiry=expiry)
+            return value
+
+    def set (self, key, value, expiry=None):
+        self.set_value (key, value, expiry=expiry)
+
+    def set_number (self, key, value, expiry=None):
+        self.set_value (key, value, expiry=expiry)
+
+    def set_value (self, key, value, expiry=None):
+        with self.connection.reserve () as mc:
+            if expiry == self.ASAP:
+                mc.delete (self.KEY_PREFIX + key)
+            else:
+                mc.set (self.KEY_PREFIX + key, value, time=expiry)
+
+    def delete (self, key):
+        with self.connection.reserve () as mc:
+            mc.delete (self.KEY_PREFIX + key)
+
+    def expire (self, key, expiry=None):
+        with self.connection.reserve () as mc:
+            if expiry == self.ASAP:
+                mc.delete (self.KEY_PREFIX + key)
+            else:
+                mc.touch (self.KEY_PREFIX + key, time=expiry)
+
+    def exists (self, key):
+        with self.connection.reserve () as mc:
+            return self.KEY_PREFIX + key in mc
+
+    def increase (self, key, expiry=None):
+        key = self.KEY_PREFIX + key
+        with self.connection.reserve () as mc:
+            value = mc.get (key) + 1 if key in mc else +1
+            if expiry == self.ASAP: mc.delete (key)
+            else: mc.set (key, value, time=expiry)
+            return value
+
+    def decrease (self, key, expiry=None):
+        key = self.KEY_PREFIX + key
+        with self.connection.reserve () as mc:
+            value = mc.get (key) - 1 if key in mc else -1
+            if expiry == self.ASAP: mc.delete (key)
+            else: mc.set (key, value, time=expiry)
+            return value
+
+    def flush_all (self):
+        with self.connection.reserve () as mc:
+            print dir(mc)
+            mc.flush_all ()
+
+    ###########################################################################
+
+    @property
+    def connection (self):
+        if not hasattr (self, '_connection'):
+            setattr (self, '_connection', self.connect ())
+        return getattr (self, '_connection')
+
+    def connect (self):
+        mc = pylibmc.Client (self.servers, binary=True, behaviors={
+            'tcp_nodelay': True, 'no_block': True, 'ketama': True
+        }, username=self.username, password=self.password)
+
+        return pylibmc.ClientPool (mc, self.pool_size)
+
+    def close (self):
+        if hasattr (self, '_connection'):
+            pass
 
 ###############################################################################
 
@@ -149,7 +283,8 @@ class NotexRedisPlugin (NotexCache):
     def ASAP (self):
         return 0
 
-    def __init__ (self, host, port=6379, password=None, db=0, keyword='rdb'):
+    def __init__ (self, host, port=6379, password=None, db=0,
+                  keyword='rdb'):
 
         self.host, self.port = host, port
         self.password, self.db = password, db
@@ -158,14 +293,10 @@ class NotexRedisPlugin (NotexCache):
     def setup (self, app):
 
         for plugin in app.plugins:
-            if not isinstance (plugin, EddbRedisPlugin):
+            if not isinstance (plugin, NotexRedisPlugin):
                 continue
             if plugin.keyword == self.keyword:
                 raise bottle.PluginError ('conflicting plugins')
-
-    def close (self):
-        if hasattr (self, '_connection'):
-            pass
 
     def apply (self, callback, route):
 
@@ -262,25 +393,30 @@ class NotexRedisPlugin (NotexCache):
         return redis.StrictRedis (
             host=self.host, port=self.port, password=self.password, db=self.db)
 
+    def close (self):
+        if hasattr (self, '_connection'):
+            pass
+
 ###############################################################################
 
 ## std: cache for views etc.
+memcached_plugin = NotexMemcachedPlugin (
+    servers=ARGs.get ('memcached_servers', 'localhost:11211').split(','),
+    username=ARGs.get ('memcached_username', None),
+    password=ARGs.get ('memcached_password', None))
+
+## aaa: cache for authentication etc.
 redis_plugin_0 = NotexRedisPlugin (db=0,
     host=ARGs.get ('redis_host', 'localhost'),
     port=ARGs.get ('redis_port', 6379),
     password=ARGs.get ('redis_password', None))
 
-## aaa: cache for authentication etc.
-redis_plugin_1 = NotexRedisPlugin (db=0,
-    host=ARGs.get ('redis_host', 'localhost'),
-    port=ARGs.get ('redis_port', 6379),
-    password=ARGs.get ('redis_password', None))
+if ARGs.get ('memcached_flush') is not None:
+    memcached_plugin.flush_all ()
 
 if ARGs.get ('redis_flush_db') is not None:
     if '0' in ARGs.get ('redis_flush_db'):
         redis_plugin_0.flush_all ()
-    if '1' in ARGs.get ('redis_flush_db'):
-        redis_plugin_1.flush_all ()
 
 ###############################################################################
 ###############################################################################
