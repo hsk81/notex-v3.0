@@ -89,13 +89,17 @@ if __name__ == '__main__':
         default=os.environ.get ('SESSION_KEY', 'secret'),
         help='Session key')
 
-    parser.add_argument ('-S', '--no-sass', default=False,
+    parser.add_argument ('-S', '--no-sass',
+        default=os.environ.get ('NO_SASS', False),
         help='SASS flag', action='store_true')
-    parser.add_argument ('-d', '--debug', default=False,
+    parser.add_argument ('-d', '--debug',
+        default=os.environ.get ('DEBUG', False),
         help='Debug flag', action='store_true')
-    parser.add_argument ('-r', '--reload', default=False,
+    parser.add_argument ('-r', '--reload',
+        default=os.environ.get ('RELOAD', False),
         help='Reload flag', action='store_true')
-    parser.add_argument ('-w', '--wsgi', default='waitress',
+    parser.add_argument ('-w', '--wsgi',
+        default=os.environ.get ('WSGI', 'waitress'),
         help='WSGI server to use', metavar='WSGI')
 
     ARGs.put (parser.parse_args ())
