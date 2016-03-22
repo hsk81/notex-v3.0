@@ -5,7 +5,6 @@ import ARGs
 import argparse
 import bottle
 import importlib
-import ujson as JSON
 import os
 import sys
 
@@ -96,13 +95,13 @@ if __name__ == '__main__':
         help='Session key')
 
     parser.add_argument ('-S', '--no-sass',
-        default=JSON.decode(os.environ.get ('NO_SASS', 'false')),
+        default=os.environ.get ('NO_SASS', False),
         help='SASS flag', action='store_true')
     parser.add_argument ('-d', '--debug',
-        default=JSON.decode(os.environ.get ('DEBUG', 'false')),
+        default=os.environ.get ('DEBUG', False),
         help='Debug flag', action='store_true')
     parser.add_argument ('-r', '--reload',
-        default=JSON.decode(os.environ.get ('RELOAD', 'false')),
+        default=os.environ.get ('RELOAD', False),
         help='Reload flag', action='store_true')
     parser.add_argument ('-w', '--wsgi',
         default=os.environ.get ('WSGI', 'waitress'),
