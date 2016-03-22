@@ -130,6 +130,7 @@ var global = window;
     var with_google_api = function (callback) {
         if (global.gapi === undefined) {
             global.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
+                console.debug('[on:gapi-load]', arguments);
                 if (typeof callback === 'function') {
                     callback(global.gapi);
                 }
@@ -151,15 +152,15 @@ var global = window;
         };
         with_google_api(function (gapi) {
             console.debug('[with:google-api]', arguments);
-            var on_authorization = function (aaa) {
+            var on_done = function (xhr) {
                 console.debug('[with:google-api/aaa]', arguments);
-                if (aaa.error) switch (aaa.error) {
+                if (xhr.error) switch (xhr.error) {
                     case 'immediate_failed':
                         gapi.auth.authorize($.extend(
-                            {}, params, {immediate: false}), on_authorization);
+                            {}, params, {immediate: false}), on_done, on_fail);
                         break;
                     default:
-                        console.error(aaa);
+                        console.error(xhr);
                         return;
                 } else if (gapi.client.blogger === undefined) {
                     gapi.client.load('blogger', 'v3').then(function () {
@@ -173,8 +174,14 @@ var global = window;
                     }
                 }
             };
+            var on_fail = function (xhr) {
+                console.error('[on:fail]', xhr);
+                if (typeof callback === 'function') {
+                    callback(null);
+                }
+            };
             gapi.auth.authorize($.extend(
-                {}, params, {immediate: true}), on_authorization);
+                {}, params, {immediate: true}), on_done, on_fail);
         });
     };
 
@@ -290,20 +297,24 @@ var global = window;
 
                     console.error('[on:get-by-url]', res);
                 };
-
-                var url_request = blogger.blogs.getByUrl({
-                    url: url, fields: 'id,posts(totalItems)'
-                });
-                url_request.then(
-                    after(on_done, function () {
-                        $publish.attr('disabled', false);
-                        $publish.button('reset');
-                    }),
-                    before(on_fail, function () {
-                        $publish.attr('disabled', false);
-                        $publish.button('reset');
-                    })
-                );
+                if (blogger) {
+                    var url_request = blogger.blogs.getByUrl({
+                        url: url, fields: 'id,posts(totalItems)'
+                    });
+                    url_request.then(
+                        after(on_done, function () {
+                            $publish.attr('disabled', false);
+                            $publish.button('reset');
+                        }),
+                        before(on_fail, function () {
+                            $publish.attr('disabled', false);
+                            $publish.button('reset');
+                        })
+                    );
+                } else {
+                    $publish.attr('disabled', false);
+                    $publish.button('reset');
+                }
             });
             $publish.attr('disabled', true);
             $publish.button('publishing');
