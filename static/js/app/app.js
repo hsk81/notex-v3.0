@@ -150,7 +150,9 @@ var global = window;
             scope: 'https://www.googleapis.com/auth/blogger'
         };
         with_google_api(function (gapi) {
+            console.debug('[with:google-api]', arguments);
             var on_authorization = function (aaa) {
+                console.debug('[with:google-api/aaa]', arguments);
                 if (aaa.error) switch (aaa.error) {
                     case 'immediate_failed':
                         gapi.auth.authorize($.extend(
@@ -247,17 +249,17 @@ var global = window;
             $post_title.focus();
         } else {
             with_blogger_api(function (blogger) {
+                console.debug('[with:blogger-api]', arguments);
                 var on_done = function (res) {
+                    console.debug('[with:blogger-api/done]', arguments);
                     var blog = assert(res && res.result),
                         update = $post_title_cb.prop('checked');
-
                     if (update && blog.posts.totalItems > 0) {
                         var on_done = function (res) {
                             var posts = res.result && res.result.items || [],
                                 post = posts.find(function (p) {
                                     return p.title === title;
                                 });
-
                             if (post !== undefined) {
                                 do_update(blogger, blog, post);
                             } else {
@@ -267,7 +269,6 @@ var global = window;
                         var on_fail = function (res) {
                             console.error('[on:list]', res);
                         };
-
                         var all_request = blogger.posts.list({
                             blogId: blog.id, fields: 'items(id,title)',
                             orderBy: 'published'
@@ -276,11 +277,11 @@ var global = window;
                     } else {
                         do_insert(blogger, blog);
                     }
-
                     global.cookie.set('blog-url', url);
                     $('#publish-dlg').modal('hide');
                 };
                 var on_fail = function (res) {
+                    console.debug('[with:blogger-api/fail]', arguments);
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', function () {
                         var url = $blog_url.val();
@@ -309,6 +310,7 @@ var global = window;
         }
 
         function do_insert (blogger, blog) {
+            console.debug('[do:insert]', arguments);
             var on_done = function (res) {
                 var url = assert(res.result.url),
                     id = assert(res.result.id);
@@ -326,6 +328,7 @@ var global = window;
             insert_req.then(on_done, on_fail);
         }
         function do_update (blogger, blog, post) {
+            console.debug('[do:update]', arguments);
             var on_done = function (res) {
                 var url = assert(res.result.url),
                     id = assert(res.result.id);
@@ -342,7 +345,6 @@ var global = window;
             });
             update_req.then(on_done, on_fail);
         }
-
         function md2html (md_content, with_header) {
             var $content = $('<div>', {
                 html: md.render(md_content)
