@@ -57,18 +57,9 @@ html, body {
         font-family: monospace;
         font-size: inherit;
       }
-      /*
       textarea#md-inp {
-        height: calc(100% - 41px);
+        outline-width: 0;
       }
-      div.input-group {
-        border-top: 1px solid #e7e7e7;
-        padding: 3px;
-      }
-      div.input-group {
-        -webkit-margin-before: -5px;
-      }
-      */
     }
     .rhs {
       height: 100%;
