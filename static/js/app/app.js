@@ -207,6 +207,13 @@ var global = window;
 
         $(this).find('[data-toggle="tooltip"]').tooltip();
         $(this).find('[data-toggle="popover"]').popover();
+
+        var $publish = $(this).find('.btn-primary');
+        $publish.attr('disabled', false);
+        $publish.removeClass('btn-success');
+        $publish.removeClass('btn-warning');
+        $publish.removeClass('btn-danger');
+        $publish.button('reset');
     });
 
     $('#publish-dlg').on('shown.bs.modal', function (ev) {
@@ -282,8 +289,6 @@ var global = window;
                     } else {
                         do_insert(blogger, blog);
                     }
-                    global.cookie.set('blog-url', url);
-                    $('#publish-dlg').modal('hide');
                 };
                 var on_fail = function (res) {
                     $blog_url_ig.addClass('has-error');
@@ -299,20 +304,36 @@ var global = window;
                     });
                     url_request.then(
                         after(on_done, function () {
+                            global.cookie.set('blog-url', url);
+
                             $publish.attr('disabled', false);
-                            $publish.button('reset');
+                            $publish.addClass('btn-success');
+                            $publish.button('published');
+
+                            setTimeout(function () {
+                                setTimeout(function () {
+                                    $publish.button('reset');
+                                }, 600);
+                                $('#publish-dlg').modal('hide');
+                            }, 600);
                         }),
                         before(on_fail, function () {
                             $publish.attr('disabled', false);
+                            $publish.addClass('btn-danger');
                             $publish.button('reset');
                         })
                     );
                 } else {
                     $publish.attr('disabled', false);
+                    $publish.addClass('btn-danger');
                     $publish.button('reset');
                 }
             });
+
             $publish.attr('disabled', true);
+            $publish.removeClass('btn-success');
+            $publish.removeClass('btn-warning');
+            $publish.removeClass('btn-danger');
             $publish.button('publishing');
         }
 
