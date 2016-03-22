@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 ###############################################################################
 
-import ARGs, argparse, importlib, os, sys, bottle
+import ARGs
+import argparse
+import bottle
+import importlib
+import ujson as JSON
+import os
+import sys
 
 ###############################################################################
 ###############################################################################
@@ -90,13 +96,13 @@ if __name__ == '__main__':
         help='Session key')
 
     parser.add_argument ('-S', '--no-sass',
-        default=os.environ.get ('NO_SASS', False),
+        default=JSON.decode(os.environ.get ('NO_SASS', 'false')),
         help='SASS flag', action='store_true')
     parser.add_argument ('-d', '--debug',
-        default=os.environ.get ('DEBUG', False),
+        default=JSON.decode(os.environ.get ('DEBUG', 'false')),
         help='Debug flag', action='store_true')
     parser.add_argument ('-r', '--reload',
-        default=os.environ.get ('RELOAD', False),
+        default=JSON.decode(os.environ.get ('RELOAD', 'false')),
         help='Reload flag', action='store_true')
     parser.add_argument ('-w', '--wsgi',
         default=os.environ.get ('WSGI', 'waitress'),
