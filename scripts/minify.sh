@@ -21,7 +21,9 @@ function concat_lib_js () {
 function concat_app_js () {
     cat \
         static/js/app/cookie/cookie.js \
+        static/js/app/function/after.js \
         static/js/app/function/assert.js \
+        static/js/app/function/before.js \
         static/js/app/function/buffered.js \
         static/js/app/function/mine.js \
         static/js/app/function/partial.js \
