@@ -130,7 +130,6 @@ var global = window;
     var with_google_api = function (callback) {
         if (global.gapi === undefined) {
             global.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
-                console.debug('[on:gapi-load]', arguments);
                 if (typeof callback === 'function') {
                     callback(global.gapi);
                 }
@@ -151,16 +150,14 @@ var global = window;
             scope: 'https://www.googleapis.com/auth/blogger'
         };
         with_google_api(function (gapi) {
-            console.debug('[with:google-api]', arguments);
-            var on_done = function (xhr) {
-                console.debug('[with:google-api/aaa]', arguments);
-                if (xhr.error) switch (xhr.error) {
+            var on_done = function (res) {
+                if (res.error) switch (res.error) {
                     case 'immediate_failed':
                         gapi.auth.authorize($.extend(
                             {}, params, {immediate: false}), on_done, on_fail);
                         break;
                     default:
-                        console.error(xhr);
+                        console.error(res);
                         return;
                 } else if (gapi.client.blogger === undefined) {
                     gapi.client.load('blogger', 'v3').then(function () {
@@ -174,11 +171,11 @@ var global = window;
                     }
                 }
             };
-            var on_fail = function (xhr) {
-                console.error('[on:fail]', xhr);
+            var on_fail = function (res) {
                 if (typeof callback === 'function') {
-                    callback(null);
+                    callback(false);
                 }
+                console.error('[on:fail]', res);
             };
             gapi.auth.authorize($.extend(
                 {}, params, {immediate: true}), on_done, on_fail);
@@ -256,9 +253,7 @@ var global = window;
             $post_title.focus();
         } else {
             with_blogger_api(function (blogger) {
-                console.debug('[with:blogger-api]', arguments);
                 var on_done = function (res) {
-                    console.debug('[with:blogger-api/done]', arguments);
                     var blog = assert(res && res.result),
                         update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
@@ -288,13 +283,11 @@ var global = window;
                     $('#publish-dlg').modal('hide');
                 };
                 var on_fail = function (res) {
-                    console.debug('[with:blogger-api/fail]', arguments);
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', function () {
                         var url = $blog_url.val();
                         if (url) $blog_url_ig.removeClass('has-error');
                     });
-
                     console.error('[on:get-by-url]', res);
                 };
                 if (blogger) {
@@ -321,7 +314,6 @@ var global = window;
         }
 
         function do_insert (blogger, blog) {
-            console.debug('[do:insert]', arguments);
             var on_done = function (res) {
                 var url = assert(res.result.url),
                     id = assert(res.result.id);
@@ -339,7 +331,6 @@ var global = window;
             insert_req.then(on_done, on_fail);
         }
         function do_update (blogger, blog, post) {
-            console.debug('[do:update]', arguments);
             var on_done = function (res) {
                 var url = assert(res.result.url),
                     id = assert(res.result.id);
