@@ -13,13 +13,13 @@ var global = window;
                 try {
                     return hljs.highlight(language, text).value;
                 } catch (ex) {
-                    console.error(ex);
+                    console.error('[on:markdown-it.highlight]', ex);
                 }
             } else {
                 try {
                     return hljs.highlightAuto(text).value;
                 } catch (ex) {
-                    console.error(ex);
+                    console.error('[on:markdown-it.highlight]', ex);
                 }
             }
             return null; // escape HTML
@@ -157,7 +157,10 @@ var global = window;
                             {}, params, {immediate: false}), on_done, on_fail);
                         break;
                     default:
-                        console.error(res);
+                        if (typeof callback === 'function') {
+                            callback(false);
+                        }
+                        console.error('[with:google-api/done]', res);
                         return;
                 } else if (gapi.client.blogger === undefined) {
                     gapi.client.load('blogger', 'v3').then(function () {
@@ -175,7 +178,7 @@ var global = window;
                 if (typeof callback === 'function') {
                     callback(false);
                 }
-                console.error('[on:fail]', res);
+                console.error('[with:google-api/fail]', res);
             };
             gapi.auth.authorize($.extend(
                 {}, params, {immediate: true}), on_done, on_fail);
@@ -269,7 +272,7 @@ var global = window;
                             }
                         };
                         var on_fail = function (res) {
-                            console.error('[on:list]', res);
+                            console.error('[on:blogger.posts.list]', res);
                         };
                         var all_request = blogger.posts.list({
                             blogId: blog.id, fields: 'items(id,title)',
@@ -288,7 +291,7 @@ var global = window;
                         var url = $blog_url.val();
                         if (url) $blog_url_ig.removeClass('has-error');
                     });
-                    console.error('[on:get-by-url]', res);
+                    console.error('[on:blogger.blogs.get-by-url]', res);
                 };
                 if (blogger) {
                     var url_request = blogger.blogs.getByUrl({
@@ -321,7 +324,7 @@ var global = window;
                 if (tab !== undefined) tab.focus();
             };
             var on_fail = function (res) {
-                console.error('[on:insert]', res);
+                console.error('[on:blogger.posts.insert]', res);
             };
             var insert_req = blogger.posts.insert({
                 blogId: assert(blog.id),
@@ -338,7 +341,7 @@ var global = window;
                 if (tab !== undefined) tab.focus();
             };
             var on_fail = function (res) {
-                console.error('[on:update]', res);
+                console.error('[on:blogger.posts.update]', res);
             };
             var update_req = blogger.posts.update({
                 blogId: assert(blog.id), postId: assert(post.id),
