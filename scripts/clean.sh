@@ -4,7 +4,7 @@ SCRIPT_PATH=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd) ;
 ###############################################################################
 
 function clean_env () {
-    rm -rf bin/ include/ lib/
+    rm -rf bin/ include/ lib/ share/
 }
 
 function clean_egg () {
