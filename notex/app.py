@@ -11,6 +11,7 @@ from notex.view.index import app_index
 from notex.view.login import app_login
 from notex.view.now import app_now
 from notex.view.static import app_static
+
 import ARGs
 import gzip
 import os
@@ -52,7 +53,6 @@ def concat(out_path, inp_path, flag='a', func=lambda s: s):
         with open(out_path, flag) as out_file:
             out_file.write(func(inp_file.read()))
 
-
 def zipify(out_path):
     with open(out_path, 'r') as inp_file:
         with gzip.open(out_path + '.gz', 'wb') as zip_file:
@@ -83,10 +83,8 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     out_path = 'static/js/all.tmp.js'
 
-
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)
-
 
     concat(out_path,
            'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
