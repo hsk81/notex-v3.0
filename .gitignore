@@ -33,12 +33,10 @@ run-pro.sh
 
 ## minified
 
-static/css/all.min.css
-static/css/app.min.css
-static/css/lib.min.css
-static/js/all.min.js
-static/js/app.min.js
-static/js/lib.min.js
+static/css/**/*.css
+static/css/**/*.css.gz
+static/js/all.tmp.js
+static/js/all.tmp.js.gz
 
 # ##############################################################################
 # global -----------------------------------------------------------------------
