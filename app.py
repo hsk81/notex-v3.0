@@ -97,6 +97,13 @@ if __name__ == '__main__':
     parser.add_argument ('-S', '--no-sass',
         default=os.environ.get ('NO_SASS', False),
         help='SASS flag', action='store_true')
+    parser.add_argument ('-C', '--no-css-minify',
+        default=os.environ.get ('NO_CSS_MINIFY', False),
+        help='CSS flag', action='store_true')
+    parser.add_argument ('-J', '--no-js-minify',
+        default=os.environ.get ('NO_JS_MINIFY', False),
+        help='JS flag', action='store_true')
+
     parser.add_argument ('-d', '--debug',
         default=os.environ.get ('DEBUG', False),
         help='Debug flag', action='store_true')
