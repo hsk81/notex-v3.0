@@ -4,7 +4,6 @@ __author__ = 'hsk81'
 ###############################################################################
 
 from bottle import Bottle
-
 from notex.api import app_api
 from notex.view.debug import app_debug
 from notex.view.edit import app_edit
@@ -12,7 +11,6 @@ from notex.view.index import app_index
 from notex.view.login import app_login
 from notex.view.now import app_now
 from notex.view.static import app_static
-
 import ARGs
 import gzip
 import os
@@ -23,24 +21,23 @@ import rjsmin
 ###############################################################################
 ###############################################################################
 
-app_main = Bottle ()
-app_main.merge (app_edit)
-app_main.merge (app_index)
-app_main.merge (app_login)
-app_main.merge (app_now)
-app_main.merge (app_static)
-app_main.mount ('/api', app_api)
+app_main = Bottle()
+app_main.merge(app_edit)
+app_main.merge(app_index)
+app_main.merge(app_login)
+app_main.merge(app_now)
+app_main.merge(app_static)
+app_main.mount('/api', app_api)
 
-if ARGs.get ('debug'):
-    app_main.merge (app_debug)
+if ARGs.get('debug'):
+    app_main.merge(app_debug)
 
 ###############################################################################
 ###############################################################################
 
-if not ARGs.get ('no_sass') or ARGs.get ('debug'):
+if not ARGs.get('no_sass') or ARGs.get('debug'):
     for path, dns, fns in os.walk('static/css'):
         for filename in filter(lambda fn: fn.endswith('.scss'), fns):
-
             inp_path = os.path.join(path, filename)
             out_path = inp_path.replace('.scss', '.css')
 
@@ -55,6 +52,7 @@ def concat(out_path, inp_path, flag='a', func=lambda s: s):
         with open(out_path, flag) as out_file:
             out_file.write(func(inp_file.read()))
 
+
 def zipify(out_path):
     with open(out_path, 'r') as inp_file:
         with gzip.open(out_path + '.gz', 'wb') as zip_file:
@@ -62,11 +60,13 @@ def zipify(out_path):
 
 ###############################################################################
 
-if not ARGs.get('no_css_minify') and not ARGs.get ('debug'):
+if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
     out_path = 'static/css/all.tmp.css'
+
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rcssmin.cssmin)
+
 
     concat(out_path,
            'static/css/lib/bootstrap/bootstrap-3.3.6.min.css', 'w')
@@ -80,11 +80,13 @@ if not ARGs.get('no_css_minify') and not ARGs.get ('debug'):
 
 ###############################################################################
 
-if not ARGs.get('no_js_minify') and not ARGs.get ('debug'):
+if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     out_path = 'static/js/all.tmp.js'
+
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)
+
 
     concat(out_path,
            'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
