@@ -63,10 +63,8 @@ def zipify(out_path):
 if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
     out_path = 'static/css/all.tmp.css'
 
-
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rcssmin.cssmin)
-
 
     concat(out_path,
            'static/css/lib/bootstrap/bootstrap-3.3.6.min.css', 'w')
