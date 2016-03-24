@@ -70,6 +70,7 @@ html, body {
         height: 100%;
         overflow-y: auto;
         padding: 1em;
+        position: absolute;
         width: 100%;
       }
       div#md-out, div#md-tmp {
@@ -80,7 +81,8 @@ html, body {
         text-align: justify;
       }
       div#md-out .mjx-math,
-      div#md-out .mjx-char {
+      div#md-out .mjx-char,
+      div#md-out a {
         color: navy;
       }
     }
