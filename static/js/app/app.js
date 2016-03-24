@@ -70,9 +70,11 @@ var global = window;
             timeout_id = setTimeout(function () {
                 if (MathJax !== undefined) {
                     MathJax.Hub.Queue([
+                        "resetEquationNumbers", MathJax.InputJax.TeX
+                    ], [
                         "Typeset", MathJax.Hub, 'md-out', function () {
+                            $md_out.css('visibility', 'visible');
                             $md_tmp.remove();
-                            $md_out.show();
                         }
                     ]);
                 }
@@ -86,7 +88,7 @@ var global = window;
             $md_tmp.insertBefore($md_out);
             $md_tmp.scrollTop($md_out.scrollTop());
 
-            $md_out.hide();
+            $md_out.css('visibility', 'hidden');
             $md_out.html(md.render(md_new));
 
             var $a = $('a[name=save]'), $h = $md_out.find(':header');
