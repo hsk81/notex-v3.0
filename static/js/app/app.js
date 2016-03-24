@@ -82,7 +82,6 @@ var global = window;
 
             $md_tmp = $('#md-tmp');
             $md_tmp.remove();
-
             $md_tmp = $md_out.clone();
             $md_tmp.prop('id', 'md-tmp');
             $md_tmp.insertBefore($md_out);
