@@ -34,6 +34,7 @@ run-pro.sh
 ## minified
 
 static/css/**/*.css
+static/css/**/*.css.map
 static/css/**/*.css.gz
 static/js/all.tmp.js
 static/js/all.tmp.js.gz
