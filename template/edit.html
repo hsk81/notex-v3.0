@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+{% block title %}
+<title>{{ domain|capitalize }}&nbsp;·&nbsp;Editor</title>
+{% endblock %}
+
+{% block head %}
+{% if debug %}
+<link href="/static/css/app/edit.css" rel="stylesheet">
+{% endif %}
+{% endblock %}
+
+{% block body %}
+{% include 'home/0100-header.html' %}
+{% include 'home/0200-center.html' %}
+{# include 'home/0900-footer.html' #}
+{% endblock %}
+
+{% block script_mjx %}
+<script type="text/x-mathjax-config">MathJax.Hub.Config({asciimath2jax:{delimiters:[['\{\{','\}\}']]},tex2jax:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},processEscapes:true,processSectionDelay:0});</script>
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+{% endblock %}

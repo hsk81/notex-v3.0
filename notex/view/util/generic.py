@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 ###############################################################################
 
-from bottle import jinja2_template
 from bottle import request
 from datetime import date
 
@@ -10,42 +9,25 @@ import ARGs, os, ujson as JSON
 ###############################################################################
 ###############################################################################
 
-def generic (view, **kwargs):
+from jinja2 import Environment, FileSystemLoader
+env = Environment (loader=FileSystemLoader('./template'))
+
+if not ARGs.get ('debug'):
+    env.add_extension ('compressinja.html.HtmlCompressor')
+
+env.globals.update ({'JSON': JSON})
+
+###############################################################################
+
+def generic (tpl_name, **kwargs):
     domain = request.get_header ('host')
-    keywords = get_keywords (view, domain=domain)
+    keywords = get_keywords (tpl_name, domain=domain)
+    tpl = env.get_template(tpl_name + '.html')
 
-    return template (view, debug=ARGs.get (key='debug'),
-        email=get_mailto (), description=get_description (view),
+    return tpl.render (
+        debug=ARGs.get (key='debug'),
+        email=get_mailto (), description=get_description (tpl_name),
         domain=domain, keywords=keywords, today=date.today (), **kwargs)
-
-def template (*args, **kwargs):
-
-    def extend (name, key, value):
-        if name not in kwargs:
-            kwargs[name] = {key: value}
-        elif key not in kwargs[name]:
-            kwargs[name][key] = value
-        else:
-            kwargs[name][key].extend (value)
-
-    def update (name, key, value):
-        if name not in kwargs:
-            kwargs[name] = {key: value}
-        elif key not in kwargs[name]:
-            kwargs[name][key] = value
-        else:
-            kwargs[name][key].update (value)
-
-    if not ARGs.get ('debug'):
-        extend ('template_settings', 'extensions', [
-            'compressinja.html.HtmlCompressor'
-        ])
-
-    update ('template_settings', 'filters', {
-        'json': JSON.dumps
-    })
-
-    return jinja2_template (*args, **kwargs)
 
 ###############################################################################
 
@@ -70,7 +52,7 @@ def get_keywords (view, domain):
 
 def get_description (view):
 
-    base = '{0}: Energy Efficiency Database'.format (view.capitalize ())
+    base = '{0}: Weblog Service'.format (view.capitalize ())
     if view == 'home':
         return os.environ.get ('DESCRIPTION_HOME', base)
     elif view == 'contact':
