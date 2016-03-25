@@ -81,6 +81,9 @@ html, body {
       div#md-out p, div#md-tmp p {
         text-align: justify;
       }
+      div#md-out .footnote-ref > a {
+        font-size: smaller;
+      }
       div#md-out .mjx-math,
       div#md-out .mjx-char,
       div#md-out a {
