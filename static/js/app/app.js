@@ -28,6 +28,11 @@ var global = window;
     });
 
     md.use(markdownitAbbr);
+    md.use(markdownitAnchor);
+    md.use(markdownitFigure, {
+      dataType: true,
+      figcaption: true
+    });
     md.use(markdownitFootnote);
     md.use(markdownitMark);
     md.use(markdownitMath, {
@@ -211,7 +216,7 @@ var global = window;
             $blog_url.val(blog_url);
         }
 
-        var title = $('#md-out').find(':header:first-of-type').text();
+        var title = $('#md-out').find(':header:nth(0)').text();
         if (title && typeof title === 'string') {
             $post_title.val(title);
         }

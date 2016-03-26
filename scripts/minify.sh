@@ -11,6 +11,8 @@ function concat_lib_js () {
         static/js/lib/highlight/highlight-9.2.0.min.js \
         static/js/lib/markdown-it/markdown-it-6.0.0.min.js \
         static/js/lib/markdown-it/markdown-it-abbr-1.0.3.min.js \
+        static/js/lib/markdown-it/markdown-it-anchor-2.5.0.min.js \
+        static/js/lib/markdown-it/markdown-it-figure-0.2.3.min.js \
         static/js/lib/markdown-it/markdown-it-footnote-2.0.0.min.js \
         static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js \
         static/js/lib/markdown-it/markdown-it-math-3.0.2.min.js \
