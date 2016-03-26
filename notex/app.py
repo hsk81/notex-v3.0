@@ -6,7 +6,7 @@ __author__ = 'hsk81'
 from bottle import Bottle
 from notex.api import app_api
 from notex.view.debug import app_debug
-from notex.view.edit import app_edit
+from notex.view.editor import app_edit
 from notex.view.index import app_index
 from notex.view.login import app_login
 from notex.view.now import app_now
