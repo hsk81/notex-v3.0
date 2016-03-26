@@ -23,15 +23,15 @@ app = app_edit
 ###############################################################################
 ###############################################################################
 
-@app.get ('/edit')
+@app.get ('/editor')
 def edit (db):
 
     @mdb.memoize (expiry=mdb.NEVER, unless=lambda: ARGs.debug () or aaa.current)
     def memoized (*args, **kwargs):
 
-        return generic ('edit', html=html_for (db, detect('en')))
+        return generic ('editor', html=html_for (db, detect('en')))
 
-    return memoized (name='views.edit:' + detect('en'))
+    return memoized (name='views.editor:' + detect('en'))
 
 ###############################################################################
 ###############################################################################
