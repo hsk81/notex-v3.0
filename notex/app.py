@@ -118,6 +118,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
            'static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-table-of-contents-0.2.0.min.js')
+    concat(out_path,
+           'static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js')
     minify(out_path,
            'static/js/app/cookie/cookie.js')
     minify(out_path,
