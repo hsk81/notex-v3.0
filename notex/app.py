@@ -99,6 +99,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-abbr-1.0.3.min.js')
     concat(out_path,
+           'static/js/lib/markdown-it/markdown-it-center-text-1.0.3.min.js')
+    concat(out_path,
            'static/js/lib/markdown-it/markdown-it-figure-0.2.3.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-footnote-2.0.0.min.js')
