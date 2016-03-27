@@ -30,6 +30,8 @@ var global = window;
     md.use(markdownitAbbr);
     md.use(markdownitAnchor);
     md.use(markdownitCentertext);
+    md.use(markdownitDecorate);
+    md.use(markdownitEmoji);
     md.use(markdownitFigure, {
       dataType: true,
       figcaption: true
@@ -50,6 +52,7 @@ var global = window;
     });
     md.use(markdownitSub);
     md.use(markdownitSup);
+    md.use(markdownitToc);
 
     $('#md-inp').on('keypress', function (ev) {
         if (timeout_id !== undefined) {
