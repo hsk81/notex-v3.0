@@ -73,7 +73,7 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/css/lib/highlight/default-9.2.0.min.css')
     minify(out_path,
-           'static/css/app/edit.css')
+           'static/css/app/editor.css')
     zipify(out_path)
 
 ###############################################################################
