@@ -53,6 +53,7 @@ var global = window;
     md.use(markdownitSub);
     md.use(markdownitSup);
     md.use(markdownitToc);
+    md.use(markdownitVideo);
 
     $('#md-inp').on('keypress', function (ev) {
         if (timeout_id !== undefined) {
