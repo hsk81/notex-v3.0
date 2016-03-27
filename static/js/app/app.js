@@ -29,6 +29,7 @@ var global = window;
 
     md.use(markdownitAbbr);
     md.use(markdownitAnchor);
+    md.use(markdownitCentertext);
     md.use(markdownitFigure, {
       dataType: true,
       figcaption: true
@@ -47,7 +48,6 @@ var global = window;
             return '$$' + string + '$$';
         }
     });
-
     md.use(markdownitSub);
     md.use(markdownitSup);
 
