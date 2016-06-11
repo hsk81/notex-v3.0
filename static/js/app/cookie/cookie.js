@@ -1,29 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-var global = window;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-(function () {
-    function set_cookie(name, value, expiry_ms) {
+var Cookie = (function () {
+    function Cookie() {
+    }
+    Cookie.set = function (name, value, expiry_ms) {
         var json = JSON.stringify(value);
         if (expiry_ms === undefined) {
             document.cookie = name + '=' + json;
-        } else {
+        }
+        else {
             var date = new Date();
             date.setTime(date.getTime() + expiry_ms);
             var expires = 'expires=' + date.toUTCString();
             document.cookie = name + '=' + json + '; ' + expires;
         }
-    }
-
-    function get_cookie(name, value) {
-        var cookie_name = name + '=',
-            cookies = document.cookie.split(';'),
-            string;
-
+    };
+    Cookie.get = function (name, value) {
+        var cookie_name = name + '=', cookies = document.cookie.split(';'), string;
         for (var i = 0; i < cookies.length; i++) {
             var cookie = cookies[i];
             while (cookie.charAt(0) === ' ') {
@@ -34,21 +25,18 @@ var global = window;
                 break;
             }
         }
-
-        if (string !== undefined) try {
-            return JSON.parse(string);
-        } catch (ex) {
-            return value;
-        } else {
+        if (string !== undefined)
+            try {
+                return JSON.parse(string);
+            }
+            catch (ex) {
+                return value;
+            }
+        else {
             return value;
         }
-    }
-
-    global.cookie = {
-        set: set_cookie,
-        get: get_cookie
-    }
+    };
+    return Cookie;
 }());
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+window.cookie = Cookie;
+//# sourceMappingURL=cookie.js.map
