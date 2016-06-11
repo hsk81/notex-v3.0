@@ -1,3 +1,7 @@
+interface Function {
+    partial:Function;
+}
+
 /**
  * Allows to bind *any* argument using their names rather their positions; this
  * approach is more flexible if the initial arguments are to be left unbound.
@@ -14,24 +18,34 @@
  * .., val{n-2})`. Notice that the relative position of the *unbound* arguments
  * is left intact.
  */
-Function.prototype.partial = function () {
-    var args = (arguments.length > 0) ? arguments[0] : {}, negs = {}, func = this;
-    var str = func.toString(), lhs = str.indexOf('(') + 1, rhs = str.indexOf(')'), names = str.slice(lhs, rhs).match(/([^\s,]+)/g);
-    var i = 0;
+
+Function.prototype.partial = function ():Function {
+    let args = (arguments.length > 0) ? arguments[0] : {},
+        negs = {},
+        func = this;
+
+    let str = func.toString(),
+        lhs = str.indexOf('(') + 1,
+        rhs = str.indexOf(')'),
+        names = str.slice(lhs, rhs).match(/([^\s,]+)/g);
+
+    let i = 0;
+
     names.every(function (value) {
         if (value in args === false) {
             negs[i++] = value;
         }
         return true;
     });
+
     return function () {
-        var union = [];
-        for (var i_1 in arguments) {
-            if (arguments.hasOwnProperty(i_1)) {
-                args[negs[i_1]] = arguments[i_1];
+        let union = [];
+        for (let i in arguments) {
+            if (arguments.hasOwnProperty(i)) {
+                args[negs[i]] = arguments[i];
             }
         }
-        for (var j in names) {
+        for (let j in names) {
             if (names.hasOwnProperty(j)) {
                 union.push(args[names[j]]);
             }
@@ -39,4 +53,3 @@ Function.prototype.partial = function () {
         return func.apply(this, union);
     };
 };
-//# sourceMappingURL=partial.js.map
