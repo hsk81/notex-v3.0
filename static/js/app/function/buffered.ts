@@ -2,7 +2,7 @@ interface Function {
     cancel:Function;
 }
 
-function buffered(fn:Function, ms?:number):Function {
+function buffered(fn:Function, ms:number = 200):Function {
     let id:number, gn:Function = function () {
         let self = this, args = arguments;
         if (id !== undefined) {
@@ -14,7 +14,7 @@ function buffered(fn:Function, ms?:number):Function {
             id = setTimeout(function () {
                 fn.apply(self, args);
                 id = undefined;
-            }, ms || 200);
+            }, ms);
         }
     };
 

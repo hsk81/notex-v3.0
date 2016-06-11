@@ -1,4 +1,5 @@
 function buffered(fn, ms) {
+    if (ms === void 0) { ms = 200; }
     var id, gn = function () {
         var self = this, args = arguments;
         if (id !== undefined) {
@@ -9,7 +10,7 @@ function buffered(fn, ms) {
             id = setTimeout(function () {
                 fn.apply(self, args);
                 id = undefined;
-            }, ms || 200);
+            }, ms);
         }
     };
     gn.cancel = function () {
