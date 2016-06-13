@@ -36,6 +36,8 @@ run-pro.sh
 static/css/**/*.css
 static/css/**/*.css.map
 static/css/**/*.css.gz
+static/js/**/*.js.map
+static/js/**/*.js.gz
 static/js/all.tmp.js
 static/js/all.tmp.js.gz
 
