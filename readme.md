@@ -22,17 +22,17 @@ Then source to the virtual environment set-up for `python2`, which if successful
 notex.git $ source bin/activate
 ```
 
-Now, you can install all the `python2` dependencies with the help of the `setup.py` script. This step might you require to have a development environment set-up (including some headers for Python):
+Now, you can install all the `python2` dependencies with the help of the `setup.py` script. This step might require you to have a development environment set-up (including some headers for Python):
 ```bash
 [notex] $ ./setup.py install
 ```
 
-It's time for you start your `postgresql`, `redis` and `memcached` instances. Once done, we can start the application:
+It's time for you to start your `postgresql`, `redis` and `memcached` instances. Once done, we can start the application:
 ```bash
 [notex] $ ./app.py --db-drop --db-create
 ```
 
-If any database `notex` has been created before, it will be dropped and a new instance will be created. Obviously, these two parameters should *only* be used once at the very beginning and can later be omitted! Later on, you should start the application via:
+If any database `notex` has been created before, it will be dropped and a new instance will be created. Obviously, these two parameters should *only* be used once at the very beginning and can later be omitted! So later on, you should start the application via:
 ```bash
 [notex] $ ./app.py --debug --reload
 ```
