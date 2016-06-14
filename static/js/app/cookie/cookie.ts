@@ -1,5 +1,14 @@
-class Cookie {
-    static set(name:string, value:any, expiry_ms?:number):void {
+interface ICookie {
+    set:<T>(name:string, value:T, expiry_ms?:number)=> T;
+    get:<T>(name:string, value?:T)=> T;
+}
+
+interface Window {
+    cookie:ICookie;
+}
+
+window.cookie = class Cookie implements ICookie {
+    static set<T>(name:string, value:T, expiry_ms?:number):T {
         let json = JSON.stringify(value);
         if (expiry_ms === undefined) {
             document.cookie = name + '=' + json;
@@ -9,11 +18,15 @@ class Cookie {
             let expires = 'expires=' + date.toUTCString();
             document.cookie = name + '=' + json + '; ' + expires;
         }
+        return value;
+    }
+    set<T>(name:string, value:T, expiry_ms?:number):T {
+        return Cookie.set(name, value, expiry_ms);
     }
 
-    static get(name:string, value:any):any {
-        let cookie_name = name + '=',
-            cookies = document.cookie.split(';'),
+    static get<T>(name:string, value?:T):T {
+        let cookies = document.cookie.split(';'),
+            cookie_name = name + '=',
             string;
 
         for (let i = 0; i < cookies.length; i++) {
@@ -35,10 +48,7 @@ class Cookie {
             return value;
         }
     }
-}
-
-interface Window {
-    cookie:Cookie;
-}
-
-window.cookie = Cookie;
+    get<T>(name:string, value?:T):T {
+        return Cookie.get(name, value);
+    }
+};
