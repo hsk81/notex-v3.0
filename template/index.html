@@ -43,10 +43,11 @@
         <script src="/static/js/lib/highlight/highlight-9.2.0.min.js"></script>
         <!-- /static/js/app -->
         <script src="/static/js/lib/require/require-2.2.0.js"
-                data-main="/static/js/app/app.js">
-        </script>
+                data-main="/static/js/app/app.js"></script>
         {% else %}
-        <script src="/static/js/all.tmp.js"></script>
+        <script src="/static/js/lib.tmp.js"></script>
+        <script src="/static/js/lib/require/require-2.2.0.js"
+                data-main="/static/js/app/app.js"></script>
         {% endif %}
 
         {% block script_mjx %}

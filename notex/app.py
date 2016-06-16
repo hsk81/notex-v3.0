@@ -79,11 +79,11 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 ###############################################################################
 
 if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
-    out_path = 'static/js/all.tmp.js'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)
 
+    out_path = 'static/js/lib.tmp.js'
     concat(out_path,
            'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
     concat(out_path,
@@ -120,26 +120,6 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
            'static/js/lib/markdown-it/markdown-it-table-of-contents-0.2.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js')
-    minify(out_path,
-           'static/js/app/cookie/cookie.js')
-    minify(out_path,
-           'static/js/app/function/after.js')
-    minify(out_path,
-           'static/js/app/function/assert.js')
-    minify(out_path,
-           'static/js/app/function/before.js')
-    minify(out_path,
-           'static/js/app/function/buffered.js')
-    minify(out_path,
-           'static/js/app/function/mine.js')
-    minify(out_path,
-           'static/js/app/function/partial.js')
-    minify(out_path,
-           'static/js/app/function/random.js')
-    minify(out_path,
-           'static/js/app/function/with.js')
-    minify(out_path,
-           'static/js/app/app.js')
     zipify(out_path)
 
 ###############################################################################
