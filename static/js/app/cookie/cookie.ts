@@ -1,13 +1,17 @@
-interface ICookie {
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+console.debug('[import:cookie.ts]');
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+export interface ICookie {
     set:<T>(name:string, value:T, expiry_ms?:number)=> T;
     get:<T>(name:string, value?:T)=> T;
 }
 
-interface Window {
-    cookie:ICookie;
-}
-
-window.cookie = class Cookie implements ICookie {
+class Cookie implements ICookie {
     static set<T>(name:string, value:T, expiry_ms?:number):T {
         let json = JSON.stringify(value);
         if (expiry_ms === undefined) {
@@ -20,6 +24,7 @@ window.cookie = class Cookie implements ICookie {
         }
         return value;
     }
+
     set<T>(name:string, value:T, expiry_ms?:number):T {
         return Cookie.set(name, value, expiry_ms);
     }
@@ -48,7 +53,17 @@ window.cookie = class Cookie implements ICookie {
             return value;
         }
     }
+
     get<T>(name:string, value?:T):T {
         return Cookie.get(name, value);
     }
-};
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+export let cookie:ICookie = new Cookie();
+export default cookie;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,10 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+      "module": "amd",
+      "target": "es3",
+      "noImplicitAny": false,
+      "removeComments": true,
+      "sourceMap": true
+  }
+}
