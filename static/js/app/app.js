@@ -1,9 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-(function () {
-    var timeout_id, md_old, md = new window.markdownit({
+define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./function/named", "./function/partial", './function/with', './string/random'], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1) {
+    "use strict";
+    console.debug('[import:app.ts]');
+    var timeout_id, md_old, md = new markdownit({
         highlight: function (text, language) {
             if (language && hljs.getLanguage(language)) {
                 try {
@@ -21,22 +19,22 @@
                     console.error('[on:markdown-it.highlight]', ex);
                 }
             }
-            return null; // escape HTML
+            return null;
         },
         html: true, linkify: true, typographer: true
     });
-    md.use(window.markdownitAbbr);
-    md.use(window.markdownitAnchor);
-    md.use(window.markdownitCentertext);
-    md.use(window.markdownitDecorate);
-    md.use(window.markdownitEmoji);
-    md.use(window.markdownitFigure, {
+    md.use(markdownitAbbr);
+    md.use(markdownitAnchor);
+    md.use(markdownitCentertext);
+    md.use(markdownitDecorate);
+    md.use(markdownitEmoji);
+    md.use(markdownitFigure, {
         dataType: true,
         figcaption: true
     });
-    md.use(window.markdownitFootnote);
-    md.use(window.markdownitMark);
-    md.use(window.markdownitMath, {
+    md.use(markdownitFootnote);
+    md.use(markdownitMark);
+    md.use(markdownitMath, {
         inlineOpen: '$',
         inlineClose: '$',
         inlineRenderer: function (string) {
@@ -48,17 +46,17 @@
             return '$$' + string + '$$';
         }
     });
-    md.use(window.markdownitSub);
-    md.use(window.markdownitSup);
-    md.use(window.markdownitToc);
-    md.use(window.markdownitVideo);
-    $('#md-inp').on('keypress', mine(function (self, ev) {
+    md.use(markdownitSub);
+    md.use(markdownitSup);
+    md.use(markdownitToc);
+    md.use(markdownitVideo);
+    $('#md-inp').on('keypress', mine_1["default"](function (self, ev) {
         if (timeout_id !== undefined) {
             clearTimeout(timeout_id);
             timeout_id = undefined;
         }
     }));
-    $('#md-inp').on('change keyup paste', buffered(mine(function (self, ev) {
+    $('#md-inp').on('change keyup paste', buffered_1["default"](mine_1["default"](function (self, ev) {
         var $md_inp = $(ev.target), $md_out = $('#md-out'), $md_tmp;
         var md_new = $md_inp.val();
         if (md_new !== md_old) {
@@ -126,8 +124,6 @@
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
     });
-    ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
     var with_google_api = function (callback) {
         if (gapi === undefined) {
             onGoogleApiClientLoad = function onGoogleApiClientLoad() {
@@ -190,7 +186,7 @@
         $blog_url_ig.removeClass('has-error');
         $post_title_ig.removeClass('has-error');
         $post_title_ig.find('[type=checkbox]').prop('checked', true);
-        var blog_url = cookie.get('blog-url');
+        var blog_url = cookie_1["default"].get('blog-url');
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
@@ -208,7 +204,7 @@
         $publish.button('reset');
     });
     $('#publish-dlg').on('shown.bs.modal', function (ev) {
-        var blog_url = cookie.get('blog-url');
+        var blog_url = cookie_1["default"].get('blog-url');
         if (blog_url) {
             $('#post-title').focus();
         }
@@ -252,7 +248,7 @@
         else {
             with_blogger_api(function (blogger) {
                 var on_done = function (res) {
-                    var blog = assert(res && res.result), update = $post_title_cb.prop('checked');
+                    var blog = assert_1["default"](res && res.result), update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
                         var on_done = function (res) {
                             var posts = res.result && res.result.items || [], post = posts.find(function (p) {
@@ -291,8 +287,8 @@
                     var url_request = blogger.blogs.getByUrl({
                         url: url, fields: 'id,posts(totalItems)'
                     });
-                    url_request.then(after(on_done, function () {
-                        cookie.set('blog-url', url);
+                    url_request.then(after_1["default"](on_done, function () {
+                        cookie_1["default"].set('blog-url', url);
                         $publish.attr('disabled', false);
                         $publish.addClass('btn-success');
                         $publish.button('published');
@@ -302,7 +298,7 @@
                             }, 600);
                             $('#publish-dlg').modal('hide');
                         }, 600);
-                    }), before(on_fail, function () {
+                    }), before_1["default"](on_fail, function () {
                         $publish.attr('disabled', false);
                         $publish.addClass('btn-danger');
                         $publish.button('reset');
@@ -322,7 +318,7 @@
         }
         function do_insert(blogger, blog) {
             var on_done = function (res) {
-                var url = assert(res.result.url), id = assert(res.result.id);
+                var url = assert_1["default"](res.result.url), id = assert_1["default"](res.result.id);
                 var tab = open(url, 'post:' + id);
                 if (tab !== undefined)
                     tab.focus();
@@ -331,15 +327,15 @@
                 console.error('[on:blogger.posts.insert]', res);
             };
             var insert_req = blogger.posts.insert({
-                blogId: assert(blog.id),
+                blogId: assert_1["default"](blog.id),
                 content: md2html($('#md-inp').val()),
-                fields: 'id,url,title', title: assert(title)
+                fields: 'id,url,title', title: assert_1["default"](title)
             });
             insert_req.then(on_done, on_fail);
         }
         function do_update(blogger, blog, post) {
             var on_done = function (res) {
-                var url = assert(res.result.url), id = assert(res.result.id);
+                var url = assert_1["default"](res.result.url), id = assert_1["default"](res.result.id);
                 var tab = open(url, 'post:' + id);
                 if (tab !== undefined)
                     tab.focus();
@@ -348,9 +344,9 @@
                 console.error('[on:blogger.posts.update]', res);
             };
             var update_req = blogger.posts.update({
-                blogId: assert(blog.id), postId: assert(post.id),
+                blogId: assert_1["default"](blog.id), postId: assert_1["default"](post.id),
                 content: md2html($('#md-inp').val()),
-                fields: 'id,url,title', title: assert(post.title)
+                fields: 'id,url,title', title: assert_1["default"](post.title)
             });
             update_req.then(on_done, on_fail);
         }
@@ -364,7 +360,5 @@
             return $content.html();
         }
     });
-}());
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+});
 //# sourceMappingURL=app.js.map
