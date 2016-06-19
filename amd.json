@@ -1,0 +1,5 @@
+{
+  "baseUrl": "./static/js/app",
+  "out": "./static/tmp/app.js",
+  "name": "app"
+}
