@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+///<reference path="./global/global.d.ts"/>
 
 console.debug('[import:app.ts]');
 
@@ -18,34 +18,8 @@ import mine from './function/mine';
 
 import "./function/named";
 import "./function/partial";
-import './function/with';
-import './string/random';
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-declare let $:any;
-declare let gapi:any;
-declare let hljs:any;
-declare let onGoogleApiClientLoad:Function;
-declare let MathJax:any;
-
-///////////////////////////////////////////////////////////////////////////////
-
-declare let markdownit:(any:any)=> void;
-declare let markdownitAbbr:()=> void;
-declare let markdownitAnchor:()=> void;
-declare let markdownitCentertext:()=> void;
-declare let markdownitDecorate:()=> void;
-declare let markdownitEmoji:()=> void;
-declare let markdownitFigure:()=> void;
-declare let markdownitFootnote:()=> void;
-declare let markdownitMark:()=> void;
-declare let markdownitMath:()=> void;
-declare let markdownitSub:()=> void;
-declare let markdownitSup:()=> void;
-declare let markdownitToc:()=> void;
-declare let markdownitVideo:()=> void;
+import "./function/with";
+import "./string/random";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

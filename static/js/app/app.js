@@ -1,4 +1,4 @@
-define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./function/named", "./function/partial", './function/with', './string/random'], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1) {
+define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1) {
     "use strict";
     console.debug('[import:app.ts]');
     var timeout_id, md_old, md = new markdownit({
