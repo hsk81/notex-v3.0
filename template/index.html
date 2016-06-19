@@ -22,7 +22,6 @@
         {% block body %}{% endblock %}
         {% block script_all %}
         {% if debug %}
-        <!-- /static/js/lib -->
         <script src="/static/js/lib/jquery/jquery-1.12.1.min.js"></script>
         <script src="/static/js/lib/jquery/jquery.set-cursor-position-1.12.1.min.js"></script>
         <script src="/static/js/lib/bootstrap/bootstrap-3.3.6.min.js"></script>
@@ -38,15 +37,13 @@
         <script src="/static/js/lib/markdown-it/markdown-it-math-3.0.2.min.js"></script>
         <script src="/static/js/lib/markdown-it/markdown-it-sub-1.0.0.min.js"></script>
         <script src="/static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js"></script>
-        <script src="/static/js/lib/markdown-it/markdown-it-table-of-contents-0.2.0.min.js"></script>
+        <script src="/static/js/lib/markdown-it/markdown-it-toc-0.2.0.min.js"></script>
         <script src="/static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js"></script>
         <script src="/static/js/lib/highlight/highlight-9.2.0.min.js"></script>
-        <!-- /static/js/app -->
-        <script src="/static/js/lib/require/require-2.2.0.js"
+        <script src="/static/js/lib/require/require-2.2.0.min.js"
                 data-main="/static/js/app/app.js"></script>
         {% else %}
-        <script src="/static/js/lib.tmp.js"></script>
-        <script src="/static/js/lib/require/require-2.2.0.js"
+        <script src="/static/js/all.tmp.js"
                 data-main="/static/js/app/app.js"></script>
         {% endif %}
 

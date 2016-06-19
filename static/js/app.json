@@ -1,0 +1,5 @@
+{
+    "baseUrl": "./app",
+    "name": "app",
+    "out": "app.tmp.js"
+}
