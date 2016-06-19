@@ -1,5 +1,5 @@
 {
   "baseUrl": "./static/js/app",
-  "out": "./static/tmp/app.js",
+  "out": "./static/build/app.js",
   "name": "app"
 }
