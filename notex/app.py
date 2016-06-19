@@ -62,7 +62,7 @@ def zipify(out_path):
 ###############################################################################
 
 if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
-    out_path = 'static/tmp/all.css'
+    out_path = 'static/build/all.css'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rcssmin.cssmin)
@@ -80,7 +80,7 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 ###############################################################################
 
 if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
-    out_path = 'static/tmp/all.js'
+    out_path = 'static/build/all.js'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)

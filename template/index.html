@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css">
         <link rel="stylesheet" href="/static/css/lib/highlight/default-9.2.0.min.css">
         {% else %}
-        <link rel="stylesheet" href="/static/tmp/all.css">
+        <link rel="stylesheet" href="/static/build/all.css">
         {% endif %}
         {% block head %}{% endblock %}
     </head>{% endblock %}
@@ -43,7 +43,7 @@
         <script src="/static/js/lib/require/require-2.2.0.min.js"
                 data-main="/static/js/app/app.js"></script>
         {% else %}
-        <script src="/static/tmp/all.js"
+        <script src="/static/build/all.js"
                 data-main="/static/js/app/app.js"></script>
         {% endif %}
 
