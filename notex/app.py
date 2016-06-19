@@ -62,7 +62,7 @@ def zipify(out_path):
 ###############################################################################
 
 if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
-    out_path = 'static/css/all.tmp.css'
+    out_path = 'static/tmp/all.css'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rcssmin.cssmin)
@@ -80,7 +80,7 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 ###############################################################################
 
 if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
-    out_path = 'static/js/all.tmp.js'
+    out_path = 'static/tmp/all.js'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)
@@ -126,8 +126,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
            'static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js')
     concat(out_path,
            'static/js/lib/require/require-2.2.0.min.js')
-    optimy(out_path,
-           'static/js/app.json')
+
+    optimy(out_path, 'amd.json')
     zipify(out_path)
 
 ###############################################################################
