@@ -13,6 +13,7 @@ from notex.view.now import app_now
 from notex.view.static import app_static
 
 import ARGs
+import amd
 import gzip
 import os
 import sass
@@ -79,11 +80,14 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 ###############################################################################
 
 if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
+    out_path = 'static/js/all.tmp.js'
 
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rjsmin.jsmin)
 
-    out_path = 'static/js/lib.tmp.js'
+    def optimy(out_path, inp_path, flag='a'):
+        concat(out_path, amd.optimize(inp_path), flag=flag)
+
     concat(out_path,
            'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
     concat(out_path,
@@ -117,9 +121,13 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-table-of-contents-0.2.0.min.js')
+           'static/js/lib/markdown-it/markdown-it-toc-0.2.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js')
+    concat(out_path,
+           'static/js/lib/require/require-2.2.0.min.js')
+    optimy(out_path,
+           'static/js/app.json')
     zipify(out_path)
 
 ###############################################################################
