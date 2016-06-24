@@ -48,7 +48,7 @@ export class BloggerApi {
                     }
                 }
             };
-            var on_fail = function (res) {
+            var on_fail = (res) => {
                 if (typeof callback === 'function') {
                     callback(false);
                 }
