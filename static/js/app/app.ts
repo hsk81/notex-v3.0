@@ -7,8 +7,8 @@ console.debug('[import:app.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 
 import cookie from "./cookie/cookie";
-
-///////////////////////////////////////////////////////////////////////////////
+import MarkdownIt from "./markdown-it/markdown-it"
+import BloggerApi from "./google-api/blogger-api"
 
 import after from "./function/after";
 import assert from "./function/assert";
@@ -20,10 +20,6 @@ import "./function/named";
 import "./function/partial";
 import "./function/with";
 import "./string/random";
-
-///////////////////////////////////////////////////////////////////////////////
-
-import MarkdownIt from "./markdown-it/markdown-it"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,66 +118,8 @@ $('[name=swap]').on('click', function () {
         .toggleClass('col-xs-12 col-sm-12');
 });
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-
-var with_google_api = function (callback) {
-    if (gapi === undefined) {
-        onGoogleApiClientLoad = function onGoogleApiClientLoad() {
-            if (typeof callback === 'function') {
-                callback(gapi);
-            }
-        };
-        $('body').append($('<script>', {
-            src: 'https://apis.google.com/js/client.js?onload={0}'.replace(
-                '{0}', onGoogleApiClientLoad.name
-            )
-        }));
-    } else {
-        callback(gapi);
-    }
-};
-
-var with_blogger_api = function (callback) {
-    var params = {
-        client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
-        scope: 'https://www.googleapis.com/auth/blogger'
-    };
-    with_google_api(function (gapi) {
-        var on_done = function (res) {
-            if (res.error) switch (res.error) {
-                case 'immediate_failed':
-                    gapi.auth.authorize($.extend(
-                        {}, params, {immediate: false}), on_done, on_fail);
-                    break;
-                default:
-                    if (typeof callback === 'function') {
-                        callback(false);
-                    }
-                    console.error('[with:google-api/done]', res);
-                    return;
-            } else if (gapi.client.blogger === undefined) {
-                gapi.client.load('blogger', 'v3').then(function () {
-                    if (typeof callback === 'function') {
-                        callback(gapi.client.blogger, params);
-                    }
-                });
-            } else {
-                if (typeof callback === 'function') {
-                    callback(gapi.client.blogger, params);
-                }
-            }
-        };
-        var on_fail = function (res) {
-            if (typeof callback === 'function') {
-                callback(false);
-            }
-            console.error('[with:google-api/fail]', res);
-        };
-        gapi.auth.authorize($.extend(
-            {}, params, {immediate: true}), on_done, on_fail);
-    });
-};
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 $('#publish-dlg').on('show.bs.modal', function (ev) {
     var $blog_url = $('#blog-url'),
@@ -261,7 +199,7 @@ $('#publish-dlg').find('.btn-primary').on('click', function () {
     } else if ($post_title_ig.hasClass('has-error')) {
         $post_title.focus();
     } else {
-        with_blogger_api(function (blogger) {
+        BloggerApi.me.get(function (blogger) {
             var on_done = function (res) {
                 var blog = assert(res && res.result),
                     update = $post_title_cb.prop('checked');
