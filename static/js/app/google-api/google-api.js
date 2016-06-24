@@ -5,11 +5,18 @@ define(["require", "exports", "../function/assert"], function (require, exports,
         function GoogleApi() {
             this.loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
         }
+        Object.defineProperty(GoogleApi, "me", {
+            get: function () {
+                return new GoogleApi();
+            },
+            enumerable: true,
+            configurable: true
+        });
         GoogleApi.prototype.get = function (callback) {
             if (typeof window.gapi === 'undefined') {
                 window.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
                     if (typeof callback === 'function') {
-                        callback(assert_1["default"](window.gapi, 'gapi'));
+                        callback(assert_1.default(window.gapi, 'gapi'));
                     }
                 };
                 $('body').append($('<script>', {
@@ -20,11 +27,10 @@ define(["require", "exports", "../function/assert"], function (require, exports,
                 callback(window.gapi);
             }
         };
-        GoogleApi.me = new GoogleApi();
         return GoogleApi;
     }());
     exports.GoogleApi = GoogleApi;
-    exports.__esModule = true;
-    exports["default"] = GoogleApi;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = GoogleApi;
 });
 //# sourceMappingURL=google-api.js.map

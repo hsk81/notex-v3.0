@@ -25,7 +25,7 @@ define(["require", "exports"], function (require, exports) {
         return gn;
     }
     exports.buffered = buffered;
-    exports.__esModule = true;
-    exports["default"] = buffered;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = buffered;
 });
 //# sourceMappingURL=buffered.js.map

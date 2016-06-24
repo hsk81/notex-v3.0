@@ -22,7 +22,9 @@ declare let window:Window;
 ///////////////////////////////////////////////////////////////////////////////
 
 export class GoogleApi {
-    static me:GoogleApi = new GoogleApi();
+    static get me():GoogleApi {
+        return new GoogleApi();
+    }
 
     constructor() {
         this.loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';

@@ -10,7 +10,7 @@ define(["require", "exports"], function (require, exports) {
         };
     }
     exports.before = before;
-    exports.__esModule = true;
-    exports["default"] = before;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = before;
 });
 //# sourceMappingURL=before.js.map

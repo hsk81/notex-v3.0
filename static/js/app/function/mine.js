@@ -7,7 +7,7 @@ define(["require", "exports"], function (require, exports) {
         };
     }
     exports.mine = mine;
-    exports.__esModule = true;
-    exports["default"] = mine;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = mine;
 });
 //# sourceMappingURL=mine.js.map

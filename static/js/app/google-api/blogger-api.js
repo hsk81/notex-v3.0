@@ -8,9 +8,16 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                 scope: 'https://www.googleapis.com/auth/blogger'
             };
         }
+        Object.defineProperty(BloggerApi, "me", {
+            get: function () {
+                return new BloggerApi();
+            },
+            enumerable: true,
+            configurable: true
+        });
         BloggerApi.prototype.get = function (callback) {
             var _this = this;
-            google_api_1["default"].me.get(function (gapi) {
+            google_api_1.default.me.get(function (gapi) {
                 var on_done = function (res) {
                     if (res.error)
                         switch (res.error) {
@@ -46,11 +53,10 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                 gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
             });
         };
-        BloggerApi.me = new BloggerApi();
         return BloggerApi;
     }());
     exports.BloggerApi = BloggerApi;
-    exports.__esModule = true;
-    exports["default"] = BloggerApi;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = BloggerApi;
 });
 //# sourceMappingURL=blogger-api.js.map
