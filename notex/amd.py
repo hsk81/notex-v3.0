@@ -11,12 +11,13 @@ import gzip
 ###############################################################################
 ###############################################################################
 
-def optimize (json_path):
-    subprocess.call(["/usr/bin/r.js", "-v"])
-    subprocess.call(["/usr/bin/r.js", "-o", json_path])
-    base_path, _ = os.path.split(json_path)
+def optimize (amd_conf, optimizer="./static/js/lib/require/r-2.2.0.min.js"):
 
-    with open(json_path, 'r') as json_file:
+    subprocess.call(["/usr/bin/env", "node", optimizer, "-v"])
+    subprocess.call(["/usr/bin/env", "node", optimizer, "-o", amd_conf])
+    base_path, _ = os.path.split(amd_conf)
+
+    with open(amd_conf, 'r') as json_file:
         json = JSON.decode(json_file.read())
 
     out_path = os.path.join(base_path, json['out'])
