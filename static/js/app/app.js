@@ -1,4 +1,4 @@
-define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./markdown-it/markdown-it", "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1, markdown_it_1) {
+define(["require", "exports", "./cookie/cookie", "./markdown-it/markdown-it", "./google-api/blogger-api", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, cookie_1, markdown_it_1, blogger_api_1, after_1, assert_1, before_1, buffered_1, mine_1) {
     "use strict";
     console.debug('[import:app.ts]');
     var mdi = new markdown_it_1["default"]();
@@ -77,62 +77,6 @@ define(["require", "exports", "./cookie/cookie", "./function/after", "./function
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
     });
-    var with_google_api = function (callback) {
-        if (gapi === undefined) {
-            onGoogleApiClientLoad = function onGoogleApiClientLoad() {
-                if (typeof callback === 'function') {
-                    callback(gapi);
-                }
-            };
-            $('body').append($('<script>', {
-                src: 'https://apis.google.com/js/client.js?onload={0}'.replace('{0}', onGoogleApiClientLoad.name)
-            }));
-        }
-        else {
-            callback(gapi);
-        }
-    };
-    var with_blogger_api = function (callback) {
-        var params = {
-            client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
-            scope: 'https://www.googleapis.com/auth/blogger'
-        };
-        with_google_api(function (gapi) {
-            var on_done = function (res) {
-                if (res.error)
-                    switch (res.error) {
-                        case 'immediate_failed':
-                            gapi.auth.authorize($.extend({}, params, { immediate: false }), on_done, on_fail);
-                            break;
-                        default:
-                            if (typeof callback === 'function') {
-                                callback(false);
-                            }
-                            console.error('[with:google-api/done]', res);
-                            return;
-                    }
-                else if (gapi.client.blogger === undefined) {
-                    gapi.client.load('blogger', 'v3').then(function () {
-                        if (typeof callback === 'function') {
-                            callback(gapi.client.blogger, params);
-                        }
-                    });
-                }
-                else {
-                    if (typeof callback === 'function') {
-                        callback(gapi.client.blogger, params);
-                    }
-                }
-            };
-            var on_fail = function (res) {
-                if (typeof callback === 'function') {
-                    callback(false);
-                }
-                console.error('[with:google-api/fail]', res);
-            };
-            gapi.auth.authorize($.extend({}, params, { immediate: true }), on_done, on_fail);
-        });
-    };
     $('#publish-dlg').on('show.bs.modal', function (ev) {
         var $blog_url = $('#blog-url'), $blog_url_ig = $blog_url.parent('.input-group');
         var $post_title = $('#post-title'), $post_title_ig = $post_title.parent('.input-group');
@@ -199,7 +143,7 @@ define(["require", "exports", "./cookie/cookie", "./function/after", "./function
             $post_title.focus();
         }
         else {
-            with_blogger_api(function (blogger) {
+            blogger_api_1["default"].me.get(function (blogger) {
                 var on_done = function (res) {
                     var blog = assert_1["default"](res && res.result), update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
