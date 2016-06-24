@@ -1,55 +1,8 @@
-define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1) {
+define(["require", "exports", "./cookie/cookie", "./function/after", "./function/assert", "./function/before", "./function/buffered", './function/mine', "./markdown-it/markdown-it", "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, cookie_1, after_1, assert_1, before_1, buffered_1, mine_1, markdown_it_1) {
     "use strict";
     console.debug('[import:app.ts]');
-    var timeout_id, md_old, md = new markdownit({
-        highlight: function (text, language) {
-            if (language && hljs.getLanguage(language)) {
-                try {
-                    return hljs.highlight(language, text).value;
-                }
-                catch (ex) {
-                    console.error('[on:markdown-it.highlight]', ex);
-                }
-            }
-            else {
-                try {
-                    return hljs.highlightAuto(text).value;
-                }
-                catch (ex) {
-                    console.error('[on:markdown-it.highlight]', ex);
-                }
-            }
-            return null;
-        },
-        html: true, linkify: true, typographer: true
-    });
-    md.use(markdownitAbbr);
-    md.use(markdownitAnchor);
-    md.use(markdownitCentertext);
-    md.use(markdownitDecorate);
-    md.use(markdownitEmoji);
-    md.use(markdownitFigure, {
-        dataType: true,
-        figcaption: true
-    });
-    md.use(markdownitFootnote);
-    md.use(markdownitMark);
-    md.use(markdownitMath, {
-        inlineOpen: '$',
-        inlineClose: '$',
-        inlineRenderer: function (string) {
-            return '$' + string + '$';
-        },
-        blockOpen: '$$',
-        blockClose: '$$',
-        blockRenderer: function (string) {
-            return '$$' + string + '$$';
-        }
-    });
-    md.use(markdownitSub);
-    md.use(markdownitSup);
-    md.use(markdownitToc);
-    md.use(markdownitVideo);
+    var mdi = new markdown_it_1["default"]();
+    var timeout_id, md_old;
     $('#md-inp').on('keypress', mine_1["default"](function (self, ev) {
         if (timeout_id !== undefined) {
             clearTimeout(timeout_id);
@@ -93,7 +46,7 @@ define(["require", "exports", "./cookie/cookie", "./function/after", "./function
             $md_tmp.insertBefore($md_out);
             $md_tmp.scrollTop($md_out.scrollTop());
             $md_out.css('visibility', 'hidden');
-            $md_out.html(md.render(md_new));
+            $md_out.html(mdi.render(md_new));
             var $a = $('a[name=save]'), $h = $md_out.find(':header');
             $a.attr("href", URL.createObjectURL(new Blob([md_new], { type: 'text/markdown' })));
             $a.attr("download", ($h.length > 0 ? $($h[0]).text() :
@@ -352,7 +305,7 @@ define(["require", "exports", "./cookie/cookie", "./function/after", "./function
         }
         function md2html(md_content, with_header) {
             var $content = $('<div>', {
-                html: md.render(md_content)
+                html: mdi.render(md_content)
             });
             if (!with_header) {
                 $content.find(':header:first-of-type').remove();

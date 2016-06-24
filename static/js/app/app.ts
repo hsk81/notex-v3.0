@@ -22,55 +22,17 @@ import "./function/with";
 import "./string/random";
 
 ///////////////////////////////////////////////////////////////////////////////
+
+import MarkdownIt from "./markdown-it/markdown-it"
+
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var timeout_id, md_old, md = new markdownit({
-    highlight: function (text, language) {
-        if (language && hljs.getLanguage(language)) {
-            try {
-                return hljs.highlight(language, text).value;
-            } catch (ex) {
-                console.error('[on:markdown-it.highlight]', ex);
-            }
-        } else {
-            try {
-                return hljs.highlightAuto(text).value;
-            } catch (ex) {
-                console.error('[on:markdown-it.highlight]', ex);
-            }
-        }
-        return null; // escape HTML
-    },
-    html: true, linkify: true, typographer: true
-});
+let mdi = new MarkdownIt();
+let timeout_id, md_old;
 
-md.use(markdownitAbbr);
-md.use(markdownitAnchor);
-md.use(markdownitCentertext);
-md.use(markdownitDecorate);
-md.use(markdownitEmoji);
-md.use(markdownitFigure, {
-    dataType: true,
-    figcaption: true
-});
-md.use(markdownitFootnote);
-md.use(markdownitMark);
-md.use(markdownitMath, {
-    inlineOpen: '$',
-    inlineClose: '$',
-    inlineRenderer: function (string) {
-        return '$' + string + '$';
-    },
-    blockOpen: '$$',
-    blockClose: '$$',
-    blockRenderer: function (string) {
-        return '$$' + string + '$$';
-    }
-});
-md.use(markdownitSub);
-md.use(markdownitSup);
-md.use(markdownitToc);
-md.use(markdownitVideo);
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 $('#md-inp').on('keypress', mine(function (self, ev) {
     if (timeout_id !== undefined) {
@@ -124,7 +86,7 @@ $('#md-inp').on('change keyup paste', buffered(mine(function (self, ev) {
         $md_tmp.scrollTop($md_out.scrollTop());
 
         $md_out.css('visibility', 'hidden');
-        $md_out.html(md.render(md_new));
+        $md_out.html(mdi.render(md_new));
 
         var $a = $('a[name=save]'), $h = $md_out.find(':header');
         $a.attr("href", URL.createObjectURL(
@@ -412,7 +374,7 @@ $('#publish-dlg').find('.btn-primary').on('click', function () {
 
     function md2html(md_content, with_header?) {
         var $content = $('<div>', {
-            html: md.render(md_content)
+            html: mdi.render(md_content)
         });
         if (!with_header) {
             $content.find(':header:first-of-type').remove();
