@@ -49,7 +49,7 @@ define(["require", "exports"], function (require, exports) {
         return Cookie;
     }());
     exports.cookie = new Cookie();
-    exports.__esModule = true;
-    exports["default"] = exports.cookie;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = exports.cookie;
 });
 //# sourceMappingURL=cookie.js.map

@@ -8,7 +8,7 @@ define(["require", "exports"], function (require, exports) {
         };
     }
     exports.after = after;
-    exports.__esModule = true;
-    exports["default"] = after;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = after;
 });
 //# sourceMappingURL=after.js.map

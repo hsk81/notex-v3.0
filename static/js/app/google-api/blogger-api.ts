@@ -12,7 +12,9 @@ import GoogleApi from "./google-api";
 ///////////////////////////////////////////////////////////////////////////////
 
 export class BloggerApi {
-    static me:BloggerApi = new BloggerApi();
+    static get me():BloggerApi {
+        return new BloggerApi();
+    }
 
     constructor() {
         this.options = {

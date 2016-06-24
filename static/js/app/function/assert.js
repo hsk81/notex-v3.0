@@ -18,7 +18,7 @@ define(["require", "exports"], function (require, exports) {
         return expression;
     }
     exports.assert = assert;
-    exports.__esModule = true;
-    exports["default"] = assert;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = assert;
 });
 //# sourceMappingURL=assert.js.map

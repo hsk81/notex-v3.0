@@ -53,13 +53,20 @@ define(["require", "exports"], function (require, exports) {
             this.mdi.use(markdownitToc);
             this.mdi.use(markdownitVideo);
         }
+        Object.defineProperty(MarkdownIt, "me", {
+            get: function () {
+                return new MarkdownIt();
+            },
+            enumerable: true,
+            configurable: true
+        });
         MarkdownIt.prototype.render = function (src, env) {
             return this.mdi.render(src, env);
         };
         return MarkdownIt;
     }());
     exports.MarkdownIt = MarkdownIt;
-    exports.__esModule = true;
-    exports["default"] = MarkdownIt;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = MarkdownIt;
 });
 //# sourceMappingURL=markdown-it.js.map

@@ -32,6 +32,9 @@ declare let hljs:any;
  * @see: https://markdown-it.github.io/markdown-it/
  */
 export class MarkdownIt {
+    static get me():MarkdownIt {
+        return new MarkdownIt();
+    }
 
     constructor() {
         this.mdi = new markdownit({
