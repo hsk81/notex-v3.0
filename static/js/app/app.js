@@ -1,10 +1,12 @@
-define(["require", "exports", './markdown-editor/markdown-editor', './publish-dialog/publish-dialog', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, markdown_editor_1, publish_dialog_1) {
+define(["require", "exports", './ui/header-menu/header-menu', './ui/markdown-editor/markdown-editor', './ui/publish-dialog/publish-dialog', './ui/download-manager/download-manager', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, header_menu_1, markdown_editor_1, publish_dialog_1, download_manager_1) {
     "use strict";
     console.debug('[import:app.ts]');
     var App = (function () {
         function App() {
+            this.headerMenu = header_menu_1.default.me;
             this.markdownEditor = markdown_editor_1.default.me;
             this.publishDialog = publish_dialog_1.default.me;
+            this.downloadManager = download_manager_1.default.me;
         }
         Object.defineProperty(App, "me", {
             get: function () {
@@ -16,29 +18,5 @@ define(["require", "exports", './markdown-editor/markdown-editor', './publish-di
         return App;
     }());
     window.APP = App.me;
-    $('#md-src,#md-src-mob').on('change', function (ev) {
-        var files = ev.target.files;
-        for (var i = 0; i < files.length; i++) {
-            if (files[i].type && files[i].type.match(/text/)) {
-                var reader = new FileReader();
-                reader.onload = function (progress_ev) {
-                    var target = progress_ev.target;
-                    if (target && target.readyState === 2 &&
-                        typeof target.result === 'string') {
-                        $('#md-inp')
-                            .val(target.result).trigger('change')
-                            .setCursorPosition(0).focus();
-                    }
-                };
-                reader.readAsText(files[i]);
-            }
-        }
-    });
-    $('[name=swap]').on('click', function () {
-        $('div.lhs').toggleClass('hidden-xs hidden-sm')
-            .toggleClass('col-xs-12 col-sm-12');
-        $('div.rhs').toggleClass('hidden-xs hidden-sm')
-            .toggleClass('col-xs-12 col-sm-12');
-    });
 });
 //# sourceMappingURL=app.js.map
