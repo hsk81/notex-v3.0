@@ -1,4 +1,4 @@
-define(["require", "exports", './ui/header-menu/header-menu', './ui/markdown-editor/markdown-editor', './ui/publish-dialog/publish-dialog', './ui/download-manager/download-manager', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, header_menu_1, markdown_editor_1, publish_dialog_1, download_manager_1) {
+define(["require", "exports", './ui/header-menu', './ui/markdown-editor', './ui/publish-dialog', './ui/download-manager', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, header_menu_1, markdown_editor_1, publish_dialog_1, download_manager_1) {
     "use strict";
     console.debug('[import:app.ts]');
     var App = (function () {

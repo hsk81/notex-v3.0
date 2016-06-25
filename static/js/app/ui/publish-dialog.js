@@ -1,4 +1,4 @@
-define(["require", "exports", '../../cookie/cookie', '../../google-api/blogger-api', '../../markdown-it/markdown-it', '../../function/after', '../../function/assert', '../../function/before'], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, after_1, assert_1, before_1) {
+define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '../markdown-it/markdown-it', '../function/after', '../function/assert', '../function/before'], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, after_1, assert_1, before_1) {
     "use strict";
     console.debug('[import:ui/publish-dialog.ts]');
     var PublishDialog = (function () {

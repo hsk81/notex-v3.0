@@ -1,4 +1,4 @@
-define(["require", "exports", '../header-menu/header-menu'], function (require, exports, header_menu_1) {
+define(["require", "exports", './header-menu'], function (require, exports, header_menu_1) {
     "use strict";
     console.debug('[import:ui/download-manager.ts]');
     var DownloadManager = (function () {

@@ -1,4 +1,4 @@
-define(["require", "exports", '../download-manager/download-manager', '../../markdown-it/markdown-it', '../../function/buffered'], function (require, exports, download_manager_1, markdown_it_1, buffered_1) {
+define(["require", "exports", './download-manager', '../markdown-it/markdown-it', '../function/buffered'], function (require, exports, download_manager_1, markdown_it_1, buffered_1) {
     "use strict";
     console.debug('[import:ui/markdown-editor.ts]');
     var MarkdownEditor = (function () {

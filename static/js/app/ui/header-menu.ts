@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-///<reference path="../../global/global.d.ts"/>
+///<reference path="../global/global.d.ts"/>
 
 console.debug('[import:ui/header-menu.ts]');
 
