@@ -33,7 +33,10 @@ declare let hljs:any;
  */
 export class MarkdownIt {
     static get me():MarkdownIt {
-        return new MarkdownIt();
+        if (this['_me'] === undefined) {
+            this['_me'] = new MarkdownIt();
+        }
+        return this['_me'];
     }
 
     constructor() {

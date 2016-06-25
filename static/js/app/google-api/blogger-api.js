@@ -10,7 +10,10 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
         }
         Object.defineProperty(BloggerApi, "me", {
             get: function () {
-                return new BloggerApi();
+                if (this['_me'] === undefined) {
+                    this['_me'] = new BloggerApi();
+                }
+                return this['_me'];
             },
             enumerable: true,
             configurable: true

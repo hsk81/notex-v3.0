@@ -7,7 +7,10 @@ define(["require", "exports", "../function/assert"], function (require, exports,
         }
         Object.defineProperty(GoogleApi, "me", {
             get: function () {
-                return new GoogleApi();
+                if (this['_me'] === undefined) {
+                    this['_me'] = new GoogleApi();
+                }
+                return this['_me'];
             },
             enumerable: true,
             configurable: true

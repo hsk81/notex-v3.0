@@ -19,7 +19,10 @@ import before from '../function/before';
 
 export class PublishDialog {
     static get me():PublishDialog {
-        return new PublishDialog();
+        if (this['_me'] === undefined) {
+            this['_me'] = new PublishDialog();
+        }
+        return this['_me'];
     }
 
     constructor() {
