@@ -1,13 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
+///<reference path="../../global/global.d.ts"/>
 
-console.debug('[import:app.ts]');
+console.debug('[import:ui/markdown-editor.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import MarkdownIt from '../markdown-it/markdown-it';
-import buffered from '../function/buffered';
+import DownloadManager from '../download-manager/download-manager';
+import MarkdownIt from '../../markdown-it/markdown-it';
+import buffered from '../../function/buffered';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,11 +76,10 @@ export class MarkdownEditor {
                 $md_out.css('visibility', 'hidden');
                 $md_out.html(MarkdownIt.me.render(md_new));
 
-                var $a = $('a[name=save]'), $h = $md_out.find(':header');
-                $a.attr("href", URL.createObjectURL(
-                    new Blob([md_new], {type: 'text/markdown'})));
-                $a.attr("download", ($h.length > 0 ? $($h[0]).text() :
-                        new Date().toISOString()) + '.md');
+                var $h = $md_out.find(':header');
+                DownloadManager.me.title = ($h.length > 0 ?
+                        $($h[0]).text() : new Date().toISOString()) + '.md';
+                DownloadManager.me.content = md_new;
             }
         }, 600));
     }
