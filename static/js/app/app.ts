@@ -13,10 +13,10 @@ import './string/random';
 
 ///////////////////////////////////////////////////////////////////////////////
 
-import HeaderMenu from './ui/header-menu/header-menu';
-import MarkdownEditor from './ui/markdown-editor/markdown-editor';
-import PublishDialog from './ui/publish-dialog/publish-dialog';
-import DownloadManager from './ui/download-manager/download-manager';
+import HeaderMenu from './ui/header-menu';
+import MarkdownEditor from './ui/markdown-editor';
+import PublishDialog from './ui/publish-dialog';
+import DownloadManager from './ui/download-manager';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
