@@ -13,7 +13,10 @@ import GoogleApi from "./google-api";
 
 export class BloggerApi {
     static get me():BloggerApi {
-        return new BloggerApi();
+        if (this['_me'] === undefined) {
+            this['_me'] = new BloggerApi();
+        }
+        return this['_me'];
     }
 
     constructor() {

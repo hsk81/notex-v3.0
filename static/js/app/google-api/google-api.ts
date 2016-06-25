@@ -23,7 +23,10 @@ declare let window:Window;
 
 export class GoogleApi {
     static get me():GoogleApi {
-        return new GoogleApi();
+        if (this['_me'] === undefined) {
+            this['_me'] = new GoogleApi();
+        }
+        return this['_me'];
     }
 
     constructor() {

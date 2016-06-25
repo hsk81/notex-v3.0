@@ -11,7 +11,10 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         }
         Object.defineProperty(PublishDialog, "me", {
             get: function () {
-                return new PublishDialog();
+                if (this['_me'] === undefined) {
+                    this['_me'] = new PublishDialog();
+                }
+                return this['_me'];
             },
             enumerable: true,
             configurable: true
