@@ -34,10 +34,9 @@ def generic(tpl_name, **kwargs):
 ###############################################################################
 
 def get_domain():
+
     host = request.get_header('host') or ''
-    domain = '.'.join(host.split('.')[-2:])
-    print '[get:domain]', host, domain
-    return domain
+    return '.'.join(host.split('.')[-2:])
 
 def get_description(view):
 
