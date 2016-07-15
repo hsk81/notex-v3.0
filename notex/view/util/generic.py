@@ -4,7 +4,9 @@
 from bottle import request
 from datetime import date
 
-import ARGs, os, ujson as JSON
+import ARGs, os
+import ipaddress
+import ujson as JSON
 
 ###############################################################################
 ###############################################################################
@@ -36,7 +38,15 @@ def generic(tpl_name, **kwargs):
 def get_domain():
 
     host = request.get_header('host') or ''
-    return '.'.join(host.split('.')[-2:])
+    try:
+        return str(ipaddress.ip_address(host))
+    except ValueError:
+        try:
+            ip, port = host.rsplit(':')
+            ip = ipaddress.ip_address(ip)
+            return '{0}:{1}'.format(ip, port) if port else str(ip)
+        except ValueError:
+            return '.'.join(host.split('.')[-2:])
 
 def get_description(view):
 
