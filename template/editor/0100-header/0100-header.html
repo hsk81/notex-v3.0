@@ -1,0 +1,43 @@
+<nav class="header navbar navbar-default">
+    <div class="container-fluid hidden-xs hidden-sm">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">NoTex.ch</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><label name="open" for="md-src" class="md-src">
+                    <span class="glyphicon glyphicon-open">
+                    </span>&nbsp;Open</label>
+                <input id="md-src" type="file" class="md-src"></li>
+            <li><a name="save" href="#">
+                <span class="glyphicon glyphicon-save">
+                </span>&nbsp;Save</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a name="publish" href="#"
+                   data-toggle="modal" data-target="#publish-dlg">
+                <span class="glyphicon glyphicon-cloud-upload">
+                </span>&nbsp;Publish</a></li>
+        </ul>
+    </div>
+    <div class="container-fluid hidden-md hidden-lg">
+        <label name="open" for="md-src-mob"
+               class="md-src-mob btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-open"></span>
+            <input id="md-src-mob" type="file" class="md-src-mob">
+        </label>
+        <a name="save" href="#"
+           class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-save"></span>
+        </a>
+        <button name="swap" type="button"
+                class="btn btn-default navbar-btn"
+                style="width: calc(100% - 136px)">
+            <span class="glyphicon glyphicon-transfer"></span>
+        </button>
+        <button name="publish" type="button"
+                class="btn btn-default navbar-btn"
+                data-toggle="modal" data-target="#publish-dlg">
+            <span class="glyphicon glyphicon-cloud-upload"></span>
+        </button>
+    </div>
+</nav>
