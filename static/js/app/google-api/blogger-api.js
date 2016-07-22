@@ -53,7 +53,9 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                     }
                     console.error('[with:google-api/fail]', res);
                 };
-                gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
+                setTimeout(function () {
+                    gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
+                }, 1024);
             });
         };
         return BloggerApi;

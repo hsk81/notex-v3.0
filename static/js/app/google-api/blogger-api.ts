@@ -59,8 +59,11 @@ export class BloggerApi {
                 }
                 console.error('[with:google-api/fail]', res);
             };
-            gapi.auth.authorize($.extend(
-                {}, this.options, {immediate: true}), on_done, on_fail);
+
+            setTimeout(() => {
+                gapi.auth.authorize($.extend(
+                    {}, this.options, {immediate: true}), on_done, on_fail);
+            }, 1024);
         });
     }
 
