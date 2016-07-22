@@ -37,29 +37,55 @@ export class PublishDialog {
 
         this.$primary.on(
             'click', this.onPrimaryClick.bind(this));
+
+        this.$expand.on('click', () => {
+            let $post_scripts = this.$post_scripts,
+                $glyphicon = this.$expand.find('.glyphicon');
+
+            if (this.$expand.data('state') === 'expanded') {
+                this.$expand.data('state', 'collapsed');
+            } else {
+                this.$expand.data('state', 'expanded');
+            }
+
+            if (this.$expand.data('state') === 'expanded') {
+                $glyphicon.removeClass('glyphicon-chevron-down');
+                $glyphicon.addClass('glyphicon-chevron-up');
+                $post_scripts.show();
+            } else {
+                $glyphicon.removeClass('glyphicon-chevron-up');
+                $glyphicon.addClass('glyphicon-chevron-down');
+                $post_scripts.hide();
+            }
+        });
     }
 
     onBsModalShow() {
-        console.debug('[on:bs-modal-show');
-        var $blog_url = $('#blog-url'),
+        let $blog_url = this.$blog_url,
             $blog_url_ig = $blog_url.parent('.input-group');
-        var $post_title = $('#post-title'),
-            $post_title_ig = $post_title.parent('.input-group');
+        let $post_title = this.$post_title,
+            $post_title_ig = $post_title.parent('.input-group'),
+            $post_scripts = this.$post_scripts;
 
         $blog_url_ig.removeClass('has-error');
         $post_title_ig.removeClass('has-error');
         $post_title_ig.find('[type=checkbox]').prop('checked', true);
 
-        var blog_url = cookie.get('blog-url');
+        let blog_url = cookie.get('blog-url');
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
 
-        var headers = $('#md-out').find(':header'),
+        let headers = this.$mdOut.find(':header'),
             title = $(headers[0]).text();
         if (title && typeof title === 'string') {
             $post_title.val(title);
         }
+
+        let base64 = $post_scripts.find('textarea').text(),
+            script = atob(base64);
+        $post_scripts.find('textarea').text(script);
+        $post_scripts.hide();
 
         $(this).find('[data-toggle="tooltip"]').tooltip();
         $(this).find('[data-toggle="popover"]').popover();
@@ -72,43 +98,57 @@ export class PublishDialog {
     }
 
     onBsModalShown() {
-        var blog_url = cookie.get('blog-url');
+        let blog_url = cookie.get('blog-url');
         if (blog_url) {
-            $('#post-title').focus();
+            this.$post_title.focus();
         } else {
-            $('#blog-url').focus();
+            this.$blog_url.focus();
         }
     }
 
     onBsModalHide() {
+        let $post_scripts = this.$post_scripts,
+            $post_scripts_ta = $post_scripts.find('textarea');
+        let script = $post_scripts.find('textarea').text(),
+            base64 = btoa(script);
+
+        $post_scripts_ta.text(base64);
+        $post_scripts.hide();
+
+        let $expand = this.$expand,
+            $glyphicon = this.$expand.find('.glyphicon');
+
+        $expand.data('state', 'collapsed');
+        $glyphicon.removeClass('glyphicon-chevron-up');
+        $glyphicon.addClass('glyphicon-chevron-down');
     }
 
     onBsModalHidden() {
         setTimeout(() => {
-            $('#md-inp').focus();
+            this.$mdInp.focus();
         }, 1);
     }
 
     onPrimaryClick() {
-        var $blog_url = $('#blog-url'),
+        let $blog_url = this.$blog_url,
             $blog_url_ig = $blog_url.parent('.input-group');
-        var $post_title = $('#post-title'),
+        let $post_title = this.$post_title,
             $post_title_ig = $post_title.parent('.input-group'),
             $post_title_cb = $post_title_ig.find('[type=checkbox]');
 
-        var url = $blog_url.val();
+        let url = $blog_url.val();
         if (!url) {
             $blog_url_ig.addClass('has-error');
             $blog_url.focus().off('blur').on('blur', () => {
-                var url = $blog_url.val();
+                let url = $blog_url.val();
                 if (url) $blog_url_ig.removeClass('has-error');
             });
         }
-        var title = $post_title.val();
+        let title = $post_title.val();
         if (!title) {
             $post_title_ig.addClass('has-error');
             $post_title.focus().off('blur').on('blur', () => {
-                var title = $post_title.val();
+                let title = $post_title.val();
                 if (title) $post_title_ig.removeClass('has-error');
             });
         }
@@ -119,43 +159,43 @@ export class PublishDialog {
             $post_title.focus();
         } else {
             BloggerApi.me.get((blogger) => {
-                var on_done = (res) => {
-                    var blog = assert(res && res.result),
+                let on_done = (res) => {
+                    let blog = assert(res && res.result),
                         update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
-                        var on_done = (res) => {
-                            var posts = res.result && res.result.items || [],
+                        let on_done = (res) => {
+                            let posts = res.result && res.result.items || [],
                                 post = posts.find((p) => {
                                     return p.title === title;
                                 });
                             if (post !== undefined) {
-                                do_update(blogger, blog, post);
+                                this.doUpdate(blogger, blog, post);
                             } else {
-                                do_insert(blogger, blog);
+                                this.doInsert(blogger, blog, title);
                             }
                         };
-                        var on_fail = (res) => {
+                        let on_fail = (res) => {
                             console.error('[on:blogger.posts.list]', res);
                         };
-                        var all_request = blogger.posts.list({
+                        let all_request = blogger.posts.list({
                             blogId: blog.id, fields: 'items(id,title)',
                             orderBy: 'published'
                         });
                         all_request.then(on_done, on_fail);
                     } else {
-                        do_insert(blogger, blog);
+                        this.doInsert(blogger, blog, title);
                     }
                 };
-                var on_fail = (res) => {
+                let on_fail = (res) => {
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', () => {
-                        var url = $blog_url.val();
+                        let url = $blog_url.val();
                         if (url) $blog_url_ig.removeClass('has-error');
                     });
                     console.error('[on:blogger.blogs.get-by-url]', res);
                 };
                 if (blogger) {
-                    var url_request = blogger.blogs.getByUrl({
+                    let url_request = blogger.blogs.getByUrl({
                         url: url, fields: 'id,posts(totalItems)'
                     });
                     url_request.then(
@@ -192,56 +232,97 @@ export class PublishDialog {
             this.$primary.removeClass('btn-danger');
             this.$primary.button('publishing');
         }
+    }
 
-        function do_insert(blogger, blog) {
-            var on_done = (res) => {
-                var url = assert(res.result.url),
-                    id = assert(res.result.id);
-                var tab = open(url, 'post:' + id);
-                if (tab !== undefined) tab.focus();
-            };
-            var on_fail = (res) => {
-                console.error('[on:blogger.posts.insert]', res);
-            };
-            var insert_req = blogger.posts.insert({
-                blogId: assert(blog.id),
-                content: md2html($('#md-inp').val()),
-                fields: 'id,url,title', title: assert(title)
-            });
-            insert_req.then(on_done, on_fail);
-        }
+    doInsert(blogger, blog, title) {
+        let on_done = (res) => {
+            let url = assert(res.result.url),
+                id = assert(res.result.id);
+            let tab = open(url, 'post:' + id);
+            if (tab !== undefined) tab.focus();
+        };
+        let on_fail = (res) => {
+            console.error('[on:blogger.posts.insert]', res);
+        };
+        let insert_req = blogger.posts.insert({
+            blogId: assert(blog.id),
+            content: this.getContent(),
+            fields: 'id,url,title',
+            title: assert(title)
+        });
+        insert_req.then(on_done, on_fail);
+    }
 
-        function do_update(blogger, blog, post) {
-            var on_done = (res) => {
-                var url = assert(res.result.url),
-                    id = assert(res.result.id);
-                var tab = open(url, 'post:' + id);
-                if (tab !== undefined) tab.focus();
-            };
-            var on_fail = (res) => {
-                console.error('[on:blogger.posts.update]', res);
-            };
-            var update_req = blogger.posts.update({
-                blogId: assert(blog.id), postId: assert(post.id),
-                content: md2html($('#md-inp').val()),
-                fields: 'id,url,title', title: assert(post.title)
-            });
-            update_req.then(on_done, on_fail);
-        }
+    doUpdate(blogger, blog, post) {
+        let on_done = (res) => {
+            let url = assert(res.result.url),
+                id = assert(res.result.id);
+            let tab = open(url, 'post:' + id);
+            if (tab !== undefined) tab.focus();
+        };
+        let on_fail = (res) => {
+            console.error('[on:blogger.posts.update]', res);
+        };
+        let update_req = blogger.posts.update({
+            blogId: assert(blog.id),
+            content: this.getContent(),
+            fields: 'id,url,title',
+            postId: assert(post.id),
+            title: assert(post.title)
+        });
+        update_req.then(on_done, on_fail);
+    }
 
-        function md2html(md_content, with_header?) {
-            var $content = $('<div>', {
-                html: MarkdownIt.me.render(md_content)
-            });
-            if (!with_header) {
-                $content.find(':header:first-of-type').remove();
-            }
-            return $content.html();
+    getContent():string {
+        return this.toHtml(this.$mdInp.val()) + this.getScripts();
+    }
+
+    toHtml(md_content, with_header?) {
+        let $content = $('<div>', {
+            html: MarkdownIt.me.render(md_content)
+        });
+        if (!with_header) {
+            $content.find(':header:first-of-type').remove();
         }
+        return $content.html();
+    }
+
+    getScripts() {
+        let $post_scripts = this.$post_scripts,
+            $checkbox = $post_scripts.find('[type=checkbox]');
+        if ($checkbox.prop('checked')) {
+            return $post_scripts.find('textarea').val();
+        } else {
+            return '';
+        }
+    }
+
+    get $mdOut():any {
+        return $('#md-out');
+    }
+
+    get $mdInp():any {
+        return $('#md-inp');
     }
 
     get $dialog():any {
         return $('#publish-dlg');
+    }
+
+    get $blog_url():any {
+        return $('#blog-url');
+    }
+
+    get $post_title():any {
+        return $('#post-title');
+    }
+
+    get $post_scripts():any {
+        return $('.post-scripts');
+    }
+
+    get $expand():any {
+        return $('button#expand');
     }
 
     get $primary():any {

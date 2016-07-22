@@ -3,11 +3,31 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
     console.debug('[import:ui/publish-dialog.ts]');
     var PublishDialog = (function () {
         function PublishDialog() {
+            var _this = this;
             this.$dialog.on('show.bs.modal', this.onBsModalShow.bind(this));
             this.$dialog.on('shown.bs.modal', this.onBsModalShown.bind(this));
             this.$dialog.on('hide.bs.modal', this.onBsModalHide.bind(this));
             this.$dialog.on('hidden.bs.modal', this.onBsModalHidden.bind(this));
             this.$primary.on('click', this.onPrimaryClick.bind(this));
+            this.$expand.on('click', function () {
+                var $post_scripts = _this.$post_scripts, $glyphicon = _this.$expand.find('.glyphicon');
+                if (_this.$expand.data('state') === 'expanded') {
+                    _this.$expand.data('state', 'collapsed');
+                }
+                else {
+                    _this.$expand.data('state', 'expanded');
+                }
+                if (_this.$expand.data('state') === 'expanded') {
+                    $glyphicon.removeClass('glyphicon-chevron-down');
+                    $glyphicon.addClass('glyphicon-chevron-up');
+                    $post_scripts.show();
+                }
+                else {
+                    $glyphicon.removeClass('glyphicon-chevron-up');
+                    $glyphicon.addClass('glyphicon-chevron-down');
+                    $post_scripts.hide();
+                }
+            });
         }
         Object.defineProperty(PublishDialog, "me", {
             get: function () {
@@ -20,9 +40,8 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             configurable: true
         });
         PublishDialog.prototype.onBsModalShow = function () {
-            console.debug('[on:bs-modal-show');
-            var $blog_url = $('#blog-url'), $blog_url_ig = $blog_url.parent('.input-group');
-            var $post_title = $('#post-title'), $post_title_ig = $post_title.parent('.input-group');
+            var $blog_url = this.$blog_url, $blog_url_ig = $blog_url.parent('.input-group');
+            var $post_title = this.$post_title, $post_title_ig = $post_title.parent('.input-group'), $post_scripts = this.$post_scripts;
             $blog_url_ig.removeClass('has-error');
             $post_title_ig.removeClass('has-error');
             $post_title_ig.find('[type=checkbox]').prop('checked', true);
@@ -30,10 +49,13 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             if (blog_url && typeof blog_url === 'string') {
                 $blog_url.val(blog_url);
             }
-            var headers = $('#md-out').find(':header'), title = $(headers[0]).text();
+            var headers = this.$mdOut.find(':header'), title = $(headers[0]).text();
             if (title && typeof title === 'string') {
                 $post_title.val(title);
             }
+            var base64 = $post_scripts.find('textarea').text(), script = atob(base64);
+            $post_scripts.find('textarea').text(script);
+            $post_scripts.hide();
             $(this).find('[data-toggle="tooltip"]').tooltip();
             $(this).find('[data-toggle="popover"]').popover();
             this.$primary.attr('disabled', false);
@@ -45,23 +67,32 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         PublishDialog.prototype.onBsModalShown = function () {
             var blog_url = cookie_1.default.get('blog-url');
             if (blog_url) {
-                $('#post-title').focus();
+                this.$post_title.focus();
             }
             else {
-                $('#blog-url').focus();
+                this.$blog_url.focus();
             }
         };
         PublishDialog.prototype.onBsModalHide = function () {
+            var $post_scripts = this.$post_scripts, $post_scripts_ta = $post_scripts.find('textarea');
+            var script = $post_scripts.find('textarea').text(), base64 = btoa(script);
+            $post_scripts_ta.text(base64);
+            $post_scripts.hide();
+            var $expand = this.$expand, $glyphicon = this.$expand.find('.glyphicon');
+            $expand.data('state', 'collapsed');
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
         };
         PublishDialog.prototype.onBsModalHidden = function () {
+            var _this = this;
             setTimeout(function () {
-                $('#md-inp').focus();
+                _this.$mdInp.focus();
             }, 1);
         };
         PublishDialog.prototype.onPrimaryClick = function () {
             var _this = this;
-            var $blog_url = $('#blog-url'), $blog_url_ig = $blog_url.parent('.input-group');
-            var $post_title = $('#post-title'), $post_title_ig = $post_title.parent('.input-group'), $post_title_cb = $post_title_ig.find('[type=checkbox]');
+            var $blog_url = this.$blog_url, $blog_url_ig = $blog_url.parent('.input-group');
+            var $post_title = this.$post_title, $post_title_ig = $post_title.parent('.input-group'), $post_title_cb = $post_title_ig.find('[type=checkbox]');
             var url = $blog_url.val();
             if (!url) {
                 $blog_url_ig.addClass('has-error');
@@ -91,28 +122,28 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                     var on_done = function (res) {
                         var blog = assert_1.default(res && res.result), update = $post_title_cb.prop('checked');
                         if (update && blog.posts.totalItems > 0) {
-                            var on_done = function (res) {
+                            var on_done_1 = function (res) {
                                 var posts = res.result && res.result.items || [], post = posts.find(function (p) {
                                     return p.title === title;
                                 });
                                 if (post !== undefined) {
-                                    do_update(blogger, blog, post);
+                                    _this.doUpdate(blogger, blog, post);
                                 }
                                 else {
-                                    do_insert(blogger, blog);
+                                    _this.doInsert(blogger, blog, title);
                                 }
                             };
-                            var on_fail = function (res) {
+                            var on_fail_1 = function (res) {
                                 console.error('[on:blogger.posts.list]', res);
                             };
                             var all_request = blogger.posts.list({
                                 blogId: blog.id, fields: 'items(id,title)',
                                 orderBy: 'published'
                             });
-                            all_request.then(on_done, on_fail);
+                            all_request.then(on_done_1, on_fail_1);
                         }
                         else {
-                            do_insert(blogger, blog);
+                            _this.doInsert(blogger, blog, title);
                         }
                     };
                     var on_fail = function (res) {
@@ -157,53 +188,110 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 this.$primary.removeClass('btn-danger');
                 this.$primary.button('publishing');
             }
-            function do_insert(blogger, blog) {
-                var on_done = function (res) {
-                    var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
-                    var tab = open(url, 'post:' + id);
-                    if (tab !== undefined)
-                        tab.focus();
-                };
-                var on_fail = function (res) {
-                    console.error('[on:blogger.posts.insert]', res);
-                };
-                var insert_req = blogger.posts.insert({
-                    blogId: assert_1.default(blog.id),
-                    content: md2html($('#md-inp').val()),
-                    fields: 'id,url,title', title: assert_1.default(title)
-                });
-                insert_req.then(on_done, on_fail);
+        };
+        PublishDialog.prototype.doInsert = function (blogger, blog, title) {
+            var on_done = function (res) {
+                var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
+                var tab = open(url, 'post:' + id);
+                if (tab !== undefined)
+                    tab.focus();
+            };
+            var on_fail = function (res) {
+                console.error('[on:blogger.posts.insert]', res);
+            };
+            var insert_req = blogger.posts.insert({
+                blogId: assert_1.default(blog.id),
+                content: this.getContent(),
+                fields: 'id,url,title',
+                title: assert_1.default(title)
+            });
+            insert_req.then(on_done, on_fail);
+        };
+        PublishDialog.prototype.doUpdate = function (blogger, blog, post) {
+            var on_done = function (res) {
+                var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
+                var tab = open(url, 'post:' + id);
+                if (tab !== undefined)
+                    tab.focus();
+            };
+            var on_fail = function (res) {
+                console.error('[on:blogger.posts.update]', res);
+            };
+            var update_req = blogger.posts.update({
+                blogId: assert_1.default(blog.id),
+                content: this.getContent(),
+                fields: 'id,url,title',
+                postId: assert_1.default(post.id),
+                title: assert_1.default(post.title)
+            });
+            update_req.then(on_done, on_fail);
+        };
+        PublishDialog.prototype.getContent = function () {
+            return this.toHtml(this.$mdInp.val()) + this.getScripts();
+        };
+        PublishDialog.prototype.toHtml = function (md_content, with_header) {
+            var $content = $('<div>', {
+                html: markdown_it_1.default.me.render(md_content)
+            });
+            if (!with_header) {
+                $content.find(':header:first-of-type').remove();
             }
-            function do_update(blogger, blog, post) {
-                var on_done = function (res) {
-                    var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
-                    var tab = open(url, 'post:' + id);
-                    if (tab !== undefined)
-                        tab.focus();
-                };
-                var on_fail = function (res) {
-                    console.error('[on:blogger.posts.update]', res);
-                };
-                var update_req = blogger.posts.update({
-                    blogId: assert_1.default(blog.id), postId: assert_1.default(post.id),
-                    content: md2html($('#md-inp').val()),
-                    fields: 'id,url,title', title: assert_1.default(post.title)
-                });
-                update_req.then(on_done, on_fail);
+            return $content.html();
+        };
+        PublishDialog.prototype.getScripts = function () {
+            var $post_scripts = this.$post_scripts, $checkbox = $post_scripts.find('[type=checkbox]');
+            if ($checkbox.prop('checked')) {
+                return $post_scripts.find('textarea').val();
             }
-            function md2html(md_content, with_header) {
-                var $content = $('<div>', {
-                    html: markdown_it_1.default.me.render(md_content)
-                });
-                if (!with_header) {
-                    $content.find(':header:first-of-type').remove();
-                }
-                return $content.html();
+            else {
+                return '';
             }
         };
+        Object.defineProperty(PublishDialog.prototype, "$mdOut", {
+            get: function () {
+                return $('#md-out');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$mdInp", {
+            get: function () {
+                return $('#md-inp');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(PublishDialog.prototype, "$dialog", {
             get: function () {
                 return $('#publish-dlg');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$blog_url", {
+            get: function () {
+                return $('#blog-url');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_title", {
+            get: function () {
+                return $('#post-title');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_scripts", {
+            get: function () {
+                return $('.post-scripts');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$expand", {
+            get: function () {
+                return $('button#expand');
             },
             enumerable: true,
             configurable: true

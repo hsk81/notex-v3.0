@@ -5,7 +5,10 @@
         <button type="button" class="close" data-dismiss="modal">
             <span>&times;</span>
         </button>
-        <h4 class="modal-title">Publish to <a href="https://www.blogger.com/">Blogger.com</a></h4>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAACr1BMVEUhfwD/ghv/hB7/hhX/hR//hiL/iB7/iCD/iCX/iCf/iSH/iiD/iiH/iij/iyD/iyr/jCr/jCv/jCz/jiH/jSz/jS7/jiX/jS//jTP/jir/jiz/ji3/ji7/jyX/jjP/jyr/jyz/jy//jzD/jzL/jzP/kCr/kDD/kDP/kiD/kDT/kSv/kiL/kS3/kTD/kTP/kir/kTT/kyL/kjP/kjT/kyv/kjX/lCL/ky7/ky//kzD/kzP/kzT/lCv/lC//lDH/lDL/lDT/lDX/liT/lS7/lS//lTL/lTP/lTT/lTX/ljD/lTr/lTv/lTz/ljT/ljX/ly7/ly//ljz/lzT/lzX/lzf/mC7/mC//lzn/mDX/mS3/mDj/mTD/mTb/mEL/mjH/mjL/mjX/mjb/mjf/mzP/mzb/mzf/mkH/mkP/nDb/nDf/nD3/nTb/nTf/nEP/nTv/nEf/nT7/njb/njf/njj/nUb/nj7/nUj/nj//nzb/nkD/nzf/oDf/oDn/oDr/oTf/oTz/ojj/ozj/oz3/oVX/o0f/o0j/olX/o1L/p1X/p1j/p1n/qFn/qVn/qVr/q1n/q1r/rWL/rWf/rmP/rmb/r2P/sGf/tGj/tWn/tXX/vIH/vIP/vIT/vIX/vYH/vYX/vYb/voX/v4X/v4b/v4j/wYP/wYf/wYj/xIr/xJL/xpX/x5b/yZf/ypr/y5r/zJz/zJ//zZ7/zZ//z6f/0af/0qr/1Kn/1a//1rP/17T/2LH/27n/27z/3Lr/3b//3cH/3r//3sD/3sH/3sL/3sP/38L/38P/4MX/4cX/48v/5Mv/5dH/5tD/5tH/59D/6NL/6NT/6df/6tj/69r/69v/7uD/7+L/8ub/8+n/9Or/9Ov/9ez/9u//9/D/+vf//fv//fz//f3//v3//v7///7///8n95ryAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfgAxAINiKfRh1EAAACJElEQVQoz2NgaGqoq6uqKizMzshISUhIiIiICPL1dXd3d7C2NtJjYKhvrMMpb6VnzFALlK6uxiVvwFADk86Ojw7w9/f3DEKW1wPKV4PkiyI1okvLKysrI4RlXf2A8g5g+/UYiquqq6qqKsxal+88evz4sWO7NkwSM/dDlq8qrKpwmn7+CQzcWmNnCTbeWg8on1MIBIbT7jxBAhvd7JHlsyNbziFLP7k/1Q1kvDFIPjM7O1t7yWMU+Se7Q0DawfKpGRnJoVtBgjdXL122bO6qa0DmnXCo8WD5uLw9IPl1zjYmJvrMG4HMByWSCrqmQGl1hqSUlLDSQyD5s1P6+vs7ek8CmY/Wd3WmyUDkExL8Sw8+wQRbBNRA8okJCQEFB7DIX80X0FNXZ4jBJX+5DCwfHBHhkrUfi/ylfAF1dRX88ipgedusvSCB0xN6ukGgq337Q7A8v4qKHIOfr69F1C6Q/FodVVVVeXlJSa4Zd4HcC7GCUHk7rc0g+RsrFy5asGDevFnzL4KC+4SouIocWN6Xb+YjTPs3MQKl5Rg8gElJK/cUhvT1Nl6wvANQ3oN78m006XtzWDTh8g4OPBPPoEhfmc2hApKWYwDGozUwMbCnL96278ghEDh8aMeKZlZlsLQEWB4IHBXYpLwCwcDHW4mJUxksKwGTNwICRWkRIJASERIRh2gGyxsDZfSQADDMITaDpSUYDPRQZVGlJRgYTJElQdJyyNIAygzFuhksnCgAAAAASUVORK5CYII="
+             class="img-thumbnail pull-left" alt="Blogger.com">
+        <h4 class="modal-title">Publish to <a href="https://www.blogger.com/">
+            Blogger.com</a></h4>
       </div>
       <div class="modal-body">
         <label for="blog-url">Blog URL</label>
@@ -41,10 +44,40 @@
               </button>
           </div>
         </div>
+        <br class="post-scripts"/>
+        <label class="post-scripts" for="post-scripts">Post Scripts</label>
+        <div class="post-scripts input-group">
+          <span class="input-group-addon">
+              <input type="checkbox" data-toggle="tooltip" data-placement="top"
+                     title="Append publication scripts to blog post"
+                     style="margin-top: 3px" tabindex="-1" checked>
+          </span>
+          <textarea type="textarea" class="form-control" id="post-scripts"
+                    placeholder="publication scripts to append">
+            PCEtLQogIC0tIEhpZ2hsaWdodC5qczogOS41LjAKICAtLT4KCjxsaW5rIGhyZWY9
+            Jy8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL2hpZ2hsaWdodC5qcy85
+            LjUuMC9zdHlsZXMvdG9tb3Jyb3cubWluLmNzcycgcmVsPSdzdHlsZXNoZWV0Jz48
+            L2xpbms+Cgo8c2NyaXB0IHNyYz0nLy9jZG5qcy5jbG91ZGZsYXJlLmNvbS9hamF4
+            L2xpYnMvaGlnaGxpZ2h0LmpzLzkuNS4wL2hpZ2hsaWdodC5taW4uanMnPjwvc2Ny
+            aXB0PgoKPCEtLQogIC0tIE1hdGhKYXg6IGxhdGVzdAogIC0tPgoKPHNjcmlwdCB0
+            eXBlPSd0ZXh0L3gtbWF0aGpheC1jb25maWcnPgpNYXRoSmF4Lkh1Yi5Db25maWco
+            ewogICAgYXNjaWltYXRoMmpheDogewogICAgICAgIGRlbGltaXRlcnM6IFtbCiAg
+            ICAgICAgICAgICdce1x7JywnXH1cfScKICAgICAgICBdXQogICAgfSwKICAgIFRl
+            WDogewogICAgICAgIGVxdWF0aW9uTnVtYmVyczogewogICAgICAgICAgICBhdXRv
+            TnVtYmVyOiAnQU1TJwogICAgICAgIH0KICAgIH0sCiAgICB0ZXgyamF4OiB7CiAg
+            ICAgICAgZGlzcGxheU1hdGg6IFtbCiAgICAgICAgICAgICckJCcsICckJCcKICAg
+            ICAgICBdXSwKICAgICAgICBpbmxpbmVNYXRoOiBbWwogICAgICAgICAgICAnJCcs
+            ICckJwogICAgICAgIF1dCiAgICB9Cn0pOwo8L3NjcmlwdD4KCjxzY3JpcHQgc3Jj
+            PScvL2Nkbi5tYXRoamF4Lm9yZy9tYXRoamF4L2xhdGVzdC9NYXRoSmF4LmpzP2Nv
+            bmZpZz1UZVgtTU1MLUFNX0NIVE1MJyBhc3luYz48L3NjcmlwdD4K
+          </textarea>
+        </div>
       </div>
       <div class="modal-footer">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAACr1BMVEUhfwD/ghv/hB7/hhX/hR//hiL/iB7/iCD/iCX/iCf/iSH/iiD/iiH/iij/iyD/iyr/jCr/jCv/jCz/jiH/jSz/jS7/jiX/jS//jTP/jir/jiz/ji3/ji7/jyX/jjP/jyr/jyz/jy//jzD/jzL/jzP/kCr/kDD/kDP/kiD/kDT/kSv/kiL/kS3/kTD/kTP/kir/kTT/kyL/kjP/kjT/kyv/kjX/lCL/ky7/ky//kzD/kzP/kzT/lCv/lC//lDH/lDL/lDT/lDX/liT/lS7/lS//lTL/lTP/lTT/lTX/ljD/lTr/lTv/lTz/ljT/ljX/ly7/ly//ljz/lzT/lzX/lzf/mC7/mC//lzn/mDX/mS3/mDj/mTD/mTb/mEL/mjH/mjL/mjX/mjb/mjf/mzP/mzb/mzf/mkH/mkP/nDb/nDf/nD3/nTb/nTf/nEP/nTv/nEf/nT7/njb/njf/njj/nUb/nj7/nUj/nj//nzb/nkD/nzf/oDf/oDn/oDr/oTf/oTz/ojj/ozj/oz3/oVX/o0f/o0j/olX/o1L/p1X/p1j/p1n/qFn/qVn/qVr/q1n/q1r/rWL/rWf/rmP/rmb/r2P/sGf/tGj/tWn/tXX/vIH/vIP/vIT/vIX/vYH/vYX/vYb/voX/v4X/v4b/v4j/wYP/wYf/wYj/xIr/xJL/xpX/x5b/yZf/ypr/y5r/zJz/zJ//zZ7/zZ//z6f/0af/0qr/1Kn/1a//1rP/17T/2LH/27n/27z/3Lr/3b//3cH/3r//3sD/3sH/3sL/3sP/38L/38P/4MX/4cX/48v/5Mv/5dH/5tD/5tH/59D/6NL/6NT/6df/6tj/69r/69v/7uD/7+L/8ub/8+n/9Or/9Ov/9ez/9u//9/D/+vf//fv//fz//f3//v3//v7///7///8n95ryAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfgAxAINiKfRh1EAAACJElEQVQoz2NgaGqoq6uqKizMzshISUhIiIiICPL1dXd3d7C2NtJjYKhvrMMpb6VnzFALlK6uxiVvwFADk86Ojw7w9/f3DEKW1wPKV4PkiyI1okvLKysrI4RlXf2A8g5g+/UYiquqq6qqKsxal+88evz4sWO7NkwSM/dDlq8qrKpwmn7+CQzcWmNnCTbeWg8on1MIBIbT7jxBAhvd7JHlsyNbziFLP7k/1Q1kvDFIPjM7O1t7yWMU+Se7Q0DawfKpGRnJoVtBgjdXL122bO6qa0DmnXCo8WD5uLw9IPl1zjYmJvrMG4HMByWSCrqmQGl1hqSUlLDSQyD5s1P6+vs7ek8CmY/Wd3WmyUDkExL8Sw8+wQRbBNRA8okJCQEFB7DIX80X0FNXZ4jBJX+5DCwfHBHhkrUfi/ylfAF1dRX88ipgedusvSCB0xN6ukGgq337Q7A8v4qKHIOfr69F1C6Q/FodVVVVeXlJSa4Zd4HcC7GCUHk7rc0g+RsrFy5asGDevFnzL4KC+4SouIocWN6Xb+YjTPs3MQKl5Rg8gElJK/cUhvT1Nl6wvANQ3oN78m006XtzWDTh8g4OPBPPoEhfmc2hApKWYwDGozUwMbCnL96278ghEDh8aMeKZlZlsLQEWB4IHBXYpLwCwcDHW4mJUxksKwGTNwICRWkRIJASERIRh2gGyxsDZfSQADDMITaDpSUYDPRQZVGlJRgYTJElQdJyyNIAygzFuhksnCgAAAAASUVORK5CYII="
-             class="img-thumbnail pull-left" style="height: 34px;" alt="Blogger.com">
+        <button type="button" class="btn btn-default pull-left" id="expand">
+            <span class="glyphicon glyphicon-chevron-down"
+                  style="top: 2px;"></span>
+        </button>
         <button type="button" class="btn btn-default" data-dismiss="modal">
             Close
         </button>
