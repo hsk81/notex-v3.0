@@ -26,69 +26,65 @@ export class BloggerApi {
         };
     }
 
-    get(callback:Function) {
+    get(callback:Function, ms:number = 2048, n:number = 2) {
         GoogleApi.me.get((gapi) => {
-            if (timeout_id1) {
-                clearTimeout(timeout_id1);
-            }
-            let on_done = (res) => {
-                if (timeout_id2) {
-                    clearTimeout(timeout_id2);
-                }
-                if (res.error) switch (res.error) {
-                    case 'immediate_failed':
-                        let opts = $.extend(
-                            {}, this.options, {immediate: false});
-                        gapi.auth.authorize(
-                            opts, on_done, on_fail);
-                        if (typeof callback === 'function') {
+
+            if (gapi) {
+                let timeout_id1 = setTimeout(() => {
+                    if (n - 1 > 0) {
+                        this.get(callback, ms, n - 1);
+                    } else {
+                        callback(false);
+                    }
+                }, ms);
+
+                let on_fail = (res) => {
+                    if (timeout_id1) clearTimeout(timeout_id1);
+                    console.error('[with:google-api/fail]', res);
+                    callback(false);
+                };
+
+                let on_done = (res) => {
+                    if (timeout_id1) {
+                        clearTimeout(timeout_id1);
+                    }
+                    if (res.error) switch (res.error) {
+                        case 'immediate_failed':
+                            let opts = $.extend(
+                                {}, this.options, {immediate: false});
+                            gapi.auth.authorize(
+                                opts, on_done, on_fail);
                             callback(false);
-                        }
-                        break;
-                    default:
-                        if (typeof callback === 'function') {
+                            break;
+                        default:
+                            console.error('[with:google-api/done]', res);
                             callback(false);
-                        }
-                        console.error('[with:google-api/done]', res);
-                        return;
-                } else if (gapi.client.blogger === undefined) {
-                    gapi.client.load('blogger', 'v3').then(() => {
-                        if (typeof callback === 'function') {
+                            return;
+                    } else if (gapi.client.blogger === undefined) {
+                        let timeout_id2 = setTimeout(() => {
+                            if (n - 1 > 0) {
+                                this.get(callback, ms, n - 1);
+                            } else {
+                                callback(false);
+                            }
+                        }, ms);
+                        gapi.client.load('blogger', 'v3').then(() => {
+                            if (timeout_id2) clearTimeout(timeout_id2);
                             callback(gapi.client.blogger, this.options);
-                        }
-                    });
-                } else {
-                    if (typeof callback === 'function') {
+                        });
+                    } else {
                         callback(gapi.client.blogger, this.options);
                     }
-                }
-            };
+                };
 
-            let on_fail = (res) => {
-                if (timeout_id2) {
-                    clearTimeout(timeout_id2);
-                }
-                if (typeof callback === 'function') {
-                    callback(false);
-                }
-                console.error('[with:google-api/fail]', res);
-            };
-
-            let timeout_id2 = setTimeout(() => {
-                if (typeof callback === 'function') {
-                    callback(false);
-                }
-            }, 4096);
-
-            gapi.auth.authorize($.extend(
-                {}, this.options, {immediate: true}), on_done, on_fail);
-        });
-
-        let timeout_id1 = setTimeout(() => {
-            if (typeof callback === 'function') {
+                let opts = $.extend(
+                    {}, this.options, {immediate: true});
+                gapi.auth.authorize(
+                    opts, on_done, on_fail);
+            } else {
                 callback(false);
             }
-        }, 4096);
+        });
     }
 
     private options:any;

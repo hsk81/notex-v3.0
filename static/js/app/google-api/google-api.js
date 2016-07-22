@@ -1,4 +1,4 @@
-define(["require", "exports", "../function/assert"], function (require, exports, assert_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     console.debug('[import:google-api.ts]');
     var GoogleApi = (function () {
@@ -15,19 +15,36 @@ define(["require", "exports", "../function/assert"], function (require, exports,
             enumerable: true,
             configurable: true
         });
-        GoogleApi.prototype.get = function (callback) {
-            if (typeof window.gapi === 'undefined') {
+        GoogleApi.prototype.get = function (callback, ms, n) {
+            var _this = this;
+            if (ms === void 0) { ms = 2048; }
+            if (n === void 0) { n = 2; }
+            if (typeof window.gapi !== 'undefined') {
+                callback(window.gapi);
+            }
+            else {
+                var timeout_id_1 = setTimeout(function () {
+                    if (n - 1 > 0) {
+                        _this.get(callback, ms, n - 1);
+                    }
+                    else {
+                        callback(false);
+                    }
+                }, ms);
                 window.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
-                    if (typeof callback === 'function') {
-                        callback(assert_1.default(window.gapi, 'gapi'));
+                    if (timeout_id_1) {
+                        clearTimeout(timeout_id_1);
+                    }
+                    if (typeof window.gapi !== 'undefined') {
+                        callback(window.gapi);
+                    }
+                    else {
+                        callback(false);
                     }
                 };
                 $('body').append($('<script>', {
                     src: this.loadUrlTpl.replace('{0}', window.onGoogleApiClientLoad.name)
                 }));
-            }
-            else {
-                callback(window.gapi);
             }
         };
         return GoogleApi;
