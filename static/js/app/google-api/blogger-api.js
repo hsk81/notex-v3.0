@@ -25,7 +25,11 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                     if (res.error)
                         switch (res.error) {
                             case 'immediate_failed':
-                                gapi.auth.authorize($.extend({}, _this.options, { immediate: false }), on_done, on_fail);
+                                var opts = $.extend({}, _this.options, { immediate: false });
+                                gapi.auth.authorize(opts, on_done, on_fail);
+                                if (typeof callback === 'function') {
+                                    callback(false);
+                                }
                                 break;
                             default:
                                 if (typeof callback === 'function') {
@@ -53,9 +57,7 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                     }
                     console.error('[with:google-api/fail]', res);
                 };
-                setTimeout(function () {
-                    gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
-                }, 1024);
+                gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
             });
         };
         return BloggerApi;

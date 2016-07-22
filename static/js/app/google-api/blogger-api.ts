@@ -28,12 +28,16 @@ export class BloggerApi {
 
     get(callback:Function) {
         GoogleApi.me.get((gapi) => {
-            var on_done = (res) => {
+            let on_done = (res) => {
                 if (res.error) switch (res.error) {
                     case 'immediate_failed':
-                        gapi.auth.authorize($.extend(
-                            {}, this.options, {immediate: false}),
-                            on_done, on_fail);
+                        let opts = $.extend(
+                            {}, this.options, {immediate: false});
+                        gapi.auth.authorize(
+                            opts, on_done, on_fail);
+                        if (typeof callback === 'function') {
+                            callback(false);
+                        }
                         break;
                     default:
                         if (typeof callback === 'function') {
@@ -53,17 +57,16 @@ export class BloggerApi {
                     }
                 }
             };
-            var on_fail = (res) => {
+
+            let on_fail = (res) => {
                 if (typeof callback === 'function') {
                     callback(false);
                 }
                 console.error('[with:google-api/fail]', res);
             };
 
-            setTimeout(() => {
-                gapi.auth.authorize($.extend(
-                    {}, this.options, {immediate: true}), on_done, on_fail);
-            }, 1024);
+            gapi.auth.authorize($.extend(
+                {}, this.options, {immediate: true}), on_done, on_fail);
         });
     }
 
