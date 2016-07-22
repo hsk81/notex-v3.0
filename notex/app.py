@@ -72,7 +72,7 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
     concat(out_path,
-           'static/css/lib/highlight/default-9.2.0.min.css')
+           'static/css/lib/highlight/default-9.5.0.min.css')
     minify(out_path,
            'static/css/app/editor.css')
     zipify(out_path)
@@ -95,7 +95,7 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
     concat(out_path,
-           'static/js/lib/highlight/highlight-9.2.0.min.js')
+           'static/js/lib/highlight/highlight-9.5.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-6.1.1.min.js')
     concat(out_path,
