@@ -63,9 +63,8 @@ export class PublishDialog {
             $post_title.val(title);
         }
 
-        let base64 = $post_scripts.find('textarea').text(),
-            script = atob(base64);
-        $post_scripts.find('textarea').text(script);
+        let text = $post_scripts.find('textarea').text();
+        $post_scripts.find('textarea').text(text);
         $post_scripts.hide();
 
         $(this).find('[data-toggle="tooltip"]').tooltip();
@@ -90,10 +89,9 @@ export class PublishDialog {
     onBsModalHide() {
         let $post_scripts = this.$post_scripts,
             $post_scripts_ta = $post_scripts.find('textarea');
-        let script = $post_scripts.find('textarea').text(),
-            base64 = btoa(script);
 
-        $post_scripts_ta.text(base64);
+        let text = $post_scripts.find('textarea').text();
+        $post_scripts_ta.text(text);
         $post_scripts.hide();
 
         let $expand = this.$expand,

@@ -34,8 +34,8 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             if (title && typeof title === 'string') {
                 $post_title.val(title);
             }
-            var base64 = $post_scripts.find('textarea').text(), script = atob(base64);
-            $post_scripts.find('textarea').text(script);
+            var text = $post_scripts.find('textarea').text();
+            $post_scripts.find('textarea').text(text);
             $post_scripts.hide();
             $(this).find('[data-toggle="tooltip"]').tooltip();
             $(this).find('[data-toggle="popover"]').popover();
@@ -56,8 +56,8 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         };
         PublishDialog.prototype.onBsModalHide = function () {
             var $post_scripts = this.$post_scripts, $post_scripts_ta = $post_scripts.find('textarea');
-            var script = $post_scripts.find('textarea').text(), base64 = btoa(script);
-            $post_scripts_ta.text(base64);
+            var text = $post_scripts.find('textarea').text();
+            $post_scripts_ta.text(text);
             $post_scripts.hide();
             var $expand = this.$expand, $glyphicon = this.$expand.find('.glyphicon');
             $expand.data('state', 'collapsed');
