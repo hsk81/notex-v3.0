@@ -10,7 +10,10 @@ define(["require", "exports", './ui/header-menu', './ui/markdown-editor', './ui/
         }
         Object.defineProperty(App, "me", {
             get: function () {
-                return new App();
+                if (this['_me'] === undefined) {
+                    this['_me'] = new App();
+                }
+                return this['_me'];
             },
             enumerable: true,
             configurable: true

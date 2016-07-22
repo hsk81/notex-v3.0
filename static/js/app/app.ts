@@ -23,7 +23,10 @@ import DownloadManager from './ui/download-manager';
 
 class App {
     static get me():App {
-        return new App();
+        if (this['_me'] === undefined) {
+            this['_me'] = new App();
+        }
+        return this['_me'];
     }
 
     constructor() {
