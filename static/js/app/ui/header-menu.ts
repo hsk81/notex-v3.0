@@ -15,39 +15,46 @@ export class HeaderMenu {
     }
 
     constructor() {
-        this.$openItem.on('change', (ev) => {
-            var files = ev.target.files;
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].type && files[i].type.match(/text/)) {
-                    var reader = new FileReader();
-                    reader.onload = function (progress_ev) {
-                        var target = <any>progress_ev.target;
-                        if (target && target.readyState === 2 &&
-                            typeof target.result === 'string') {
-                            $('#md-inp')
-                                .val(target.result).trigger('change')
-                                .setCursorPosition(0).focus();
-                        }
-                    };
-                    reader.readAsText(files[i]);
-                }
-            }
-        });
+        this.$openItem.on(
+            'change', this.onOpenItemChange.bind(this));
+        this.$swapItem.on(
+            'click', this.onSwapItemClick.bind(this));
+    }
 
-        this.$swapItem.on('click', function () {
-            $('div.lhs').toggleClass('hidden-xs hidden-sm')
-                .toggleClass('col-xs-12 col-sm-12');
-            $('div.rhs').toggleClass('hidden-xs hidden-sm')
-                .toggleClass('col-xs-12 col-sm-12');
-        });
+    onOpenItemChange(ev) {
+        var files = ev.target.files;
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].type && files[i].type.match(/text/)) {
+                let reader = new FileReader();
+                reader.onload = function (progress_ev) {
+                    var target = <any>progress_ev.target;
+                    if (target && target.readyState === 2 &&
+                        typeof target.result === 'string') {
+                        $('#md-inp')
+                            .val(target.result).trigger('change')
+                            .setCursorPosition(0).focus();
+                    }
+                };
+                reader.readAsText(files[i]);
+            }
+        }
+    }
+
+    onSwapItemClick() {
+        $('div.lhs').toggleClass('hidden-xs hidden-sm')
+            .toggleClass('col-xs-12 col-sm-12');
+        $('div.rhs').toggleClass('hidden-xs hidden-sm')
+            .toggleClass('col-xs-12 col-sm-12');
     }
 
     get $openItem():any {
         return $('#md-src,#md-src-mob');
     }
+
     get $saveItem():any {
         return $('a[name=save]');
     }
+
     get $swapItem():any {
         return $('[name=swap]');
     }

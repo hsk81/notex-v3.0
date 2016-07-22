@@ -3,31 +3,12 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
     console.debug('[import:ui/publish-dialog.ts]');
     var PublishDialog = (function () {
         function PublishDialog() {
-            var _this = this;
             this.$dialog.on('show.bs.modal', this.onBsModalShow.bind(this));
             this.$dialog.on('shown.bs.modal', this.onBsModalShown.bind(this));
             this.$dialog.on('hide.bs.modal', this.onBsModalHide.bind(this));
             this.$dialog.on('hidden.bs.modal', this.onBsModalHidden.bind(this));
             this.$primary.on('click', this.onPrimaryClick.bind(this));
-            this.$expand.on('click', function () {
-                var $post_scripts = _this.$post_scripts, $glyphicon = _this.$expand.find('.glyphicon');
-                if (_this.$expand.data('state') === 'expanded') {
-                    _this.$expand.data('state', 'collapsed');
-                }
-                else {
-                    _this.$expand.data('state', 'expanded');
-                }
-                if (_this.$expand.data('state') === 'expanded') {
-                    $glyphicon.removeClass('glyphicon-chevron-down');
-                    $glyphicon.addClass('glyphicon-chevron-up');
-                    $post_scripts.show();
-                }
-                else {
-                    $glyphicon.removeClass('glyphicon-chevron-up');
-                    $glyphicon.addClass('glyphicon-chevron-down');
-                    $post_scripts.hide();
-                }
-            });
+            this.$expand.on('click', this.onExpandClick.bind(this));
         }
         Object.defineProperty(PublishDialog, "me", {
             get: function () {
@@ -88,6 +69,25 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             setTimeout(function () {
                 _this.$mdInp.focus();
             }, 1);
+        };
+        PublishDialog.prototype.onExpandClick = function () {
+            var $post_scripts = this.$post_scripts, $glyphicon = this.$expand.find('.glyphicon');
+            if (this.$expand.data('state') === 'expanded') {
+                this.$expand.data('state', 'collapsed');
+            }
+            else {
+                this.$expand.data('state', 'expanded');
+            }
+            if (this.$expand.data('state') === 'expanded') {
+                $glyphicon.removeClass('glyphicon-chevron-down');
+                $glyphicon.addClass('glyphicon-chevron-up');
+                $post_scripts.show();
+            }
+            else {
+                $glyphicon.removeClass('glyphicon-chevron-up');
+                $glyphicon.addClass('glyphicon-chevron-down');
+                $post_scripts.hide();
+            }
         };
         PublishDialog.prototype.onPrimaryClick = function () {
             var _this = this;
@@ -201,7 +201,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             };
             var insert_req = blogger.posts.insert({
                 blogId: assert_1.default(blog.id),
-                content: this.getContent(),
+                content: this.content(),
                 fields: 'id,url,title',
                 title: assert_1.default(title)
             });
@@ -219,15 +219,15 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             };
             var update_req = blogger.posts.update({
                 blogId: assert_1.default(blog.id),
-                content: this.getContent(),
+                content: this.content(),
                 fields: 'id,url,title',
                 postId: assert_1.default(post.id),
                 title: assert_1.default(post.title)
             });
             update_req.then(on_done, on_fail);
         };
-        PublishDialog.prototype.getContent = function () {
-            return this.toHtml(this.$mdInp.val()) + this.getScripts();
+        PublishDialog.prototype.content = function () {
+            return this.toHtml(this.$mdInp.val()) + this.withScripts();
         };
         PublishDialog.prototype.toHtml = function (md_content, with_header) {
             var $content = $('<div>', {
@@ -238,7 +238,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             }
             return $content.html();
         };
-        PublishDialog.prototype.getScripts = function () {
+        PublishDialog.prototype.withScripts = function () {
             var $post_scripts = this.$post_scripts, $checkbox = $post_scripts.find('[type=checkbox]');
             if ($checkbox.prop('checked')) {
                 return $post_scripts.find('textarea').val();
@@ -270,35 +270,35 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         });
         Object.defineProperty(PublishDialog.prototype, "$blog_url", {
             get: function () {
-                return $('#blog-url');
+                return this.$dialog.find('#blog-url');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(PublishDialog.prototype, "$post_title", {
             get: function () {
-                return $('#post-title');
+                return this.$dialog.find('#post-title');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(PublishDialog.prototype, "$post_scripts", {
             get: function () {
-                return $('.post-scripts');
+                return this.$dialog.find('.post-scripts');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(PublishDialog.prototype, "$expand", {
             get: function () {
-                return $('button#expand');
+                return this.$dialog.find('#expand');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(PublishDialog.prototype, "$primary", {
             get: function () {
-                return $('#publish-dlg').find('.btn-primary');
+                return this.$dialog.find('.btn-primary');
             },
             enumerable: true,
             configurable: true
