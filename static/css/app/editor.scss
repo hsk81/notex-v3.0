@@ -112,3 +112,25 @@ html, body {
     }
   }
 }
+
+/* ============================================================================
+ * Publish Dialog:
+ * ========================================================================= */
+
+#publish-dlg {
+  .modal-header {
+    .img-thumbnail {
+      height: 25px;
+      margin-right: 4px;
+      padding: 2px;
+    }
+  }
+  .modal-body {
+    textarea#post-scripts {
+      font-family: monospace;
+      font-size: smaller;
+      height: 13em;
+      resize: vertical;
+    }
+  }
+}
