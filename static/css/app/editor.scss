@@ -75,8 +75,18 @@ html, body {
         width: 100%;
       }
       div#md-out, div#md-tmp {
+        @media(max-width: 480px) {
+          font-size: medium;
+        }
+        @media(min-width: 480px) {
+          font-size: large;
+        }
         font-family: "Linux Libertine", serif;
-        font-size: large;
+      }
+      div#md-out pre, div#md-tmp pre {
+        @media(max-width: 480px) {
+          font-size: x-small;
+        }
       }
       div#md-out p, div#md-tmp p {
         text-align: justify;
