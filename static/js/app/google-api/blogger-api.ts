@@ -29,6 +29,9 @@ export class BloggerApi {
     get(callback:Function) {
         GoogleApi.me.get((gapi) => {
             let on_done = (res) => {
+                if (timeout_id) {
+                    clearTimeout(timeout_id);
+                }
                 if (res.error) switch (res.error) {
                     case 'immediate_failed':
                         let opts = $.extend(
@@ -59,11 +62,20 @@ export class BloggerApi {
             };
 
             let on_fail = (res) => {
+                if (timeout_id) {
+                    clearTimeout(timeout_id);
+                }
                 if (typeof callback === 'function') {
                     callback(false);
                 }
                 console.error('[with:google-api/fail]', res);
             };
+
+            let timeout_id = setTimeout(() => {
+                if (typeof callback === 'function') {
+                    callback(false);
+                }
+            }, 4096);
 
             gapi.auth.authorize($.extend(
                 {}, this.options, {immediate: true}), on_done, on_fail);
