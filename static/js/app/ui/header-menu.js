@@ -3,30 +3,8 @@ define(["require", "exports"], function (require, exports) {
     console.debug('[import:ui/header-menu.ts]');
     var HeaderMenu = (function () {
         function HeaderMenu() {
-            this.$openItem.on('change', function (ev) {
-                var files = ev.target.files;
-                for (var i = 0; i < files.length; i++) {
-                    if (files[i].type && files[i].type.match(/text/)) {
-                        var reader = new FileReader();
-                        reader.onload = function (progress_ev) {
-                            var target = progress_ev.target;
-                            if (target && target.readyState === 2 &&
-                                typeof target.result === 'string') {
-                                $('#md-inp')
-                                    .val(target.result).trigger('change')
-                                    .setCursorPosition(0).focus();
-                            }
-                        };
-                        reader.readAsText(files[i]);
-                    }
-                }
-            });
-            this.$swapItem.on('click', function () {
-                $('div.lhs').toggleClass('hidden-xs hidden-sm')
-                    .toggleClass('col-xs-12 col-sm-12');
-                $('div.rhs').toggleClass('hidden-xs hidden-sm')
-                    .toggleClass('col-xs-12 col-sm-12');
-            });
+            this.$openItem.on('change', this.onOpenItemChange.bind(this));
+            this.$swapItem.on('click', this.onSwapItemClick.bind(this));
         }
         Object.defineProperty(HeaderMenu, "me", {
             get: function () {
@@ -38,6 +16,30 @@ define(["require", "exports"], function (require, exports) {
             enumerable: true,
             configurable: true
         });
+        HeaderMenu.prototype.onOpenItemChange = function (ev) {
+            var files = ev.target.files;
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].type && files[i].type.match(/text/)) {
+                    var reader = new FileReader();
+                    reader.onload = function (progress_ev) {
+                        var target = progress_ev.target;
+                        if (target && target.readyState === 2 &&
+                            typeof target.result === 'string') {
+                            $('#md-inp')
+                                .val(target.result).trigger('change')
+                                .setCursorPosition(0).focus();
+                        }
+                    };
+                    reader.readAsText(files[i]);
+                }
+            }
+        };
+        HeaderMenu.prototype.onSwapItemClick = function () {
+            $('div.lhs').toggleClass('hidden-xs hidden-sm')
+                .toggleClass('col-xs-12 col-sm-12');
+            $('div.rhs').toggleClass('hidden-xs hidden-sm')
+                .toggleClass('col-xs-12 col-sm-12');
+        };
         Object.defineProperty(HeaderMenu.prototype, "$openItem", {
             get: function () {
                 return $('#md-src,#md-src-mob');

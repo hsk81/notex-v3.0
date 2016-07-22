@@ -37,27 +37,8 @@ export class PublishDialog {
 
         this.$primary.on(
             'click', this.onPrimaryClick.bind(this));
-
-        this.$expand.on('click', () => {
-            let $post_scripts = this.$post_scripts,
-                $glyphicon = this.$expand.find('.glyphicon');
-
-            if (this.$expand.data('state') === 'expanded') {
-                this.$expand.data('state', 'collapsed');
-            } else {
-                this.$expand.data('state', 'expanded');
-            }
-
-            if (this.$expand.data('state') === 'expanded') {
-                $glyphicon.removeClass('glyphicon-chevron-down');
-                $glyphicon.addClass('glyphicon-chevron-up');
-                $post_scripts.show();
-            } else {
-                $glyphicon.removeClass('glyphicon-chevron-up');
-                $glyphicon.addClass('glyphicon-chevron-down');
-                $post_scripts.hide();
-            }
-        });
+        this.$expand.on(
+            'click', this.onExpandClick.bind(this));
     }
 
     onBsModalShow() {
@@ -127,6 +108,27 @@ export class PublishDialog {
         setTimeout(() => {
             this.$mdInp.focus();
         }, 1);
+    }
+
+    onExpandClick() {
+        let $post_scripts = this.$post_scripts,
+            $glyphicon = this.$expand.find('.glyphicon');
+
+        if (this.$expand.data('state') === 'expanded') {
+            this.$expand.data('state', 'collapsed');
+        } else {
+            this.$expand.data('state', 'expanded');
+        }
+
+        if (this.$expand.data('state') === 'expanded') {
+            $glyphicon.removeClass('glyphicon-chevron-down');
+            $glyphicon.addClass('glyphicon-chevron-up');
+            $post_scripts.show();
+        } else {
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
+            $post_scripts.hide();
+        }
     }
 
     onPrimaryClick() {
@@ -246,7 +248,7 @@ export class PublishDialog {
         };
         let insert_req = blogger.posts.insert({
             blogId: assert(blog.id),
-            content: this.getContent(),
+            content: this.content(),
             fields: 'id,url,title',
             title: assert(title)
         });
@@ -265,7 +267,7 @@ export class PublishDialog {
         };
         let update_req = blogger.posts.update({
             blogId: assert(blog.id),
-            content: this.getContent(),
+            content: this.content(),
             fields: 'id,url,title',
             postId: assert(post.id),
             title: assert(post.title)
@@ -273,8 +275,8 @@ export class PublishDialog {
         update_req.then(on_done, on_fail);
     }
 
-    getContent():string {
-        return this.toHtml(this.$mdInp.val()) + this.getScripts();
+    content():string {
+        return this.toHtml(this.$mdInp.val()) + this.withScripts();
     }
 
     toHtml(md_content, with_header?) {
@@ -287,7 +289,7 @@ export class PublishDialog {
         return $content.html();
     }
 
-    getScripts() {
+    withScripts() {
         let $post_scripts = this.$post_scripts,
             $checkbox = $post_scripts.find('[type=checkbox]');
         if ($checkbox.prop('checked')) {
@@ -310,23 +312,23 @@ export class PublishDialog {
     }
 
     get $blog_url():any {
-        return $('#blog-url');
+        return this.$dialog.find('#blog-url');
     }
 
     get $post_title():any {
-        return $('#post-title');
+        return this.$dialog.find('#post-title');
     }
 
     get $post_scripts():any {
-        return $('.post-scripts');
+        return this.$dialog.find('.post-scripts');
     }
 
     get $expand():any {
-        return $('button#expand');
+        return this.$dialog.find('#expand');
     }
 
     get $primary():any {
-        return $('#publish-dlg').find('.btn-primary');
+        return this.$dialog.find('.btn-primary');
     }
 }
 

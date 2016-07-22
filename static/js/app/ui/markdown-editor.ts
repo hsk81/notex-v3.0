@@ -87,6 +87,7 @@ export class MarkdownEditor {
     get $mdInp():any {
         return $('#md-inp');
     }
+
     get $mdOut():any {
         return $('#md-out');
     }
