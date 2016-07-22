@@ -18,66 +18,68 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
             enumerable: true,
             configurable: true
         });
-        BloggerApi.prototype.get = function (callback) {
+        BloggerApi.prototype.get = function (callback, ms, n) {
             var _this = this;
+            if (ms === void 0) { ms = 2048; }
+            if (n === void 0) { n = 2; }
             google_api_1.default.me.get(function (gapi) {
-                if (timeout_id1) {
-                    clearTimeout(timeout_id1);
-                }
-                var on_done = function (res) {
-                    if (timeout_id2) {
-                        clearTimeout(timeout_id2);
-                    }
-                    if (res.error)
-                        switch (res.error) {
-                            case 'immediate_failed':
-                                var opts = $.extend({}, _this.options, { immediate: false });
-                                gapi.auth.authorize(opts, on_done, on_fail);
-                                if (typeof callback === 'function') {
-                                    callback(false);
-                                }
-                                break;
-                            default:
-                                if (typeof callback === 'function') {
-                                    callback(false);
-                                }
-                                console.error('[with:google-api/done]', res);
-                                return;
+                if (gapi) {
+                    var timeout_id1_1 = setTimeout(function () {
+                        if (n - 1 > 0) {
+                            _this.get(callback, ms, n - 1);
                         }
-                    else if (gapi.client.blogger === undefined) {
-                        gapi.client.load('blogger', 'v3').then(function () {
-                            if (typeof callback === 'function') {
-                                callback(gapi.client.blogger, _this.options);
+                        else {
+                            callback(false);
+                        }
+                    }, ms);
+                    var on_fail_1 = function (res) {
+                        if (timeout_id1_1)
+                            clearTimeout(timeout_id1_1);
+                        console.error('[with:google-api/fail]', res);
+                        callback(false);
+                    };
+                    var on_done_1 = function (res) {
+                        if (timeout_id1_1) {
+                            clearTimeout(timeout_id1_1);
+                        }
+                        if (res.error)
+                            switch (res.error) {
+                                case 'immediate_failed':
+                                    var opts_1 = $.extend({}, _this.options, { immediate: false });
+                                    gapi.auth.authorize(opts_1, on_done_1, on_fail_1);
+                                    callback(false);
+                                    break;
+                                default:
+                                    console.error('[with:google-api/done]', res);
+                                    callback(false);
+                                    return;
                             }
-                        });
-                    }
-                    else {
-                        if (typeof callback === 'function') {
+                        else if (gapi.client.blogger === undefined) {
+                            var timeout_id2_1 = setTimeout(function () {
+                                if (n - 1 > 0) {
+                                    _this.get(callback, ms, n - 1);
+                                }
+                                else {
+                                    callback(false);
+                                }
+                            }, ms);
+                            gapi.client.load('blogger', 'v3').then(function () {
+                                if (timeout_id2_1)
+                                    clearTimeout(timeout_id2_1);
+                                callback(gapi.client.blogger, _this.options);
+                            });
+                        }
+                        else {
                             callback(gapi.client.blogger, _this.options);
                         }
-                    }
-                };
-                var on_fail = function (res) {
-                    if (timeout_id2) {
-                        clearTimeout(timeout_id2);
-                    }
-                    if (typeof callback === 'function') {
-                        callback(false);
-                    }
-                    console.error('[with:google-api/fail]', res);
-                };
-                var timeout_id2 = setTimeout(function () {
-                    if (typeof callback === 'function') {
-                        callback(false);
-                    }
-                }, 4096);
-                gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
-            });
-            var timeout_id1 = setTimeout(function () {
-                if (typeof callback === 'function') {
+                    };
+                    var opts = $.extend({}, _this.options, { immediate: true });
+                    gapi.auth.authorize(opts, on_done_1, on_fail_1);
+                }
+                else {
                     callback(false);
                 }
-            }, 4096);
+            });
         };
         return BloggerApi;
     }());
