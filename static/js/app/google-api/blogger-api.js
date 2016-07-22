@@ -22,6 +22,9 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
             var _this = this;
             google_api_1.default.me.get(function (gapi) {
                 var on_done = function (res) {
+                    if (timeout_id) {
+                        clearTimeout(timeout_id);
+                    }
                     if (res.error)
                         switch (res.error) {
                             case 'immediate_failed':
@@ -52,11 +55,19 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                     }
                 };
                 var on_fail = function (res) {
+                    if (timeout_id) {
+                        clearTimeout(timeout_id);
+                    }
                     if (typeof callback === 'function') {
                         callback(false);
                     }
                     console.error('[with:google-api/fail]', res);
                 };
+                var timeout_id = setTimeout(function () {
+                    if (typeof callback === 'function') {
+                        callback(false);
+                    }
+                }, 4096);
                 gapi.auth.authorize($.extend({}, _this.options, { immediate: true }), on_done, on_fail);
             });
         };
