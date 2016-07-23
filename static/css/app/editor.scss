@@ -136,11 +136,16 @@ html, body {
     }
   }
   .modal-body {
-    textarea#post-scripts {
-      font-family: monospace;
-      font-size: smaller;
-      height: 13em;
-      resize: vertical;
+    .post-settings.nav {
+      margin-bottom: 1em;
+    }
+    .post-settings {
+      #post-scripts, #post-styles {
+        font-family: monospace;
+        font-size: smaller;
+        height: 13em;
+        resize: vertical;
+      }
     }
   }
 }

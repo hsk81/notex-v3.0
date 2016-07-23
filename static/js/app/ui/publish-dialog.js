@@ -7,8 +7,12 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             this.$dialog.on('shown.bs.modal', this.onBsModalShown.bind(this));
             this.$dialog.on('hide.bs.modal', this.onBsModalHide.bind(this));
             this.$dialog.on('hidden.bs.modal', this.onBsModalHidden.bind(this));
-            this.$primary.on('click', this.onPrimaryClick.bind(this));
             this.$expand.on('click', this.onExpandClick.bind(this));
+            this.$post_scripts_nav.on('click', this.onScriptsNavClick.bind(this));
+            this.$post_scripts_checkbox.on('click', this.onScriptsCheckboxClick.bind(this));
+            this.$post_styles_nav.on('click', this.onStylesNavClick.bind(this));
+            this.$post_styles_checkbox.on('click', this.onStylesCheckboxClick.bind(this));
+            this.$primary.on('click', this.onPrimaryClick.bind(this));
         }
         Object.defineProperty(PublishDialog, "me", {
             get: function () {
@@ -20,13 +24,64 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(PublishDialog.prototype, "blogUrl", {
+            get: function () {
+                return cookie_1.default.get('blog-url');
+            },
+            set: function (value) {
+                cookie_1.default.set('blog-url', value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "scripts", {
+            get: function () {
+                return localStorage.getItem('post-scripts');
+            },
+            set: function (value) {
+                localStorage.setItem('post-scripts', value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "scriptsFlag", {
+            get: function () {
+                return cookie_1.default.get('post-scripts-flag', true);
+            },
+            set: function (value) {
+                cookie_1.default.set('post-scripts-flag', value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "styles", {
+            get: function () {
+                return localStorage.getItem('post-styles');
+            },
+            set: function (value) {
+                localStorage.setItem('post-styles', value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "stylesFlag", {
+            get: function () {
+                return cookie_1.default.get('post-styles-flag', true);
+            },
+            set: function (value) {
+                cookie_1.default.set('post-styles-flag', value);
+            },
+            enumerable: true,
+            configurable: true
+        });
         PublishDialog.prototype.onBsModalShow = function () {
             var $blog_url = this.$blog_url, $blog_url_ig = $blog_url.parent('.input-group');
-            var $post_title = this.$post_title, $post_title_ig = $post_title.parent('.input-group'), $post_scripts = this.$post_scripts;
+            var $post_title = this.$post_title, $post_title_ig = $post_title.parent('.input-group');
+            var $post_settings = this.$post_settings, $post_scripts_chk = this.$post_scripts_checkbox, $post_scripts_ta = this.$post_scripts_textarea, $post_styles_chk = this.$post_styles_checkbox, $post_styles_ta = this.$post_styles_textarea;
             $blog_url_ig.removeClass('has-error');
             $post_title_ig.removeClass('has-error');
             $post_title_ig.find('[type=checkbox]').prop('checked', true);
-            var blog_url = cookie_1.default.get('blog-url');
+            var blog_url = this.blogUrl;
             if (blog_url && typeof blog_url === 'string') {
                 $blog_url.val(blog_url);
             }
@@ -34,9 +89,13 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             if (title && typeof title === 'string') {
                 $post_title.val(title);
             }
-            var text = $post_scripts.find('textarea').text();
-            $post_scripts.find('textarea').text(text);
-            $post_scripts.hide();
+            $post_settings.hide();
+            $post_scripts_chk.prop('checked', this.scriptsFlag);
+            if (this.scripts)
+                $post_scripts_ta.val(this.scripts);
+            $post_styles_chk.prop('checked', this.stylesFlag);
+            if (this.styles)
+                $post_styles_ta.val(this.styles);
             $(this).find('[data-toggle="tooltip"]').tooltip();
             $(this).find('[data-toggle="popover"]').popover();
             this.$primary.attr('disabled', false);
@@ -46,8 +105,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             this.$primary.button('reset');
         };
         PublishDialog.prototype.onBsModalShown = function () {
-            var blog_url = cookie_1.default.get('blog-url');
-            if (blog_url) {
+            if (this.blogUrl) {
                 this.$post_title.focus();
             }
             else {
@@ -55,14 +113,11 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             }
         };
         PublishDialog.prototype.onBsModalHide = function () {
-            var $post_scripts = this.$post_scripts, $post_scripts_ta = $post_scripts.find('textarea');
-            var text = $post_scripts.find('textarea').text();
-            $post_scripts_ta.text(text);
-            $post_scripts.hide();
-            var $expand = this.$expand, $glyphicon = this.$expand.find('.glyphicon');
+            var $expand = this.$expand, $glyphicon = this.$expand.find('.glyphicon'), $post_settings = this.$post_settings;
             $expand.data('state', 'collapsed');
             $glyphicon.removeClass('glyphicon-chevron-up');
             $glyphicon.addClass('glyphicon-chevron-down');
+            $post_settings.hide();
         };
         PublishDialog.prototype.onBsModalHidden = function () {
             var _this = this;
@@ -71,7 +126,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             }, 1);
         };
         PublishDialog.prototype.onExpandClick = function () {
-            var $post_scripts = this.$post_scripts, $glyphicon = this.$expand.find('.glyphicon');
+            var $glyphicon = this.$expand.find('.glyphicon'), $settings = this.$post_settings;
             if (this.$expand.data('state') === 'expanded') {
                 this.$expand.data('state', 'collapsed');
             }
@@ -79,15 +134,41 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 this.$expand.data('state', 'expanded');
             }
             if (this.$expand.data('state') === 'expanded') {
+                if (this.$post_scripts_nav.hasClass('active')) {
+                    $settings.filter(':not(.styles)').show();
+                }
+                else if (this.$post_styles_nav.hasClass('active')) {
+                    $settings.filter(':not(.scripts)').show();
+                }
+                else {
+                    $settings.show();
+                }
                 $glyphicon.removeClass('glyphicon-chevron-down');
                 $glyphicon.addClass('glyphicon-chevron-up');
-                $post_scripts.show();
             }
             else {
                 $glyphicon.removeClass('glyphicon-chevron-up');
                 $glyphicon.addClass('glyphicon-chevron-down');
-                $post_scripts.hide();
+                $settings.hide();
             }
+        };
+        PublishDialog.prototype.onScriptsNavClick = function () {
+            this.$post_styles_nav.removeClass('active');
+            this.$post_styles.hide();
+            this.$post_scripts_nav.addClass('active');
+            this.$post_scripts.show();
+        };
+        PublishDialog.prototype.onScriptsCheckboxClick = function (ev) {
+            this.scriptsFlag = $(ev.target).prop('checked');
+        };
+        PublishDialog.prototype.onStylesNavClick = function () {
+            this.$post_scripts_nav.removeClass('active');
+            this.$post_scripts.hide();
+            this.$post_styles_nav.addClass('active');
+            this.$post_styles.show();
+        };
+        PublishDialog.prototype.onStylesCheckboxClick = function (ev) {
+            this.stylesFlag = $(ev.target).prop('checked');
         };
         PublishDialog.prototype.onPrimaryClick = function () {
             var _this = this;
@@ -160,7 +241,9 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                             url: url, fields: 'id,posts(totalItems)'
                         });
                         url_request.then(after_1.default(on_done, function () {
-                            cookie_1.default.set('blog-url', url);
+                            _this.scripts = _this.$post_scripts_textarea.val();
+                            _this.styles = _this.$post_styles_textarea.val();
+                            _this.blogUrl = url;
                             _this.$primary.attr('disabled', false);
                             _this.$primary.addClass('btn-success');
                             _this.$primary.button('published');
@@ -227,7 +310,27 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             update_req.then(on_done, on_fail);
         };
         PublishDialog.prototype.content = function () {
-            return this.toHtml(this.$mdInp.val()) + this.withScripts();
+            return this.toHtml(this.$mdInp.val())
+                + this.withScripts()
+                + this.withStyles();
+        };
+        PublishDialog.prototype.withScripts = function () {
+            var $checkbox = this.$post_scripts_checkbox;
+            if ($checkbox.prop('checked')) {
+                return this.$post_scripts_textarea.val();
+            }
+            else {
+                return '';
+            }
+        };
+        PublishDialog.prototype.withStyles = function () {
+            var $checkbox = this.$post_styles_checkbox;
+            if ($checkbox.prop('checked')) {
+                return this.$post_styles_textarea.val();
+            }
+            else {
+                return '';
+            }
         };
         PublishDialog.prototype.toHtml = function (md_content, with_header) {
             var $content = $('<div>', {
@@ -237,15 +340,6 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 $content.find(':header:first-of-type').remove();
             }
             return $content.html();
-        };
-        PublishDialog.prototype.withScripts = function () {
-            var $post_scripts = this.$post_scripts, $checkbox = $post_scripts.find('[type=checkbox]');
-            if ($checkbox.prop('checked')) {
-                return $post_scripts.find('textarea').val();
-            }
-            else {
-                return '';
-            }
         };
         Object.defineProperty(PublishDialog.prototype, "$mdOut", {
             get: function () {
@@ -282,9 +376,72 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(PublishDialog.prototype, "$post_settings", {
+            get: function () {
+                return this.$dialog.find('.post-settings');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_settings_nav", {
+            get: function () {
+                return this.$dialog.find('.post-settings.nav');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(PublishDialog.prototype, "$post_scripts", {
             get: function () {
-                return this.$dialog.find('.post-scripts');
+                return this.$dialog.find('.post-settings.scripts');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_scripts_nav", {
+            get: function () {
+                return this.$post_settings_nav.find('.scripts');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_scripts_checkbox", {
+            get: function () {
+                return this.$post_scripts.find('[type=checkbox]');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_scripts_textarea", {
+            get: function () {
+                return this.$post_scripts.find('textarea');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_styles", {
+            get: function () {
+                return this.$dialog.find('.post-settings.styles');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_styles_nav", {
+            get: function () {
+                return this.$post_settings_nav.find('.styles');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_styles_checkbox", {
+            get: function () {
+                return this.$post_styles.find('[type=checkbox]');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "$post_styles_textarea", {
+            get: function () {
+                return this.$post_styles.find('textarea');
             },
             enumerable: true,
             configurable: true
