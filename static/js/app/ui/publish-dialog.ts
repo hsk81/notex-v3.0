@@ -18,14 +18,54 @@ import before from '../function/before';
 ///////////////////////////////////////////////////////////////////////////////
 
 export class PublishDialog {
-    static get me():PublishDialog {
+    public static get me():PublishDialog {
         if (this['_me'] === undefined) {
             this['_me'] = new PublishDialog();
         }
         return this['_me'];
     }
 
-    constructor() {
+    private get blogUrl():string {
+        return cookie.get<string>('blog-url');
+    }
+
+    private set blogUrl(value:string) {
+        cookie.set<string>('blog-url', value);
+    }
+
+    private get scripts():string {
+        return localStorage.getItem('post-scripts');
+    }
+
+    private set scripts(value:string) {
+        localStorage.setItem('post-scripts', value);
+    }
+
+    private get scriptsFlag():boolean {
+        return cookie.get<boolean>('post-scripts-flag', true);
+    }
+
+    private set scriptsFlag(value:boolean) {
+        cookie.set<boolean>('post-scripts-flag', value);
+    }
+
+    private get styles():string {
+        return localStorage.getItem('post-styles');
+    }
+
+    private set styles(value:string) {
+        localStorage.setItem('post-styles', value);
+    }
+
+    private get stylesFlag():boolean {
+        return cookie.get<boolean>('post-styles-flag', true);
+    }
+
+    private set stylesFlag(value:boolean) {
+        cookie.set<boolean>('post-styles-flag', value);
+    }
+
+    public constructor() {
         this.$dialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.$dialog.on(
@@ -35,24 +75,38 @@ export class PublishDialog {
         this.$dialog.on(
             'hidden.bs.modal', this.onBsModalHidden.bind(this));
 
-        this.$primary.on(
-            'click', this.onPrimaryClick.bind(this));
         this.$expand.on(
             'click', this.onExpandClick.bind(this));
+
+        this.$post_scripts_nav.on(
+            'click', this.onScriptsNavClick.bind(this));
+        this.$post_scripts_checkbox.on(
+            'click', this.onScriptsCheckboxClick.bind(this));
+        this.$post_styles_nav.on(
+            'click', this.onStylesNavClick.bind(this));
+        this.$post_styles_checkbox.on(
+            'click', this.onStylesCheckboxClick.bind(this));
+
+        this.$primary.on(
+            'click', this.onPrimaryClick.bind(this));
     }
 
-    onBsModalShow() {
+    private onBsModalShow() {
         let $blog_url = this.$blog_url,
             $blog_url_ig = $blog_url.parent('.input-group');
         let $post_title = this.$post_title,
-            $post_title_ig = $post_title.parent('.input-group'),
-            $post_scripts = this.$post_scripts;
+            $post_title_ig = $post_title.parent('.input-group');
+        let $post_settings = this.$post_settings,
+            $post_scripts_chk = this.$post_scripts_checkbox,
+            $post_scripts_ta = this.$post_scripts_textarea,
+            $post_styles_chk = this.$post_styles_checkbox,
+            $post_styles_ta = this.$post_styles_textarea;
 
         $blog_url_ig.removeClass('has-error');
         $post_title_ig.removeClass('has-error');
         $post_title_ig.find('[type=checkbox]').prop('checked', true);
 
-        let blog_url = cookie.get('blog-url');
+        let blog_url = this.blogUrl;
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
@@ -63,9 +117,11 @@ export class PublishDialog {
             $post_title.val(title);
         }
 
-        let text = $post_scripts.find('textarea').text();
-        $post_scripts.find('textarea').text(text);
-        $post_scripts.hide();
+        $post_settings.hide();
+        $post_scripts_chk.prop('checked', this.scriptsFlag);
+        if (this.scripts) $post_scripts_ta.val(this.scripts);
+        $post_styles_chk.prop('checked', this.stylesFlag);
+        if (this.styles) $post_styles_ta.val(this.styles);
 
         $(this).find('[data-toggle="tooltip"]').tooltip();
         $(this).find('[data-toggle="popover"]').popover();
@@ -77,40 +133,34 @@ export class PublishDialog {
         this.$primary.button('reset');
     }
 
-    onBsModalShown() {
-        let blog_url = cookie.get('blog-url');
-        if (blog_url) {
+    private onBsModalShown() {
+        if (this.blogUrl) {
             this.$post_title.focus();
         } else {
             this.$blog_url.focus();
         }
     }
 
-    onBsModalHide() {
-        let $post_scripts = this.$post_scripts,
-            $post_scripts_ta = $post_scripts.find('textarea');
-
-        let text = $post_scripts.find('textarea').text();
-        $post_scripts_ta.text(text);
-        $post_scripts.hide();
-
+    private onBsModalHide() {
         let $expand = this.$expand,
-            $glyphicon = this.$expand.find('.glyphicon');
+            $glyphicon = this.$expand.find('.glyphicon'),
+            $post_settings = this.$post_settings;
 
         $expand.data('state', 'collapsed');
         $glyphicon.removeClass('glyphicon-chevron-up');
         $glyphicon.addClass('glyphicon-chevron-down');
+        $post_settings.hide();
     }
 
-    onBsModalHidden() {
+    private onBsModalHidden() {
         setTimeout(() => {
             this.$mdInp.focus();
         }, 1);
     }
 
-    onExpandClick() {
-        let $post_scripts = this.$post_scripts,
-            $glyphicon = this.$expand.find('.glyphicon');
+    private onExpandClick() {
+        let $glyphicon = this.$expand.find('.glyphicon'),
+            $settings = this.$post_settings;
 
         if (this.$expand.data('state') === 'expanded') {
             this.$expand.data('state', 'collapsed');
@@ -119,17 +169,45 @@ export class PublishDialog {
         }
 
         if (this.$expand.data('state') === 'expanded') {
+            if (this.$post_scripts_nav.hasClass('active')) {
+                $settings.filter(':not(.styles)').show();
+            } else if (this.$post_styles_nav.hasClass('active')) {
+                $settings.filter(':not(.scripts)').show();
+            } else {
+                $settings.show();
+            }
             $glyphicon.removeClass('glyphicon-chevron-down');
             $glyphicon.addClass('glyphicon-chevron-up');
-            $post_scripts.show();
         } else {
             $glyphicon.removeClass('glyphicon-chevron-up');
             $glyphicon.addClass('glyphicon-chevron-down');
-            $post_scripts.hide();
+            $settings.hide();
         }
     }
 
-    onPrimaryClick() {
+    private onScriptsNavClick() {
+        this.$post_styles_nav.removeClass('active');
+        this.$post_styles.hide();
+        this.$post_scripts_nav.addClass('active');
+        this.$post_scripts.show();
+    }
+
+    private onScriptsCheckboxClick(ev) {
+        this.scriptsFlag = $(ev.target).prop('checked');
+    }
+
+    private onStylesNavClick() {
+        this.$post_scripts_nav.removeClass('active');
+        this.$post_scripts.hide();
+        this.$post_styles_nav.addClass('active');
+        this.$post_styles.show();
+    }
+
+    private onStylesCheckboxClick(ev) {
+        this.stylesFlag = $(ev.target).prop('checked');
+    }
+
+    private onPrimaryClick() {
         let $blog_url = this.$blog_url,
             $blog_url_ig = $blog_url.parent('.input-group');
         let $post_title = this.$post_title,
@@ -200,7 +278,9 @@ export class PublishDialog {
                     });
                     url_request.then(
                         after(on_done, () => {
-                            cookie.set('blog-url', url);
+                            this.scripts = this.$post_scripts_textarea.val();
+                            this.styles = this.$post_styles_textarea.val();
+                            this.blogUrl = url;
 
                             this.$primary.attr('disabled', false);
                             this.$primary.addClass('btn-success');
@@ -234,7 +314,7 @@ export class PublishDialog {
         }
     }
 
-    doInsert(blogger, blog, title) {
+    private doInsert(blogger, blog, title) {
         let on_done = (res) => {
             let url = assert(res.result.url),
                 id = assert(res.result.id);
@@ -253,7 +333,7 @@ export class PublishDialog {
         insert_req.then(on_done, on_fail);
     }
 
-    doUpdate(blogger, blog, post) {
+    private doUpdate(blogger, blog, post) {
         let on_done = (res) => {
             let url = assert(res.result.url),
                 id = assert(res.result.id);
@@ -273,11 +353,31 @@ export class PublishDialog {
         update_req.then(on_done, on_fail);
     }
 
-    content():string {
-        return this.toHtml(this.$mdInp.val()) + this.withScripts();
+    private content():string {
+        return this.toHtml(this.$mdInp.val())
+            + this.withScripts()
+            + this.withStyles();
     }
 
-    toHtml(md_content, with_header?) {
+    private withScripts() {
+        let $checkbox = this.$post_scripts_checkbox;
+        if ($checkbox.prop('checked')) {
+            return this.$post_scripts_textarea.val();
+        } else {
+            return '';
+        }
+    }
+
+    private withStyles() {
+        let $checkbox = this.$post_styles_checkbox;
+        if ($checkbox.prop('checked')) {
+            return this.$post_styles_textarea.val();
+        } else {
+            return '';
+        }
+    }
+
+    private toHtml(md_content, with_header?) {
         let $content = $('<div>', {
             html: MarkdownIt.me.render(md_content)
         });
@@ -287,45 +387,71 @@ export class PublishDialog {
         return $content.html();
     }
 
-    withScripts() {
-        let $post_scripts = this.$post_scripts,
-            $checkbox = $post_scripts.find('[type=checkbox]');
-        if ($checkbox.prop('checked')) {
-            return $post_scripts.find('textarea').val();
-        } else {
-            return '';
-        }
-    }
-
-    get $mdOut():any {
+    private get $mdOut():any {
         return $('#md-out');
     }
 
-    get $mdInp():any {
+    private get $mdInp():any {
         return $('#md-inp');
     }
 
-    get $dialog():any {
+    private get $dialog():any {
         return $('#publish-dlg');
     }
 
-    get $blog_url():any {
+    private get $blog_url():any {
         return this.$dialog.find('#blog-url');
     }
 
-    get $post_title():any {
+    private get $post_title():any {
         return this.$dialog.find('#post-title');
     }
 
-    get $post_scripts():any {
-        return this.$dialog.find('.post-scripts');
+    private get $post_settings():any {
+        return this.$dialog.find('.post-settings');
     }
 
-    get $expand():any {
+    private get $post_settings_nav():any {
+        return this.$dialog.find('.post-settings.nav');
+    }
+
+    private get $post_scripts():any {
+        return this.$dialog.find('.post-settings.scripts');
+    }
+
+    private get $post_scripts_nav():any {
+        return this.$post_settings_nav.find('.scripts');
+    }
+
+    private get $post_scripts_checkbox():any {
+        return this.$post_scripts.find('[type=checkbox]');
+    }
+
+    private get $post_scripts_textarea():any {
+        return this.$post_scripts.find('textarea');
+    }
+
+    private get $post_styles():any {
+        return this.$dialog.find('.post-settings.styles');
+    }
+
+    private get $post_styles_nav():any {
+        return this.$post_settings_nav.find('.styles');
+    }
+
+    private get $post_styles_checkbox():any {
+        return this.$post_styles.find('[type=checkbox]');
+    }
+
+    private get $post_styles_textarea():any {
+        return this.$post_styles.find('textarea');
+    }
+
+    private get $expand():any {
         return this.$dialog.find('#expand');
     }
 
-    get $primary():any {
+    private get $primary():any {
         return this.$dialog.find('.btn-primary');
     }
 }

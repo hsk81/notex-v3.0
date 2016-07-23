@@ -44,16 +44,26 @@
               </button>
           </div>
         </div>
-        <br class="post-scripts"/>
-        <label class="post-scripts" for="post-scripts">Post Scripts</label>
-        <div class="post-scripts input-group">
+
+        <br class="post-settings"/>
+
+        <ul class="post-settings nav nav-tabs nav-justified nav-stacked">
+          <li role="presentation" class="active scripts">
+              <a href="#">Scripts</a>
+          </li>
+          <li role="presentation" class="styles">
+              <a href="#">Styles</a>
+          </li>
+        </ul>
+
+        <div class="post-settings scripts input-group">
           <span class="input-group-addon">
-              <input type="checkbox" data-toggle="tooltip" data-placement="top"
-                     title="Append publication scripts to blog post"
-                     style="margin-top: 3px" tabindex="-1" checked>
+              <input style="margin-top: 3px" tabindex="-1"
+                     type="checkbox" data-toggle="tooltip" data-placement="top"
+                     title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!">
           </span>
           <textarea type="textarea" class="form-control" id="post-scripts"
-                    placeholder="publication scripts to append"><!--
+                    placeholder="<script>..</script>"><!--
   -- Highlight.js: 9.5.0
   -->
 
@@ -90,6 +100,67 @@ MathJax.Hub.Config({
 
 <script src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML' async></script></textarea>
         </div>
+
+        <div class="post-settings styles input-group" style="display: none;">
+          <span class="input-group-addon">
+              <input style="margin-top: 3px" tabindex="-1"
+                     type="checkbox" data-toggle="tooltip" data-placement="top"
+                     title="Append styles to this post: If possible try to modify a blog's template directly instead of including the styles separately for each post!">
+          </span>
+          <textarea type="textarea" class="form-control" id="post-styles"
+                    placeholder="<style>..</style>"><style>
+.post-body {
+    font-size: larger;
+    text-align: justify;
+}
+.post-body br {
+    display: none;
+}
+.post-body .embed-responsive {
+    text-align: center;
+}
+.post-body .embed-responsive > iframe {
+    border: none;
+    border-radius: 3px;
+    padding: 4px;
+    width: calc(100% - 1em);
+}
+.post-body figure {
+    text-align: center;
+}
+.post-body figure > img {
+    border: 1px solid;
+    border-radius: 3px;
+    max-width: calc(100% - 1em);
+}
+.post-body figure > figcaption {
+}
+.post-body .footnotes {
+    font-size: small;
+}
+.post-body .footnote-ref {
+    font-size: xx-small;
+}
+.post-body .footnotes-sep {
+    border: none;
+    border-bottom: 1px solid;
+}
+.post-body .mjx-math,
+.post-body .mjx-char {
+    color: inherit;
+}
+.post-body pre {
+    border: 1px solid;
+    border-radius: 3px;
+    font-size: medium;
+    padding: 0.5em;
+}
+.post-footer {
+    font-size: inherit;
+}
+</style></textarea>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" id="expand">
