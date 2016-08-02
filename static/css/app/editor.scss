@@ -44,14 +44,23 @@ html, body {
     .lhs {
       height: 100%;
       padding: 0;
+      div#md-menu {
+        float: left;
+        max-width: 48px;
+        padding: 4px;
+        .btn-group-vertical {
+          margin-bottom: 4px;
+        }
+      }
       textarea#md-inp {
         border: none;
         box-shadow: inset 0 0 8px #e7e7e7;
+        float:right;
         height: 100%;
         overflow-y: auto;
         padding: 1em 1em 0;
         resize: none;
-        width: 100%;
+        width: calc(100% - 48px);
       }
       textarea#md-inp {
         font-family: monospace;
