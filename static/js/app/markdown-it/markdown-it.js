@@ -26,7 +26,9 @@ define(["require", "exports"], function (require, exports) {
                 html: true, linkify: true, typographer: true
             });
             this._mdi.use(markdownitAbbr);
-            this._mdi.use(markdownitAnchor);
+            this._mdi.use(markdownitAnchor, {
+                permalink: true
+            });
             this._mdi.use(markdownitCentertext);
             this._mdi.use(markdownitDecorate);
             this._mdi.use(markdownitEmoji);
@@ -50,7 +52,6 @@ define(["require", "exports"], function (require, exports) {
             });
             this._mdi.use(markdownitSub);
             this._mdi.use(markdownitSup);
-            this._mdi.use(markdownitToc);
             this._mdi.use(markdownitVideo);
         }
         Object.defineProperty(MarkdownIt, "me", {

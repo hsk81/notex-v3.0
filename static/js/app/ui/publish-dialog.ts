@@ -118,7 +118,7 @@ export class PublishDialog {
         let headers = this.$mdOut.find(':header'),
             title = $(headers[0]).text();
         if (title && typeof title === 'string') {
-            $post_title.val(title);
+            $post_title.val(title.replace('¶', '').trim());
         }
 
         $post_settings.hide();

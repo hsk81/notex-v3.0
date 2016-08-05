@@ -96,7 +96,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             }
             var headers = this.$mdOut.find(':header'), title = $(headers[0]).text();
             if (title && typeof title === 'string') {
-                $post_title.val(title);
+                $post_title.val(title.replace('¶', '').trim());
             }
             $post_settings.hide();
             $post_scripts_chk.prop('checked', this.scriptsFlag);

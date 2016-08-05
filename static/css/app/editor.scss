@@ -140,6 +140,14 @@ html, body {
         margin: 1em 0;
         text-align: center;
       }
+      div#md-out .header-anchor,
+      div#md-tmp .header-anchor {
+        opacity: 0.05;
+      }
+      div#md-out .header-anchor:hover,
+      div#md-tmp .header-anchor:hover {
+        opacity: 1.00;
+      }
     }
   }
 }

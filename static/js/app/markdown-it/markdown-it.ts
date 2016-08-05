@@ -18,7 +18,6 @@ declare let markdownitMark:()=> void;
 declare let markdownitMath:()=> void;
 declare let markdownitSub:()=> void;
 declare let markdownitSup:()=> void;
-declare let markdownitToc:()=> void;
 declare let markdownitVideo:()=> void;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,9 @@ export class MarkdownIt {
         });
 
         this._mdi.use(markdownitAbbr);
-        this._mdi.use(markdownitAnchor);
+        this._mdi.use(markdownitAnchor, {
+            permalink: true
+        });
         this._mdi.use(markdownitCentertext);
         this._mdi.use(markdownitDecorate);
         this._mdi.use(markdownitEmoji);
@@ -85,7 +86,6 @@ export class MarkdownIt {
         });
         this._mdi.use(markdownitSub);
         this._mdi.use(markdownitSup);
-        this._mdi.use(markdownitToc);
         this._mdi.use(markdownitVideo);
     }
 
