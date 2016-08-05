@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:assert.ts]');
+    console.debug('[import:app/function/assert.ts]');
     var AssertException = (function () {
         function AssertException(message) {
             this.message = message;

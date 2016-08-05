@@ -1,29 +1,34 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///<reference path="../global/global.d.ts"/>
 
-console.debug('[import:ui/download-manager.ts]');
+console.debug('[import:app/ui/download-manager.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+import {named} from '../decorator/named';
+import {trace} from '../decorator/trace';
 
 import HeaderMenu from './header-menu';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+@trace
+@named('DownloadManager')
 export class DownloadManager {
-    static get me():DownloadManager {
+    public static get me():DownloadManager {
         if (this['_me'] === undefined) {
             this['_me'] = new DownloadManager();
         }
         return this['_me'];
     }
 
-    set title(title:string) {
+    public set title(title:string) {
         this.$downloadLink.attr("download", title);
     }
 
-    set content(content:string) {
+    public set content(content:string) {
         this.$downloadLink.attr("href", URL.createObjectURL(
             new Blob([content], {type: 'text/markdown'})
         ));

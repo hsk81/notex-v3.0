@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-console.debug('[import:blogger-api.ts]');
+console.debug('[import:app/google-api/blogger-api.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,21 +12,21 @@ import GoogleApi from "./google-api";
 ///////////////////////////////////////////////////////////////////////////////
 
 export class BloggerApi {
-    static get me():BloggerApi {
+    public static get me():BloggerApi {
         if (this['_me'] === undefined) {
             this['_me'] = new BloggerApi();
         }
         return this['_me'];
     }
 
-    constructor() {
-        this.options = {
+    public constructor() {
+        this._options = {
             client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
             scope: 'https://www.googleapis.com/auth/blogger'
         };
     }
 
-    get(callback:Function, ms:number = 2048, n:number = 2) {
+    public get(callback:Function, ms:number = 2048, n:number = 2) {
         GoogleApi.me.get((gapi) => {
 
             if (gapi) {
@@ -51,7 +51,7 @@ export class BloggerApi {
                     if (res.error) switch (res.error) {
                         case 'immediate_failed':
                             let opts = $.extend(
-                                {}, this.options, {immediate: false});
+                                {}, this._options, {immediate: false});
                             gapi.auth.authorize(
                                 opts, on_done, on_fail);
                             callback(false);
@@ -70,15 +70,15 @@ export class BloggerApi {
                         }, ms);
                         gapi.client.load('blogger', 'v3').then(() => {
                             if (timeout_id2) clearTimeout(timeout_id2);
-                            callback(gapi.client.blogger, this.options);
+                            callback(gapi.client.blogger, this._options);
                         });
                     } else {
-                        callback(gapi.client.blogger, this.options);
+                        callback(gapi.client.blogger, this._options);
                     }
                 };
 
                 let opts = $.extend(
-                    {}, this.options, {immediate: true});
+                    {}, this._options, {immediate: true});
                 gapi.auth.authorize(
                     opts, on_done, on_fail);
             } else {
@@ -87,7 +87,7 @@ export class BloggerApi {
         });
     }
 
-    private options:any;
+    private _options:any;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

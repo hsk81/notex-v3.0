@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:markdown-it.ts]');
+    console.debug('[import:app/markdown-it/markdown-it.ts]');
     var MarkdownIt = (function () {
         function MarkdownIt() {
-            this.mdi = new markdownit({
+            this._mdi = new markdownit({
                 highlight: function (text, language) {
                     if (language && hljs.getLanguage(language)) {
                         try {
@@ -25,18 +25,18 @@ define(["require", "exports"], function (require, exports) {
                 },
                 html: true, linkify: true, typographer: true
             });
-            this.mdi.use(markdownitAbbr);
-            this.mdi.use(markdownitAnchor);
-            this.mdi.use(markdownitCentertext);
-            this.mdi.use(markdownitDecorate);
-            this.mdi.use(markdownitEmoji);
-            this.mdi.use(markdownitFigure, {
+            this._mdi.use(markdownitAbbr);
+            this._mdi.use(markdownitAnchor);
+            this._mdi.use(markdownitCentertext);
+            this._mdi.use(markdownitDecorate);
+            this._mdi.use(markdownitEmoji);
+            this._mdi.use(markdownitFigure, {
                 dataType: true,
                 figcaption: true
             });
-            this.mdi.use(markdownitFootnote);
-            this.mdi.use(markdownitMark);
-            this.mdi.use(markdownitMath, {
+            this._mdi.use(markdownitFootnote);
+            this._mdi.use(markdownitMark);
+            this._mdi.use(markdownitMath, {
                 inlineOpen: '$',
                 inlineClose: '$',
                 inlineRenderer: function (string) {
@@ -48,10 +48,10 @@ define(["require", "exports"], function (require, exports) {
                     return '$$' + string + '$$';
                 }
             });
-            this.mdi.use(markdownitSub);
-            this.mdi.use(markdownitSup);
-            this.mdi.use(markdownitToc);
-            this.mdi.use(markdownitVideo);
+            this._mdi.use(markdownitSub);
+            this._mdi.use(markdownitSup);
+            this._mdi.use(markdownitToc);
+            this._mdi.use(markdownitVideo);
         }
         Object.defineProperty(MarkdownIt, "me", {
             get: function () {
@@ -64,7 +64,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         MarkdownIt.prototype.render = function (src, env) {
-            return this.mdi.render(src, env);
+            return this._mdi.render(src, env);
         };
         return MarkdownIt;
     }());

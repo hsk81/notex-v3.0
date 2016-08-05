@@ -1,6 +1,15 @@
-define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '../markdown-it/markdown-it', '../function/after', '../function/assert', '../function/before'], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, after_1, assert_1, before_1) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '../markdown-it/markdown-it', '../function/after', '../function/assert', '../function/before', '../decorator/named', '../decorator/trace'], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, after_1, assert_1, before_1, named_1, trace_1) {
     "use strict";
-    console.debug('[import:ui/publish-dialog.ts]');
+    console.debug('[import:app/ui/publish-dialog.ts]');
     var PublishDialog = (function () {
         function PublishDialog() {
             this.$dialog.on('show.bs.modal', this.onBsModalShow.bind(this));
@@ -201,7 +210,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             else {
                 blogger_api_1.default.me.get(function (blogger) {
                     var on_done = function (res) {
-                        var blog = assert_1.default(res && res.result), update = $post_title_cb.prop('checked');
+                        var blog = assert_1.assert(res && res.result), update = $post_title_cb.prop('checked');
                         if (update && blog.posts.totalItems > 0) {
                             var on_done_1 = function (res) {
                                 var posts = res.result && res.result.items || [], post = posts.find(function (p) {
@@ -240,7 +249,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                         var url_request = blogger.blogs.getByUrl({
                             url: url, fields: 'id,posts(totalItems)'
                         });
-                        url_request.then(after_1.default(on_done, function () {
+                        url_request.then(after_1.after(on_done, function () {
                             _this.scripts = _this.$post_scripts_textarea.val();
                             _this.styles = _this.$post_styles_textarea.val();
                             _this.blogUrl = url;
@@ -253,7 +262,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                                 }, 600);
                                 $('#publish-dlg').modal('hide');
                             }, 600);
-                        }), before_1.default(on_fail, function () {
+                        }), before_1.before(on_fail, function () {
                             _this.$primary.attr('disabled', false);
                             _this.$primary.addClass('btn-danger');
                             _this.$primary.button('reset');
@@ -274,7 +283,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         };
         PublishDialog.prototype.doInsert = function (blogger, blog, title) {
             var on_done = function (res) {
-                var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
+                var url = assert_1.assert(res.result.url), id = assert_1.assert(res.result.id);
                 var tab = open(url, 'post:' + id);
                 if (tab !== undefined)
                     tab.focus();
@@ -283,16 +292,16 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 console.error('[on:blogger.posts.insert]', res);
             };
             var insert_req = blogger.posts.insert({
-                blogId: assert_1.default(blog.id),
+                blogId: assert_1.assert(blog.id),
                 content: this.content(),
                 fields: 'id,url,title',
-                title: assert_1.default(title)
+                title: assert_1.assert(title)
             });
             insert_req.then(on_done, on_fail);
         };
         PublishDialog.prototype.doUpdate = function (blogger, blog, post) {
             var on_done = function (res) {
-                var url = assert_1.default(res.result.url), id = assert_1.default(res.result.id);
+                var url = assert_1.assert(res.result.url), id = assert_1.assert(res.result.id);
                 var tab = open(url, 'post:' + id);
                 if (tab !== undefined)
                     tab.focus();
@@ -301,11 +310,11 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 console.error('[on:blogger.posts.update]', res);
             };
             var update_req = blogger.posts.update({
-                blogId: assert_1.default(blog.id),
+                blogId: assert_1.assert(blog.id),
                 content: this.content(),
                 fields: 'id,url,title',
-                postId: assert_1.default(post.id),
-                title: assert_1.default(post.title)
+                postId: assert_1.assert(post.id),
+                title: assert_1.assert(post.title)
             });
             update_req.then(on_done, on_fail);
         };
@@ -460,6 +469,11 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             enumerable: true,
             configurable: true
         });
+        PublishDialog = __decorate([
+            trace_1.trace,
+            named_1.named('PublishDialog'), 
+            __metadata('design:paramtypes', [])
+        ], PublishDialog);
         return PublishDialog;
     }());
     exports.PublishDialog = PublishDialog;

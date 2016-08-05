@@ -1,12 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-console.debug('[import:google-api.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import assert from "../function/assert";
+console.debug('[import:app/google-api/google-api.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,18 +17,18 @@ declare let window:Window;
 ///////////////////////////////////////////////////////////////////////////////
 
 export class GoogleApi {
-    static get me():GoogleApi {
+    public static get me():GoogleApi {
         if (this['_me'] === undefined) {
             this['_me'] = new GoogleApi();
         }
         return this['_me'];
     }
 
-    constructor() {
-        this.loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
+    public constructor() {
+        this._loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
     }
 
-    get(callback:Function, ms:number = 2048, n:number = 2) {
+    public get(callback:Function, ms:number = 2048, n:number = 2) {
         if (typeof window.gapi !== 'undefined') {
             callback(window.gapi);
         } else {
@@ -55,14 +50,14 @@ export class GoogleApi {
                 }
             };
             $('body').append($('<script>', {
-                src: this.loadUrlTpl.replace(
+                src: this._loadUrlTpl.replace(
                     '{0}', window.onGoogleApiClientLoad.name
                 )
             }));
         }
     }
 
-    private loadUrlTpl:string;
+    private _loadUrlTpl:string;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

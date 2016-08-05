@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-console.debug('[import:cookie.ts]');
+console.debug('[import:app/cookie/cookie.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,7 @@ export interface ICookie {
 }
 
 class Cookie implements ICookie {
-    static set<T>(name:string, value:T, expiry_ms?:number):T {
+    public static set<T>(name:string, value:T, expiry_ms?:number):T {
         let json = JSON.stringify(value);
         if (expiry_ms === undefined) {
             document.cookie = name + '=' + json;
@@ -25,11 +25,11 @@ class Cookie implements ICookie {
         return value;
     }
 
-    set<T>(name:string, value:T, expiry_ms?:number):T {
+    public set<T>(name:string, value:T, expiry_ms?:number):T {
         return Cookie.set(name, value, expiry_ms);
     }
 
-    static get<T>(name:string, value?:T):T {
+    public static get<T>(name:string, value?:T):T {
         let cookies = document.cookie.split(';'),
             cookie_name = name + '=',
             string;
@@ -54,7 +54,7 @@ class Cookie implements ICookie {
         }
     }
 
-    get<T>(name:string, value?:T):T {
+    public get<T>(name:string, value?:T):T {
         return Cookie.get(name, value);
     }
 }

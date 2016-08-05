@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:before.ts]');
+    console.debug('[import:app/function/before.ts]');
     function before(fn, callback) {
         return function () {
             var args = Array.prototype.slice.call(arguments);

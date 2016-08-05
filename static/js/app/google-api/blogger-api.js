@@ -1,9 +1,9 @@
 define(["require", "exports", "./google-api"], function (require, exports, google_api_1) {
     "use strict";
-    console.debug('[import:blogger-api.ts]');
+    console.debug('[import:app/google-api/blogger-api.ts]');
     var BloggerApi = (function () {
         function BloggerApi() {
-            this.options = {
+            this._options = {
                 client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
                 scope: 'https://www.googleapis.com/auth/blogger'
             };
@@ -45,7 +45,7 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                         if (res.error)
                             switch (res.error) {
                                 case 'immediate_failed':
-                                    var opts_1 = $.extend({}, _this.options, { immediate: false });
+                                    var opts_1 = $.extend({}, _this._options, { immediate: false });
                                     gapi.auth.authorize(opts_1, on_done_1, on_fail_1);
                                     callback(false);
                                     break;
@@ -66,14 +66,14 @@ define(["require", "exports", "./google-api"], function (require, exports, googl
                             gapi.client.load('blogger', 'v3').then(function () {
                                 if (timeout_id2_1)
                                     clearTimeout(timeout_id2_1);
-                                callback(gapi.client.blogger, _this.options);
+                                callback(gapi.client.blogger, _this._options);
                             });
                         }
                         else {
-                            callback(gapi.client.blogger, _this.options);
+                            callback(gapi.client.blogger, _this._options);
                         }
                     };
-                    var opts = $.extend({}, _this.options, { immediate: true });
+                    var opts = $.extend({}, _this._options, { immediate: true });
                     gapi.auth.authorize(opts, on_done_1, on_fail_1);
                 }
                 else {

@@ -1,2 +1,2 @@
-console.debug('[import:named.ts]');
+console.debug('[import:app/function/named.ts]');
 //# sourceMappingURL=named.js.map

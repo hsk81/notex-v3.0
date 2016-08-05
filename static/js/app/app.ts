@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+///<reference path="./global/global.d.ts"/>
 
-console.debug('[import:app.ts]');
+console.debug('[import:app/app.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -11,45 +11,48 @@ import './function/partial';
 import './function/with';
 import './string/random';
 
+import {named} from './decorator/named';
+import {trace} from './decorator/trace';
+
 ///////////////////////////////////////////////////////////////////////////////
 
-import HeaderMenu from './ui/header-menu';
-import MarkdownEditor from './ui/markdown-editor';
-import PublishDialog from './ui/publish-dialog';
 import DownloadManager from './ui/download-manager';
+import HeaderMenu from './ui/header-menu';
+import MdEditor from './ui/md-editor';
+import MdEditorToolbar from 'ui/md-editor-toolbar';
+import PublishDialog from './ui/publish-dialog';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+@trace
+@named('App')
 class App {
-    static get me():App {
+    public static get me():App {
         if (this['_me'] === undefined) {
             this['_me'] = new App();
         }
         return this['_me'];
     }
 
-    constructor() {
-        this.headerMenu = HeaderMenu.me;
-        this.markdownEditor = MarkdownEditor.me;
-        this.publishDialog = PublishDialog.me;
-        this.downloadManager = DownloadManager.me;
+    public constructor() {
+        this._headerMenu = HeaderMenu.me;
+        this._markdownEditor = MdEditor.me;
+        this._editorToolbar = MdEditorToolbar.me;
+        this._publishDialog = PublishDialog.me;
+        this._downloadManager = DownloadManager.me;
     }
 
-    private headerMenu:HeaderMenu;
-    private markdownEditor:MarkdownEditor;
-    private publishDialog:PublishDialog;
-    private downloadManager: DownloadManager;
+    private _headerMenu:HeaderMenu;
+    private _markdownEditor:MdEditor;
+    private _editorToolbar:MdEditorToolbar;
+    private _publishDialog:PublishDialog;
+    private _downloadManager: DownloadManager;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-interface Window {
-    APP:App;
-}
-
-declare let window:Window;
-window.APP = App.me;
+window['APP'] = App.me;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

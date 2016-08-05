@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:google-api.ts]');
+    console.debug('[import:app/google-api/google-api.ts]');
     var GoogleApi = (function () {
         function GoogleApi() {
-            this.loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
+            this._loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
         }
         Object.defineProperty(GoogleApi, "me", {
             get: function () {
@@ -43,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
                     }
                 };
                 $('body').append($('<script>', {
-                    src: this.loadUrlTpl.replace('{0}', window.onGoogleApiClientLoad.name)
+                    src: this._loadUrlTpl.replace('{0}', window.onGoogleApiClientLoad.name)
                 }));
             }
         };

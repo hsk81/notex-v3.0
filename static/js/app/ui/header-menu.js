@@ -1,6 +1,15 @@
-define(["require", "exports"], function (require, exports) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define(["require", "exports", '../decorator/named', '../decorator/trace', './md-editor-toolbar'], function (require, exports, named_1, trace_1, md_editor_toolbar_1) {
     "use strict";
-    console.debug('[import:ui/header-menu.ts]');
+    console.debug('[import:app/ui/header-menu.ts]');
     var HeaderMenu = (function () {
         function HeaderMenu() {
             this.$openItem.on('change', this.onOpenItemChange.bind(this));
@@ -39,6 +48,7 @@ define(["require", "exports"], function (require, exports) {
                 .toggleClass('col-xs-12 col-sm-12');
             $('div.rhs').toggleClass('hidden-xs hidden-sm')
                 .toggleClass('col-xs-12 col-sm-12');
+            md_editor_toolbar_1.default.me.refresh();
         };
         Object.defineProperty(HeaderMenu.prototype, "$openItem", {
             get: function () {
@@ -61,6 +71,11 @@ define(["require", "exports"], function (require, exports) {
             enumerable: true,
             configurable: true
         });
+        HeaderMenu = __decorate([
+            trace_1.trace,
+            named_1.named('HeaderMenu'), 
+            __metadata('design:paramtypes', [])
+        ], HeaderMenu);
         return HeaderMenu;
     }());
     exports.HeaderMenu = HeaderMenu;

@@ -1,4 +1,4 @@
-console.debug('[import:random.ts]');
+console.debug('[import:app/string/random.ts]');
 String.random = function (length, range) {
     if (length === void 0) { length = 0; }
     if (range === void 0) { range = 36; }
