@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:mine.ts]');
+    console.debug('[import:app/function/mine.ts]');
     function mine(fn) {
         return function () {
             return fn.apply(this, [this].concat(Array.prototype.slice.call(arguments)));

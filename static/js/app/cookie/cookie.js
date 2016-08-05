@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:cookie.ts]');
+    console.debug('[import:app/cookie/cookie.ts]');
     var Cookie = (function () {
         function Cookie() {
         }

@@ -1,4 +1,4 @@
-console.debug('[import:partial.ts]');
+console.debug('[import:app/function/partial.ts]');
 Function.prototype.partial = function () {
     var args = (arguments.length > 0) ? arguments[0] : {}, negs = {}, func = this;
     var str = func.toString(), lhs = str.indexOf('(') + 1, rhs = str.indexOf(')'), names = str.slice(lhs, rhs).match(/([^\s,]+)/g);

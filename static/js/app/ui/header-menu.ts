@@ -1,27 +1,37 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///<reference path="../global/global.d.ts"/>
 
-console.debug('[import:ui/header-menu.ts]');
+console.debug('[import:app/ui/header-menu.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+import {named} from '../decorator/named';
+import {trace} from '../decorator/trace';
+
+import MdEditorToolbar from './md-editor-toolbar';
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+@trace
+@named('HeaderMenu')
 export class HeaderMenu {
-    static get me():HeaderMenu {
+    public static get me():HeaderMenu {
         if (this['_me'] === undefined) {
             this['_me'] = new HeaderMenu();
         }
         return this['_me'];
     }
 
-    constructor() {
+    public constructor() {
         this.$openItem.on(
             'change', this.onOpenItemChange.bind(this));
         this.$swapItem.on(
             'click', this.onSwapItemClick.bind(this));
     }
 
-    onOpenItemChange(ev) {
+    private onOpenItemChange(ev) {
         var files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (files[i].type && files[i].type.match(/text/)) {
@@ -40,22 +50,24 @@ export class HeaderMenu {
         }
     }
 
-    onSwapItemClick() {
+    private onSwapItemClick() {
         $('div.lhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
+
+        MdEditorToolbar.me.refresh();
     }
 
-    get $openItem():any {
+    public get $openItem():any {
         return $('#md-src,#md-src-mob');
     }
 
-    get $saveItem():any {
+    public get $saveItem():any {
         return $('a[name=save]');
     }
 
-    get $swapItem():any {
+    public get $swapItem():any {
         return $('[name=swap]');
     }
 }

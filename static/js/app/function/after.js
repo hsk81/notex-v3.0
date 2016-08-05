@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    console.debug('[import:after.ts]');
+    console.debug('[import:app/function/after.ts]');
     function after(fn, callback) {
         return function () {
             var args = Array.prototype.slice.call(arguments);

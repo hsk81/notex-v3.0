@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///<reference path="../global/global.d.ts"/>
 
-console.debug('[import:ui/publish-dialog.ts]');
+console.debug('[import:app/ui/publish-dialog.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -10,13 +10,17 @@ import cookie from '../cookie/cookie';
 import BloggerApi from '../google-api/blogger-api';
 import MarkdownIt from '../markdown-it/markdown-it';
 
-import after from '../function/after';
-import assert from '../function/assert';
-import before from '../function/before';
+import {after} from '../function/after';
+import {assert} from '../function/assert';
+import {before} from '../function/before';
+import {named} from '../decorator/named';
+import {trace} from '../decorator/trace';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+@trace
+@named('PublishDialog')
 export class PublishDialog {
     public static get me():PublishDialog {
         if (this['_me'] === undefined) {

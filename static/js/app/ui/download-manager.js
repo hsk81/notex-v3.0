@@ -1,6 +1,15 @@
-define(["require", "exports", './header-menu'], function (require, exports, header_menu_1) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define(["require", "exports", '../decorator/named', '../decorator/trace', './header-menu'], function (require, exports, named_1, trace_1, header_menu_1) {
     "use strict";
-    console.debug('[import:ui/download-manager.ts]');
+    console.debug('[import:app/ui/download-manager.ts]');
     var DownloadManager = (function () {
         function DownloadManager() {
         }
@@ -35,6 +44,11 @@ define(["require", "exports", './header-menu'], function (require, exports, head
             enumerable: true,
             configurable: true
         });
+        DownloadManager = __decorate([
+            trace_1.trace,
+            named_1.named('DownloadManager'), 
+            __metadata('design:paramtypes', [])
+        ], DownloadManager);
         return DownloadManager;
     }());
     exports.DownloadManager = DownloadManager;

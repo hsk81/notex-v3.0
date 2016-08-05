@@ -1,4 +1,4 @@
-console.debug('[import:with.ts]');
+console.debug('[import:app/function/with.ts]');
 Function.prototype.with = function () {
     var slice = Array.prototype.slice, args = slice.call(arguments), func = this;
     return function () {

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-console.debug('[import:markdown-it.ts]');
+console.debug('[import:app/markdown-it/markdown-it.ts]');
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,15 +32,15 @@ declare let hljs:any;
  * @see: https://markdown-it.github.io/markdown-it/
  */
 export class MarkdownIt {
-    static get me():MarkdownIt {
+    public static get me():MarkdownIt {
         if (this['_me'] === undefined) {
             this['_me'] = new MarkdownIt();
         }
         return this['_me'];
     }
 
-    constructor() {
-        this.mdi = new markdownit({
+    public constructor() {
+        this._mdi = new markdownit({
             highlight: function (text, language) {
                 if (language && hljs.getLanguage(language)) {
                     try {
@@ -60,18 +60,18 @@ export class MarkdownIt {
             html: true, linkify: true, typographer: true
         });
 
-        this.mdi.use(markdownitAbbr);
-        this.mdi.use(markdownitAnchor);
-        this.mdi.use(markdownitCentertext);
-        this.mdi.use(markdownitDecorate);
-        this.mdi.use(markdownitEmoji);
-        this.mdi.use(markdownitFigure, {
+        this._mdi.use(markdownitAbbr);
+        this._mdi.use(markdownitAnchor);
+        this._mdi.use(markdownitCentertext);
+        this._mdi.use(markdownitDecorate);
+        this._mdi.use(markdownitEmoji);
+        this._mdi.use(markdownitFigure, {
             dataType: true,
             figcaption: true
         });
-        this.mdi.use(markdownitFootnote);
-        this.mdi.use(markdownitMark);
-        this.mdi.use(markdownitMath, {
+        this._mdi.use(markdownitFootnote);
+        this._mdi.use(markdownitMark);
+        this._mdi.use(markdownitMath, {
             inlineOpen: '$',
             inlineClose: '$',
             inlineRenderer: function (string) {
@@ -83,20 +83,20 @@ export class MarkdownIt {
                 return '$$' + string + '$$';
             }
         });
-        this.mdi.use(markdownitSub);
-        this.mdi.use(markdownitSup);
-        this.mdi.use(markdownitToc);
-        this.mdi.use(markdownitVideo);
+        this._mdi.use(markdownitSub);
+        this._mdi.use(markdownitSup);
+        this._mdi.use(markdownitToc);
+        this._mdi.use(markdownitVideo);
     }
 
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
      */
-    render(src:string, env?:any):string {
-        return this.mdi.render(src, env);
+    public render(src:string, env?:any):string {
+        return this._mdi.render(src, env);
     }
 
-    private mdi:any;
+    private _mdi:any;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
