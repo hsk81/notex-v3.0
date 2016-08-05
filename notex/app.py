@@ -97,7 +97,7 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/highlight/highlight-9.5.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-6.1.1.min.js')
+           'static/js/lib/markdown-it/markdown-it-7.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-anchor-2.5.0.min.js')
     concat(out_path,
@@ -107,23 +107,23 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-decorate-1.2.1.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-emoji-1.1.1.min.js')
+           'static/js/lib/markdown-it/markdown-it-emoji-1.2.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-figure-0.2.3.min.js')
+           'static/js/lib/markdown-it/markdown-it-figure-0.3.2.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-footnote-2.0.0.min.js')
+           'static/js/lib/markdown-it/markdown-it-footnote-3.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-math-3.0.2.min.js')
+           'static/js/lib/markdown-it/markdown-it-math-4.0.1.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-sub-1.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-toc-0.2.0.min.js')
+           'static/js/lib/markdown-it/markdown-it-toc-1.1.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-video-0.2.1.min.js')
+           'static/js/lib/markdown-it/markdown-it-video-0.4.0.min.js')
     concat(out_path,
            'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     concat(out_path,
