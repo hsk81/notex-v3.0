@@ -346,7 +346,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 html: markdown_it_1.default.me.render(md_content)
             });
             if (!with_header) {
-                $content.find(':header:first-of-type').remove();
+                $content.find(':header').first().remove();
             }
             return $content.html();
         };

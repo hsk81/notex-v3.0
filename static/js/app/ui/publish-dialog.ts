@@ -386,7 +386,7 @@ export class PublishDialog {
             html: MarkdownIt.me.render(md_content)
         });
         if (!with_header) {
-            $content.find(':header:first-of-type').remove();
+            $content.find(':header').first().remove();
         }
         return $content.html();
     }
