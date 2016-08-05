@@ -27,6 +27,7 @@ define(["require", "exports"], function (require, exports) {
             });
             this._mdi.use(markdownitAbbr);
             this._mdi.use(markdownitAnchor, {
+                level: 2,
                 permalink: true
             });
             this._mdi.use(markdownitCentertext);

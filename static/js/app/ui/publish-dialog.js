@@ -94,7 +94,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             if (blog_url && typeof blog_url === 'string') {
                 $blog_url.val(blog_url);
             }
-            var headers = this.$mdOut.find(':header'), title = $(headers[0]).text();
+            var $headers = this.$mdOut.find(':header'), title = $headers.first().text();
             if (title && typeof title === 'string') {
                 $post_title.val(title.replace('¶', '').trim());
             }
