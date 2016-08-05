@@ -115,8 +115,8 @@ export class PublishDialog {
             $blog_url.val(blog_url);
         }
 
-        let headers = this.$mdOut.find(':header'),
-            title = $(headers[0]).text();
+        let $headers = this.$mdOut.find(':header'),
+            title = $headers.first().text();
         if (title && typeof title === 'string') {
             $post_title.val(title.replace('¶', '').trim());
         }
