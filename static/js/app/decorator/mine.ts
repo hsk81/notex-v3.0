@@ -6,12 +6,20 @@ console.debug('[import:app/function/mine.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-export function mine(fn:Function):Function {
-    return function () {
-        return fn.apply(this, [this].concat(Array.prototype.slice.call(
-            arguments
-        )));
+export function mine(
+    target:any, key:string, descriptor?:PropertyDescriptor
+) {
+    let fn:Function = descriptor ? descriptor.value : target[key];
+    let mn:Function = function (...args:any[]) {
+        return fn.apply(
+            this, [this].concat(Array.prototype.slice.call(args))
+        );
     };
+    if (descriptor) {
+        descriptor.value = mn;
+    } else {
+        target[key] = mn;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
