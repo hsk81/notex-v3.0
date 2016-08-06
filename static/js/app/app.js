@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", './decorator/named', './decorator/trace', './ui/download-manager', './ui/header-menu', './ui/md-editor', 'ui/md-editor-toolbar', './ui/publish-dialog', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, named_1, trace_1, download_manager_1, header_menu_1, md_editor_1, md_editor_toolbar_1, publish_dialog_1) {
+define(["require", "exports", './ui/download-manager', './ui/header-menu', './ui/md-editor', 'ui/md-editor-toolbar', './ui/publish-dialog', './decorator/named', './decorator/trace', './function/named', './function/partial', './function/with', './string/random'], function (require, exports, download_manager_1, header_menu_1, md_editor_1, md_editor_toolbar_1, publish_dialog_1, named_1, trace_1) {
     "use strict";
     console.debug('[import:app/app.ts]');
     var App = (function () {
