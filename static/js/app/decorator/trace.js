@@ -13,58 +13,78 @@ define(["require", "exports", '../string/random'], function (require, exports) {
     function _trace(flag) {
         return function (ctor) {
             Object.keys(ctor.prototype).forEach(function (key) {
-                var fn = ctor.prototype[key];
-                if (typeof fn === 'function') {
+                var dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
+                if (dtor && typeof dtor.value === 'function') {
                     _traceable(flag)(ctor.prototype, key);
                 }
             });
             Object.keys(ctor).forEach(function (key) {
-                var fn = ctor[key];
-                if (typeof fn === 'function') {
+                var dtor = Object.getOwnPropertyDescriptor(ctor, key);
+                if (dtor && typeof dtor.value === 'function') {
                     _traceable(flag)(ctor, key);
                 }
             });
         };
     }
-    function traceable(arg, key, descriptor) {
+    function traceable(arg, key, dtor) {
         if (typeof arg === 'boolean') {
             return _traceable(arg);
         }
         else {
-            _traceable(true)(arg, key, descriptor);
+            _traceable(true)(arg, key, dtor);
         }
     }
     exports.traceable = traceable;
     function _traceable(flag) {
-        return function (target, key, descriptor) {
-            var fn = descriptor ? descriptor.value : target[key];
-            if (!flag) {
-                fn['_traced'] = false;
-            }
-            else {
-                if (fn['_traced'] === undefined) {
-                    fn['_traced'] = true;
-                    var tn = function () {
-                        var _named = target._named || '@', random = String.random(4, 16), dt_beg = new Date().toISOString();
-                        console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
-                        console.log("[" + dt_beg + "]#" + random, arguments);
-                        var result = fn.apply(this, arguments), dt_end = new Date().toISOString();
-                        console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
-                        console.log("[" + dt_end + "]#" + random, result);
-                        return result;
-                    };
-                    for (var el in fn) {
-                        if (fn.hasOwnProperty(el)) {
-                            tn[el] = fn[el];
+        return function (target, key, dtor) {
+            var wrap = function (fn, callback) {
+                if (!flag) {
+                    fn['_traced'] = false;
+                }
+                else {
+                    if (fn['_traced'] === undefined) {
+                        fn['_traced'] = true;
+                        var tn = function () {
+                            var _named = target._named || '@', random = String.random(4, 16), dt_beg = new Date().toISOString();
+                            console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
+                            console.log("[" + dt_beg + "]#" + random, arguments);
+                            var result = fn.apply(this, arguments), dt_end = new Date().toISOString();
+                            console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
+                            console.log("[" + dt_end + "]#" + random, result);
+                            return result;
+                        };
+                        for (var el in fn) {
+                            if (fn.hasOwnProperty(el)) {
+                                tn[el] = fn[el];
+                            }
                         }
-                    }
-                    if (descriptor) {
-                        descriptor.value = tn;
-                    }
-                    else {
-                        target[key] = tn;
+                        callback(tn);
                     }
                 }
+            };
+            if (dtor) {
+                if (typeof dtor.value === 'function') {
+                    wrap(dtor.value, function (tn) {
+                        dtor.value = tn;
+                    });
+                }
+                else {
+                    if (typeof dtor.get === 'function') {
+                        wrap(dtor.get, function (tn) {
+                            dtor.get = tn;
+                        });
+                    }
+                    if (typeof dtor.set === 'function') {
+                        wrap(dtor.set, function (tn) {
+                            dtor.set = tn;
+                        });
+                    }
+                }
+            }
+            else {
+                wrap(target[key], function (tn) {
+                    target[key] = tn;
+                });
             }
         };
     }
