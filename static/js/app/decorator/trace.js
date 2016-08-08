@@ -1,41 +1,41 @@
 define(["require", "exports", '../string/random'], function (require, exports) {
     "use strict";
     console.debug('[import:app/decorator/trace.ts]');
-    function trace(arg) {
-        if (typeof arg === 'boolean') {
-            return _trace(arg);
+    function trace(arg0, arg1, arg2) {
+        if (typeof arg0 === 'boolean') {
+            return _trace(arg0, arg1, arg2);
         }
         else {
-            _trace(true)(arg);
+            _trace(true)(arg0);
         }
     }
     exports.trace = trace;
-    function _trace(flag) {
+    function _trace(flag, bef, aft) {
         return function (ctor) {
             Object.keys(ctor.prototype).forEach(function (key) {
                 var dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
                 if (dtor && typeof dtor.value === 'function') {
-                    _traceable(flag)(ctor.prototype, key);
+                    _traceable(flag, bef, aft)(ctor.prototype, key);
                 }
             });
             Object.keys(ctor).forEach(function (key) {
                 var dtor = Object.getOwnPropertyDescriptor(ctor, key);
                 if (dtor && typeof dtor.value === 'function') {
-                    _traceable(flag)(ctor, key);
+                    _traceable(flag, bef, aft)(ctor, key);
                 }
             });
         };
     }
-    function traceable(arg, key, dtor) {
-        if (typeof arg === 'boolean') {
-            return _traceable(arg);
+    function traceable(arg0, arg1, arg2) {
+        if (typeof arg0 === 'boolean') {
+            return _traceable(arg0, arg1, arg2);
         }
         else {
-            _traceable(true)(arg, key, dtor);
+            _traceable(true)(arg0, arg1, arg2);
         }
     }
     exports.traceable = traceable;
-    function _traceable(flag) {
+    function _traceable(flag, bef, aft) {
         return function (target, key, dtor) {
             var wrap = function (fn, callback) {
                 if (!flag) {
@@ -45,12 +45,26 @@ define(["require", "exports", '../string/random'], function (require, exports) {
                     if (fn['_traced'] === undefined) {
                         fn['_traced'] = true;
                         var tn = function () {
+                            var args = [];
+                            for (var _i = 0; _i < arguments.length; _i++) {
+                                args[_i - 0] = arguments[_i];
+                            }
                             var _named = target._named || '@', random = String.random(4, 16), dt_beg = new Date().toISOString();
-                            console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
-                            console.log("[" + dt_beg + "]#" + random, arguments);
-                            var result = fn.apply(this, arguments), dt_end = new Date().toISOString();
-                            console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
-                            console.log("[" + dt_end + "]#" + random, result);
+                            if (bef)
+                                bef(args);
+                            else
+                                setTimeout(function () {
+                                    console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
+                                    console.log("[" + dt_beg + "]#" + random, args);
+                                }, 0);
+                            var result = fn.apply(this, args), dt_end = new Date().toISOString();
+                            if (aft)
+                                aft(result, args);
+                            else
+                                setTimeout(function () {
+                                    console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
+                                    console.log("[" + dt_end + "]#" + random, result);
+                                }, 0);
                             return result;
                         };
                         for (var el in fn) {
