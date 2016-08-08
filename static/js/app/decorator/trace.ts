@@ -75,7 +75,11 @@ function _traceable(
                             random = String.random(4, 16),
                             dt_beg = new Date().toISOString();
 
-                        if (bef) bef(args); else setTimeout(() => {
+                        if (bef) bef({
+                            name: _named, nonce: random, timestamp: dt_beg
+                        }, args);
+
+                        else setTimeout(() => {
                             console.log(
                                 `[${dt_beg}]#${random} >>> ${_named}.${key}`);
                             console.log(
@@ -85,7 +89,11 @@ function _traceable(
                         let result = fn.apply(this, args),
                             dt_end = new Date().toISOString();
 
-                        if (aft) aft(result, args); else setTimeout(() => {
+                        if (aft) aft({
+                            name: _named, nonce: random, timestamp: dt_end
+                        }, result, args);
+
+                        else setTimeout(() => {
                             console.log(
                                 `[${dt_end}]#${random} <<< ${_named}.${key}`);
                             console.log(

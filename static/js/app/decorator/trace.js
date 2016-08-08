@@ -51,7 +51,9 @@ define(["require", "exports", '../string/random'], function (require, exports) {
                             }
                             var _named = target._named || '@', random = String.random(4, 16), dt_beg = new Date().toISOString();
                             if (bef)
-                                bef(args);
+                                bef({
+                                    name: _named, nonce: random, timestamp: dt_beg
+                                }, args);
                             else
                                 setTimeout(function () {
                                     console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
@@ -59,7 +61,9 @@ define(["require", "exports", '../string/random'], function (require, exports) {
                                 }, 0);
                             var result = fn.apply(this, args), dt_end = new Date().toISOString();
                             if (aft)
-                                aft(result, args);
+                                aft({
+                                    name: _named, nonce: random, timestamp: dt_end
+                                }, result, args);
                             else
                                 setTimeout(function () {
                                     console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
