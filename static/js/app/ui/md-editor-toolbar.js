@@ -7,16 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/named', '../decorator/trace'], function (require, exports, named_1, trace_1) {
+define(["require", "exports", '../commands/commands', '../commands/commands', '../decorator/named', '../decorator/trace'], function (require, exports, commands_1, commands_2, named_1, trace_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
         function MdEditorToolbar() {
-            this._scroll = new IScroll('#md-wrap', {
-                interactiveScrollbars: true,
-                mouseWheel: true,
-                scrollbars: true
-            });
             $('.glyphicon.undo').closest('button')
                 .on('click', this.onUndoClick.bind(this));
             $('.glyphicon.redo').closest('button')
@@ -45,32 +40,28 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             configurable: true
         });
         MdEditorToolbar.prototype.refresh = function () {
-            this._scroll.refresh();
+            this.scroll.refresh();
         };
         MdEditorToolbar.prototype.onUndoClick = function (ev) {
-            this.$textarea.one('focus', function () {
-                var result = document.execCommand('undo');
-                if (result !== true) {
-                    console.debug('[on:undo]');
-                }
-            });
-            this.$textarea.focus();
+            this.commands.undo();
         };
         MdEditorToolbar.prototype.onRedoClick = function (ev) {
-            this.$textarea.one('focus', function () {
-                var result = document.execCommand('redo');
-                if (result !== true) {
-                    console.debug('[on:redo]');
-                }
-            });
-            this.$textarea.focus();
+            this.commands.redo();
         };
         MdEditorToolbar.prototype.onEraseClick = function (ev) {
+            var _this = this;
             this.$textarea.one('focus', function () {
-                var result = document.execCommand('delete');
-                if (result !== true) {
-                    console.debug('[on:erase]');
-                }
+                var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
+                _this.commands.run(new commands_2.Command(function () {
+                    _this.$textarea[0].value =
+                        val.slice(0, beg) + val.slice(end);
+                    _this.$textarea[0].setSelectionRange(beg, beg);
+                    _this.$textarea.focus();
+                }, function () {
+                    _this.$textarea[0].value = val;
+                    _this.$textarea[0].setSelectionRange(end, end);
+                    _this.$textarea.focus();
+                }));
             });
             this.$textarea.focus();
         };
@@ -78,10 +69,9 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             var _this = this;
             this.$textarea.one('focus', function () {
                 var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
-                _this._text = val.slice(beg, end);
+                _this.clipboard = val.slice(beg, end);
                 var result = document.execCommand('cut');
                 if (result !== true) {
-                    console.debug('[on:cut]');
                 }
             });
             this.$textarea.focus();
@@ -90,10 +80,9 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             var _this = this;
             this.$textarea.one('focus', function () {
                 var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
-                _this.text = val.slice(beg, end);
+                _this.clipboard = val.slice(beg, end);
                 var result = document.execCommand('copy');
                 if (result !== true) {
-                    console.debug('[on:copy]');
                 }
             });
             this.$textarea.focus();
@@ -101,22 +90,19 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         MdEditorToolbar.prototype.onPasteClick = function (ev) {
             var _this = this;
             this.$textarea.one('focus', function () {
-                var result = document.execCommand('insertText', true, _this.text);
+                var result = document.execCommand('insertText', true, _this.clipboard);
                 if (result !== true) {
-                    console.debug('[on:insertText]');
                 }
             });
             this.$textarea.focus();
         };
         MdEditorToolbar.prototype.onIndentLeftClick = function (ev) {
             this.$textarea.one('focus', function () {
-                console.debug('[on:focus]');
             });
             this.$textarea.focus();
         };
         MdEditorToolbar.prototype.onIndentRightClick = function (ev) {
             this.$textarea.one('focus', function () {
-                console.debug('[on:focus]');
             });
             this.$textarea.focus();
         };
@@ -127,12 +113,39 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "text", {
+        Object.defineProperty(MdEditorToolbar.prototype, "commands", {
             get: function () {
-                return this._text || '';
+                if (this._commands === undefined) {
+                    this._commands = new commands_1.Commands();
+                }
+                return this._commands;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "scroll", {
+            get: function () {
+                if (this._scroll === undefined) {
+                    this._scroll = new IScroll('#md-wrap', {
+                        interactiveScrollbars: true,
+                        mouseWheel: true,
+                        scrollbars: true
+                    });
+                }
+                return this._scroll;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "clipboard", {
+            get: function () {
+                if (this._clipboard === undefined) {
+                    this._clipboard = '';
+                }
+                return this._clipboard;
             },
             set: function (value) {
-                this._text = value;
+                this._clipboard = value;
             },
             enumerable: true,
             configurable: true
