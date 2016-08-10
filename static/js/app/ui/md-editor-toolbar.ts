@@ -6,6 +6,8 @@ console.debug('[import:app/ui/md-editor-toolbar.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+import {Commands} from '../commands/commands';
+import {Command} from '../commands/commands';
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
@@ -23,12 +25,6 @@ export class MdEditorToolbar {
     }
 
     public constructor() {
-        this._scroll = new IScroll('#md-wrap', {
-            interactiveScrollbars: true,
-            mouseWheel: true,
-            scrollbars: true
-        });
-
         $('.glyphicon.undo').closest('button')
             .on('click', this.onUndoClick.bind(this));
         $('.glyphicon.redo').closest('button')
@@ -49,10 +45,11 @@ export class MdEditorToolbar {
     }
 
     public refresh() {
-        this._scroll.refresh();
+        this.scroll.refresh();
     }
 
     private onUndoClick(ev:MouseEvent) {
+        /*
         this.$textarea.one('focus', () => {
             let result = document.execCommand('undo');
             if (result !== true) {
@@ -60,9 +57,12 @@ export class MdEditorToolbar {
             }
         });
         this.$textarea.focus();
+        */
+        this.commands.undo();
     }
 
     private onRedoClick(ev:MouseEvent) {
+        /*
         this.$textarea.one('focus', () => {
             let result = document.execCommand('redo');
             if (result !== true) {
@@ -70,14 +70,29 @@ export class MdEditorToolbar {
             }
         });
         this.$textarea.focus();
+        */
+        this.commands.redo();
     }
 
     private onEraseClick(ev:MouseEvent) {
         this.$textarea.one('focus', () => {
-            let result = document.execCommand('delete');
-            if (result !== true) {
-                console.debug('[on:erase]'); // @TODO: implement!
-            }
+            let beg = this.$textarea[0].selectionStart,
+                end = this.$textarea[0].selectionEnd,
+                val = this.$textarea[0].value;
+
+            this.commands.run(new Command(
+                () => {
+                    this.$textarea[0].value =
+                        val.slice(0, beg) + val.slice(end);
+                    this.$textarea[0].setSelectionRange(beg, beg);
+                    this.$textarea.focus();
+                },
+                () => {
+                    this.$textarea[0].value = val;
+                    this.$textarea[0].setSelectionRange(end, end);
+                    this.$textarea.focus();
+                }
+            ));
         });
         this.$textarea.focus();
     }
@@ -87,11 +102,11 @@ export class MdEditorToolbar {
             let beg = this.$textarea[0].selectionStart,
                 end = this.$textarea[0].selectionEnd,
                 val = this.$textarea[0].value;
-            this._text = val.slice(beg, end);
+            this.clipboard = val.slice(beg, end);
 
             let result = document.execCommand('cut');
             if (result !== true) {
-                console.debug('[on:cut]'); // @TODO: implement!
+                // @TODO: implement!
             }
         });
         this.$textarea.focus();
@@ -102,11 +117,11 @@ export class MdEditorToolbar {
             let beg = this.$textarea[0].selectionStart,
                 end = this.$textarea[0].selectionEnd,
                 val = this.$textarea[0].value;
-            this.text = val.slice(beg, end);
+            this.clipboard = val.slice(beg, end);
 
             let result = document.execCommand('copy');
             if (result !== true) {
-                console.debug('[on:copy]'); // @TODO: implement!
+                // @TODO: implement!
             }
         });
         this.$textarea.focus();
@@ -114,9 +129,9 @@ export class MdEditorToolbar {
 
     private onPasteClick(ev:MouseEvent) {
         this.$textarea.one('focus', () => {
-            let result = document.execCommand('insertText', true, this.text);
+            let result = document.execCommand('insertText', true, this.clipboard);
             if (result !== true) {
-                console.debug('[on:insertText]'); // @TODO: implement!
+                // @TODO: implement!
             }
         });
         this.$textarea.focus();
@@ -124,14 +139,14 @@ export class MdEditorToolbar {
 
     private onIndentLeftClick(ev:MouseEvent) {
         this.$textarea.one('focus', () => {
-             console.debug('[on:focus]'); // @TODO: implement!
+             // @TODO: implement!
         });
         this.$textarea.focus();
     }
 
     private onIndentRightClick(ev:MouseEvent) {
         this.$textarea.one('focus', () => {
-             console.debug('[on:focus]'); // @TODO: implement!
+             // @TODO: implement!
         });
         this.$textarea.focus();
     }
@@ -140,16 +155,38 @@ export class MdEditorToolbar {
         return $('textarea#md-inp');
     }
 
-    private get text():string {
-        return this._text || '';
+    private get commands():Commands {
+        if (this._commands === undefined) {
+            this._commands = new Commands();
+        }
+        return this._commands;
     }
 
-    private set text(value:string) {
-        this._text = value;
+    private get scroll():any {
+        if (this._scroll === undefined) {
+            this._scroll =new IScroll('#md-wrap', {
+                interactiveScrollbars: true,
+                mouseWheel: true,
+                scrollbars: true
+            });
+        }
+        return this._scroll;
     }
 
+    private get clipboard():string {
+        if (this._clipboard === undefined) {
+            this._clipboard = '';
+        }
+        return this._clipboard;
+    }
+
+    private set clipboard(value:string) {
+        this._clipboard = value;
+    }
+
+    private _commands:Commands;
+    private _clipboard:string;
     private _scroll:any;
-    private _text:string;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
