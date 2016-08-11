@@ -33,6 +33,13 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             enumerable: true,
             configurable: true
         });
+        Commands.prototype.add = function (command) {
+            var ex_command = command, re_command = Commands.top(this._redone);
+            if (re_command) {
+                ex_command.link = re_command;
+            }
+            this._redone.push(ex_command);
+        };
         Commands.prototype.run = function (command) {
             var ex_command = command, re_command = Commands.top(this._redone);
             if (re_command) {
