@@ -47,6 +47,8 @@ export class MdEditorToolbar {
             .on('keydown', this.onTextAreaKeyDown.bind(this));
         this.$textarea
             .on('keyup', this.onTextAreaKeyUp.bind(this));
+
+        this.refresh();
     }
 
     public refresh() {

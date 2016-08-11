@@ -31,6 +31,7 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
                 .on('keydown', this.onTextAreaKeyDown.bind(this));
             this.$textarea
                 .on('keyup', this.onTextAreaKeyUp.bind(this));
+            this.refresh();
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {

@@ -56,6 +56,7 @@ export class HeaderMenu {
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
 
+        //@TODO: avoid dependency?
         MdEditorToolbar.me.refresh();
     }
 
