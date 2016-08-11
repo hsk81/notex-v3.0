@@ -36,6 +36,15 @@ export class Commands {
         this._undone = [];
     }
 
+    public add(command: ICommand) {
+        let ex_command = <IExCommand>command,
+            re_command = Commands.top(this._redone);
+        if (re_command) {
+            ex_command.link = re_command;
+        }
+        this._redone.push(ex_command);
+    }
+
     public run(command: ICommand) {
         let ex_command = <IExCommand>command,
             re_command = Commands.top(this._redone);
