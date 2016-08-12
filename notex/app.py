@@ -73,6 +73,8 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
            'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
     concat(out_path,
            'static/css/lib/highlight/default-9.5.0.min.css')
+    concat(out_path,
+           'static/js/lib/codemirror/lib/codemirror.css')
     minify(out_path,
            'static/css/app/editor.css')
     zipify(out_path)
@@ -96,6 +98,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
            'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
     concat(out_path,
            'static/js/lib/highlight/highlight-9.5.0.min.js')
+    concat(out_path,
+           'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-7.0.0.min.js')
     concat(out_path,
@@ -123,7 +127,13 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.4.0.min.js')
     concat(out_path,
-           'static/js/lib/iscroll/iscroll-5.2.0.min.js')
+           'static/js/lib/codemirror/lib/codemirror.js')
+    concat(out_path,
+           'static/js/lib/codemirror/addon/mode/overlay.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/markdown/markdown.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/gfm/gfm.js')
     concat(out_path,
            'static/js/lib/require/require-2.2.0.min.js')
 

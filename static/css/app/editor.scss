@@ -62,24 +62,12 @@ html, body {
           z-index: 999 !important;
         }
       }
-      textarea#md-inp {
-        border: none;
-        box-shadow: inset 0 0 8px #e7e7e7;
-        float:right;
-        height: 100%;
-        overflow-y: auto;
-        padding: 1em 1em 0;
-        resize: none;
-      }
-      textarea#md-inp {
-        font-family: monospace;
-        font-size: inherit;
-      }
-      textarea#md-inp {
-        outline-width: 0;
-      }
-      textarea#md-inp {
+      div.CodeMirror {
         width: calc(100% - 48px);
+        height: 100%;
+      }
+      textarea#md-inp {
+        display: none;
       }
     }
     .rhs {

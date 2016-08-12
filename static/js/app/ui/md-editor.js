@@ -12,10 +12,14 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
         function MdEditor() {
-            this.$mdInp
-                .on('keypress', this.onKeyPress.bind(this));
-            this.$mdInp
-                .on('keyup change paste', this.onKeyUp.bind(this));
+            this.editor = CodeMirror.fromTextArea(document.getElementById('md-inp'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: 'gfm',
+                undoDepth: 1024
+            });
+            this.editor
+                .on('change', this.onEditorChange.bind(this));
         }
         Object.defineProperty(MdEditor, "me", {
             get: function () {
@@ -27,18 +31,12 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             enumerable: true,
             configurable: true
         });
-        MdEditor.prototype.onKeyPress = function () {
-            if (this._timeoutId !== undefined) {
-                clearTimeout(this._timeoutId);
-                this._timeoutId = undefined;
-            }
-        };
-        MdEditor.prototype.onKeyUp = function (ev) {
+        MdEditor.prototype.onEditorChange = function () {
             this.render();
         };
         MdEditor.prototype.render = function () {
-            var $md_inp = this.$mdInp, $md_out = this.$mdOut, $md_tmp;
-            var md_new = $md_inp.val();
+            var $md_out = $('#md-out'), $md_tmp;
+            var md_new = this.editor.getValue();
             if (md_new !== this._mdOld) {
                 this._mdOld = md_new;
                 if (this._timeoutId !== undefined) {
@@ -80,16 +78,12 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 download_manager_1.default.me.content = md_new;
             }
         };
-        Object.defineProperty(MdEditor.prototype, "$mdInp", {
+        Object.defineProperty(MdEditor.prototype, "editor", {
             get: function () {
-                return $('#md-inp');
+                return window['CODE_MIRROR'];
             },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "$mdOut", {
-            get: function () {
-                return $('#md-out');
+            set: function (value) {
+                window['CODE_MIRROR'] = value;
             },
             enumerable: true,
             configurable: true
