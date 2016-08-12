@@ -158,7 +158,7 @@ export class PublishDialog {
 
     private onBsModalHidden() {
         setTimeout(() => {
-            this.$mdInp.focus();
+            this.editor.focus();
         }, 1);
     }
 
@@ -358,7 +358,7 @@ export class PublishDialog {
     }
 
     private content():string {
-        return this.toHtml(this.$mdInp.val())
+        return this.toHtml(this.editor.getValue())
             + this.withScripts()
             + this.withStyles();
     }
@@ -393,10 +393,6 @@ export class PublishDialog {
 
     private get $mdOut():any {
         return $('#md-out');
-    }
-
-    private get $mdInp():any {
-        return $('#md-inp');
     }
 
     private get $dialog():any {
@@ -457,6 +453,10 @@ export class PublishDialog {
 
     private get $primary():any {
         return this.$dialog.find('.btn-primary');
+    }
+
+    private get editor(): any {
+        return window['CODE_MIRROR'];
     }
 }
 

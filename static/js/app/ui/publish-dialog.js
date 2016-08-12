@@ -131,7 +131,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         PublishDialog.prototype.onBsModalHidden = function () {
             var _this = this;
             setTimeout(function () {
-                _this.$mdInp.focus();
+                _this.editor.focus();
             }, 1);
         };
         PublishDialog.prototype.onExpandClick = function () {
@@ -319,7 +319,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             update_req.then(on_done, on_fail);
         };
         PublishDialog.prototype.content = function () {
-            return this.toHtml(this.$mdInp.val())
+            return this.toHtml(this.editor.getValue())
                 + this.withScripts()
                 + this.withStyles();
         };
@@ -353,13 +353,6 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         Object.defineProperty(PublishDialog.prototype, "$mdOut", {
             get: function () {
                 return $('#md-out');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PublishDialog.prototype, "$mdInp", {
-            get: function () {
-                return $('#md-inp');
             },
             enumerable: true,
             configurable: true
@@ -465,6 +458,13 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         Object.defineProperty(PublishDialog.prototype, "$primary", {
             get: function () {
                 return this.$dialog.find('.btn-primary');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PublishDialog.prototype, "editor", {
+            get: function () {
+                return window['CODE_MIRROR'];
             },
             enumerable: true,
             configurable: true
