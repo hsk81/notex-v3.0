@@ -9,7 +9,6 @@ console.debug('[import:app/ui/md-editor.ts]');
 import {buffered} from '../decorator/buffered';
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
-import {traceable} from '../decorator/trace';
 
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
@@ -20,7 +19,7 @@ import MarkdownIt from '../markdown-it/markdown-it';
 @trace
 @named('MdEditor')
 export class MdEditor {
-    public static get me():MdEditor {
+    public static get me(): MdEditor {
         if (this['_me'] === undefined) {
             this['_me'] = new MdEditor();
         }
@@ -28,21 +27,12 @@ export class MdEditor {
     }
 
     public constructor() {
-        this.$mdInp.on(
-            'keypress', this.onKeyPress.bind(this));
-        this.$mdInp.on(
-            'keyup change paste', this.onKeyUp.bind(this));
+        this.$mdInp
+            .on('keypress', this.onKeyPress.bind(this));
+        this.$mdInp
+            .on('keyup change paste', this.onKeyUp.bind(this));
     }
 
-    public get $mdInp():any {
-        return $('#md-inp');
-    }
-
-    public get $mdOut():any {
-        return $('#md-out');
-    }
-
-    @traceable(false)
     private onKeyPress() {
         if (this._timeoutId !== undefined) {
             clearTimeout(this._timeoutId);
@@ -50,10 +40,13 @@ export class MdEditor {
         }
     }
 
+    private onKeyUp(ev: KeyboardEvent) {
+        this.render();
+    }
+
     @buffered(600)
-    @traceable(false)
-    private onKeyUp(ev:Event) {
-        let $md_inp = $(ev.target),
+    public render() {
+        let $md_inp = this.$mdInp,
             $md_out = this.$mdOut,
             $md_tmp;
 
@@ -69,9 +62,9 @@ export class MdEditor {
             this._timeoutId = setTimeout(() => {
                 if (MathJax !== undefined) {
                     MathJax.Hub.Queue([
-                        "resetEquationNumbers", MathJax.InputJax.TeX
+                        'resetEquationNumbers', MathJax.InputJax.TeX
                     ], [
-                        "Typeset", MathJax.Hub, 'md-out', () => {
+                        'Typeset', MathJax.Hub, 'md-out', () => {
                             $md_out.css('visibility', 'visible');
                             $md_tmp.remove();
 
@@ -80,7 +73,7 @@ export class MdEditor {
                                 $.get(path).done((html) => {
                                     $md_out.html(html);
                                     MathJax.Hub.Queue([
-                                        "Typeset", MathJax.Hub, 'md-out'
+                                        'Typeset', MathJax.Hub, 'md-out'
                                     ]);
                                 });
                             }
@@ -106,8 +99,16 @@ export class MdEditor {
         }
     }
 
-    private _timeoutId:number;
-    private _mdOld:string;
+    private get $mdInp(): any {
+        return $('#md-inp');
+    }
+
+    private get $mdOut(): any {
+        return $('#md-out');
+    }
+
+    private _timeoutId: number;
+    private _mdOld: string;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
