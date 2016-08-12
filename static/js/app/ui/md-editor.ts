@@ -27,30 +27,28 @@ export class MdEditor {
     }
 
     public constructor() {
-        this.$mdInp
-            .on('keypress', this.onKeyPress.bind(this));
-        this.$mdInp
-            .on('keyup change paste', this.onKeyUp.bind(this));
+        this.editor = CodeMirror.fromTextArea(
+            document.getElementById('md-inp'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: 'gfm',
+                undoDepth: 1024
+            }
+        );
+        this.editor
+            .on('change', this.onEditorChange.bind(this));
     }
 
-    private onKeyPress() {
-        if (this._timeoutId !== undefined) {
-            clearTimeout(this._timeoutId);
-            this._timeoutId = undefined;
-        }
-    }
-
-    private onKeyUp(ev: KeyboardEvent) {
+    private onEditorChange() {
         this.render();
     }
 
     @buffered(600)
     public render() {
-        let $md_inp = this.$mdInp,
-            $md_out = this.$mdOut,
+        let $md_out = $('#md-out'),
             $md_tmp;
 
-        let md_new = $md_inp.val();
+        let md_new = this.editor.getValue();
         if (md_new !== this._mdOld) {
             this._mdOld = md_new;
 
@@ -99,12 +97,12 @@ export class MdEditor {
         }
     }
 
-    private get $mdInp(): any {
-        return $('#md-inp');
+    private get editor(): any {
+        return window['CODE_MIRROR'];
     }
 
-    private get $mdOut(): any {
-        return $('#md-out');
+    private set editor(value: any) {
+        window['CODE_MIRROR'] = value;
     }
 
     private _timeoutId: number;

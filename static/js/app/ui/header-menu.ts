@@ -6,6 +6,7 @@ console.debug('[import:app/ui/header-menu.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+import {mine} from '../decorator/mine';
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
@@ -25,13 +26,14 @@ export class HeaderMenu {
     }
 
     public constructor() {
-        this.$openItem.on(
-            'change', this.onOpenItemChange.bind(this));
-        this.$swapItem.on(
-            'click', this.onSwapItemClick.bind(this));
+        this.$openItem
+            .on('change', this.onOpenItemChange.bind(this));
+        this.$swapItem
+            .on('click', this.onSwapItemClick.bind(this));
     }
 
-    private onOpenItemChange(ev) {
+    @mine
+    private onOpenItemChange(self, ev) {
         var files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (files[i].type && files[i].type.match(/text/)) {
@@ -39,10 +41,10 @@ export class HeaderMenu {
                 reader.onload = function (progress_ev) {
                     var target = <any>progress_ev.target;
                     if (target && target.readyState === 2 &&
-                        typeof target.result === 'string') {
-                        $('#md-inp')
-                            .val(target.result).trigger('change')
-                            .setCursorPosition(0).focus();
+                        typeof target.result === 'string')
+                    {
+                        self.editor.setValue(target.result);
+                        self.editor.focus();
                     }
                 };
                 reader.readAsText(files[i]);
@@ -56,8 +58,8 @@ export class HeaderMenu {
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
 
-        //@TODO: avoid dependency?
-        MdEditorToolbar.me.refresh();
+        this.toolbar.refresh();
+        this.editor.focus();
     }
 
     public get $openItem():any {
@@ -70,6 +72,14 @@ export class HeaderMenu {
 
     public get $swapItem():any {
         return $('[name=swap]');
+    }
+
+    private get toolbar(): any {
+        return MdEditorToolbar.me;
+    }
+
+    private get editor(): any {
+        return window['CODE_MIRROR'];
     }
 }
 

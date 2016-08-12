@@ -7,13 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/named', '../decorator/trace', './md-editor-toolbar'], function (require, exports, named_1, trace_1, md_editor_toolbar_1) {
+define(["require", "exports", '../decorator/mine', '../decorator/named', '../decorator/trace', './md-editor-toolbar'], function (require, exports, mine_1, named_1, trace_1, md_editor_toolbar_1) {
     "use strict";
     console.debug('[import:app/ui/header-menu.ts]');
     var HeaderMenu = (function () {
         function HeaderMenu() {
-            this.$openItem.on('change', this.onOpenItemChange.bind(this));
-            this.$swapItem.on('click', this.onSwapItemClick.bind(this));
+            this.$openItem
+                .on('change', this.onOpenItemChange.bind(this));
+            this.$swapItem
+                .on('click', this.onSwapItemClick.bind(this));
         }
         Object.defineProperty(HeaderMenu, "me", {
             get: function () {
@@ -25,7 +27,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             enumerable: true,
             configurable: true
         });
-        HeaderMenu.prototype.onOpenItemChange = function (ev) {
+        HeaderMenu.prototype.onOpenItemChange = function (self, ev) {
             var files = ev.target.files;
             for (var i = 0; i < files.length; i++) {
                 if (files[i].type && files[i].type.match(/text/)) {
@@ -34,9 +36,8 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                         var target = progress_ev.target;
                         if (target && target.readyState === 2 &&
                             typeof target.result === 'string') {
-                            $('#md-inp')
-                                .val(target.result).trigger('change')
-                                .setCursorPosition(0).focus();
+                            self.editor.setValue(target.result);
+                            self.editor.focus();
                         }
                     };
                     reader.readAsText(files[i]);
@@ -48,7 +49,8 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 .toggleClass('col-xs-12 col-sm-12');
             $('div.rhs').toggleClass('hidden-xs hidden-sm')
                 .toggleClass('col-xs-12 col-sm-12');
-            md_editor_toolbar_1.default.me.refresh();
+            this.toolbar.refresh();
+            this.editor.focus();
         };
         Object.defineProperty(HeaderMenu.prototype, "$openItem", {
             get: function () {
@@ -71,6 +73,26 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(HeaderMenu.prototype, "toolbar", {
+            get: function () {
+                return md_editor_toolbar_1.default.me;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(HeaderMenu.prototype, "editor", {
+            get: function () {
+                return window['CODE_MIRROR'];
+            },
+            enumerable: true,
+            configurable: true
+        });
+        __decorate([
+            mine_1.mine, 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Object, Object]), 
+            __metadata('design:returntype', void 0)
+        ], HeaderMenu.prototype, "onOpenItemChange", null);
         HeaderMenu = __decorate([
             trace_1.trace,
             named_1.named('HeaderMenu'), 

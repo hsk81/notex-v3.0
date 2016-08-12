@@ -6,13 +6,8 @@ console.debug('[import:app/ui/md-editor-toolbar.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Commands} from '../commands/commands';
-import {Command} from '../commands/commands';
-import {MdEditor} from './md-editor';
-
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
-import {seq} from '../function/seq';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,200 +37,48 @@ export class MdEditorToolbar {
         this.$erase
             .on('click', this.onEraseClick.bind(this));
 
-        this.$mdInp
-            .on('keypress', this.onMdInpKeyPress.bind(this));
-        this.$mdInp
-            .on('keydown', this.onMdInpKeyDown.bind(this));
-
         this.refresh();
     }
 
     public refresh() {
         this.scroll.refresh();
+        this.editor.refresh();
     }
 
-    private onUndoClick(ev: MouseEvent) {
-        this.commands.undo();
+    private onUndoClick() {
+        this.editor.execCommand('undo');
+        this.editor.focus();
     }
 
-    private onRedoClick(ev: MouseEvent) {
-        this.commands.redo();
+    private onRedoClick() {
+        this.editor.execCommand('redo');
+        this.editor.focus();
     }
 
-    private onCutClick(ev: MouseEvent) {
-        this.$mdInp.one('focus', () => {
-            let beg = this.$mdInp[0].selectionStart,
-                end = this.$mdInp[0].selectionEnd,
-                val = this.$mdInp[0].value;
-            let txt = this.clipboard,
-                len = Math.abs(end - beg);
-
-            if (len) this.commands.run(new Command(
-                seq(() => {
-                    this.$mdInp[0].value = val.slice(0, beg) + val.slice(end);
-                    this.$mdInp[0].setSelectionRange(beg, beg);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.clipboard = val.slice(beg, end);
-                }, () => {
-                    this.render();
-                }),
-                seq(() => {
-                    this.$mdInp[0].value = val;
-                    this.$mdInp[0].setSelectionRange(beg, end);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.clipboard = txt;
-                }, () => {
-                    this.render();
-                })
-            ));
-        });
-        this.$mdInp.focus();
+    private onCutClick() {
+        this.clipboard = this.editor.getSelection();
+        this.editor.replaceSelection('');
+        this.editor.focus();
     }
 
-    private onCopyClick(ev: MouseEvent) {
-        this.$mdInp.one('focus', () => {
-            let beg = this.$mdInp[0].selectionStart,
-                end = this.$mdInp[0].selectionEnd,
-                val = this.$mdInp[0].value;
-            try {
-                document.execCommand('copy');
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.clipboard = val.slice(beg, end);
-        });
-        this.$mdInp.focus();
-    }
-
-    private onPasteClick(ev: MouseEvent) {
-        this.$mdInp.one('focus', () => {
-            let beg = this.$mdInp[0].selectionStart,
-                end = this.$mdInp[0].selectionEnd,
-                val = this.$mdInp[0].value;
-            let txt = this.clipboard,
-                len = txt.length;
-
-            this.commands.run(new Command(
-                seq(() => {
-                    this.$mdInp[0].value =
-                        val.slice(0, beg) + txt + val.slice(end);
-                    this.$mdInp[0].setSelectionRange(beg + len, beg + len);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.clipboard = txt;
-                }, () => {
-                    this.render();
-                }),
-                seq(() => {
-                    this.$mdInp[0].value = val;
-                    this.$mdInp[0].setSelectionRange(beg, end);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.clipboard = txt;
-                }, () => {
-                    this.render();
-                })
-            ));
-        });
-        this.$mdInp.focus();
-    }
-
-    private onEraseClick(ev: MouseEvent) {
-        this.$mdInp.one('focus', () => {
-            let beg = this.$mdInp[0].selectionStart,
-                end = this.$mdInp[0].selectionEnd,
-                val = this.$mdInp[0].value;
-            let txt = val.slice(beg, end),
-                len = txt.length;
-
-            if (len) this.commands.run(new Command(
-                seq(() => {
-                    this.$mdInp[0].value = val.slice(0, beg) + val.slice(end);
-                    this.$mdInp[0].setSelectionRange(beg, beg);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.render();
-                }),
-                seq(() => {
-                    this.$mdInp[0].value = val;
-                    this.$mdInp[0].setSelectionRange(beg, end);
-                    this.$mdInp.focus();
-                }, () => {
-                    this.render();
-                })
-            ));
-        });
-        this.$mdInp.focus();
-    }
-
-    private onMdInpKeyPress(ev: KeyboardEvent) {
-        switch (ev.key) {
-            case 'z':
-                return this.onLowerZKeyPress(ev);
-            case 'Z':
-                return this.onUpperZKeyPress(ev);
+    private onCopyClick() {
+        try {
+            document.execCommand('copy');
+        } catch (ex) {
+            console.error(ex);
         }
+        this.clipboard = this.editor.getSelection();
+        this.editor.focus();
     }
 
-    private onLowerZKeyPress(ev: KeyboardEvent) {
-        if (ev.ctrlKey) {
-            this.commands.undo();
-            return false;
-        }
+    private onPasteClick() {
+        this.editor.replaceSelection(this.clipboard);
+        this.editor.focus();
     }
 
-    private onUpperZKeyPress(ev: KeyboardEvent) {
-        if (ev.ctrlKey) {
-            this.commands.redo();
-            return false;
-        }
-    }
-
-    private onMdInpKeyDown(ev: KeyboardEvent) {
-        switch (ev.key) {
-            case 'c':
-                return this.onLowerCKeyDown(ev);
-            case 'v':
-                return this.onLowerVKeyDown(ev);
-            case 'x':
-                return this.onLowerXKeyDown(ev);
-            case 'Delete':
-                return this.onDeleteKeyDown(ev);
-        }
-    }
-
-    private onLowerCKeyDown(ev: KeyboardEvent) {
-        if (ev.ctrlKey) {
-            this.$copy.click();
-            return false;
-        }
-    }
-
-    private onLowerVKeyDown(ev: KeyboardEvent) {
-        if (ev.ctrlKey) {
-            this.$paste.click();
-            return false;
-        }
-    }
-
-    private onLowerXKeyDown(ev: KeyboardEvent) {
-        if (ev.ctrlKey) {
-            this.$cut.click();
-            return false;
-        }
-    }
-
-    private onDeleteKeyDown(ev: KeyboardEvent) {
-        if (ev.ctrlKey && !ev.shiftKey) {
-            this.$erase.click();
-            return false;
-        }
-    }
-
-    private render() {
-        MdEditor.me.render();
+    private onEraseClick() {
+        this.editor.replaceSelection('');
+        this.editor.focus();
     }
 
     private get $undo() {
@@ -244,10 +87,6 @@ export class MdEditorToolbar {
 
     private get $redo() {
         return $('.glyphicon.redo').closest('button');
-    }
-
-    private get $erase() {
-        return $('.glyphicon-erase').closest('button');
     }
 
     private get $cut() {
@@ -262,12 +101,8 @@ export class MdEditorToolbar {
         return $('.glyphicon-paste').closest('button');
     }
 
-    private get $mdInp() {
-        return $('#md-inp');
-    }
-
-    private get commands(): Commands {
-        return Commands.me;
+    private get $erase() {
+        return $('.glyphicon-erase').closest('button');
     }
 
     private get scroll(): any {
@@ -279,6 +114,10 @@ export class MdEditorToolbar {
             });
         }
         return this._scroll;
+    }
+
+    private get editor(): any {
+        return window['CODE_MIRROR'];
     }
 
     private get clipboard(): string {
