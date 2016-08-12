@@ -27,11 +27,40 @@ export class MdEditor {
     }
 
     public constructor() {
+        CodeMirror.defineMode('notex-md', function(config) {
+            return CodeMirror.multiplexingMode(
+                CodeMirror.getMode(config, 'gfm'), {
+                    mode: CodeMirror.getMode(config, 'text/x-markdown'),
+                    open: '```markdown', close: '```'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-stex'),
+                    open: '{{', close: '}}'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-stex'),
+                    open: '$$', close: '$$'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-stex'),
+                    open: '$', close: '$'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-stex'),
+                    open: '```latex', close: '```'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-python'),
+                    open: '```python', close: '```'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/x-cython'),
+                    open: '```cython', close: '```'
+                }, {
+                    mode: CodeMirror.getMode(config, 'text/plain'),
+                    open: '```', close: '```'
+                }
+            );
+        });
         this.editor = CodeMirror.fromTextArea(
             document.getElementById('md-inp'), {
                 lineNumbers: true,
                 lineWrapping: true,
-                mode: 'gfm',
+                mode: 'notex-md',
                 undoDepth: 1024
             }
         );
