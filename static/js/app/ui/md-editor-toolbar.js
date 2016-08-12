@@ -7,30 +7,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../commands/commands', '../commands/commands', '../function/after', '../decorator/named', '../decorator/trace'], function (require, exports, commands_1, commands_2, after_1, named_1, trace_1) {
+define(["require", "exports", '../commands/commands', '../commands/commands', './md-editor', '../decorator/named', '../decorator/trace', '../function/seq'], function (require, exports, commands_1, commands_2, md_editor_1, named_1, trace_1, seq_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
         function MdEditorToolbar() {
-            this._snapshot = null;
             this.$undo
                 .on('click', this.onUndoClick.bind(this));
             this.$redo
                 .on('click', this.onRedoClick.bind(this));
-            this.$scissors
-                .on('click', this.onScissorsClick.bind(this));
+            this.$cut
+                .on('click', this.onCutClick.bind(this));
             this.$copy
                 .on('click', this.onCopyClick.bind(this));
             this.$paste
                 .on('click', this.onPasteClick.bind(this));
             this.$erase
                 .on('click', this.onEraseClick.bind(this));
-            this.$textarea
-                .on('keypress', this.onTextAreaKeyPress.bind(this));
-            this.$textarea
-                .on('keydown', this.onTextAreaKeyDown.bind(this));
-            this.$textarea
-                .on('keyup', this.onTextAreaKeyUp.bind(this));
+            this.$mdInp
+                .on('keypress', this.onMdInpKeyPress.bind(this));
+            this.$mdInp
+                .on('keydown', this.onMdInpKeyDown.bind(this));
             this.refresh();
         }
         Object.defineProperty(MdEditorToolbar, "me", {
@@ -52,33 +49,36 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
         MdEditorToolbar.prototype.onRedoClick = function (ev) {
             this.commands.redo();
         };
-        MdEditorToolbar.prototype.onScissorsClick = function (ev) {
+        MdEditorToolbar.prototype.onCutClick = function (ev) {
             var _this = this;
-            this.$textarea.one('focus', function () {
-                var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
+            this.$mdInp.one('focus', function () {
+                var beg = _this.$mdInp[0].selectionStart, end = _this.$mdInp[0].selectionEnd, val = _this.$mdInp[0].value;
                 var txt = _this.clipboard, len = Math.abs(end - beg);
                 if (len)
-                    _this.commands.run(new commands_2.Command(after_1.after(function () {
-                        _this.$textarea[0].value =
-                            val.slice(0, beg) + val.slice(end);
-                        _this.$textarea[0].setSelectionRange(beg, beg);
-                        _this.$textarea.focus();
+                    _this.commands.run(new commands_2.Command(seq_1.seq(function () {
+                        _this.$mdInp[0].value = val.slice(0, beg) + val.slice(end);
+                        _this.$mdInp[0].setSelectionRange(beg, beg);
+                        _this.$mdInp.focus();
                     }, function () {
                         _this.clipboard = val.slice(beg, end);
-                    }), after_1.after(function () {
-                        _this.$textarea[0].value = val;
-                        _this.$textarea[0].setSelectionRange(beg, end);
-                        _this.$textarea.focus();
+                    }, function () {
+                        _this.render();
+                    }), seq_1.seq(function () {
+                        _this.$mdInp[0].value = val;
+                        _this.$mdInp[0].setSelectionRange(beg, end);
+                        _this.$mdInp.focus();
                     }, function () {
                         _this.clipboard = txt;
+                    }, function () {
+                        _this.render();
                     })));
             });
-            this.$textarea.focus();
+            this.$mdInp.focus();
         };
         MdEditorToolbar.prototype.onCopyClick = function (ev) {
             var _this = this;
-            this.$textarea.one('focus', function () {
-                var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
+            this.$mdInp.one('focus', function () {
+                var beg = _this.$mdInp[0].selectionStart, end = _this.$mdInp[0].selectionEnd, val = _this.$mdInp[0].value;
                 try {
                     document.execCommand('copy');
                 }
@@ -87,50 +87,57 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
                 }
                 _this.clipboard = val.slice(beg, end);
             });
-            this.$textarea.focus();
+            this.$mdInp.focus();
         };
         MdEditorToolbar.prototype.onPasteClick = function (ev) {
             var _this = this;
-            this.$textarea.one('focus', function () {
-                var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
+            this.$mdInp.one('focus', function () {
+                var beg = _this.$mdInp[0].selectionStart, end = _this.$mdInp[0].selectionEnd, val = _this.$mdInp[0].value;
                 var txt = _this.clipboard, len = txt.length;
-                _this.commands.run(new commands_2.Command(after_1.after(function () {
-                    _this.$textarea[0].value =
+                _this.commands.run(new commands_2.Command(seq_1.seq(function () {
+                    _this.$mdInp[0].value =
                         val.slice(0, beg) + txt + val.slice(end);
-                    _this.$textarea[0].setSelectionRange(beg + len, beg + len);
-                    _this.$textarea.focus();
+                    _this.$mdInp[0].setSelectionRange(beg + len, beg + len);
+                    _this.$mdInp.focus();
                 }, function () {
                     _this.clipboard = txt;
-                }), after_1.after(function () {
-                    _this.$textarea[0].value = val;
-                    _this.$textarea[0].setSelectionRange(beg, end);
-                    _this.$textarea.focus();
+                }, function () {
+                    _this.render();
+                }), seq_1.seq(function () {
+                    _this.$mdInp[0].value = val;
+                    _this.$mdInp[0].setSelectionRange(beg, end);
+                    _this.$mdInp.focus();
                 }, function () {
                     _this.clipboard = txt;
+                }, function () {
+                    _this.render();
                 })));
             });
-            this.$textarea.focus();
+            this.$mdInp.focus();
         };
         MdEditorToolbar.prototype.onEraseClick = function (ev) {
             var _this = this;
-            this.$textarea.one('focus', function () {
-                var beg = _this.$textarea[0].selectionStart, end = _this.$textarea[0].selectionEnd, val = _this.$textarea[0].value;
+            this.$mdInp.one('focus', function () {
+                var beg = _this.$mdInp[0].selectionStart, end = _this.$mdInp[0].selectionEnd, val = _this.$mdInp[0].value;
                 var txt = val.slice(beg, end), len = txt.length;
                 if (len)
-                    _this.commands.run(new commands_2.Command(function () {
-                        _this.$textarea[0].value =
-                            val.slice(0, beg) + val.slice(end);
-                        _this.$textarea[0].setSelectionRange(beg, beg);
-                        _this.$textarea.focus();
+                    _this.commands.run(new commands_2.Command(seq_1.seq(function () {
+                        _this.$mdInp[0].value = val.slice(0, beg) + val.slice(end);
+                        _this.$mdInp[0].setSelectionRange(beg, beg);
+                        _this.$mdInp.focus();
                     }, function () {
-                        _this.$textarea[0].value = val;
-                        _this.$textarea[0].setSelectionRange(beg, end);
-                        _this.$textarea.focus();
-                    }));
+                        _this.render();
+                    }), seq_1.seq(function () {
+                        _this.$mdInp[0].value = val;
+                        _this.$mdInp[0].setSelectionRange(beg, end);
+                        _this.$mdInp.focus();
+                    }, function () {
+                        _this.render();
+                    })));
             });
-            this.$textarea.focus();
+            this.$mdInp.focus();
         };
-        MdEditorToolbar.prototype.onTextAreaKeyPress = function (ev) {
+        MdEditorToolbar.prototype.onMdInpKeyPress = function (ev) {
             switch (ev.key) {
                 case 'z':
                     return this.onLowerZKeyPress(ev);
@@ -150,7 +157,7 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
                 return false;
             }
         };
-        MdEditorToolbar.prototype.onTextAreaKeyDown = function (ev) {
+        MdEditorToolbar.prototype.onMdInpKeyDown = function (ev) {
             switch (ev.key) {
                 case 'c':
                     return this.onLowerCKeyDown(ev);
@@ -176,7 +183,7 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
         };
         MdEditorToolbar.prototype.onLowerXKeyDown = function (ev) {
             if (ev.ctrlKey) {
-                this.$scissors.click();
+                this.$cut.click();
                 return false;
             }
         };
@@ -185,44 +192,9 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
                 this.$erase.click();
                 return false;
             }
-            else {
-                var beg = this.$textarea[0].selectionStart, end = this.$textarea[0].selectionEnd, val = this.$textarea[0].value;
-                var dif = Math.abs(end - beg), bit = dif > 0 ? 0 : 1;
-                var to_bet = val.slice(0, beg), to_end = val.slice(end + bit, val.length);
-                this.$textarea[0].value = to_bet + to_end;
-                this.$textarea[0].setSelectionRange(beg, beg);
-                if (this._snapshot === null) {
-                    this._snapshot = {
-                        beg: beg, end: end, val: val
-                    };
-                }
-                return false;
-            }
         };
-        MdEditorToolbar.prototype.onTextAreaKeyUp = function (ev) {
-            switch (ev.key) {
-                case 'Delete':
-                    return this.onDeleteKeyUp(ev);
-            }
-        };
-        MdEditorToolbar.prototype.onDeleteKeyUp = function (ev) {
-            var _this = this;
-            if (!ev.ctrlKey && !ev.shiftKey) {
-                var old_beg_1 = this._snapshot.beg, old_end_1 = this._snapshot.end, old_val_1 = this._snapshot.val;
-                var new_beg_1 = this.$textarea[0].selectionStart, new_end_1 = this.$textarea[0].selectionEnd, new_val_1 = this.$textarea[0].value;
-                this._snapshot = null;
-                this.$textarea.focus();
-                this.commands.add(new commands_2.Command(function () {
-                    _this.$textarea[0].value = new_val_1;
-                    _this.$textarea[0].setSelectionRange(new_beg_1, new_end_1);
-                    _this.$textarea.focus();
-                }, function () {
-                    _this.$textarea[0].value = old_val_1;
-                    _this.$textarea[0].setSelectionRange(old_beg_1, old_end_1);
-                    _this.$textarea.focus();
-                }));
-                return false;
-            }
+        MdEditorToolbar.prototype.render = function () {
+            md_editor_1.MdEditor.me.render();
         };
         Object.defineProperty(MdEditorToolbar.prototype, "$undo", {
             get: function () {
@@ -245,7 +217,7 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "$scissors", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$cut", {
             get: function () {
                 return $('.glyphicon-scissors').closest('button');
             },
@@ -266,19 +238,16 @@ define(["require", "exports", '../commands/commands', '../commands/commands', '.
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "$textarea", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$mdInp", {
             get: function () {
-                return $('textarea#md-inp');
+                return $('#md-inp');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MdEditorToolbar.prototype, "commands", {
             get: function () {
-                if (this._commands === undefined) {
-                    this._commands = new commands_1.Commands();
-                }
-                return this._commands;
+                return commands_1.Commands.me;
             },
             enumerable: true,
             configurable: true

@@ -7,13 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it'], function (require, exports, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1) {
+define(["require", "exports", '../decorator/buffered', '../decorator/named', '../decorator/trace', './download-manager', '../markdown-it/markdown-it'], function (require, exports, buffered_1, named_1, trace_1, download_manager_1, markdown_it_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
         function MdEditor() {
-            this.$mdInp.on('keypress', this.onKeyPress.bind(this));
-            this.$mdInp.on('keyup change paste', this.onKeyUp.bind(this));
+            this.$mdInp
+                .on('keypress', this.onKeyPress.bind(this));
+            this.$mdInp
+                .on('keyup change paste', this.onKeyUp.bind(this));
         }
         Object.defineProperty(MdEditor, "me", {
             get: function () {
@@ -25,20 +27,6 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "$mdInp", {
-            get: function () {
-                return $('#md-inp');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "$mdOut", {
-            get: function () {
-                return $('#md-out');
-            },
-            enumerable: true,
-            configurable: true
-        });
         MdEditor.prototype.onKeyPress = function () {
             if (this._timeoutId !== undefined) {
                 clearTimeout(this._timeoutId);
@@ -46,7 +34,10 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             }
         };
         MdEditor.prototype.onKeyUp = function (ev) {
-            var $md_inp = $(ev.target), $md_out = this.$mdOut, $md_tmp;
+            this.render();
+        };
+        MdEditor.prototype.render = function () {
+            var $md_inp = this.$mdInp, $md_out = this.$mdOut, $md_tmp;
             var md_new = $md_inp.val();
             if (md_new !== this._mdOld) {
                 this._mdOld = md_new;
@@ -57,9 +48,9 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 this._timeoutId = setTimeout(function () {
                     if (MathJax !== undefined) {
                         MathJax.Hub.Queue([
-                            "resetEquationNumbers", MathJax.InputJax.TeX
+                            'resetEquationNumbers', MathJax.InputJax.TeX
                         ], [
-                            "Typeset", MathJax.Hub, 'md-out', function () {
+                            'Typeset', MathJax.Hub, 'md-out', function () {
                                 $md_out.css('visibility', 'visible');
                                 $md_tmp.remove();
                                 if (md_new.length === 0) {
@@ -67,7 +58,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                                     $.get(path).done(function (html) {
                                         $md_out.html(html);
                                         MathJax.Hub.Queue([
-                                            "Typeset", MathJax.Hub, 'md-out'
+                                            'Typeset', MathJax.Hub, 'md-out'
                                         ]);
                                     });
                                 }
@@ -89,19 +80,26 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 download_manager_1.default.me.content = md_new;
             }
         };
+        Object.defineProperty(MdEditor.prototype, "$mdInp", {
+            get: function () {
+                return $('#md-inp');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "$mdOut", {
+            get: function () {
+                return $('#md-out');
+            },
+            enumerable: true,
+            configurable: true
+        });
         __decorate([
-            trace_2.traceable(false), 
+            buffered_1.buffered(600), 
             __metadata('design:type', Function), 
             __metadata('design:paramtypes', []), 
             __metadata('design:returntype', void 0)
-        ], MdEditor.prototype, "onKeyPress", null);
-        __decorate([
-            buffered_1.buffered(600),
-            trace_2.traceable(false), 
-            __metadata('design:type', Function), 
-            __metadata('design:paramtypes', [Event]), 
-            __metadata('design:returntype', void 0)
-        ], MdEditor.prototype, "onKeyUp", null);
+        ], MdEditor.prototype, "render", null);
         MdEditor = __decorate([
             trace_1.trace,
             named_1.named('MdEditor'), 
