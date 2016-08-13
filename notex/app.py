@@ -129,11 +129,79 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/codemirror/lib/codemirror.js')
     concat(out_path,
+           'static/js/lib/codemirror/addon/mode/multiplex.js')
+    concat(out_path,
            'static/js/lib/codemirror/addon/mode/overlay.js')
+    concat(out_path,
+           'static/js/lib/codemirror/addon/mode/simple.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/clike/clike.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/cmake/cmake.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/css/css.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/dockerfile/dockerfile.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/erlang/erlang.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/fortran/fortran.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/go/go.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/haskell/haskell.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/http/http.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/javascript/javascript.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/jinja2/jinja2.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/julia/julia.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/lua/lua.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/mathematica/mathematica.js')
     concat(out_path,
            'static/js/lib/codemirror/mode/markdown/markdown.js')
     concat(out_path,
-           'static/js/lib/codemirror/mode/gfm/gfm.js')
+           'static/js/lib/codemirror/mode/gfm/gfm.js') ## @aft(markdown)
+    concat(out_path,
+           'static/js/lib/codemirror/mode/mllike/mllike.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/nginx/nginx.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/octave/octave.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/perl/perl.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/php/php.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/python/python.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/r/r.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/rst/rst.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/sass/sass.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/sql/sql.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/spreadsheet/spreadsheet.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/stex/stex.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/swift/swift.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/xml/xml.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/htmlmixed/htmlmixed.js') ## @aft(xml)
+    concat(out_path,
+           'static/js/lib/codemirror/mode/yaml/yaml.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/vb/vb.js')
+    concat(out_path,
+           'static/js/lib/codemirror/mode/vbscript/vbscript.js')
     concat(out_path,
            'static/js/lib/require/require-2.2.0.min.js')
 
