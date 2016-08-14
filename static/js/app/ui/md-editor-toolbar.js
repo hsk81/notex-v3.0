@@ -79,29 +79,41 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             this.editor.replaceSelection('');
             this.editor.focus();
         };
-        MdEditorToolbar.prototype.onHeaderClick = function () {
-            var cursor = this.editor.getCursor(), from = $.extend({}, cursor, { ch: 0 }), mode = this.editor.getModeAt(from);
+        MdEditorToolbar.prototype.onHeaderClick = function (ev) {
+            var cursor = this.editor.getCursor(), from = { line: cursor.line, ch: 0 }, mode = this.editor.getModeAt(from);
             if (mode.name === 'markdown') {
-                var line = this.editor.getLineHandle(from.line), tokens = this.editor.getLineTokens(from.line);
-                if (tokens.length > 0 && tokens[0]) {
-                    var type = tokens[0].type;
-                    if (type && type.match(/^header/)) {
-                        if (type.match(/header-6$/)) {
-                            var match = line.text.match(/#{6,}\s*/), match_string = match && match.toString();
-                            this.editor.replaceRange('', from, $.extend({}, from, {
-                                ch: match_string ? match_string.length : 6
-                            }));
-                        }
-                        else {
-                            this.editor.replaceRange('#', from);
-                        }
+                var line = this.editor.getLineHandle(from.line), suffix = line.text.match(/^\s+/) ? '' : ' ', prefix = '#';
+                var tokens = this.editor.getLineTokens(from.line);
+                if (tokens.length > 0 && tokens[0] &&
+                    tokens[0].type && tokens[0].type.match(/^header/)) {
+                    var match_1 = tokens[0].type.match(/header-1$/), match_2 = tokens[0].type.match(/header-2$/);
+                    if (match_1 && tokens[0].string === '=' ||
+                        match_2 && tokens[0].string === '-') {
+                        prefix += tokens[0].string === '=' ? '#' : '##';
+                        this.editor.replaceRange('', from, {
+                            ch: line.text.length, line: from.line,
+                        });
+                        this.editor.replaceRange(prefix + suffix, {
+                            ch: 0, line: from.line - 1,
+                        });
+                        this.editor.setCursor({
+                            ch: tokens[0].string === '=' ? 3 : 4,
+                            line: from.line - 1,
+                        });
+                    }
+                    else if (tokens[0].type.match(/header-6$/)) {
+                        var match = line.text.match(/#{6,}\s*/), match_string = match && match.toString();
+                        this.editor.replaceRange('', from, {
+                            ch: match_string ? match_string.length : 6,
+                            line: from.line
+                        });
                     }
                     else {
-                        this.editor.replaceRange('# ', from);
+                        this.editor.replaceRange(prefix, from);
                     }
                 }
                 else {
-                    this.editor.replaceRange('# ', from);
+                    this.editor.replaceRange(prefix + suffix, from);
                 }
             }
             this.editor.focus();
