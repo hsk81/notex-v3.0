@@ -90,32 +90,49 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
-    private onHeaderClick() {
+    private onHeaderClick(ev: MouseEvent) {
         let cursor = this.editor.getCursor(),
-            from = $.extend({}, cursor, {ch:0}),
+            from = {line: cursor.line, ch: 0},
             mode = this.editor.getModeAt(from);
         if (mode.name === 'markdown') {
             let line = this.editor.getLineHandle(from.line),
-                tokens = this.editor.getLineTokens(from.line);
-            if (tokens.length > 0 && tokens[0]) {
-                let type = tokens[0].type;
-                if (type && type.match(/^header/)) {
-                    if (type.match(/header-6$/)) {
-                        let match = line.text.match(/#{6,}\s*/),
-                            match_string = match && match.toString();
-                        this.editor.replaceRange(
-                            '', from, $.extend({}, from, {
-                                ch: match_string ? match_string.length : 6
-                            })
-                        );
-                    } else {
-                        this.editor.replaceRange('#', from);
-                    }
-                } else {
-                    this.editor.replaceRange('# ', from);
+                suffix = line.text.match(/^\s+/) ? '' : ' ',
+                prefix = '#';
+
+            let tokens = this.editor.getLineTokens(from.line);
+            if (tokens.length > 0 && tokens[0] &&
+                tokens[0].type && tokens[0].type.match(/^header/))
+            {
+                let match_1 = tokens[0].type.match(/header-1$/),
+                    match_2 = tokens[0].type.match(/header-2$/);
+                if (match_1 && tokens[0].string === '=' ||
+                    match_2 && tokens[0].string === '-')
+                {
+                    prefix += tokens[0].string === '=' ? '#' : '##';
+                    this.editor.replaceRange('', from, {
+                        ch: line.text.length, line: from.line,
+                    });
+                    this.editor.replaceRange(prefix + suffix, {
+                        ch: 0, line: from.line - 1,
+                    });
+                    this.editor.setCursor({
+                        ch: tokens[0].string === '=' ? 3 : 4,
+                        line: from.line - 1,
+                    });
+                }
+                else if (tokens[0].type.match(/header-6$/)) {
+                    let match = line.text.match(/#{6,}\s*/),
+                        match_string = match && match.toString();
+                    this.editor.replaceRange('', from, {
+                        ch: match_string ? match_string.length : 6,
+                        line: from.line
+                    });
+                }
+                else {
+                    this.editor.replaceRange(prefix, from);
                 }
             } else {
-                this.editor.replaceRange('# ', from);
+                this.editor.replaceRange(prefix + suffix, from);
             }
         }
         this.editor.focus();
