@@ -24,6 +24,14 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                 .on('click', this.onPasteClick.bind(this));
             this.$erase
                 .on('click', this.onEraseClick.bind(this));
+            this.$header
+                .on('click', this.onHeaderClick.bind(this));
+            this.$bold
+                .on('click', this.onBoldClick.bind(this));
+            this.$italic
+                .on('click', this.onItalicClick.bind(this));
+            this.$font
+                .on('click', this.onFontClick.bind(this));
             this.refresh();
         }
         Object.defineProperty(MdEditorToolbar, "me", {
@@ -71,6 +79,42 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             this.editor.replaceSelection('');
             this.editor.focus();
         };
+        MdEditorToolbar.prototype.onHeaderClick = function () {
+            var cursor = this.editor.getCursor(), from = $.extend({}, cursor, { ch: 0 }), mode = this.editor.getModeAt(from);
+            if (mode.name === 'markdown') {
+                var line = this.editor.getLineHandle(from.line), tokens = this.editor.getLineTokens(from.line);
+                if (tokens.length > 0 && tokens[0]) {
+                    var type = tokens[0].type;
+                    if (type && type.match(/^header/)) {
+                        if (type.match(/header-6$/)) {
+                            var match = line.text.match(/#{6,}\s*/), match_string = match && match.toString();
+                            this.editor.replaceRange('', from, $.extend({}, from, {
+                                ch: match_string ? match_string.length : 6
+                            }));
+                        }
+                        else {
+                            this.editor.replaceRange('#', from);
+                        }
+                    }
+                    else {
+                        this.editor.replaceRange('# ', from);
+                    }
+                }
+                else {
+                    this.editor.replaceRange('# ', from);
+                }
+            }
+            this.editor.focus();
+        };
+        MdEditorToolbar.prototype.onBoldClick = function () {
+            this.editor.focus();
+        };
+        MdEditorToolbar.prototype.onItalicClick = function () {
+            this.editor.focus();
+        };
+        MdEditorToolbar.prototype.onFontClick = function () {
+            this.editor.focus();
+        };
         Object.defineProperty(MdEditorToolbar.prototype, "$undo", {
             get: function () {
                 return $('.glyphicon.undo').closest('button');
@@ -109,6 +153,34 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         Object.defineProperty(MdEditorToolbar.prototype, "$erase", {
             get: function () {
                 return $('.glyphicon-erase').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$header", {
+            get: function () {
+                return $('.glyphicon-header').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$bold", {
+            get: function () {
+                return $('.glyphicon-bold').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$italic", {
+            get: function () {
+                return $('.glyphicon-italic').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$font", {
+            get: function () {
+                return $('.glyphicon-font').closest('button');
             },
             enumerable: true,
             configurable: true
