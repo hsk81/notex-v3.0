@@ -37,6 +37,15 @@ export class MdEditorToolbar {
         this.$erase
             .on('click', this.onEraseClick.bind(this));
 
+        this.$header
+            .on('click', this.onHeaderClick.bind(this));
+        this.$bold
+            .on('click', this.onBoldClick.bind(this));
+        this.$italic
+            .on('click', this.onItalicClick.bind(this));
+        this.$font
+            .on('click', this.onFontClick.bind(this));
+
         this.refresh();
     }
 
@@ -81,6 +90,49 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
+    private onHeaderClick() {
+        let cursor = this.editor.getCursor(),
+            from = $.extend({}, cursor, {ch:0}),
+            mode = this.editor.getModeAt(from);
+        if (mode.name === 'markdown') {
+            let line = this.editor.getLineHandle(from.line),
+                tokens = this.editor.getLineTokens(from.line);
+            if (tokens.length > 0 && tokens[0]) {
+                let type = tokens[0].type;
+                if (type && type.match(/^header/)) {
+                    if (type.match(/header-6$/)) {
+                        let match = line.text.match(/#{6,}\s*/),
+                            match_string = match && match.toString();
+                        this.editor.replaceRange(
+                            '', from, $.extend({}, from, {
+                                ch: match_string ? match_string.length : 6
+                            })
+                        );
+                    } else {
+                        this.editor.replaceRange('#', from);
+                    }
+                } else {
+                    this.editor.replaceRange('# ', from);
+                }
+            } else {
+                this.editor.replaceRange('# ', from);
+            }
+        }
+        this.editor.focus();
+    }
+
+    private onBoldClick() {
+        this.editor.focus();
+    }
+
+    private onItalicClick() {
+        this.editor.focus();
+    }
+
+    private onFontClick() {
+        this.editor.focus();
+    }
+
     private get $undo() {
         return $('.glyphicon.undo').closest('button');
     }
@@ -103,6 +155,22 @@ export class MdEditorToolbar {
 
     private get $erase() {
         return $('.glyphicon-erase').closest('button');
+    }
+
+    private get $header() {
+        return $('.glyphicon-header').closest('button');
+    }
+
+    private get $bold() {
+        return $('.glyphicon-bold').closest('button');
+    }
+
+    private get $italic() {
+        return $('.glyphicon-italic').closest('button');
+    }
+
+    private get $font() {
+        return $('.glyphicon-font').closest('button');
     }
 
     private get scroll(): any {
