@@ -102,18 +102,18 @@ export class MdEditorToolbar {
             prefix = '#';
 
         let hs = curr_ts.filter((tok) => {
-            return tok && tok.type && tok.type.match(/^header/);
+            return tok && tok.type && tok.type.match(/header/);
         });
         let h1s = line.text.match(/^\s*=/) && curr_ts.filter((tok) => {
-            return tok && tok.type && tok.type.match(/header-1$/) &&
+            return tok && tok.type && tok.type.match(/header-1/) &&
                    tok.string === '=';
         });
         let h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter((tok) => {
-            return tok && tok.type && tok.type.match(/header-2$/) &&
+            return tok && tok.type && tok.type.match(/header-2/) &&
                    tok.string === '-';
         });
         let h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter((tok) => {
-            return tok && tok.type && tok.type.match(/header-6$/) &&
+            return tok && tok.type && tok.type.match(/header-6/) &&
                    tok.string === '#';
         });
 
@@ -179,6 +179,129 @@ export class MdEditorToolbar {
     }
 
     private onBoldClick() {
+        let cursor = this.editor.getCursor(),
+            token = this.editor.getTokenAt(cursor),
+            mode = this.editor.getModeAt(cursor);
+
+        let lhs = (cursor, token) => {
+            let last = {line: cursor.line, ch: cursor.ch},
+                next = {line: cursor.line, ch: cursor.ch};
+            while (true) {
+                let next_token = this.editor.getTokenAt(next);
+                if (next_token.type && !next_token.type.match(token.type) ||
+                    !next_token.type && next_token.type !== token.type)
+                {
+                    return last = {
+                        line: next.line, ch: next.ch
+                    };
+                } else {
+                    last = {
+                        line: next.line, ch: next.ch
+                    };
+                }
+                if (next.ch > 0) {
+                    next.ch -= 1;
+                } else {
+                    if (next.line > 0) {
+                        next.line -= 1;
+                        next.ch = this.editor.getLine(
+                            next.line
+                        ).length;
+                    } else {
+                        return last;
+                    }
+                }
+            }
+        };
+        let rhs = (cursor, token) => {
+            let last = {line: cursor.line, ch: cursor.ch},
+                next = {line: cursor.line, ch: cursor.ch};
+            while (true) {
+                let next_token = this.editor.getTokenAt(next);
+                if (next_token.type && !next_token.type.match(token.type) ||
+                    !next_token.type && next_token.type !== token.type)
+                {
+                    return last;
+                } else {
+                    last = {
+                        line: next.line, ch: next.ch
+                    };
+                }
+                if (next.ch < this.editor.getLine(next.line).length) {
+                    next.ch += 1;
+                } else {
+                    if (next.line < this.editor.lineCount()) {
+                        next.line += 1;
+                        next.ch = this.editor.getLine(
+                            next.line
+                        ).length;
+                    } else {
+                        return last;
+                    }
+                }
+            }
+        };
+
+        if (mode && mode.name === 'markdown') {
+            let selection = this.editor.getSelection();
+            if (selection) {
+                if (token.type && token.type.match(/strong/) ||
+                    token.type && token.type.match(/em/))
+                {
+                    if (token.type.match(/strong/)) {
+                        let lhs_cursor = lhs(cursor, token),
+                            rhs_cursor = rhs(cursor, token);
+                        let range = this.editor.getRange(lhs_cursor, rhs_cursor),
+                            text = range.slice(2, range.length - 2);
+                        this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
+                        this.editor.setSelection(lhs_cursor, {
+                            line: rhs_cursor.line, ch: rhs_cursor.ch - 4
+                        });
+                    } else {
+                        let lhs_cursor = lhs(cursor, token),
+                            rhs_cursor = rhs(cursor, token);
+                        let range = this.editor.getRange(lhs_cursor, rhs_cursor),
+                            text = '*' + range + '*';
+                        this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
+                        this.editor.setSelection(lhs_cursor, {
+                            line: rhs_cursor.line, ch: rhs_cursor.ch + 2
+                        });
+                    }
+                } else {
+                    this.editor.replaceSelection('**' + selection + '**', 'around');
+                }
+            } else {
+                if (token.type && token.type.match(/strong/) ||
+                    token.type && token.type.match(/em/))
+                {
+                    if (token.type.match(/em/)) {
+                        let lhs_cursor = lhs(cursor, token),
+                            rhs_cursor = rhs(cursor, token);
+                        let range = this.editor.getRange(lhs_cursor, rhs_cursor),
+                            text = '*' + range + '*';
+                        this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
+                        this.editor.setSelection(lhs_cursor, {
+                            line: rhs_cursor.line, ch: rhs_cursor.ch + 2
+                        });
+                    } else {
+                        let lhs_cursor = lhs(cursor, token),
+                            rhs_cursor = rhs(cursor, token);
+                        let range = this.editor.getRange(lhs_cursor, rhs_cursor),
+                            text = range.slice(2, range.length - 2);
+                        this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
+                        this.editor.setSelection(lhs_cursor, {
+                            line: rhs_cursor.line, ch: rhs_cursor.ch - 4
+                        });
+                    }
+                } else {
+                    this.editor.replaceRange('****', cursor);
+                    this.editor.setCursor({
+                        line: cursor.line, ch: cursor.ch + 2
+                    });
+                }
+            }
+        }
+
         this.editor.focus();
     }
 
