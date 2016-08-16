@@ -179,65 +179,6 @@ export class MdEditorToolbar {
     }
 
     private onBoldClick() {
-        let lhs_cursor = (cursor, token) => {
-            let last = {line: cursor.line, ch: cursor.ch},
-                next = {line: cursor.line, ch: cursor.ch};
-            while (true) {
-                let next_token = this.editor.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type)
-                {
-                    return last = {
-                        line: next.line, ch: next.ch
-                    };
-                } else {
-                    last = {
-                        line: next.line, ch: next.ch
-                    };
-                }
-                if (next.ch > 0) {
-                    next.ch -= 1;
-                } else {
-                    if (next.line > 0) {
-                        next.line -= 1;
-                        next.ch = this.editor.getLine(
-                            next.line
-                        ).length;
-                    } else {
-                        return last;
-                    }
-                }
-            }
-        };
-        let rhs_cursor = (cursor, token) => {
-            let last = {line: cursor.line, ch: cursor.ch},
-                next = {line: cursor.line, ch: cursor.ch};
-            while (true) {
-                let next_token = this.editor.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type)
-                {
-                    return last;
-                } else {
-                    last = {
-                        line: next.line, ch: next.ch
-                    };
-                }
-                if (next.ch < this.editor.getLine(next.line).length) {
-                    next.ch += 1;
-                } else {
-                    if (next.line < this.editor.lineCount()) {
-                        next.line += 1;
-                        next.ch = this.editor.getLine(
-                            next.line
-                        ).length;
-                    } else {
-                        return last;
-                    }
-                }
-            }
-        };
-
         let selections = this.editor.listSelections();
         if (selections.length > 0 && this.editor.getSelection()) {
             this.editor.setSelections(selections.map((sel) => {
@@ -251,8 +192,8 @@ export class MdEditorToolbar {
                         tok.type && tok.type.match(/em/))
                     {
                         return {
-                            anchor: lhs_cursor(sel.anchor, tok),
-                            head: rhs_cursor(sel.head, tok)
+                            anchor: this.lhs(sel.anchor, tok),
+                            head: this.rhs(sel.head, tok)
                         };
                     } else {
                         return sel;
@@ -279,8 +220,8 @@ export class MdEditorToolbar {
                     let tok = this.editor.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)) {
-                        let lhs = lhs_cursor(sel_lhs, tok),
-                            rhs = rhs_cursor(sel_rhs, tok);
+                        let lhs = this.lhs(sel_lhs, tok),
+                            rhs = this.rhs(sel_rhs, tok);
                         if (tok.type.match(/em/)) {
                             return `*${this.editor.getRange(lhs, rhs)}*`;
                         } else {
@@ -301,8 +242,8 @@ export class MdEditorToolbar {
                 if (tok.type && tok.type.match(/strong/) ||
                     tok.type && tok.type.match(/em/))
                 {
-                    let lhs = lhs_cursor(cur, tok),
-                        rhs = rhs_cursor(cur, tok);
+                    let lhs = this.lhs(cur, tok),
+                        rhs = this.rhs(cur, tok);
                     if (tok.type.match(/em/)) {
                         let src = this.editor.getRange(lhs, rhs),
                             tgt = `*${src}*`;
@@ -312,7 +253,7 @@ export class MdEditorToolbar {
                         });
                     } else {
                         let src = this.editor.getRange(lhs, rhs),
-                            tgt = src.slice(2, src.length - 2);
+                            tgt = src.slice(2, -2);
                         this.editor.replaceRange(tgt, lhs, rhs);
                         this.editor.setSelection(lhs, {
                             line: rhs.line, ch: rhs.ch - 4
@@ -331,11 +272,149 @@ export class MdEditorToolbar {
     }
 
     private onItalicClick() {
+        let selections = this.editor.listSelections();
+        if (selections.length > 0 && this.editor.getSelection()) {
+            this.editor.setSelections(selections.map((sel) => {
+                let lhs_mod = this.editor.getModeAt(sel.head),
+                    rhs_mod = this.editor.getModeAt(sel.anchor);
+                if (lhs_mod && lhs_mod.name === 'markdown' &&
+                    rhs_mod && rhs_mod.name === 'markdown')
+                {
+                    let tok = this.editor.getTokenAt(sel.head);
+                    if (tok.type && tok.type.match(/strong/) ||
+                        tok.type && tok.type.match(/em/))
+                    {
+                        return {
+                            anchor: this.lhs(sel.anchor, tok),
+                            head: this.rhs(sel.head, tok)
+                        };
+                    } else {
+                        return sel;
+                    }
+                } else {
+                    return sel;
+                }
+            }));
+            this.editor.replaceSelections(selections.map((sel) => {
+                let sel_lhs = sel.anchor,
+                    sel_rhs = sel.head;
+                if (sel_lhs.line > sel_rhs.line ||
+                    sel_lhs.line === sel_rhs.line &&
+                    sel_lhs.ch > sel_rhs.ch)
+                {
+                    sel_lhs = sel.head;
+                    sel_rhs = sel.anchor;
+                }
+                let mod_lhs = this.editor.getModeAt(sel_lhs),
+                    mod_rhs = this.editor.getModeAt(sel_rhs);
+                if (mod_lhs && mod_lhs.name === 'markdown' &&
+                    mod_rhs && mod_rhs.name === 'markdown')
+                {
+                    let tok = this.editor.getTokenAt(sel_rhs);
+                    if (tok.type && tok.type.match(/strong/) ||
+                        tok.type && tok.type.match(/em/)) {
+                        let lhs = this.lhs(sel_lhs, tok),
+                            rhs = this.rhs(sel_rhs, tok);
+                        return this.editor.getRange(lhs, rhs).slice(1, -1);
+                    } else {
+                        return `*${this.editor.getRange(sel_lhs, sel_rhs)}*`;
+                    }
+                } else {
+                    return this.editor.getRange(sel_lhs, sel_rhs);
+                }
+            }), 'around');
+        } else {
+            let cur = this.editor.getCursor(),
+                mod = this.editor.getModeAt(cur);
+            if (mod && mod.name === 'markdown') {
+                let tok = this.editor.getTokenAt(cur);
+                if (tok.type && tok.type.match(/strong/) ||
+                    tok.type && tok.type.match(/em/))
+                {
+                    let lhs = this.lhs(cur, tok),
+                        rhs = this.rhs(cur, tok);
+                    let src = this.editor.getRange(lhs, rhs),
+                        tgt = src.slice(1, -1);
+                    this.editor.replaceRange(tgt, lhs, rhs);
+                    this.editor.setSelection(lhs, {
+                        line: rhs.line, ch: rhs.ch - 2
+                    });
+                } else {
+                    this.editor.replaceRange('* *', cur);
+                    this.editor.setSelection({
+                        line: cur.line, ch: cur.ch + 1
+                    }, {
+                        line: cur.line, ch: cur.ch + 2
+                    });
+                }
+            }
+        }
+
         this.editor.focus();
     }
 
     private onFontClick() {
         this.editor.focus();
+    }
+
+    private lhs(cursor, token): {ch: number, line: number} {
+        let last = {line: cursor.line, ch: cursor.ch},
+            next = {line: cursor.line, ch: cursor.ch};
+        while (true) {
+            let next_token = this.editor.getTokenAt(next);
+            if (next_token.type && !next_token.type.match(token.type) ||
+                !next_token.type && next_token.type !== token.type)
+            {
+                return last = {
+                    ch: next.ch, line: next.line
+                };
+            } else {
+                last = {
+                    ch: next.ch, line: next.line
+                };
+            }
+            if (next.ch > 0) {
+                next.ch -= 1;
+            } else {
+                if (next.line > 0) {
+                    next.line -= 1;
+                    next.ch = this.editor.getLine(
+                        next.line
+                    ).length;
+                } else {
+                    return last;
+                }
+            }
+        }
+    }
+
+    private rhs(cursor, token): {ch: number, line: number} {
+        let last = {line: cursor.line, ch: cursor.ch},
+            next = {line: cursor.line, ch: cursor.ch};
+        while (true) {
+            let next_token = this.editor.getTokenAt(next);
+            if (next_token.type && !next_token.type.match(token.type) ||
+                !next_token.type && next_token.type !== token.type)
+            {
+                return last;
+            } else {
+                last = {
+                    ch: next.ch, line: next.line
+                };
+            }
+            if (next.ch < this.editor.getLine(next.line).length) {
+                next.ch += 1;
+            } else {
+                if (next.line < this.editor.lineCount()) {
+                    next.line += 1;
+                    next.ch = this.editor.getLine(
+                        next.line
+                    ).length;
+                } else {
+                    return last;
+                }
+            }
+        }
     }
 
     private get $undo() {
