@@ -31,7 +31,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             this.$italic
                 .on('click', this.onItalicClick.bind(this));
             this.$font
-                .on('click', this.onFontClick.bind(this));
+                .on('click', this.onCommentClick.bind(this));
             this.refresh();
         }
         Object.defineProperty(MdEditorToolbar, "me", {
@@ -322,7 +322,76 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             }
             this.editor.focus();
         };
-        MdEditorToolbar.prototype.onFontClick = function () {
+        MdEditorToolbar.prototype.onCommentClick = function () {
+            var _this = this;
+            var selections = this.editor.listSelections();
+            if (selections.length > 0 && this.editor.getSelection()) {
+                this.editor.setSelections(selections.map(function (sel) {
+                    var lhs_mod = _this.editor.getModeAt(sel.head), rhs_mod = _this.editor.getModeAt(sel.anchor);
+                    if (lhs_mod && lhs_mod.name === 'markdown' &&
+                        rhs_mod && rhs_mod.name === 'markdown') {
+                        var tok = _this.editor.getTokenAt(sel.head);
+                        if (tok.type && tok.type.match(/comment/)) {
+                            return {
+                                anchor: _this.lhs(sel.anchor, tok),
+                                head: _this.rhs(sel.head, tok)
+                            };
+                        }
+                        else {
+                            return sel;
+                        }
+                    }
+                    else {
+                        return sel;
+                    }
+                }));
+                this.editor.replaceSelections(selections.map(function (sel) {
+                    var sel_lhs = sel.anchor, sel_rhs = sel.head;
+                    if (sel_lhs.line > sel_rhs.line ||
+                        sel_lhs.line === sel_rhs.line &&
+                            sel_lhs.ch > sel_rhs.ch) {
+                        sel_lhs = sel.head;
+                        sel_rhs = sel.anchor;
+                    }
+                    var mod_lhs = _this.editor.getModeAt(sel_lhs), mod_rhs = _this.editor.getModeAt(sel_rhs);
+                    if (mod_lhs && mod_lhs.name === 'markdown' &&
+                        mod_rhs && mod_rhs.name === 'markdown') {
+                        var tok = _this.editor.getTokenAt(sel_rhs);
+                        if (tok.type && tok.type.match(/comment/)) {
+                            var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
+                            return _this.editor.getRange(lhs, rhs).slice(1, -1);
+                        }
+                        else {
+                            return "`" + _this.editor.getRange(sel_lhs, sel_rhs) + "`";
+                        }
+                    }
+                    else {
+                        return _this.editor.getRange(sel_lhs, sel_rhs);
+                    }
+                }), 'around');
+            }
+            else {
+                var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
+                if (mod && mod.name === 'markdown') {
+                    var tok = this.editor.getTokenAt(cur);
+                    if (tok.type && tok.type.match(/comment/)) {
+                        var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
+                        var src = this.editor.getRange(lhs, rhs), tgt = src.slice(1, -1);
+                        this.editor.replaceRange(tgt, lhs, rhs);
+                        this.editor.setSelection(lhs, {
+                            line: rhs.line, ch: rhs.ch - 2
+                        });
+                    }
+                    else {
+                        this.editor.replaceRange('` `', cur);
+                        this.editor.setSelection({
+                            line: cur.line, ch: cur.ch + 1
+                        }, {
+                            line: cur.line, ch: cur.ch + 2
+                        });
+                    }
+                }
+            }
             this.editor.focus();
         };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
