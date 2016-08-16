@@ -32,6 +32,10 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                 .on('click', this.onItalicClick.bind(this));
             this.$font
                 .on('click', this.onCommentClick.bind(this));
+            this.$indentLhs
+                .on('click', this.onIndentLhsClick.bind(this));
+            this.$indentRhs
+                .on('click', this.onIndentRhsClick.bind(this));
             this.refresh();
         }
         Object.defineProperty(MdEditorToolbar, "me", {
@@ -79,7 +83,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             this.editor.replaceSelection('');
             this.editor.focus();
         };
-        MdEditorToolbar.prototype.onHeaderClick = function (ev) {
+        MdEditorToolbar.prototype.onHeaderClick = function () {
             var cursor = this.editor.getCursor(), curr_from = { line: cursor.line, ch: 0 }, next_from = { line: cursor.line + 1, ch: 0 };
             var curr_ts = this.editor.getLineTokens(curr_from.line), next_ts = this.editor.getLineTokens(next_from.line);
             var line = this.editor.getLineHandle(curr_from.line), mode = this.editor.getModeAt(curr_from);
@@ -394,6 +398,14 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             }
             this.editor.focus();
         };
+        MdEditorToolbar.prototype.onIndentLhsClick = function () {
+            var cursor = this.editor.getCursor();
+            this.editor.indentLine(cursor.line, 'add');
+        };
+        MdEditorToolbar.prototype.onIndentRhsClick = function () {
+            var cursor = this.editor.getCursor();
+            this.editor.indentLine(cursor.line, 'subtract');
+        };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
             var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
             while (true) {
@@ -516,6 +528,34 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         Object.defineProperty(MdEditorToolbar.prototype, "$font", {
             get: function () {
                 return $('.glyphicon-font').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$supscript", {
+            get: function () {
+                return $('.glyphicon-superscript').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$subscript", {
+            get: function () {
+                return $('.glyphicon-subscript').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$indentLhs", {
+            get: function () {
+                return $('.glyphicon-indent-left').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$indentRhs", {
+            get: function () {
+                return $('.glyphicon-indent-right').closest('button');
             },
             enumerable: true,
             configurable: true

@@ -46,6 +46,11 @@ export class MdEditorToolbar {
         this.$font
             .on('click', this.onCommentClick.bind(this));
 
+        this.$indentLhs
+            .on('click', this.onIndentLhsClick.bind(this));
+        this.$indentRhs
+            .on('click', this.onIndentRhsClick.bind(this));
+
         this.refresh();
     }
 
@@ -90,7 +95,7 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
-    private onHeaderClick(ev: MouseEvent) {
+    private onHeaderClick() {
         let cursor = this.editor.getCursor(),
             curr_from = {line: cursor.line, ch: 0},
             next_from = {line: cursor.line + 1, ch: 0};
@@ -432,6 +437,16 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
+    private onIndentLhsClick() {
+        let cursor = this.editor.getCursor();
+        this.editor.indentLine(cursor.line, 'add');
+    }
+
+    private onIndentRhsClick() {
+        let cursor = this.editor.getCursor();
+        this.editor.indentLine(cursor.line, 'subtract');
+    }
+
     private lhs(cursor, token): {ch: number, line: number} {
         let last = {line: cursor.line, ch: cursor.ch},
             next = {line: cursor.line, ch: cursor.ch};
@@ -530,6 +545,22 @@ export class MdEditorToolbar {
 
     private get $font() {
         return $('.glyphicon-font').closest('button');
+    }
+
+    private get $supscript() {
+        return $('.glyphicon-superscript').closest('button');
+    }
+
+    private get $subscript() {
+        return $('.glyphicon-subscript').closest('button');
+    }
+
+    private get $indentLhs() {
+        return $('.glyphicon-indent-left').closest('button');
+    }
+
+    private get $indentRhs() {
+        return $('.glyphicon-indent-right').closest('button');
     }
 
     private get scroll(): any {
