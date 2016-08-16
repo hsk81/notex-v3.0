@@ -44,7 +44,7 @@ export class MdEditorToolbar {
         this.$italic
             .on('click', this.onItalicClick.bind(this));
         this.$font
-            .on('click', this.onFontClick.bind(this));
+            .on('click', this.onCommentClick.bind(this));
 
         this.refresh();
     }
@@ -353,7 +353,82 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
-    private onFontClick() {
+    private onCommentClick() {
+        let selections = this.editor.listSelections();
+        if (selections.length > 0 && this.editor.getSelection()) {
+            this.editor.setSelections(selections.map((sel) => {
+                let lhs_mod = this.editor.getModeAt(sel.head),
+                    rhs_mod = this.editor.getModeAt(sel.anchor);
+                if (lhs_mod && lhs_mod.name === 'markdown' &&
+                    rhs_mod && rhs_mod.name === 'markdown')
+                {
+                    let tok = this.editor.getTokenAt(sel.head);
+                    if (tok.type && tok.type.match(/comment/))
+                    {
+                        return {
+                            anchor: this.lhs(sel.anchor, tok),
+                            head: this.rhs(sel.head, tok)
+                        };
+                    } else {
+                        return sel;
+                    }
+                } else {
+                    return sel;
+                }
+            }));
+            this.editor.replaceSelections(selections.map((sel) => {
+                let sel_lhs = sel.anchor,
+                    sel_rhs = sel.head;
+                if (sel_lhs.line > sel_rhs.line ||
+                    sel_lhs.line === sel_rhs.line &&
+                    sel_lhs.ch > sel_rhs.ch)
+                {
+                    sel_lhs = sel.head;
+                    sel_rhs = sel.anchor;
+                }
+                let mod_lhs = this.editor.getModeAt(sel_lhs),
+                    mod_rhs = this.editor.getModeAt(sel_rhs);
+                if (mod_lhs && mod_lhs.name === 'markdown' &&
+                    mod_rhs && mod_rhs.name === 'markdown')
+                {
+                    let tok = this.editor.getTokenAt(sel_rhs);
+                    if (tok.type && tok.type.match(/comment/)) {
+                        let lhs = this.lhs(sel_lhs, tok),
+                            rhs = this.rhs(sel_rhs, tok);
+                        return this.editor.getRange(lhs, rhs).slice(1, -1);
+                    } else {
+                        return `\`${this.editor.getRange(sel_lhs, sel_rhs)}\``;
+                    }
+                } else {
+                    return this.editor.getRange(sel_lhs, sel_rhs);
+                }
+            }), 'around');
+        } else {
+            let cur = this.editor.getCursor(),
+                mod = this.editor.getModeAt(cur);
+            if (mod && mod.name === 'markdown') {
+                let tok = this.editor.getTokenAt(cur);
+                if (tok.type && tok.type.match(/comment/))
+                {
+                    let lhs = this.lhs(cur, tok),
+                        rhs = this.rhs(cur, tok);
+                    let src = this.editor.getRange(lhs, rhs),
+                        tgt = src.slice(1, -1);
+                    this.editor.replaceRange(tgt, lhs, rhs);
+                    this.editor.setSelection(lhs, {
+                        line: rhs.line, ch: rhs.ch - 2
+                    });
+                } else {
+                    this.editor.replaceRange('` `', cur);
+                    this.editor.setSelection({
+                        line: cur.line, ch: cur.ch + 1
+                    }, {
+                        line: cur.line, ch: cur.ch + 2
+                    });
+                }
+            }
+        }
+
         this.editor.focus();
     }
 
