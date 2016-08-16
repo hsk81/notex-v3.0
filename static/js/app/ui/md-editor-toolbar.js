@@ -162,8 +162,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         };
         MdEditorToolbar.prototype.onBoldClick = function () {
             var _this = this;
-            var cursor = this.editor.getCursor(), token = this.editor.getTokenAt(cursor), mode = this.editor.getModeAt(cursor);
-            var lhs = function (cursor, token) {
+            var lhs_cursor = function (cursor, token) {
                 var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
                 while (true) {
                     var next_token = _this.editor.getTokenAt(next);
@@ -192,7 +191,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                     }
                 }
             };
-            var rhs = function (cursor, token) {
+            var rhs_cursor = function (cursor, token) {
                 var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
                 while (true) {
                     var next_token = _this.editor.getTokenAt(next);
@@ -219,56 +218,85 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                     }
                 }
             };
-            if (mode && mode.name === 'markdown') {
-                var selection = this.editor.getSelection();
-                if (selection) {
-                    if (token.type && token.type.match(/strong/) ||
-                        token.type && token.type.match(/em/)) {
-                        if (token.type.match(/strong/)) {
-                            var lhs_cursor = lhs(cursor, token), rhs_cursor = rhs(cursor, token);
-                            var range = this.editor.getRange(lhs_cursor, rhs_cursor), text = range.slice(2, range.length - 2);
-                            this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
-                            this.editor.setSelection(lhs_cursor, {
-                                line: rhs_cursor.line, ch: rhs_cursor.ch - 4
+            var selections = this.editor.listSelections();
+            if (selections.length > 0 && this.editor.getSelection()) {
+                this.editor.setSelections(selections.map(function (sel) {
+                    var lhs_mod = _this.editor.getModeAt(sel.head), rhs_mod = _this.editor.getModeAt(sel.anchor);
+                    if (lhs_mod && lhs_mod.name === 'markdown' &&
+                        rhs_mod && rhs_mod.name === 'markdown') {
+                        var tok = _this.editor.getTokenAt(sel.head);
+                        if (tok.type && tok.type.match(/strong/) ||
+                            tok.type && tok.type.match(/em/)) {
+                            return {
+                                anchor: lhs_cursor(sel.anchor, tok),
+                                head: rhs_cursor(sel.head, tok)
+                            };
+                        }
+                        else {
+                            return sel;
+                        }
+                    }
+                    else {
+                        return sel;
+                    }
+                }));
+                this.editor.replaceSelections(selections.map(function (sel) {
+                    var sel_lhs = sel.anchor, sel_rhs = sel.head;
+                    if (sel_lhs.line > sel_rhs.line ||
+                        sel_lhs.line === sel_rhs.line &&
+                            sel_lhs.ch > sel_rhs.ch) {
+                        sel_lhs = sel.head;
+                        sel_rhs = sel.anchor;
+                    }
+                    var mod_lhs = _this.editor.getModeAt(sel_lhs), mod_rhs = _this.editor.getModeAt(sel_rhs);
+                    if (mod_lhs && mod_lhs.name === 'markdown' &&
+                        mod_rhs && mod_rhs.name === 'markdown') {
+                        var tok = _this.editor.getTokenAt(sel_rhs);
+                        if (tok.type && tok.type.match(/strong/) ||
+                            tok.type && tok.type.match(/em/)) {
+                            var lhs = lhs_cursor(sel_lhs, tok), rhs = rhs_cursor(sel_rhs, tok);
+                            if (tok.type.match(/em/)) {
+                                return "*" + _this.editor.getRange(lhs, rhs) + "*";
+                            }
+                            else {
+                                return _this.editor.getRange(lhs, rhs).slice(2, -2);
+                            }
+                        }
+                        else {
+                            return "**" + _this.editor.getRange(sel_lhs, sel_rhs) + "**";
+                        }
+                    }
+                    else {
+                        return _this.editor.getRange(sel_lhs, sel_rhs);
+                    }
+                }), 'around');
+            }
+            else {
+                var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
+                if (mod && mod.name === 'markdown') {
+                    var tok = this.editor.getTokenAt(cur);
+                    if (tok.type && tok.type.match(/strong/) ||
+                        tok.type && tok.type.match(/em/)) {
+                        var lhs = lhs_cursor(cur, tok), rhs = rhs_cursor(cur, tok);
+                        if (tok.type.match(/em/)) {
+                            var src = this.editor.getRange(lhs, rhs), tgt = "*" + src + "*";
+                            this.editor.replaceRange(tgt, lhs, rhs);
+                            this.editor.setSelection(lhs, {
+                                line: rhs.line, ch: rhs.ch + 2
                             });
                         }
                         else {
-                            var lhs_cursor = lhs(cursor, token), rhs_cursor = rhs(cursor, token);
-                            var range = this.editor.getRange(lhs_cursor, rhs_cursor), text = '*' + range + '*';
-                            this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
-                            this.editor.setSelection(lhs_cursor, {
-                                line: rhs_cursor.line, ch: rhs_cursor.ch + 2
+                            var src = this.editor.getRange(lhs, rhs), tgt = src.slice(2, src.length - 2);
+                            this.editor.replaceRange(tgt, lhs, rhs);
+                            this.editor.setSelection(lhs, {
+                                line: rhs.line, ch: rhs.ch - 4
                             });
                         }
                     }
                     else {
-                        this.editor.replaceSelection('**' + selection + '**', 'around');
-                    }
-                }
-                else {
-                    if (token.type && token.type.match(/strong/) ||
-                        token.type && token.type.match(/em/)) {
-                        if (token.type.match(/em/)) {
-                            var lhs_cursor = lhs(cursor, token), rhs_cursor = rhs(cursor, token);
-                            var range = this.editor.getRange(lhs_cursor, rhs_cursor), text = '*' + range + '*';
-                            this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
-                            this.editor.setSelection(lhs_cursor, {
-                                line: rhs_cursor.line, ch: rhs_cursor.ch + 2
-                            });
-                        }
-                        else {
-                            var lhs_cursor = lhs(cursor, token), rhs_cursor = rhs(cursor, token);
-                            var range = this.editor.getRange(lhs_cursor, rhs_cursor), text = range.slice(2, range.length - 2);
-                            this.editor.replaceRange(text, lhs_cursor, rhs_cursor);
-                            this.editor.setSelection(lhs_cursor, {
-                                line: rhs_cursor.line, ch: rhs_cursor.ch - 4
-                            });
-                        }
-                    }
-                    else {
-                        this.editor.replaceRange('****', cursor);
+                        this.editor.replaceRange('****', cur);
                         this.editor.setCursor({
-                            line: cursor.line, ch: cursor.ch + 2
+                            line: cur.line, ch: cur.ch + 2
                         });
                     }
                 }
