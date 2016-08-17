@@ -218,9 +218,11 @@ export class MdEditor {
                 }
             );
             this.editor.setOption('extraKeys', {
-                Tab: (cm) => {
-                    cm.replaceSelection(
-                        Array(cm.getOption('indentUnit') + 1).join(' '));
+                'Tab': (cm) => {
+                    cm.execCommand('indentMore');
+                },
+                'Shift-Tab': (cm) => {
+                    cm.execCommand('indentLess');
                 }
             });
             this.editor
