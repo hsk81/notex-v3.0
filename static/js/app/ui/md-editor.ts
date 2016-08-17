@@ -212,6 +212,7 @@ export class MdEditor {
             this.editor = CodeMirror.fromTextArea(
                 document.getElementById('md-inp'), {
                     mode: MdEditor.defineMode(),
+                    styleActiveLine: true,
                     lineWrapping: true,
                     lineNumbers: true,
                     undoDepth: 4096
