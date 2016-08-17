@@ -13,33 +13,35 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
     var MdEditorToolbar = (function () {
         function MdEditorToolbar() {
             var _this = this;
-            this.$undo
-                .on('click', this.onUndoClick.bind(this));
-            this.$redo
-                .on('click', this.onRedoClick.bind(this));
-            this.$cut
-                .on('click', this.onCutClick.bind(this));
-            this.$copy
-                .on('click', this.onCopyClick.bind(this));
-            this.$paste
-                .on('click', this.onPasteClick.bind(this));
-            this.$erase
-                .on('click', this.onEraseClick.bind(this));
-            this.$header
-                .on('click', this.onHeaderClick.bind(this));
-            this.$bold
-                .on('click', this.onBoldClick.bind(this));
-            this.$italic
-                .on('click', this.onItalicClick.bind(this));
-            this.$font
-                .on('click', this.onCommentClick.bind(this));
-            this.$indentLhs
-                .on('click', this.onIndentLhsClick.bind(this));
-            this.$indentRhs
-                .on('click', this.onIndentRhsClick.bind(this));
-            $('#md-wrap').show(function () {
-                _this.refresh();
-            });
+            if (this.editor) {
+                this.$undo
+                    .on('click', this.onUndoClick.bind(this));
+                this.$redo
+                    .on('click', this.onRedoClick.bind(this));
+                this.$cut
+                    .on('click', this.onCutClick.bind(this));
+                this.$copy
+                    .on('click', this.onCopyClick.bind(this));
+                this.$paste
+                    .on('click', this.onPasteClick.bind(this));
+                this.$erase
+                    .on('click', this.onEraseClick.bind(this));
+                this.$header
+                    .on('click', this.onHeaderClick.bind(this));
+                this.$bold
+                    .on('click', this.onBoldClick.bind(this));
+                this.$italic
+                    .on('click', this.onItalicClick.bind(this));
+                this.$font
+                    .on('click', this.onCommentClick.bind(this));
+                this.$indentLhs
+                    .on('click', this.onIndentLhsClick.bind(this));
+                this.$indentRhs
+                    .on('click', this.onIndentRhsClick.bind(this));
+                $('#md-wrap').fadeIn('slow', function () {
+                    _this.refresh();
+                });
+            }
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
@@ -52,8 +54,10 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             configurable: true
         });
         MdEditorToolbar.prototype.refresh = function () {
+            if (this.editor) {
+                this.editor.refresh();
+            }
             this.scroll.refresh();
-            this.editor.refresh();
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
             this.editor.execCommand('undo');
