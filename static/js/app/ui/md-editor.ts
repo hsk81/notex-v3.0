@@ -19,15 +19,8 @@ import MarkdownIt from '../markdown-it/markdown-it';
 @trace
 @named('MdEditor')
 export class MdEditor {
-    public static get me(): MdEditor {
-        if (this['_me'] === undefined) {
-            this['_me'] = new MdEditor();
-        }
-        return this['_me'];
-    }
-
-    public constructor() {
-        CodeMirror.defineMode('notex-md', function(config) {
+    private static defineMode(mode:string = 'notex-md') {
+        CodeMirror.defineMode(mode, function(config) {
             return CodeMirror.multiplexingMode(
                 CodeMirror.getMode(config, 'gfm'), {
                     mode: CodeMirror.getMode(config, 'text/x-stex'),
@@ -200,16 +193,33 @@ export class MdEditor {
                 }
             );
         });
-        this.editor = CodeMirror.fromTextArea(
-            document.getElementById('md-inp'), {
-                lineNumbers: true,
-                lineWrapping: true,
-                mode: 'notex-md',
-                undoDepth: 1024
-            }
-        );
-        this.editor
-            .on('change', this.onEditorChange.bind(this));
+        return mode;
+    }
+
+    public static get me(): MdEditor {
+        if (this['_me'] === undefined) {
+            this['_me'] = new MdEditor();
+        }
+        return this['_me'];
+    }
+
+    public constructor() {
+        if (this.mobile) {
+            this.$input.show();
+            this.$input
+                .on('keyup change paste', this.onEditorChange.bind(this));
+        } else {
+            this.editor = CodeMirror.fromTextArea(
+                document.getElementById('md-inp'), {
+                    mode: MdEditor.defineMode(),
+                    lineWrapping: true,
+                    lineNumbers: true,
+                    undoDepth: 4096
+                }
+            );
+            this.editor
+                .on('change', this.onEditorChange.bind(this));
+        }
     }
 
     @buffered(600)
@@ -267,19 +277,36 @@ export class MdEditor {
     }
 
     public focus() {
-        this.editor.focus();
+        if (this.editor) {
+            this.editor.focus();
+        } else {
+            this.$input.focus();
+        }
     }
 
     public getValue() {
-        return this.editor.getValue();
+        if (this.editor) {
+            return this.editor.getValue();
+        } else {
+            return this.$input.val();
+        }
     }
 
     public setValue(value: string) {
-        return this.editor.setValue(value);
+        if (this.editor) {
+            return this.editor.setValue(value);
+        } else {
+            this.$input.val(value);
+            this.render();
+        }
     }
 
     private onEditorChange() {
         this.render();
+    }
+
+    private get $input() {
+        return $('#md-inp');
     }
 
     private get editor(): any {
@@ -288,6 +315,10 @@ export class MdEditor {
 
     private set editor(value: any) {
         window['CODE_MIRROR'] = value;
+    }
+
+    private get mobile():boolean {
+        return $('.lhs').is(':hidden');
     }
 
     private _timeoutId: number;

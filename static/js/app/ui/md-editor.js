@@ -12,7 +12,25 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
         function MdEditor() {
-            CodeMirror.defineMode('notex-md', function (config) {
+            if (this.mobile) {
+                this.$input.show();
+                this.$input
+                    .on('keyup change paste', this.onEditorChange.bind(this));
+            }
+            else {
+                this.editor = CodeMirror.fromTextArea(document.getElementById('md-inp'), {
+                    mode: MdEditor.defineMode(),
+                    lineWrapping: true,
+                    lineNumbers: true,
+                    undoDepth: 4096
+                });
+                this.editor
+                    .on('change', this.onEditorChange.bind(this));
+            }
+        }
+        MdEditor.defineMode = function (mode) {
+            if (mode === void 0) { mode = 'notex-md'; }
+            CodeMirror.defineMode(mode, function (config) {
                 return CodeMirror.multiplexingMode(CodeMirror.getMode(config, 'gfm'), {
                     mode: CodeMirror.getMode(config, 'text/x-stex'),
                     open: '{{', close: '}}'
@@ -183,15 +201,8 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                     open: '```', close: '```'
                 });
             });
-            this.editor = CodeMirror.fromTextArea(document.getElementById('md-inp'), {
-                lineNumbers: true,
-                lineWrapping: true,
-                mode: 'notex-md',
-                undoDepth: 1024
-            });
-            this.editor
-                .on('change', this.onEditorChange.bind(this));
-        }
+            return mode;
+        };
         Object.defineProperty(MdEditor, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
@@ -247,23 +258,53 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             }
         };
         MdEditor.prototype.focus = function () {
-            this.editor.focus();
+            if (this.editor) {
+                this.editor.focus();
+            }
+            else {
+                this.$input.focus();
+            }
         };
         MdEditor.prototype.getValue = function () {
-            return this.editor.getValue();
+            if (this.editor) {
+                return this.editor.getValue();
+            }
+            else {
+                return this.$input.val();
+            }
         };
         MdEditor.prototype.setValue = function (value) {
-            return this.editor.setValue(value);
+            if (this.editor) {
+                return this.editor.setValue(value);
+            }
+            else {
+                this.$input.val(value);
+                this.render();
+            }
         };
         MdEditor.prototype.onEditorChange = function () {
             this.render();
         };
+        Object.defineProperty(MdEditor.prototype, "$input", {
+            get: function () {
+                return $('#md-inp');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditor.prototype, "editor", {
             get: function () {
                 return window['CODE_MIRROR'];
             },
             set: function (value) {
                 window['CODE_MIRROR'] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "mobile", {
+            get: function () {
+                return $('.lhs').is(':hidden');
             },
             enumerable: true,
             configurable: true

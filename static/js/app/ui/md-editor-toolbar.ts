@@ -23,42 +23,46 @@ export class MdEditorToolbar {
     }
 
     public constructor() {
-        this.$undo
-            .on('click', this.onUndoClick.bind(this));
-        this.$redo
-            .on('click', this.onRedoClick.bind(this));
+        if (this.editor) {
+            this.$undo
+                .on('click', this.onUndoClick.bind(this));
+            this.$redo
+                .on('click', this.onRedoClick.bind(this));
 
-        this.$cut
-            .on('click', this.onCutClick.bind(this));
-        this.$copy
-            .on('click', this.onCopyClick.bind(this));
-        this.$paste
-            .on('click', this.onPasteClick.bind(this));
-        this.$erase
-            .on('click', this.onEraseClick.bind(this));
+            this.$cut
+                .on('click', this.onCutClick.bind(this));
+            this.$copy
+                .on('click', this.onCopyClick.bind(this));
+            this.$paste
+                .on('click', this.onPasteClick.bind(this));
+            this.$erase
+                .on('click', this.onEraseClick.bind(this));
 
-        this.$header
-            .on('click', this.onHeaderClick.bind(this));
-        this.$bold
-            .on('click', this.onBoldClick.bind(this));
-        this.$italic
-            .on('click', this.onItalicClick.bind(this));
-        this.$font
-            .on('click', this.onCommentClick.bind(this));
+            this.$header
+                .on('click', this.onHeaderClick.bind(this));
+            this.$bold
+                .on('click', this.onBoldClick.bind(this));
+            this.$italic
+                .on('click', this.onItalicClick.bind(this));
+            this.$font
+                .on('click', this.onCommentClick.bind(this));
 
-        this.$indentLhs
-            .on('click', this.onIndentLhsClick.bind(this));
-        this.$indentRhs
-            .on('click', this.onIndentRhsClick.bind(this));
+            this.$indentLhs
+                .on('click', this.onIndentLhsClick.bind(this));
+            this.$indentRhs
+                .on('click', this.onIndentRhsClick.bind(this));
 
-        $('#md-wrap').show(() => {
-            this.refresh();
-        });
+            $('#md-wrap').fadeIn('slow', () => {
+                this.refresh();
+            });
+        }
     }
 
     public refresh() {
+        if (this.editor) {
+            this.editor.refresh();
+        }
         this.scroll.refresh();
-        this.editor.refresh();
     }
 
     private onUndoClick() {
