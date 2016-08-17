@@ -58,8 +58,8 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         MdEditorToolbar.prototype.refresh = function () {
             if (this.editor) {
                 this.editor.refresh();
+                this.scroll.refresh();
             }
-            this.scroll.refresh();
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
             this.editor.execCommand('undo');
@@ -551,20 +551,6 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         Object.defineProperty(MdEditorToolbar.prototype, "$font", {
             get: function () {
                 return $('.glyphicon-font').closest('button');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditorToolbar.prototype, "$supscript", {
-            get: function () {
-                return $('.glyphicon-superscript').closest('button');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditorToolbar.prototype, "$subscript", {
-            get: function () {
-                return $('.glyphicon-subscript').closest('button');
             },
             enumerable: true,
             configurable: true

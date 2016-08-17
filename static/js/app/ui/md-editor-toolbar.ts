@@ -63,8 +63,8 @@ export class MdEditorToolbar {
     public refresh() {
         if (this.editor) {
             this.editor.refresh();
+            this.scroll.refresh();
         }
-        this.scroll.refresh();
     }
 
     private onUndoClick() {
@@ -561,14 +561,6 @@ export class MdEditorToolbar {
 
     private get $font() {
         return $('.glyphicon-font').closest('button');
-    }
-
-    private get $supscript() {
-        return $('.glyphicon-superscript').closest('button');
-    }
-
-    private get $subscript() {
-        return $('.glyphicon-subscript').closest('button');
     }
 
     private get $indentLhs() {
