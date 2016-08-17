@@ -66,6 +66,9 @@ html, body {
         }
       }
       div.CodeMirror {
+        pre.CodeMirror-placeholder {
+          color: #999999;
+        }
         box-shadow: inset 0 0 8px #e7e7e7;
         height: 100%;
         width: calc(100% - 48px);

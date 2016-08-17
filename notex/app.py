@@ -129,6 +129,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/codemirror/lib/codemirror.js')
     concat(out_path,
+           'static/js/lib/codemirror/addon/display/placeholder.js')
+    concat(out_path,
            'static/js/lib/codemirror/addon/mode/multiplex.js')
     concat(out_path,
            'static/js/lib/codemirror/addon/mode/overlay.js')
