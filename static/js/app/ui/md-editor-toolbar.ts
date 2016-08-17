@@ -47,10 +47,15 @@ export class MdEditorToolbar {
             this.$font
                 .on('click', this.onCommentClick.bind(this));
 
-            this.$indentLhs
-                .on('click', this.onIndentLhsClick.bind(this));
-            this.$indentRhs
-                .on('click', this.onIndentRhsClick.bind(this));
+            this.$indent
+                .on('click', this.onIndentClick.bind(this));
+            this.$outdent
+                .on('click', this.onOutdentClick.bind(this));
+
+            this.$supscript
+                .on('click', this.onSupscriptClick.bind(this));
+            this.$subscript
+                .on('click', this.onSubscriptClick.bind(this));
 
             this.$mdToolbarWrap.fadeIn('slow', () => {
                 this.$mdToolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -445,14 +450,44 @@ export class MdEditorToolbar {
         this.editor.focus();
     }
 
-    private onIndentLhsClick() {
+    private onIndentClick() {
         let cursor = this.editor.getCursor();
         this.editor.indentLine(cursor.line, 'add');
     }
 
-    private onIndentRhsClick() {
+    private onOutdentClick() {
         let cursor = this.editor.getCursor();
         this.editor.indentLine(cursor.line, 'subtract');
+    }
+
+    private onSupscriptClick() {
+        let cur = this.editor.getCursor(),
+            mod = this.editor.getModeAt(cur);
+        if (mod && mod.name === 'markdown') {
+            this.editor.replaceRange('^{ }', cur);
+            this.editor.setSelection({
+                line: cur.line, ch: cur.ch + 2
+            }, {
+                line: cur.line, ch: cur.ch + 3
+            });
+        }
+
+        this.editor.focus();
+    }
+
+    private onSubscriptClick() {
+        let cur = this.editor.getCursor(),
+            mod = this.editor.getModeAt(cur);
+        if (mod && mod.name === 'markdown') {
+            this.editor.replaceRange('~{ }', cur);
+            this.editor.setSelection({
+                line: cur.line, ch: cur.ch + 2
+            }, {
+                line: cur.line, ch: cur.ch + 3
+            });
+        }
+
+        this.editor.focus();
     }
 
     private lhs(cursor, token): {ch: number, line: number} {
@@ -563,12 +598,20 @@ export class MdEditorToolbar {
         return $('.glyphicon-font').closest('button');
     }
 
-    private get $indentLhs() {
+    private get $indent() {
         return $('.glyphicon-indent-left').closest('button');
     }
 
-    private get $indentRhs() {
+    private get $outdent() {
         return $('.glyphicon-indent-right').closest('button');
+    }
+
+    private get $supscript() {
+        return $('.glyphicon-superscript').closest('button');
+    }
+
+    private get $subscript() {
+        return $('.glyphicon-subscript').closest('button');
     }
 
     private get scroll(): any {
