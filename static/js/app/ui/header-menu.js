@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/mine', '../decorator/named', '../decorator/trace', './md-editor-toolbar'], function (require, exports, mine_1, named_1, trace_1, md_editor_toolbar_1) {
+define(["require", "exports", '../decorator/mine', '../decorator/named', '../decorator/trace', './md-editor', './md-editor-toolbar'], function (require, exports, mine_1, named_1, trace_1, md_editor_1, md_editor_toolbar_1) {
     "use strict";
     console.debug('[import:app/ui/header-menu.ts]');
     var HeaderMenu = (function () {
@@ -82,7 +82,7 @@ define(["require", "exports", '../decorator/mine', '../decorator/named', '../dec
         });
         Object.defineProperty(HeaderMenu.prototype, "editor", {
             get: function () {
-                return window['CODE_MIRROR'];
+                return md_editor_1.default.me;
             },
             enumerable: true,
             configurable: true

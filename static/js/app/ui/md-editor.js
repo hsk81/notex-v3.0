@@ -202,12 +202,9 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             enumerable: true,
             configurable: true
         });
-        MdEditor.prototype.onEditorChange = function () {
-            this.render();
-        };
         MdEditor.prototype.render = function () {
             var $md_out = $('#md-out'), $md_tmp;
-            var md_new = this.editor.getValue();
+            var md_new = this.getValue();
             if (md_new !== this._mdOld) {
                 this._mdOld = md_new;
                 if (this._timeoutId !== undefined) {
@@ -248,6 +245,18 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                     $($h[0]).text() : new Date().toISOString()) + '.md';
                 download_manager_1.default.me.content = md_new;
             }
+        };
+        MdEditor.prototype.focus = function () {
+            this.editor.focus();
+        };
+        MdEditor.prototype.getValue = function () {
+            return this.editor.getValue();
+        };
+        MdEditor.prototype.setValue = function (value) {
+            return this.editor.setValue(value);
+        };
+        MdEditor.prototype.onEditorChange = function () {
+            this.render();
         };
         Object.defineProperty(MdEditor.prototype, "editor", {
             get: function () {

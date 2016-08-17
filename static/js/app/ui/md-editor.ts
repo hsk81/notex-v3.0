@@ -212,16 +212,12 @@ export class MdEditor {
             .on('change', this.onEditorChange.bind(this));
     }
 
-    private onEditorChange() {
-        this.render();
-    }
-
     @buffered(600)
     public render() {
         let $md_out = $('#md-out'),
             $md_tmp;
 
-        let md_new = this.editor.getValue();
+        let md_new = this.getValue();
         if (md_new !== this._mdOld) {
             this._mdOld = md_new;
 
@@ -268,6 +264,22 @@ export class MdEditor {
                     $($h[0]).text() : new Date().toISOString()) + '.md';
             DownloadManager.me.content = md_new;
         }
+    }
+
+    public focus() {
+        this.editor.focus();
+    }
+
+    public getValue() {
+        return this.editor.getValue();
+    }
+
+    public setValue(value: string) {
+        return this.editor.setValue(value);
+    }
+
+    private onEditorChange() {
+        this.render();
     }
 
     private get editor(): any {
