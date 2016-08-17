@@ -58,8 +58,8 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         MdEditorToolbar.prototype.refresh = function () {
             if (this.editor) {
                 this.editor.refresh();
-                this.scroll.refresh();
             }
+            this.scroll.refresh();
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
             this.editor.execCommand('undo');

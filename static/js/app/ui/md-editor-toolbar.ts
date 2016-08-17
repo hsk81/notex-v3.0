@@ -63,8 +63,8 @@ export class MdEditorToolbar {
     public refresh() {
         if (this.editor) {
             this.editor.refresh();
-            this.scroll.refresh();
         }
+        this.scroll.refresh();
     }
 
     private onUndoClick() {
