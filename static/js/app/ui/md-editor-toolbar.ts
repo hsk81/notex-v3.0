@@ -448,14 +448,12 @@ export class MdEditorToolbar {
     }
 
     private onIndentClick() {
-        let cursor = this.editor.getCursor();
-        this.editor.indentLine(cursor.line, 'add');
+        this.editor.execCommand('indentMore');
         this.editor.focus();
     }
 
     private onOutdentClick() {
-        let cursor = this.editor.getCursor();
-        this.editor.indentLine(cursor.line, 'subtract');
+        this.editor.execCommand('indentLess');
         this.editor.focus();
     }
 

@@ -25,8 +25,11 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                     undoDepth: 4096
                 });
                 this.editor.setOption('extraKeys', {
-                    Tab: function (cm) {
-                        cm.replaceSelection(Array(cm.getOption('indentUnit') + 1).join(' '));
+                    'Tab': function (cm) {
+                        cm.execCommand('indentMore');
+                    },
+                    'Shift-Tab': function (cm) {
+                        cm.execCommand('indentLess');
                     }
                 });
                 this.editor
