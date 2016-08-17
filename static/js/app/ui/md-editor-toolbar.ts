@@ -52,7 +52,9 @@ export class MdEditorToolbar {
             this.$indentRhs
                 .on('click', this.onIndentRhsClick.bind(this));
 
-            $('#md-wrap').fadeIn('slow', () => {
+            this.$mdToolbarWrap.fadeIn('slow', () => {
+                this.$mdToolbar.find('[data-toggle="tooltip"]').tooltip();
+                this.$mdToolbar.find('[data-toggle="popover"]').popover();
                 this.refresh();
             });
         }
@@ -513,6 +515,14 @@ export class MdEditorToolbar {
         }
     }
 
+    private get $mdToolbarWrap() {
+        return $('#md-toolbar-wrap');
+    }
+
+    private get $mdToolbar() {
+        return $('#md-toolbar');
+    }
+
     private get $undo() {
         return $('.glyphicon.undo').closest('button');
     }
@@ -571,7 +581,7 @@ export class MdEditorToolbar {
 
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll('#md-wrap', {
+            this._scroll = new IScroll('#md-toolbar-wrap', {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true

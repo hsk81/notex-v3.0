@@ -38,7 +38,9 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                     .on('click', this.onIndentLhsClick.bind(this));
                 this.$indentRhs
                     .on('click', this.onIndentRhsClick.bind(this));
-                $('#md-wrap').fadeIn('slow', function () {
+                this.$mdToolbarWrap.fadeIn('slow', function () {
+                    _this.$mdToolbar.find('[data-toggle="tooltip"]').tooltip();
+                    _this.$mdToolbar.find('[data-toggle="popover"]').popover();
                     _this.refresh();
                 });
             }
@@ -469,6 +471,20 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                 }
             }
         };
+        Object.defineProperty(MdEditorToolbar.prototype, "$mdToolbarWrap", {
+            get: function () {
+                return $('#md-toolbar-wrap');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$mdToolbar", {
+            get: function () {
+                return $('#md-toolbar');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditorToolbar.prototype, "$undo", {
             get: function () {
                 return $('.glyphicon.undo').closest('button');
@@ -570,7 +586,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         Object.defineProperty(MdEditorToolbar.prototype, "scroll", {
             get: function () {
                 if (this._scroll === undefined) {
-                    this._scroll = new IScroll('#md-wrap', {
+                    this._scroll = new IScroll('#md-toolbar-wrap', {
                         interactiveScrollbars: true,
                         mouseWheel: true,
                         scrollbars: true

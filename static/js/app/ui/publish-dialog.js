@@ -105,8 +105,8 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             $post_styles_chk.prop('checked', this.stylesFlag);
             if (this.styles)
                 $post_styles_ta.val(this.styles);
-            $(this).find('[data-toggle="tooltip"]').tooltip();
-            $(this).find('[data-toggle="popover"]').popover();
+            this.$dialog.find('[data-toggle="tooltip"]').tooltip();
+            this.$dialog.find('[data-toggle="popover"]').popover();
             this.$primary.attr('disabled', false);
             this.$primary.removeClass('btn-success');
             this.$primary.removeClass('btn-warning');
@@ -135,7 +135,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             }, 1);
         };
         PublishDialog.prototype.onExpandClick = function () {
-            var $glyphicon = this.$expand.find('.glyphicon'), $settings = this.$post_settings;
+            var $glyphicon = this.$expand.find('.glyphicon'), $textarea = this.$post_scripts_textarea, $settings = this.$post_settings, $title = this.$post_title;
             if (this.$expand.data('state') === 'expanded') {
                 this.$expand.data('state', 'collapsed');
             }
@@ -154,11 +154,15 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
                 }
                 $glyphicon.removeClass('glyphicon-chevron-down');
                 $glyphicon.addClass('glyphicon-chevron-up');
+                $textarea[0].setSelectionRange(0, 0);
+                $textarea.scrollTop(0);
+                $textarea.focus();
             }
             else {
                 $glyphicon.removeClass('glyphicon-chevron-up');
                 $glyphicon.addClass('glyphicon-chevron-down');
                 $settings.hide();
+                $title.focus();
             }
         };
         PublishDialog.prototype.onScriptsNavClick = function () {
@@ -166,6 +170,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             this.$post_styles.hide();
             this.$post_scripts_nav.addClass('active');
             this.$post_scripts.show();
+            this.$post_scripts_textarea.focus();
         };
         PublishDialog.prototype.onScriptsCheckboxClick = function (ev) {
             this.scriptsFlag = $(ev.target).prop('checked');
@@ -175,6 +180,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
             this.$post_scripts.hide();
             this.$post_styles_nav.addClass('active');
             this.$post_styles.show();
+            this.$post_styles_textarea.focus();
         };
         PublishDialog.prototype.onStylesCheckboxClick = function (ev) {
             this.stylesFlag = $(ev.target).prop('checked');

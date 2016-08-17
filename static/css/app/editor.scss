@@ -44,16 +44,16 @@ html, body {
     .lhs {
       height: 100%;
       padding: 0;
-      div#md-wrap {
+      div#md-toolbar-wrap {
         display: none;
       }
-      div#md-wrap {
+      div#md-toolbar-wrap {
         float: left;
         height: 100%;
         max-width: 48px;
         overflow-y: hidden;
         position: relative;
-        div#md-menu {
+        div#md-toolbar {
           padding: 4px 4px 0;
           .btn-group-vertical {
             margin-bottom: 4px;
