@@ -217,6 +217,12 @@ export class MdEditor {
                     undoDepth: 4096
                 }
             );
+            this.editor.setOption('extraKeys', {
+                Tab: (cm) => {
+                    cm.replaceSelection(
+                        Array(cm.getOption('indentUnit') + 1).join(' '));
+                }
+            });
             this.editor
                 .on('change', this.onEditorChange.bind(this));
         }

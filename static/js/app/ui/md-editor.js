@@ -24,6 +24,11 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                     lineNumbers: true,
                     undoDepth: 4096
                 });
+                this.editor.setOption('extraKeys', {
+                    Tab: function (cm) {
+                        cm.replaceSelection(Array(cm.getOption('indentUnit') + 1).join(' '));
+                    }
+                });
                 this.editor
                     .on('change', this.onEditorChange.bind(this));
             }
