@@ -285,7 +285,6 @@ export class MdEditorToolbar {
                 }
             }
         }
-
         this.editor.focus();
     }
 
@@ -367,7 +366,6 @@ export class MdEditorToolbar {
                 }
             }
         }
-
         this.editor.focus();
     }
 
@@ -446,18 +444,19 @@ export class MdEditorToolbar {
                 }
             }
         }
-
         this.editor.focus();
     }
 
     private onIndentClick() {
         let cursor = this.editor.getCursor();
         this.editor.indentLine(cursor.line, 'add');
+        this.editor.focus();
     }
 
     private onOutdentClick() {
         let cursor = this.editor.getCursor();
         this.editor.indentLine(cursor.line, 'subtract');
+        this.editor.focus();
     }
 
     private onSupscriptClick() {
@@ -471,7 +470,6 @@ export class MdEditorToolbar {
                 line: cur.line, ch: cur.ch + 3
             });
         }
-
         this.editor.focus();
     }
 
@@ -486,7 +484,6 @@ export class MdEditorToolbar {
                 line: cur.line, ch: cur.ch + 3
             });
         }
-
         this.editor.focus();
     }
 

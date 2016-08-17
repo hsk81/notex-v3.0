@@ -414,10 +414,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
         MdEditorToolbar.prototype.onIndentClick = function () {
             var cursor = this.editor.getCursor();
             this.editor.indentLine(cursor.line, 'add');
+            this.editor.focus();
         };
         MdEditorToolbar.prototype.onOutdentClick = function () {
             var cursor = this.editor.getCursor();
             this.editor.indentLine(cursor.line, 'subtract');
+            this.editor.focus();
         };
         MdEditorToolbar.prototype.onSupscriptClick = function () {
             var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
