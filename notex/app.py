@@ -121,9 +121,9 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-math-4.0.1.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-sub-1.0.0.min.js')
+           'static/js/lib/markdown-it/markdown-it-sub-2.0.0.min.js')
     concat(out_path,
-           'static/js/lib/markdown-it/markdown-it-sup-1.0.0.min.js')
+           'static/js/lib/markdown-it/markdown-it-sup-2.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.4.0.min.js')
     concat(out_path,
