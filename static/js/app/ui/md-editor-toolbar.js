@@ -34,10 +34,14 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                     .on('click', this.onItalicClick.bind(this));
                 this.$font
                     .on('click', this.onCommentClick.bind(this));
-                this.$indentLhs
-                    .on('click', this.onIndentLhsClick.bind(this));
-                this.$indentRhs
-                    .on('click', this.onIndentRhsClick.bind(this));
+                this.$indent
+                    .on('click', this.onIndentClick.bind(this));
+                this.$outdent
+                    .on('click', this.onOutdentClick.bind(this));
+                this.$supscript
+                    .on('click', this.onSupscriptClick.bind(this));
+                this.$subscript
+                    .on('click', this.onSubscriptClick.bind(this));
                 this.$mdToolbarWrap.fadeIn('slow', function () {
                     _this.$mdToolbar.find('[data-toggle="tooltip"]').tooltip();
                     _this.$mdToolbar.find('[data-toggle="popover"]').popover();
@@ -407,13 +411,37 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             }
             this.editor.focus();
         };
-        MdEditorToolbar.prototype.onIndentLhsClick = function () {
+        MdEditorToolbar.prototype.onIndentClick = function () {
             var cursor = this.editor.getCursor();
             this.editor.indentLine(cursor.line, 'add');
         };
-        MdEditorToolbar.prototype.onIndentRhsClick = function () {
+        MdEditorToolbar.prototype.onOutdentClick = function () {
             var cursor = this.editor.getCursor();
             this.editor.indentLine(cursor.line, 'subtract');
+        };
+        MdEditorToolbar.prototype.onSupscriptClick = function () {
+            var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
+            if (mod && mod.name === 'markdown') {
+                this.editor.replaceRange('^{ }', cur);
+                this.editor.setSelection({
+                    line: cur.line, ch: cur.ch + 2
+                }, {
+                    line: cur.line, ch: cur.ch + 3
+                });
+            }
+            this.editor.focus();
+        };
+        MdEditorToolbar.prototype.onSubscriptClick = function () {
+            var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
+            if (mod && mod.name === 'markdown') {
+                this.editor.replaceRange('~{ }', cur);
+                this.editor.setSelection({
+                    line: cur.line, ch: cur.ch + 2
+                }, {
+                    line: cur.line, ch: cur.ch + 3
+                });
+            }
+            this.editor.focus();
         };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
             var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
@@ -555,16 +583,30 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "$indentLhs", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$indent", {
             get: function () {
                 return $('.glyphicon-indent-left').closest('button');
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "$indentRhs", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$outdent", {
             get: function () {
                 return $('.glyphicon-indent-right').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$supscript", {
+            get: function () {
+                return $('.glyphicon-superscript').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$subscript", {
+            get: function () {
+                return $('.glyphicon-subscript').closest('button');
             },
             enumerable: true,
             configurable: true
