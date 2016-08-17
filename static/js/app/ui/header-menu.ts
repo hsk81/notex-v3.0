@@ -10,6 +10,7 @@ import {mine} from '../decorator/mine';
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
+import MdEditor from './md-editor';
 import MdEditorToolbar from './md-editor-toolbar';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,8 +79,8 @@ export class HeaderMenu {
         return MdEditorToolbar.me;
     }
 
-    private get editor(): any {
-        return window['CODE_MIRROR'];
+    private get editor(): MdEditor {
+        return MdEditor.me;
     }
 }
 

@@ -9,6 +9,7 @@ console.debug('[import:app/ui/publish-dialog.ts]');
 import cookie from '../cookie/cookie';
 import BloggerApi from '../google-api/blogger-api';
 import MarkdownIt from '../markdown-it/markdown-it';
+import MdEditor from './md-editor';
 
 import {after} from '../function/after';
 import {assert} from '../function/assert';
@@ -22,50 +23,50 @@ import {trace} from '../decorator/trace';
 @trace
 @named('PublishDialog')
 export class PublishDialog {
-    public static get me():PublishDialog {
+    public static get me(): PublishDialog {
         if (this['_me'] === undefined) {
             this['_me'] = new PublishDialog();
         }
         return this['_me'];
     }
 
-    private get blogUrl():string {
+    private get blogUrl(): string {
         return cookie.get<string>('blog-url');
     }
 
-    private set blogUrl(value:string) {
+    private set blogUrl(value: string) {
         cookie.set<string>('blog-url', value);
     }
 
-    private get scripts():string {
+    private get scripts(): string {
         return localStorage.getItem('post-scripts');
     }
 
-    private set scripts(value:string) {
+    private set scripts(value: string) {
         localStorage.setItem('post-scripts', value);
     }
 
-    private get scriptsFlag():boolean {
+    private get scriptsFlag(): boolean {
         return cookie.get<boolean>('post-scripts-flag', true);
     }
 
-    private set scriptsFlag(value:boolean) {
+    private set scriptsFlag(value: boolean) {
         cookie.set<boolean>('post-scripts-flag', value);
     }
 
-    private get styles():string {
+    private get styles(): string {
         return localStorage.getItem('post-styles');
     }
 
-    private set styles(value:string) {
+    private set styles(value: string) {
         localStorage.setItem('post-styles', value);
     }
 
-    private get stylesFlag():boolean {
+    private get stylesFlag(): boolean {
         return cookie.get<boolean>('post-styles-flag', true);
     }
 
-    private set stylesFlag(value:boolean) {
+    private set stylesFlag(value: boolean) {
         cookie.set<boolean>('post-styles-flag', value);
     }
 
@@ -357,7 +358,7 @@ export class PublishDialog {
         update_req.then(on_done, on_fail);
     }
 
-    private content():string {
+    private content(): string {
         return this.toHtml(this.editor.getValue())
             + this.withScripts()
             + this.withStyles();
@@ -391,72 +392,72 @@ export class PublishDialog {
         return $content.html();
     }
 
-    private get $mdOut():any {
+    private get $mdOut(): any {
         return $('#md-out');
     }
 
-    private get $dialog():any {
+    private get $dialog(): any {
         return $('#publish-dlg');
     }
 
-    private get $blog_url():any {
+    private get $blog_url(): any {
         return this.$dialog.find('#blog-url');
     }
 
-    private get $post_title():any {
+    private get $post_title(): any {
         return this.$dialog.find('#post-title');
     }
 
-    private get $post_settings():any {
+    private get $post_settings(): any {
         return this.$dialog.find('.post-settings');
     }
 
-    private get $post_settings_nav():any {
+    private get $post_settings_nav(): any {
         return this.$dialog.find('.post-settings.nav');
     }
 
-    private get $post_scripts():any {
+    private get $post_scripts(): any {
         return this.$dialog.find('.post-settings.scripts');
     }
 
-    private get $post_scripts_nav():any {
+    private get $post_scripts_nav(): any {
         return this.$post_settings_nav.find('.scripts');
     }
 
-    private get $post_scripts_checkbox():any {
+    private get $post_scripts_checkbox(): any {
         return this.$post_scripts.find('[type=checkbox]');
     }
 
-    private get $post_scripts_textarea():any {
+    private get $post_scripts_textarea(): any {
         return this.$post_scripts.find('textarea');
     }
 
-    private get $post_styles():any {
+    private get $post_styles(): any {
         return this.$dialog.find('.post-settings.styles');
     }
 
-    private get $post_styles_nav():any {
+    private get $post_styles_nav(): any {
         return this.$post_settings_nav.find('.styles');
     }
 
-    private get $post_styles_checkbox():any {
+    private get $post_styles_checkbox(): any {
         return this.$post_styles.find('[type=checkbox]');
     }
 
-    private get $post_styles_textarea():any {
+    private get $post_styles_textarea(): any {
         return this.$post_styles.find('textarea');
     }
 
-    private get $expand():any {
+    private get $expand(): any {
         return this.$dialog.find('#expand');
     }
 
-    private get $primary():any {
+    private get $primary(): any {
         return this.$dialog.find('.btn-primary');
     }
 
-    private get editor(): any {
-        return window['CODE_MIRROR'];
+    private get editor(): MdEditor {
+        return MdEditor.me;
     }
 }
 

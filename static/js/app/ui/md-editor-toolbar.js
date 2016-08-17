@@ -12,6 +12,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
         function MdEditorToolbar() {
+            var _this = this;
             this.$undo
                 .on('click', this.onUndoClick.bind(this));
             this.$redo
@@ -36,7 +37,9 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
                 .on('click', this.onIndentLhsClick.bind(this));
             this.$indentRhs
                 .on('click', this.onIndentRhsClick.bind(this));
-            this.refresh();
+            $('#md-wrap').show(function () {
+                _this.refresh();
+            });
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {

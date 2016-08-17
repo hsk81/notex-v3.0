@@ -51,7 +51,9 @@ export class MdEditorToolbar {
         this.$indentRhs
             .on('click', this.onIndentRhsClick.bind(this));
 
-        this.refresh();
+        $('#md-wrap').show(() => {
+            this.refresh();
+        });
     }
 
     public refresh() {

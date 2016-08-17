@@ -45,6 +45,9 @@ html, body {
       height: 100%;
       padding: 0;
       div#md-wrap {
+        display: none;
+      }
+      div#md-wrap {
         float: left;
         height: 100%;
         max-width: 48px;
