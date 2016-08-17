@@ -11,14 +11,14 @@
             Blogger.com</a></h4>
       </div>
       <div class="modal-body">
-        <label for="blog-url">Blog URL</label>
-        <div class="input-group">
+        <label class="post-basics" for="blog-url">Blog URL</label>
+        <div class="post-basics input-group">
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-link"></span>
           </span>
           <input type="text" class="form-control" id="blog-url"
                  placeholder="a blog URL like https://my.blogspot.com">
-          <div class="input-group-btn">
+          <div class="input-group-btn hidden-xs hidden-sm">
               <button class="btn btn-default" type="button" tabindex="-1" title="Blog URL"
                       data-container="body" data-toggle="popover" data-placement="left"
                       data-trigger="focus" data-content="Ensure to provide an existing blog URL with read and write access.">
@@ -26,9 +26,9 @@
               </button>
           </div>
         </div>
-        <br/>
-        <label for="post-title">Post Title</label>
-        <div class="input-group">
+        <br class="post-basics"/>
+        <label class="post-basics" for="post-title">Post Title</label>
+        <div class="post-basics input-group">
           <span class="input-group-addon">
               <input type="checkbox" data-toggle="tooltip" data-placement="top"
                      title="Update the most recent post with the same title, if any such exists."
@@ -36,7 +36,7 @@
           </span>
           <input type="text" class="form-control" id="post-title"
                  placeholder="a new or an existing post title">
-          <div class="input-group-btn">
+          <div class="input-group-btn hidden-xs hidden-sm">
               <button class="btn btn-default" type="button" tabindex="-1" title="Post Title"
                       data-container="body" data-toggle="popover" data-placement="left"
                       data-trigger="focus" data-content="Updates most recent post with same title, unless checkbox is unchecked.">

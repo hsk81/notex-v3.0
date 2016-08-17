@@ -128,8 +128,8 @@ export class PublishDialog {
         $post_styles_chk.prop('checked', this.stylesFlag);
         if (this.styles) $post_styles_ta.val(this.styles);
 
-        $(this).find('[data-toggle="tooltip"]').tooltip();
-        $(this).find('[data-toggle="popover"]').popover();
+        this.$dialog.find('[data-toggle="tooltip"]').tooltip();
+        this.$dialog.find('[data-toggle="popover"]').popover();
 
         this.$primary.attr('disabled', false);
         this.$primary.removeClass('btn-success');
@@ -165,7 +165,9 @@ export class PublishDialog {
 
     private onExpandClick() {
         let $glyphicon = this.$expand.find('.glyphicon'),
-            $settings = this.$post_settings;
+            $textarea = this.$post_scripts_textarea,
+            $settings = this.$post_settings,
+            $title = this.$post_title;
 
         if (this.$expand.data('state') === 'expanded') {
             this.$expand.data('state', 'collapsed');
@@ -183,10 +185,14 @@ export class PublishDialog {
             }
             $glyphicon.removeClass('glyphicon-chevron-down');
             $glyphicon.addClass('glyphicon-chevron-up');
+            $textarea[0].setSelectionRange(0,0);
+            $textarea.scrollTop(0);
+            $textarea.focus();
         } else {
             $glyphicon.removeClass('glyphicon-chevron-up');
             $glyphicon.addClass('glyphicon-chevron-down');
             $settings.hide();
+            $title.focus();
         }
     }
 
@@ -195,6 +201,7 @@ export class PublishDialog {
         this.$post_styles.hide();
         this.$post_scripts_nav.addClass('active');
         this.$post_scripts.show();
+        this.$post_scripts_textarea.focus();
     }
 
     private onScriptsCheckboxClick(ev) {
@@ -206,6 +213,7 @@ export class PublishDialog {
         this.$post_scripts.hide();
         this.$post_styles_nav.addClass('active');
         this.$post_styles.show();
+        this.$post_styles_textarea.focus();
     }
 
     private onStylesCheckboxClick(ev) {
