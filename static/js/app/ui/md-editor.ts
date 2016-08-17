@@ -8,7 +8,7 @@ console.debug('[import:app/ui/md-editor.ts]');
 
 import {buffered} from '../decorator/buffered';
 import {named} from '../decorator/named';
-import {trace} from '../decorator/trace';
+import {trace, traceable} from '../decorator/trace';
 
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
@@ -284,6 +284,7 @@ export class MdEditor {
         }
     }
 
+    @traceable(false)
     public getValue() {
         if (this.editor) {
             return this.editor.getValue();
@@ -292,6 +293,7 @@ export class MdEditor {
         }
     }
 
+    @traceable(false)
     public setValue(value: string) {
         if (this.editor) {
             return this.editor.setValue(value);

@@ -315,6 +315,18 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             __metadata('design:paramtypes', []), 
             __metadata('design:returntype', void 0)
         ], MdEditor.prototype, "render", null);
+        __decorate([
+            trace_1.traceable(false), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', []), 
+            __metadata('design:returntype', void 0)
+        ], MdEditor.prototype, "getValue", null);
+        __decorate([
+            trace_1.traceable(false), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [String]), 
+            __metadata('design:returntype', void 0)
+        ], MdEditor.prototype, "setValue", null);
         MdEditor = __decorate([
             trace_1.trace,
             named_1.named('MdEditor'), 
