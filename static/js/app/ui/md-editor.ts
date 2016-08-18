@@ -231,7 +231,7 @@ export class MdEditor {
             this.editor
                 .on('change', this.onEditorChange.bind(this));
 
-            this._spellCheck = new SpellCheck({
+            this.spellCheck = new SpellCheck({
                 code: 'en_US', charset: 'us-ascii'
             }, (overlay) => {
                 this.editor.addOverlay(overlay);
@@ -338,6 +338,10 @@ export class MdEditor {
 
     private get mobile(): boolean {
         return $('.lhs').is(':hidden');
+    }
+
+    private set spellCheck(value: SpellCheck) {
+        this._spellCheck = value;
     }
 
     private _spellCheck: SpellCheck;
