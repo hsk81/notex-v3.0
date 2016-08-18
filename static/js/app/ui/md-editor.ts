@@ -230,8 +230,12 @@ export class MdEditor {
             });
             this.editor
                 .on('change', this.onEditorChange.bind(this));
-            this.editor
-                .addOverlay(SpellCheck.me.overlay);
+
+            this._spellCheck = new SpellCheck({
+                code: 'en_US', charset: 'us-ascii'
+            }, (overlay) => {
+                this.editor.addOverlay(overlay);
+            });
         }
     }
 
@@ -336,6 +340,7 @@ export class MdEditor {
         return $('.lhs').is(':hidden');
     }
 
+    private _spellCheck: SpellCheck;
     private _timeoutId: number;
     private _mdOld: string;
 }

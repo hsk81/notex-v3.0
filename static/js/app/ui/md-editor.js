@@ -12,6 +12,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
         function MdEditor() {
+            var _this = this;
             if (this.mobile) {
                 this.$input.show();
                 this.$input
@@ -35,8 +36,11 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 });
                 this.editor
                     .on('change', this.onEditorChange.bind(this));
-                this.editor
-                    .addOverlay(spell_check_1.default.me.overlay);
+                this._spellCheck = new spell_check_1.default({
+                    code: 'en_US', charset: 'us-ascii'
+                }, function (overlay) {
+                    _this.editor.addOverlay(overlay);
+                });
             }
         }
         MdEditor.defineMode = function (mode) {
