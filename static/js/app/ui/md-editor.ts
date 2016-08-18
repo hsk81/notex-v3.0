@@ -11,9 +11,9 @@ import {named} from '../decorator/named';
 import {traceable} from '../decorator/trace';
 import {trace} from '../decorator/trace';
 
-import MdEditorSpellCheck from './md-editor-spellcheck';
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
+import SpellCheck from '../spell-check/spell-check';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ export class MdEditor {
             this.editor
                 .on('change', this.onEditorChange.bind(this));
             this.editor
-                .addOverlay(MdEditorSpellCheck.me.overlay);
+                .addOverlay(SpellCheck.me.overlay);
         }
     }
 
