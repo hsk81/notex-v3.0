@@ -101,6 +101,8 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     concat(out_path,
+           'static/js/lib/typo/typo-1.1.0.min.js')
+    concat(out_path,
            'static/js/lib/markdown-it/markdown-it-7.0.0.min.js')
     concat(out_path,
            'static/js/lib/markdown-it/markdown-it-anchor-2.5.0.min.js')
