@@ -36,7 +36,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 });
                 this.editor
                     .on('change', this.onEditorChange.bind(this));
-                this._spellCheck = new spell_check_1.default({
+                this.spellCheck = new spell_check_1.default({
                     code: 'en_US', charset: 'us-ascii'
                 }, function (overlay) {
                     _this.editor.addOverlay(overlay);
@@ -320,6 +320,13 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
                 return $('.lhs').is(':hidden');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "spellCheck", {
+            set: function (value) {
+                this._spellCheck = value;
             },
             enumerable: true,
             configurable: true
