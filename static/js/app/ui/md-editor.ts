@@ -8,8 +8,10 @@ console.debug('[import:app/ui/md-editor.ts]');
 
 import {buffered} from '../decorator/buffered';
 import {named} from '../decorator/named';
-import {trace, traceable} from '../decorator/trace';
+import {traceable} from '../decorator/trace';
+import {trace} from '../decorator/trace';
 
+import MdEditorSpellCheck from './md-editor-spellcheck';
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
 
@@ -19,8 +21,8 @@ import MarkdownIt from '../markdown-it/markdown-it';
 @trace
 @named('MdEditor')
 export class MdEditor {
-    private static defineMode(mode:string = 'notex-md') {
-        CodeMirror.defineMode(mode, function(config) {
+    private static defineMode(mode: string = 'notex-md') {
+        CodeMirror.defineMode(mode, function (config) {
             return CodeMirror.multiplexingMode(
                 CodeMirror.getMode(config, 'gfm'), {
                     mode: CodeMirror.getMode(config, 'text/x-stex'),
@@ -228,6 +230,8 @@ export class MdEditor {
             });
             this.editor
                 .on('change', this.onEditorChange.bind(this));
+            this.editor
+                .addOverlay(MdEditorSpellCheck.me.overlay);
         }
     }
 
@@ -328,7 +332,7 @@ export class MdEditor {
         window['CODE_MIRROR'] = value;
     }
 
-    private get mobile():boolean {
+    private get mobile(): boolean {
         return $('.lhs').is(':hidden');
     }
 

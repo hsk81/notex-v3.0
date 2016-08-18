@@ -1,3 +1,6 @@
 [submodule "static/js/lib/codemirror"]
 	path = static/js/lib/codemirror
 	url = https://github.com/codemirror/codemirror
+[submodule "static/js/lib/dictionary"]
+	path = static/js/lib/dictionary
+	url = https://github.com/hsk81/hs-dict

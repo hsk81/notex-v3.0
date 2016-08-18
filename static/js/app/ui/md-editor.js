@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/buffered', '../decorator/named', '../decorator/trace', './download-manager', '../markdown-it/markdown-it'], function (require, exports, buffered_1, named_1, trace_1, download_manager_1, markdown_it_1) {
+define(["require", "exports", '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './md-editor-spellcheck', './download-manager', '../markdown-it/markdown-it'], function (require, exports, buffered_1, named_1, trace_1, trace_2, md_editor_spellcheck_1, download_manager_1, markdown_it_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
@@ -35,6 +35,8 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 });
                 this.editor
                     .on('change', this.onEditorChange.bind(this));
+                this.editor
+                    .addOverlay(md_editor_spellcheck_1.default.me.overlay);
             }
         }
         MdEditor.defineMode = function (mode) {
@@ -337,7 +339,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             __metadata('design:returntype', void 0)
         ], MdEditor.prototype, "setValue", null);
         MdEditor = __decorate([
-            trace_1.trace,
+            trace_2.trace,
             named_1.named('MdEditor'), 
             __metadata('design:paramtypes', [])
         ], MdEditor);
