@@ -44,16 +44,24 @@ html, body {
     .lhs {
       height: 100%;
       padding: 0;
-      div#md-toolbar-wrap {
+      div.md-toolbar-outer {
         display: none;
-      }
-      div#md-toolbar-wrap {
         float: left;
         height: 100%;
         max-width: 48px;
+      }
+      div.md-toolbar-inner:nth-of-type(1) {
+        height: calc(100% - 43px);
+      }
+      div.md-toolbar-inner:nth-of-type(2) {
+        border-top: 1px solid #dddddd;
+        position: absolute;
+        bottom: 0;
+      }
+      div.md-toolbar-inner {
         overflow-y: hidden;
         position: relative;
-        div#md-toolbar {
+        div.md-toolbar {
           padding: 4px 4px 0;
           .btn-group-vertical {
             margin-bottom: 4px;

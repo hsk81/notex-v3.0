@@ -44,7 +44,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             this.$subscript
                 .on('click', this.onSubscriptClick.bind(this));
             if (!this.ed.mobile) {
-                this.$wrap.fadeIn('slow', function () {
+                this.$outer.fadeIn('slow', function () {
                     _this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
                     _this.$toolbar.find('[data-toggle="popover"]').popover();
                     _this.refresh();
@@ -72,10 +72,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 });
                 this.ed.$input.show();
                 this.ed.$input.focus();
+                this.$mirror.css('transform', 'scale(-1,1)');
             }
             else {
                 this.ed.toMirror();
                 this.ed.mirror.focus();
+                this.$mirror.css('transform', 'scale(+1,1)');
             }
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
@@ -588,16 +590,16 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 return null;
             }
         };
-        Object.defineProperty(MdEditorToolbar.prototype, "$wrap", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$outer", {
             get: function () {
-                return $('#md-toolbar-wrap');
+                return $('.md-toolbar-outer');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MdEditorToolbar.prototype, "$toolbar", {
             get: function () {
-                return $('#md-toolbar');
+                return $('.md-toolbar');
             },
             enumerable: true,
             configurable: true
@@ -710,7 +712,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         Object.defineProperty(MdEditorToolbar.prototype, "scroll", {
             get: function () {
                 if (this._scroll === undefined) {
-                    this._scroll = new IScroll('#md-toolbar-wrap', {
+                    this._scroll = new IScroll('.md-toolbar-inner', {
                         interactiveScrollbars: true,
                         mouseWheel: true,
                         scrollbars: true

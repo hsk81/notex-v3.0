@@ -62,7 +62,7 @@ export class MdEditorToolbar {
             .on('click', this.onSubscriptClick.bind(this));
 
         if (!this.ed.mobile) {
-            this.$wrap.fadeIn('slow', () => {
+            this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
                 this.$toolbar.find('[data-toggle="popover"]').popover();
                 this.refresh();
@@ -82,9 +82,11 @@ export class MdEditorToolbar {
             });
             this.ed.$input.show();
             this.ed.$input.focus();
+            this.$mirror.css('transform', 'scale(-1,1)');
         } else {
             this.ed.toMirror();
             this.ed.mirror.focus();
+            this.$mirror.css('transform', 'scale(+1,1)');
         }
     }
 
@@ -630,12 +632,12 @@ export class MdEditorToolbar {
         }
     }
 
-    private get $wrap() {
-        return $('#md-toolbar-wrap');
+    private get $outer() {
+        return $('.md-toolbar-outer');
     }
 
     private get $toolbar() {
-        return $('#md-toolbar');
+        return $('.md-toolbar');
     }
 
     private get $mirror() {
@@ -700,7 +702,7 @@ export class MdEditorToolbar {
 
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll('#md-toolbar-wrap', {
+            this._scroll = new IScroll('.md-toolbar-inner', {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true
