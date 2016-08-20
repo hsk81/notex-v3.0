@@ -207,11 +207,17 @@ export class MdEditor {
 
     public constructor() {
         if (this.mobile) {
-            this.$input.show();
-            this.$input
-                .on('keyup change paste', this.onEditorChange.bind(this));
+            this.toInput({
+                toolbar: false
+            });
         } else {
-            this.editor = CodeMirror.fromTextArea(
+            this.toMirror();
+        }
+    }
+
+    public toMirror(): any {
+        if (!this.mirror) {
+            this.setMirror(CodeMirror.fromTextArea(
                 document.getElementById('md-inp'), {
                     mode: MdEditor.defineMode(),
                     styleActiveLine: true,
@@ -219,8 +225,8 @@ export class MdEditor {
                     lineNumbers: true,
                     undoDepth: 4096
                 }
-            );
-            this.editor.setOption('extraKeys', {
+            ));
+            this.mirror.setOption('extraKeys', {
                 'Tab': (cm) => {
                     cm.execCommand('indentMore');
                 },
@@ -228,15 +234,40 @@ export class MdEditor {
                     cm.execCommand('indentLess');
                 }
             });
-            this.editor
+            this.mirror
                 .on('change', this.onEditorChange.bind(this));
 
             this.spellCheck = new SpellCheck({
                 code: 'en_US', charset: 'us-ascii'
             }, (overlay) => {
-                this.editor.addOverlay(overlay);
+                this.mirror.addOverlay(overlay);
             });
         }
+
+        this.$input.hide();
+        return this.mirror;
+    }
+
+    public toInput(options: {
+        toolbar: boolean
+    }): any {
+        if (this.mirror) {
+            this.mirror.toTextArea();
+            this.setMirror(undefined);
+        }
+
+        this.$input
+            .off('keyup change paste')
+            .on('keyup change paste', this.onEditorChange.bind(this))
+            .show();
+
+        if (options.toolbar) {
+            this.$input.css('width', 'calc(100% - 48px)');
+        } else {
+            this.$input.css('width', '100% ');
+        }
+
+        return this.$input;
     }
 
     @buffered(600)
@@ -293,9 +324,15 @@ export class MdEditor {
         }
     }
 
+    public refresh() {
+        if (this.mirror) {
+            this.mirror.refresh();
+        }
+    }
+
     public focus() {
-        if (this.editor) {
-            this.editor.focus();
+        if (this.mirror) {
+            this.mirror.focus();
         } else {
             this.$input.focus();
         }
@@ -303,8 +340,8 @@ export class MdEditor {
 
     @traceable(false)
     public getValue() {
-        if (this.editor) {
-            return this.editor.getValue();
+        if (this.mirror) {
+            return this.mirror.getValue();
         } else {
             return this.$input.val();
         }
@@ -312,8 +349,8 @@ export class MdEditor {
 
     @traceable(false)
     public setValue(value: string) {
-        if (this.editor) {
-            return this.editor.setValue(value);
+        if (this.mirror) {
+            return this.mirror.setValue(value);
         } else {
             this.$input.val(value);
             this.render();
@@ -324,19 +361,19 @@ export class MdEditor {
         this.render();
     }
 
-    private get $input() {
+    public get $input() {
         return $('#md-inp');
     }
 
-    private get editor(): any {
+    public get mirror(): any {
         return window['CODE_MIRROR'];
     }
 
-    private set editor(value: any) {
+    private setMirror(value: any) {
         window['CODE_MIRROR'] = value;
     }
 
-    private get mobile(): boolean {
+    public get mobile(): boolean {
         return $('.lhs').is(':hidden');
     }
 

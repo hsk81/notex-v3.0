@@ -12,35 +12,13 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
         function MdEditor() {
-            var _this = this;
             if (this.mobile) {
-                this.$input.show();
-                this.$input
-                    .on('keyup change paste', this.onEditorChange.bind(this));
+                this.toInput({
+                    toolbar: false
+                });
             }
             else {
-                this.editor = CodeMirror.fromTextArea(document.getElementById('md-inp'), {
-                    mode: MdEditor.defineMode(),
-                    styleActiveLine: true,
-                    lineWrapping: true,
-                    lineNumbers: true,
-                    undoDepth: 4096
-                });
-                this.editor.setOption('extraKeys', {
-                    'Tab': function (cm) {
-                        cm.execCommand('indentMore');
-                    },
-                    'Shift-Tab': function (cm) {
-                        cm.execCommand('indentLess');
-                    }
-                });
-                this.editor
-                    .on('change', this.onEditorChange.bind(this));
-                this.spellCheck = new spell_check_1.default({
-                    code: 'en_US', charset: 'us-ascii'
-                }, function (overlay) {
-                    _this.editor.addOverlay(overlay);
-                });
+                this.toMirror();
             }
         }
         MdEditor.defineMode = function (mode) {
@@ -228,6 +206,52 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             enumerable: true,
             configurable: true
         });
+        MdEditor.prototype.toMirror = function () {
+            var _this = this;
+            if (!this.mirror) {
+                this.setMirror(CodeMirror.fromTextArea(document.getElementById('md-inp'), {
+                    mode: MdEditor.defineMode(),
+                    styleActiveLine: true,
+                    lineWrapping: true,
+                    lineNumbers: true,
+                    undoDepth: 4096
+                }));
+                this.mirror.setOption('extraKeys', {
+                    'Tab': function (cm) {
+                        cm.execCommand('indentMore');
+                    },
+                    'Shift-Tab': function (cm) {
+                        cm.execCommand('indentLess');
+                    }
+                });
+                this.mirror
+                    .on('change', this.onEditorChange.bind(this));
+                this.spellCheck = new spell_check_1.default({
+                    code: 'en_US', charset: 'us-ascii'
+                }, function (overlay) {
+                    _this.mirror.addOverlay(overlay);
+                });
+            }
+            this.$input.hide();
+            return this.mirror;
+        };
+        MdEditor.prototype.toInput = function (options) {
+            if (this.mirror) {
+                this.mirror.toTextArea();
+                this.setMirror(undefined);
+            }
+            this.$input
+                .off('keyup change paste')
+                .on('keyup change paste', this.onEditorChange.bind(this))
+                .show();
+            if (options.toolbar) {
+                this.$input.css('width', 'calc(100% - 48px)');
+            }
+            else {
+                this.$input.css('width', '100% ');
+            }
+            return this.$input;
+        };
         MdEditor.prototype.render = function () {
             var $md_out = $('#md-out'), $md_tmp;
             var md_new = this.getValue();
@@ -272,25 +296,30 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 download_manager_1.default.me.content = md_new;
             }
         };
+        MdEditor.prototype.refresh = function () {
+            if (this.mirror) {
+                this.mirror.refresh();
+            }
+        };
         MdEditor.prototype.focus = function () {
-            if (this.editor) {
-                this.editor.focus();
+            if (this.mirror) {
+                this.mirror.focus();
             }
             else {
                 this.$input.focus();
             }
         };
         MdEditor.prototype.getValue = function () {
-            if (this.editor) {
-                return this.editor.getValue();
+            if (this.mirror) {
+                return this.mirror.getValue();
             }
             else {
                 return this.$input.val();
             }
         };
         MdEditor.prototype.setValue = function (value) {
-            if (this.editor) {
-                return this.editor.setValue(value);
+            if (this.mirror) {
+                return this.mirror.setValue(value);
             }
             else {
                 this.$input.val(value);
@@ -307,16 +336,16 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "editor", {
+        Object.defineProperty(MdEditor.prototype, "mirror", {
             get: function () {
                 return window['CODE_MIRROR'];
-            },
-            set: function (value) {
-                window['CODE_MIRROR'] = value;
             },
             enumerable: true,
             configurable: true
         });
+        MdEditor.prototype.setMirror = function (value) {
+            window['CODE_MIRROR'] = value;
+        };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
                 return $('.lhs').is(':hidden');

@@ -7,44 +7,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/named', '../decorator/trace'], function (require, exports, named_1, trace_1) {
+define(["require", "exports", '../decorator/named', '../decorator/trace', './md-editor'], function (require, exports, named_1, trace_1, md_editor_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
         function MdEditorToolbar() {
             var _this = this;
-            if (this.editor) {
-                this.$undo
-                    .on('click', this.onUndoClick.bind(this));
-                this.$redo
-                    .on('click', this.onRedoClick.bind(this));
-                this.$cut
-                    .on('click', this.onCutClick.bind(this));
-                this.$copy
-                    .on('click', this.onCopyClick.bind(this));
-                this.$paste
-                    .on('click', this.onPasteClick.bind(this));
-                this.$erase
-                    .on('click', this.onEraseClick.bind(this));
-                this.$header
-                    .on('click', this.onHeaderClick.bind(this));
-                this.$bold
-                    .on('click', this.onBoldClick.bind(this));
-                this.$italic
-                    .on('click', this.onItalicClick.bind(this));
-                this.$font
-                    .on('click', this.onCommentClick.bind(this));
-                this.$indent
-                    .on('click', this.onIndentClick.bind(this));
-                this.$outdent
-                    .on('click', this.onOutdentClick.bind(this));
-                this.$supscript
-                    .on('click', this.onSupscriptClick.bind(this));
-                this.$subscript
-                    .on('click', this.onSubscriptClick.bind(this));
-                this.$mdToolbarWrap.fadeIn('slow', function () {
-                    _this.$mdToolbar.find('[data-toggle="tooltip"]').tooltip();
-                    _this.$mdToolbar.find('[data-toggle="popover"]').popover();
+            this.$mirror
+                .on('click', this.onMirrorClick.bind(this));
+            this.$undo
+                .on('click', this.onUndoClick.bind(this));
+            this.$redo
+                .on('click', this.onRedoClick.bind(this));
+            this.$cut
+                .on('click', this.onCutClick.bind(this));
+            this.$copy
+                .on('click', this.onCopyClick.bind(this));
+            this.$paste
+                .on('click', this.onPasteClick.bind(this));
+            this.$erase
+                .on('click', this.onEraseClick.bind(this));
+            this.$header
+                .on('click', this.onHeaderClick.bind(this));
+            this.$bold
+                .on('click', this.onBoldClick.bind(this));
+            this.$italic
+                .on('click', this.onItalicClick.bind(this));
+            this.$font
+                .on('click', this.onCommentClick.bind(this));
+            this.$indent
+                .on('click', this.onIndentClick.bind(this));
+            this.$outdent
+                .on('click', this.onOutdentClick.bind(this));
+            this.$supscript
+                .on('click', this.onSupscriptClick.bind(this));
+            this.$subscript
+                .on('click', this.onSubscriptClick.bind(this));
+            if (!this.ed.mobile) {
+                this.$wrap.fadeIn('slow', function () {
+                    _this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
+                    _this.$toolbar.find('[data-toggle="popover"]').popover();
                     _this.refresh();
                 });
             }
@@ -60,23 +62,46 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             configurable: true
         });
         MdEditorToolbar.prototype.refresh = function () {
-            if (this.editor) {
-                this.editor.refresh();
-            }
+            this.ed.refresh();
             this.scroll.refresh();
         };
+        MdEditorToolbar.prototype.onMirrorClick = function () {
+            if (this.ed.mirror) {
+                this.ed.toInput({
+                    toolbar: true
+                });
+                this.ed.$input.show();
+                this.ed.$input.focus();
+            }
+            else {
+                this.ed.toMirror();
+                this.ed.mirror.focus();
+            }
+        };
         MdEditorToolbar.prototype.onUndoClick = function () {
-            this.editor.execCommand('undo');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.execCommand('undo');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onRedoClick = function () {
-            this.editor.execCommand('redo');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.execCommand('redo');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onCutClick = function () {
-            this.clipboard = this.editor.getSelection();
-            this.editor.replaceSelection('');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.clipboard = this.ed.mirror.getSelection();
+                this.ed.mirror.replaceSelection('');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onCopyClick = function () {
             try {
@@ -85,430 +110,501 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             catch (ex) {
                 console.error(ex);
             }
-            this.clipboard = this.editor.getSelection();
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.clipboard = this.ed.mirror.getSelection();
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onPasteClick = function () {
-            this.editor.replaceSelection(this.clipboard);
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.replaceSelection(this.clipboard);
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onEraseClick = function () {
-            this.editor.replaceSelection('');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.replaceSelection('');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onHeaderClick = function () {
-            var cursor = this.editor.getCursor(), curr_from = { line: cursor.line, ch: 0 }, next_from = { line: cursor.line + 1, ch: 0 };
-            var curr_ts = this.editor.getLineTokens(curr_from.line), next_ts = this.editor.getLineTokens(next_from.line);
-            var line = this.editor.getLineHandle(curr_from.line), mode = this.editor.getModeAt(curr_from);
-            var suffix = line.text.match(/^\s+/) ? '' : ' ', prefix = '#';
-            var hs = curr_ts.filter(function (tok) {
-                return tok && tok.type && tok.type.match(/header/);
-            });
-            var h1s = line.text.match(/^\s*=/) && curr_ts.filter(function (tok) {
-                return tok && tok.type && tok.type.match(/header-1/) &&
-                    tok.string === '=';
-            });
-            var h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter(function (tok) {
-                return tok && tok.type && tok.type.match(/header-2/) &&
-                    tok.string === '-';
-            });
-            var h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter(function (tok) {
-                return tok && tok.type && tok.type.match(/header-6/) &&
-                    tok.string === '#';
-            });
-            if (mode && mode.name === 'markdown') {
-                if (hs && hs.length > 0) {
-                    if (h1s && h1s.length > 0) {
-                        this.editor.replaceRange('', curr_from, {
-                            ch: 0, line: curr_from.line + 1
-                        });
-                        this.editor.replaceRange('#' + prefix + suffix, {
-                            ch: 0, line: curr_from.line - 1
-                        });
-                        this.editor.setCursor({
-                            ch: 3, line: curr_from.line - 1
-                        });
-                    }
-                    else if (h2s && h2s.length > 0) {
-                        this.editor.replaceRange('', curr_from, {
-                            ch: 0, line: curr_from.line + 1
-                        });
-                        this.editor.replaceRange('##' + prefix + suffix, {
-                            ch: 0, line: curr_from.line - 1
-                        });
-                        this.editor.setCursor({
-                            ch: 4, line: curr_from.line - 1
-                        });
-                    }
-                    else if (h6s && h6s.length > 0) {
-                        this.editor.replaceRange('', curr_from, {
-                            ch: line.text.match(/\s*#{6}\s*/).toString().length,
-                            line: curr_from.line,
-                        });
-                    }
-                    else {
-                        this.editor.replaceRange(prefix, {
-                            ch: hs[0].start, line: curr_from.line
-                        });
-                    }
-                }
-                else {
-                    if (next_ts.length > 0) {
-                        var next_tok = next_ts[next_ts.length - 1];
-                        if (next_tok.type && next_tok.type.match(/^header/)) {
-                            if (next_tok.string === '=' &&
-                                next_tok.type.match(/header-1$/)) {
-                                this.editor.replaceRange('', next_from, {
-                                    line: next_from.line + 1, ch: 0
-                                });
-                                prefix += '#';
-                            }
-                            if (next_tok.string === '-' &&
-                                next_tok.type.match(/header-2$/)) {
-                                this.editor.replaceRange('', next_from, {
-                                    line: next_from.line + 1, ch: 0
-                                });
-                                prefix += '##';
-                            }
+            if (this.ed.mirror) {
+                var cursor = this.ed.mirror.getCursor(), curr_from = { line: cursor.line, ch: 0 }, next_from = { line: cursor.line + 1, ch: 0 };
+                var curr_ts = this.ed.mirror.getLineTokens(curr_from.line), next_ts = this.ed.mirror.getLineTokens(next_from.line);
+                var line = this.ed.mirror.getLineHandle(curr_from.line), mode = this.ed.mirror.getModeAt(curr_from);
+                var sx = line.text.match(/^\s+/) ? '' : ' ', px = '#';
+                var hs = curr_ts.filter(function (tok) {
+                    return tok && tok.type && tok.type.match(/header/);
+                });
+                var h1s = line.text.match(/^\s*=/) && curr_ts.filter(function (tok) {
+                    return tok && tok.type && tok.type.match(/header-1/) &&
+                        tok.string === '=';
+                });
+                var h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter(function (tok) {
+                    return tok && tok.type && tok.type.match(/header-2/) &&
+                        tok.string === '-';
+                });
+                var h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter(function (tok) {
+                    return tok && tok.type && tok.type.match(/header-6/) &&
+                        tok.string === '#';
+                });
+                if (mode && mode.name === 'markdown') {
+                    if (hs && hs.length > 0) {
+                        if (h1s && h1s.length > 0) {
+                            this.ed.mirror.replaceRange('', curr_from, {
+                                ch: 0, line: curr_from.line + 1
+                            });
+                            this.ed.mirror.replaceRange('#' + px + sx, {
+                                ch: 0, line: curr_from.line - 1
+                            });
+                            this.ed.mirror.setCursor({
+                                ch: 3, line: curr_from.line - 1
+                            });
+                        }
+                        else if (h2s && h2s.length > 0) {
+                            this.ed.mirror.replaceRange('', curr_from, {
+                                ch: 0, line: curr_from.line + 1
+                            });
+                            this.ed.mirror.replaceRange('##' + px + sx, {
+                                ch: 0, line: curr_from.line - 1
+                            });
+                            this.ed.mirror.setCursor({
+                                ch: 4, line: curr_from.line - 1
+                            });
+                        }
+                        else if (h6s && h6s.length > 0) {
+                            this.ed.mirror.replaceRange('', curr_from, {
+                                ch: line.text.match(/\s*#{6}\s*/).toString().length,
+                                line: curr_from.line,
+                            });
+                        }
+                        else {
+                            this.ed.mirror.replaceRange(px, {
+                                ch: hs[0].start, line: curr_from.line
+                            });
                         }
                     }
-                    this.editor.replaceRange(prefix + suffix, curr_from);
+                    else {
+                        if (next_ts.length > 0) {
+                            var next_tok = next_ts[next_ts.length - 1];
+                            if (next_tok.type && next_tok.type.match(/^header/)) {
+                                if (next_tok.string === '=' &&
+                                    next_tok.type.match(/header-1$/)) {
+                                    this.ed.mirror.replaceRange('', next_from, {
+                                        line: next_from.line + 1, ch: 0
+                                    });
+                                    px += '#';
+                                }
+                                if (next_tok.string === '-' &&
+                                    next_tok.type.match(/header-2$/)) {
+                                    this.ed.mirror.replaceRange('', next_from, {
+                                        line: next_from.line + 1, ch: 0
+                                    });
+                                    px += '##';
+                                }
+                            }
+                        }
+                        this.ed.mirror.replaceRange(px + sx, curr_from);
+                    }
                 }
             }
-            this.editor.focus();
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onBoldClick = function () {
             var _this = this;
-            var selections = this.editor.listSelections();
-            if (selections.length > 0 && this.editor.getSelection()) {
-                this.editor.setSelections(selections.map(function (sel) {
-                    var lhs_mod = _this.editor.getModeAt(sel.head), rhs_mod = _this.editor.getModeAt(sel.anchor);
-                    if (lhs_mod && lhs_mod.name === 'markdown' &&
-                        rhs_mod && rhs_mod.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel.head);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/)) {
-                            return {
-                                anchor: _this.lhs(sel.anchor, tok),
-                                head: _this.rhs(sel.head, tok)
-                            };
+            if (this.ed.mirror) {
+                var selections = this.ed.mirror.listSelections();
+                if (selections.length > 0 && this.ed.mirror.getSelection()) {
+                    this.ed.mirror.setSelections(selections.map(function (sel) {
+                        var lhs_mod = _this.ed.mirror.getModeAt(sel.head), rhs_mod = _this.ed.mirror.getModeAt(sel.anchor);
+                        if (lhs_mod && lhs_mod.name === 'markdown' &&
+                            rhs_mod && rhs_mod.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel.head);
+                            if (tok.type && tok.type.match(/strong/) ||
+                                tok.type && tok.type.match(/em/)) {
+                                return {
+                                    anchor: _this.lhs(sel.anchor, tok),
+                                    head: _this.rhs(sel.head, tok)
+                                };
+                            }
+                            else {
+                                return sel;
+                            }
                         }
                         else {
                             return sel;
                         }
-                    }
-                    else {
-                        return sel;
-                    }
-                }));
-                this.editor.replaceSelections(selections.map(function (sel) {
-                    var sel_lhs = sel.anchor, sel_rhs = sel.head;
-                    if (sel_lhs.line > sel_rhs.line ||
-                        sel_lhs.line === sel_rhs.line &&
-                            sel_lhs.ch > sel_rhs.ch) {
-                        sel_lhs = sel.head;
-                        sel_rhs = sel.anchor;
-                    }
-                    var mod_lhs = _this.editor.getModeAt(sel_lhs), mod_rhs = _this.editor.getModeAt(sel_rhs);
-                    if (mod_lhs && mod_lhs.name === 'markdown' &&
-                        mod_rhs && mod_rhs.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel_rhs);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/)) {
-                            var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
-                            if (tok.type.match(/em/)) {
-                                return "*" + _this.editor.getRange(lhs, rhs) + "*";
+                    }));
+                    this.ed.mirror.replaceSelections(selections.map(function (sel) {
+                        var sel_lhs = sel.anchor, sel_rhs = sel.head;
+                        if (sel_lhs.line > sel_rhs.line ||
+                            sel_lhs.line === sel_rhs.line &&
+                                sel_lhs.ch > sel_rhs.ch) {
+                            sel_lhs = sel.head;
+                            sel_rhs = sel.anchor;
+                        }
+                        var mod_lhs = _this.ed.mirror.getModeAt(sel_lhs), mod_rhs = _this.ed.mirror.getModeAt(sel_rhs);
+                        if (mod_lhs && mod_lhs.name === 'markdown' &&
+                            mod_rhs && mod_rhs.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel_rhs);
+                            if (tok.type && tok.type.match(/strong/) ||
+                                tok.type && tok.type.match(/em/)) {
+                                var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
+                                if (tok.type.match(/em/)) {
+                                    return "*" + _this.ed.mirror
+                                        .getRange(lhs, rhs) + "*";
+                                }
+                                else {
+                                    return _this.ed.mirror
+                                        .getRange(lhs, rhs).slice(2, -2);
+                                }
                             }
                             else {
-                                return _this.editor.getRange(lhs, rhs).slice(2, -2);
+                                return "**" + _this.ed.mirror
+                                    .getRange(sel_lhs, sel_rhs) + "**";
                             }
                         }
                         else {
-                            return "**" + _this.editor.getRange(sel_lhs, sel_rhs) + "**";
+                            return _this.ed.mirror
+                                .getRange(sel_lhs, sel_rhs);
                         }
-                    }
-                    else {
-                        return _this.editor.getRange(sel_lhs, sel_rhs);
-                    }
-                }), 'around');
-            }
-            else {
-                var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
-                if (mod && mod.name === 'markdown') {
-                    var tok = this.editor.getTokenAt(cur);
-                    if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/)) {
-                        var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
-                        if (tok.type.match(/em/)) {
-                            var src = this.editor.getRange(lhs, rhs), tgt = "*" + src + "*";
-                            this.editor.replaceRange(tgt, lhs, rhs);
-                            this.editor.setSelection(lhs, {
-                                line: rhs.line, ch: rhs.ch + 2
-                            });
+                    }), 'around');
+                }
+                else {
+                    var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
+                    if (mod && mod.name === 'markdown') {
+                        var tok = this.ed.mirror.getTokenAt(cur);
+                        if (tok.type && tok.type.match(/strong/) ||
+                            tok.type && tok.type.match(/em/)) {
+                            var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
+                            if (tok.type.match(/em/)) {
+                                var src = this.ed.mirror.getRange(lhs, rhs), tgt = "*" + src + "*";
+                                this.ed.mirror.replaceRange(tgt, lhs, rhs);
+                                this.ed.mirror.setSelection(lhs, {
+                                    line: rhs.line, ch: rhs.ch + 2
+                                });
+                            }
+                            else {
+                                var src = this.ed.mirror.getRange(lhs, rhs), tgt = src.slice(2, -2);
+                                this.ed.mirror.replaceRange(tgt, lhs, rhs);
+                                this.ed.mirror.setSelection(lhs, {
+                                    line: rhs.line, ch: rhs.ch - 4
+                                });
+                            }
                         }
                         else {
-                            var src = this.editor.getRange(lhs, rhs), tgt = src.slice(2, -2);
-                            this.editor.replaceRange(tgt, lhs, rhs);
-                            this.editor.setSelection(lhs, {
-                                line: rhs.line, ch: rhs.ch - 4
+                            this.ed.mirror.replaceRange('****', cur);
+                            this.ed.mirror.setCursor({
+                                line: cur.line, ch: cur.ch + 2
                             });
                         }
-                    }
-                    else {
-                        this.editor.replaceRange('****', cur);
-                        this.editor.setCursor({
-                            line: cur.line, ch: cur.ch + 2
-                        });
                     }
                 }
             }
-            this.editor.focus();
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onItalicClick = function () {
             var _this = this;
-            var selections = this.editor.listSelections();
-            if (selections.length > 0 && this.editor.getSelection()) {
-                this.editor.setSelections(selections.map(function (sel) {
-                    var lhs_mod = _this.editor.getModeAt(sel.head), rhs_mod = _this.editor.getModeAt(sel.anchor);
-                    if (lhs_mod && lhs_mod.name === 'markdown' &&
-                        rhs_mod && rhs_mod.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel.head);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/)) {
-                            return {
-                                anchor: _this.lhs(sel.anchor, tok),
-                                head: _this.rhs(sel.head, tok)
-                            };
+            if (this.ed.mirror) {
+                var selections = this.ed.mirror.listSelections();
+                if (selections.length > 0 && this.ed.mirror.getSelection()) {
+                    this.ed.mirror.setSelections(selections.map(function (sel) {
+                        var lhs_mod = _this.ed.mirror.getModeAt(sel.head), rhs_mod = _this.ed.mirror.getModeAt(sel.anchor);
+                        if (lhs_mod && lhs_mod.name === 'markdown' &&
+                            rhs_mod && rhs_mod.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel.head);
+                            if (tok.type && tok.type.match(/strong/) ||
+                                tok.type && tok.type.match(/em/)) {
+                                return {
+                                    anchor: _this.lhs(sel.anchor, tok),
+                                    head: _this.rhs(sel.head, tok)
+                                };
+                            }
+                            else {
+                                return sel;
+                            }
                         }
                         else {
                             return sel;
                         }
-                    }
-                    else {
-                        return sel;
-                    }
-                }));
-                this.editor.replaceSelections(selections.map(function (sel) {
-                    var sel_lhs = sel.anchor, sel_rhs = sel.head;
-                    if (sel_lhs.line > sel_rhs.line ||
-                        sel_lhs.line === sel_rhs.line &&
-                            sel_lhs.ch > sel_rhs.ch) {
-                        sel_lhs = sel.head;
-                        sel_rhs = sel.anchor;
-                    }
-                    var mod_lhs = _this.editor.getModeAt(sel_lhs), mod_rhs = _this.editor.getModeAt(sel_rhs);
-                    if (mod_lhs && mod_lhs.name === 'markdown' &&
-                        mod_rhs && mod_rhs.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel_rhs);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/)) {
-                            var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
-                            return _this.editor.getRange(lhs, rhs).slice(1, -1);
+                    }));
+                    this.ed.mirror.replaceSelections(selections.map(function (sel) {
+                        var sel_lhs = sel.anchor, sel_rhs = sel.head;
+                        if (sel_lhs.line > sel_rhs.line ||
+                            sel_lhs.line === sel_rhs.line &&
+                                sel_lhs.ch > sel_rhs.ch) {
+                            sel_lhs = sel.head;
+                            sel_rhs = sel.anchor;
+                        }
+                        var mod_lhs = _this.ed.mirror.getModeAt(sel_lhs), mod_rhs = _this.ed.mirror.getModeAt(sel_rhs);
+                        if (mod_lhs && mod_lhs.name === 'markdown' &&
+                            mod_rhs && mod_rhs.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel_rhs);
+                            if (tok.type && tok.type.match(/strong/) ||
+                                tok.type && tok.type.match(/em/)) {
+                                var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
+                                return _this.ed.mirror
+                                    .getRange(lhs, rhs).slice(1, -1);
+                            }
+                            else {
+                                return "*" + _this.ed.mirror
+                                    .getRange(sel_lhs, sel_rhs) + "*";
+                            }
                         }
                         else {
-                            return "*" + _this.editor.getRange(sel_lhs, sel_rhs) + "*";
+                            return _this.ed.mirror
+                                .getRange(sel_lhs, sel_rhs);
                         }
-                    }
-                    else {
-                        return _this.editor.getRange(sel_lhs, sel_rhs);
-                    }
-                }), 'around');
-            }
-            else {
-                var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
-                if (mod && mod.name === 'markdown') {
-                    var tok = this.editor.getTokenAt(cur);
-                    if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/)) {
-                        var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
-                        var src = this.editor.getRange(lhs, rhs), tgt = src.slice(1, -1);
-                        this.editor.replaceRange(tgt, lhs, rhs);
-                        this.editor.setSelection(lhs, {
-                            line: rhs.line, ch: rhs.ch - 2
-                        });
-                    }
-                    else {
-                        this.editor.replaceRange('* *', cur);
-                        this.editor.setSelection({
-                            line: cur.line, ch: cur.ch + 1
-                        }, {
-                            line: cur.line, ch: cur.ch + 2
-                        });
+                    }), 'around');
+                }
+                else {
+                    var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
+                    if (mod && mod.name === 'markdown') {
+                        var tok = this.ed.mirror.getTokenAt(cur);
+                        if (tok.type && tok.type.match(/strong/) ||
+                            tok.type && tok.type.match(/em/)) {
+                            var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
+                            var src = this.ed.mirror.getRange(lhs, rhs), tgt = src.slice(1, -1);
+                            this.ed.mirror.replaceRange(tgt, lhs, rhs);
+                            this.ed.mirror.setSelection(lhs, {
+                                line: rhs.line, ch: rhs.ch - 2
+                            });
+                        }
+                        else {
+                            this.ed.mirror.replaceRange('* *', cur);
+                            this.ed.mirror.setSelection({
+                                line: cur.line, ch: cur.ch + 1
+                            }, {
+                                line: cur.line, ch: cur.ch + 2
+                            });
+                        }
                     }
                 }
             }
-            this.editor.focus();
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onCommentClick = function () {
             var _this = this;
-            var selections = this.editor.listSelections();
-            if (selections.length > 0 && this.editor.getSelection()) {
-                this.editor.setSelections(selections.map(function (sel) {
-                    var lhs_mod = _this.editor.getModeAt(sel.head), rhs_mod = _this.editor.getModeAt(sel.anchor);
-                    if (lhs_mod && lhs_mod.name === 'markdown' &&
-                        rhs_mod && rhs_mod.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel.head);
-                        if (tok.type && tok.type.match(/comment/)) {
-                            return {
-                                anchor: _this.lhs(sel.anchor, tok),
-                                head: _this.rhs(sel.head, tok)
-                            };
+            if (this.ed.mirror) {
+                var selections = this.ed.mirror.listSelections();
+                if (selections.length > 0 && this.ed.mirror.getSelection()) {
+                    this.ed.mirror.setSelections(selections.map(function (sel) {
+                        var lhs_mod = _this.ed.mirror.getModeAt(sel.head), rhs_mod = _this.ed.mirror.getModeAt(sel.anchor);
+                        if (lhs_mod && lhs_mod.name === 'markdown' &&
+                            rhs_mod && rhs_mod.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel.head);
+                            if (tok.type && tok.type.match(/comment/)) {
+                                return {
+                                    anchor: _this.lhs(sel.anchor, tok),
+                                    head: _this.rhs(sel.head, tok)
+                                };
+                            }
+                            else {
+                                return sel;
+                            }
                         }
                         else {
                             return sel;
                         }
-                    }
-                    else {
-                        return sel;
-                    }
-                }));
-                this.editor.replaceSelections(selections.map(function (sel) {
-                    var sel_lhs = sel.anchor, sel_rhs = sel.head;
-                    if (sel_lhs.line > sel_rhs.line ||
-                        sel_lhs.line === sel_rhs.line &&
-                            sel_lhs.ch > sel_rhs.ch) {
-                        sel_lhs = sel.head;
-                        sel_rhs = sel.anchor;
-                    }
-                    var mod_lhs = _this.editor.getModeAt(sel_lhs), mod_rhs = _this.editor.getModeAt(sel_rhs);
-                    if (mod_lhs && mod_lhs.name === 'markdown' &&
-                        mod_rhs && mod_rhs.name === 'markdown') {
-                        var tok = _this.editor.getTokenAt(sel_rhs);
-                        if (tok.type && tok.type.match(/comment/)) {
-                            var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
-                            return _this.editor.getRange(lhs, rhs).slice(1, -1);
+                    }));
+                    this.ed.mirror.replaceSelections(selections.map(function (sel) {
+                        var sel_lhs = sel.anchor, sel_rhs = sel.head;
+                        if (sel_lhs.line > sel_rhs.line ||
+                            sel_lhs.line === sel_rhs.line &&
+                                sel_lhs.ch > sel_rhs.ch) {
+                            sel_lhs = sel.head;
+                            sel_rhs = sel.anchor;
+                        }
+                        var mod_lhs = _this.ed.mirror.getModeAt(sel_lhs), mod_rhs = _this.ed.mirror.getModeAt(sel_rhs);
+                        if (mod_lhs && mod_lhs.name === 'markdown' &&
+                            mod_rhs && mod_rhs.name === 'markdown') {
+                            var tok = _this.ed.mirror.getTokenAt(sel_rhs);
+                            if (tok.type && tok.type.match(/comment/)) {
+                                var lhs = _this.lhs(sel_lhs, tok), rhs = _this.rhs(sel_rhs, tok);
+                                return _this.ed.mirror
+                                    .getRange(lhs, rhs).slice(1, -1);
+                            }
+                            else {
+                                return "`" + _this.ed.mirror
+                                    .getRange(sel_lhs, sel_rhs) + "`";
+                            }
                         }
                         else {
-                            return "`" + _this.editor.getRange(sel_lhs, sel_rhs) + "`";
+                            return _this.ed.mirror
+                                .getRange(sel_lhs, sel_rhs);
+                        }
+                    }), 'around');
+                }
+                else {
+                    var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
+                    if (mod && mod.name === 'markdown') {
+                        var tok = this.ed.mirror.getTokenAt(cur);
+                        if (tok.type && tok.type.match(/comment/)) {
+                            var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
+                            var src = this.ed.mirror.getRange(lhs, rhs), tgt = src.slice(1, -1);
+                            this.ed.mirror.replaceRange(tgt, lhs, rhs);
+                            this.ed.mirror.setSelection(lhs, {
+                                line: rhs.line, ch: rhs.ch - 2
+                            });
+                        }
+                        else {
+                            this.ed.mirror.replaceRange('` `', cur);
+                            this.ed.mirror.setSelection({
+                                line: cur.line, ch: cur.ch + 1
+                            }, {
+                                line: cur.line, ch: cur.ch + 2
+                            });
                         }
                     }
-                    else {
-                        return _this.editor.getRange(sel_lhs, sel_rhs);
-                    }
-                }), 'around');
+                }
             }
             else {
-                var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
-                if (mod && mod.name === 'markdown') {
-                    var tok = this.editor.getTokenAt(cur);
-                    if (tok.type && tok.type.match(/comment/)) {
-                        var lhs = this.lhs(cur, tok), rhs = this.rhs(cur, tok);
-                        var src = this.editor.getRange(lhs, rhs), tgt = src.slice(1, -1);
-                        this.editor.replaceRange(tgt, lhs, rhs);
-                        this.editor.setSelection(lhs, {
-                            line: rhs.line, ch: rhs.ch - 2
-                        });
-                    }
-                    else {
-                        this.editor.replaceRange('` `', cur);
-                        this.editor.setSelection({
-                            line: cur.line, ch: cur.ch + 1
-                        }, {
-                            line: cur.line, ch: cur.ch + 2
-                        });
-                    }
-                }
             }
-            this.editor.focus();
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onIndentClick = function () {
-            this.editor.execCommand('indentMore');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.execCommand('indentMore');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onOutdentClick = function () {
-            this.editor.execCommand('indentLess');
-            this.editor.focus();
+            if (this.ed.mirror) {
+                this.ed.mirror.execCommand('indentLess');
+            }
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onSupscriptClick = function () {
-            var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
-                this.editor.replaceRange('^{ }', cur);
-                this.editor.setSelection({
-                    line: cur.line, ch: cur.ch + 2
-                }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
+            if (this.ed.mirror) {
+                var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
+                if (mod && mod.name === 'markdown') {
+                    this.ed.mirror.replaceRange('^{ }', cur);
+                    this.ed.mirror.setSelection({
+                        line: cur.line, ch: cur.ch + 2
+                    }, {
+                        line: cur.line, ch: cur.ch + 3
+                    });
+                }
             }
-            this.editor.focus();
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.onSubscriptClick = function () {
-            var cur = this.editor.getCursor(), mod = this.editor.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
-                this.editor.replaceRange('~{ }', cur);
-                this.editor.setSelection({
-                    line: cur.line, ch: cur.ch + 2
-                }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
+            if (this.ed.mirror) {
+                var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
+                if (mod && mod.name === 'markdown') {
+                    this.ed.mirror.replaceRange('~{ }', cur);
+                    this.ed.mirror.setSelection({
+                        line: cur.line, ch: cur.ch + 2
+                    }, {
+                        line: cur.line, ch: cur.ch + 3
+                    });
+                }
             }
-            this.editor.focus();
+            else {
+            }
+            this.ed.focus();
         };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
-            var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
-            while (true) {
-                var next_token = this.editor.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type) {
-                    return last = {
-                        ch: next.ch, line: next.line
-                    };
-                }
-                else {
-                    last = {
-                        ch: next.ch, line: next.line
-                    };
-                }
-                if (next.ch > 0) {
-                    next.ch -= 1;
-                }
-                else {
-                    if (next.line > 0) {
-                        next.line -= 1;
-                        next.ch = this.editor.getLine(next.line).length;
+            if (this.ed.mirror) {
+                var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
+                while (true) {
+                    var next_token = this.ed.mirror.getTokenAt(next);
+                    if (next_token.type && !next_token.type.match(token.type) ||
+                        !next_token.type && next_token.type !== token.type) {
+                        return last = {
+                            ch: next.ch, line: next.line
+                        };
                     }
                     else {
-                        return last;
+                        last = {
+                            ch: next.ch, line: next.line
+                        };
+                    }
+                    if (next.ch > 0) {
+                        next.ch -= 1;
+                    }
+                    else {
+                        if (next.line > 0) {
+                            next.line -= 1;
+                            next.ch = this.ed.mirror.getLine(next.line).length;
+                        }
+                        else {
+                            return last;
+                        }
                     }
                 }
+            }
+            else {
+                return null;
             }
         };
         MdEditorToolbar.prototype.rhs = function (cursor, token) {
-            var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
-            while (true) {
-                var next_token = this.editor.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type) {
-                    return last;
-                }
-                else {
-                    last = {
-                        ch: next.ch, line: next.line
-                    };
-                }
-                if (next.ch < this.editor.getLine(next.line).length) {
-                    next.ch += 1;
-                }
-                else {
-                    if (next.line < this.editor.lineCount()) {
-                        next.line += 1;
-                        next.ch = this.editor.getLine(next.line).length;
+            if (this.ed.mirror) {
+                var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
+                while (true) {
+                    var next_token = this.ed.mirror.getTokenAt(next);
+                    if (next_token.type && !next_token.type.match(token.type) ||
+                        !next_token.type && next_token.type !== token.type) {
+                        return last;
                     }
                     else {
-                        return last;
+                        last = {
+                            ch: next.ch, line: next.line
+                        };
+                    }
+                    if (next.ch < this.ed.mirror.getLine(next.line).length) {
+                        next.ch += 1;
+                    }
+                    else {
+                        if (next.line < this.ed.mirror.lineCount()) {
+                            next.line += 1;
+                            next.ch = this.ed.mirror.getLine(next.line).length;
+                        }
+                        else {
+                            return last;
+                        }
                     }
                 }
             }
+            else {
+                return null;
+            }
         };
-        Object.defineProperty(MdEditorToolbar.prototype, "$mdToolbarWrap", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$wrap", {
             get: function () {
                 return $('#md-toolbar-wrap');
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "$mdToolbar", {
+        Object.defineProperty(MdEditorToolbar.prototype, "$toolbar", {
             get: function () {
                 return $('#md-toolbar');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$mirror", {
+            get: function () {
+                return $('.glyphicon.code-mirror').closest('button');
             },
             enumerable: true,
             configurable: true
@@ -625,9 +721,9 @@ define(["require", "exports", '../decorator/named', '../decorator/trace'], funct
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditorToolbar.prototype, "editor", {
+        Object.defineProperty(MdEditorToolbar.prototype, "ed", {
             get: function () {
-                return window['CODE_MIRROR'];
+                return md_editor_1.default.me;
             },
             enumerable: true,
             configurable: true
