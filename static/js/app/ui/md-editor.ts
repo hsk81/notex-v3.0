@@ -357,6 +357,18 @@ export class MdEditor {
         }
     }
 
+    public getSelection():string {
+        if (this.mirror) {
+            return this.mirror.getSelection();
+        } else {
+            let inp = this.$input[0],
+                beg = inp.selectionStart,
+                end = inp.selectionEnd;
+
+            return inp.value.substring(beg, end);
+        }
+    }
+
     private onEditorChange() {
         this.render();
     }

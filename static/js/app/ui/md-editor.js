@@ -326,6 +326,15 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 this.render();
             }
         };
+        MdEditor.prototype.getSelection = function () {
+            if (this.mirror) {
+                return this.mirror.getSelection();
+            }
+            else {
+                var inp = this.$input[0], beg = inp.selectionStart, end = inp.selectionEnd;
+                return inp.value.substring(beg, end);
+            }
+        };
         MdEditor.prototype.onEditorChange = function () {
             this.render();
         };
@@ -348,7 +357,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
         };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
-                return $('.lhs').is(':hidden');
+                return $('.lhs').is(':hidden') && false;
             },
             enumerable: true,
             configurable: true
