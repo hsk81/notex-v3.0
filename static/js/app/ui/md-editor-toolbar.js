@@ -67,16 +67,30 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         };
         MdEditorToolbar.prototype.onMirrorClick = function () {
             if (this.ed.mirror) {
-                this.ed.toInput({
+                var scroll_1 = this.ed.mirror.getScrollInfo(), range = this.ed.mirror.listSelections()[0];
+                var start = this.ed.mirror.indexFromPos(range.anchor), end = this.ed.mirror.indexFromPos(range.head);
+                var $input = this.ed.toInput({
                     toolbar: true
                 });
-                this.ed.$input.show();
-                this.ed.$input.focus();
+                $input.show();
+                $input.focus();
+                $input.scrollLeft(scroll_1.left);
+                $input.scrollTop(scroll_1.top);
+                $input[0].setSelectionRange(Math.min(start, end), Math.max(start, end));
                 this.$mirror.css('transform', 'scale(-1,1)');
             }
             else {
-                this.ed.toMirror();
-                this.ed.mirror.focus();
+                var scroll_2 = {
+                    left: this.ed.$input.scrollLeft(),
+                    top: this.ed.$input.scrollTop()
+                }, sel = {
+                    start: this.ed.$input[0].selectionStart,
+                    end: this.ed.$input[0].selectionEnd
+                };
+                var mirror = this.ed.toMirror();
+                mirror.focus();
+                mirror.scrollTo(scroll_2.left, scroll_2.top);
+                mirror.setSelection(mirror.posFromIndex(sel.start), mirror.posFromIndex(sel.end));
                 this.$mirror.css('transform', 'scale(+1,1)');
             }
         };
@@ -85,6 +99,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 this.ed.mirror.execCommand('undo');
             }
             else {
+                try {
+                    document.execCommand('undo');
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             }
             this.ed.focus();
         };
@@ -93,29 +113,37 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 this.ed.mirror.execCommand('redo');
             }
             else {
+                try {
+                    document.execCommand('redo');
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             }
             this.ed.focus();
         };
         MdEditorToolbar.prototype.onCutClick = function () {
+            this.clipboard = this.ed.getSelection();
             if (this.ed.mirror) {
-                this.clipboard = this.ed.mirror.getSelection();
                 this.ed.mirror.replaceSelection('');
             }
             else {
+                try {
+                    document.execCommand('cut');
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             }
             this.ed.focus();
         };
         MdEditorToolbar.prototype.onCopyClick = function () {
+            this.clipboard = this.ed.getSelection();
             try {
                 document.execCommand('copy');
             }
             catch (ex) {
                 console.error(ex);
-            }
-            if (this.ed.mirror) {
-                this.clipboard = this.ed.mirror.getSelection();
-            }
-            else {
             }
             this.ed.focus();
         };
@@ -124,6 +152,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 this.ed.mirror.replaceSelection(this.clipboard);
             }
             else {
+                try {
+                    document.execCommand('insertText', false, this.clipboard);
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             }
             this.ed.focus();
         };
@@ -132,6 +166,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 this.ed.mirror.replaceSelection('');
             }
             else {
+                try {
+                    document.execCommand('insertText', false, '');
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             }
             this.ed.focus();
         };

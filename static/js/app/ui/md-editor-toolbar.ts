@@ -77,15 +77,40 @@ export class MdEditorToolbar {
 
     private onMirrorClick() {
         if (this.ed.mirror) {
-            this.ed.toInput({
+            let scroll = this.ed.mirror.getScrollInfo(),
+                range = this.ed.mirror.listSelections()[0];
+            let start = this.ed.mirror.indexFromPos(range.anchor),
+                end = this.ed.mirror.indexFromPos(range.head);
+
+            let $input = this.ed.toInput({
                 toolbar: true
             });
-            this.ed.$input.show();
-            this.ed.$input.focus();
+
+            $input.show();
+            $input.focus();
+            $input.scrollLeft(scroll.left);
+            $input.scrollTop(scroll.top);
+            $input[0].setSelectionRange(
+                Math.min(start, end), Math.max(start, end));
+
             this.$mirror.css('transform', 'scale(-1,1)');
         } else {
-            this.ed.toMirror();
-            this.ed.mirror.focus();
+            let scroll = {
+                left: this.ed.$input.scrollLeft(),
+                top: this.ed.$input.scrollTop()
+            }, sel = {
+                start: this.ed.$input[0].selectionStart,
+                end: this.ed.$input[0].selectionEnd
+            };
+
+            let mirror = this.ed.toMirror();
+
+            mirror.focus();
+            mirror.scrollTo(scroll.left, scroll.top);
+            mirror.setSelection(
+                mirror.posFromIndex(sel.start),
+                mirror.posFromIndex(sel.end));
+
             this.$mirror.css('transform', 'scale(+1,1)');
         }
     }
@@ -94,7 +119,11 @@ export class MdEditorToolbar {
         if (this.ed.mirror) {
             this.ed.mirror.execCommand('undo');
         } else {
-            //@TODO: skip?
+            try {
+                document.execCommand('undo')
+            } catch (ex) {
+                console.error(ex);
+            }
         }
         this.ed.focus();
     }
@@ -103,31 +132,35 @@ export class MdEditorToolbar {
         if (this.ed.mirror) {
             this.ed.mirror.execCommand('redo');
         } else {
-            //@TODO: skip?
+            try {
+                document.execCommand('redo')
+            } catch (ex) {
+                console.error(ex);
+            }
         }
         this.ed.focus();
     }
 
     private onCutClick() {
+        this.clipboard = this.ed.getSelection();
         if (this.ed.mirror) {
-            this.clipboard = this.ed.mirror.getSelection();
             this.ed.mirror.replaceSelection('');
         } else {
-            //@TODO: implement!
+            try {
+                document.execCommand('cut')
+            } catch (ex) {
+                console.error(ex);
+            }
         }
         this.ed.focus();
     }
 
     private onCopyClick() {
+        this.clipboard = this.ed.getSelection();
         try {
             document.execCommand('copy');
         } catch (ex) {
             console.error(ex);
-        }
-        if (this.ed.mirror) {
-            this.clipboard = this.ed.mirror.getSelection();
-        } else {
-            //@TODO: implement!
         }
         this.ed.focus();
     }
@@ -136,7 +169,11 @@ export class MdEditorToolbar {
         if (this.ed.mirror) {
             this.ed.mirror.replaceSelection(this.clipboard);
         } else {
-            //@TODO: implement!
+            try {
+                document.execCommand('insertText', false, this.clipboard);
+            } catch (ex) {
+                console.error(ex);
+            }
         }
         this.ed.focus();
     }
@@ -145,7 +182,11 @@ export class MdEditorToolbar {
         if (this.ed.mirror) {
             this.ed.mirror.replaceSelection('');
         } else {
-            //@TODO: implement!
+            try {
+                document.execCommand('insertText', false, '');
+            } catch (ex) {
+                console.error(ex);
+            }
         }
         this.ed.focus();
     }
