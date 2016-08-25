@@ -105,6 +105,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 catch (ex) {
                     console.error(ex);
                 }
+                this.ed.$input.trigger('change');
             }
             this.ed.focus();
         };
@@ -119,6 +120,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 catch (ex) {
                     console.error(ex);
                 }
+                this.ed.$input.trigger('change');
             }
             this.ed.focus();
         };
@@ -134,6 +136,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 catch (ex) {
                     console.error(ex);
                 }
+                this.ed.$input.trigger('change');
             }
             this.ed.focus();
         };
@@ -158,6 +161,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 catch (ex) {
                     console.error(ex);
                 }
+                this.ed.$input.trigger('change');
             }
             this.ed.focus();
         };
@@ -172,93 +176,132 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 catch (ex) {
                     console.error(ex);
                 }
+                this.ed.$input.trigger('change');
             }
             this.ed.focus();
         };
         MdEditorToolbar.prototype.onHeaderClick = function () {
             if (this.ed.mirror) {
-                var cursor = this.ed.mirror.getCursor(), curr_from = { line: cursor.line, ch: 0 }, next_from = { line: cursor.line + 1, ch: 0 };
-                var curr_ts = this.ed.mirror.getLineTokens(curr_from.line), next_ts = this.ed.mirror.getLineTokens(next_from.line);
-                var line = this.ed.mirror.getLineHandle(curr_from.line), mode = this.ed.mirror.getModeAt(curr_from);
-                var sx = line.text.match(/^\s+/) ? '' : ' ', px = '#';
-                var hs = curr_ts.filter(function (tok) {
-                    return tok && tok.type && tok.type.match(/header/);
-                });
-                var h1s = line.text.match(/^\s*=/) && curr_ts.filter(function (tok) {
-                    return tok && tok.type && tok.type.match(/header-1/) &&
-                        tok.string === '=';
-                });
-                var h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter(function (tok) {
-                    return tok && tok.type && tok.type.match(/header-2/) &&
-                        tok.string === '-';
-                });
-                var h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter(function (tok) {
-                    return tok && tok.type && tok.type.match(/header-6/) &&
-                        tok.string === '#';
-                });
-                if (mode && mode.name === 'markdown') {
-                    if (hs && hs.length > 0) {
-                        if (h1s && h1s.length > 0) {
-                            this.ed.mirror.replaceRange('', curr_from, {
-                                ch: 0, line: curr_from.line + 1
-                            });
-                            this.ed.mirror.replaceRange('#' + px + sx, {
-                                ch: 0, line: curr_from.line - 1
-                            });
-                            this.ed.mirror.setCursor({
-                                ch: 3, line: curr_from.line - 1
-                            });
-                        }
-                        else if (h2s && h2s.length > 0) {
-                            this.ed.mirror.replaceRange('', curr_from, {
-                                ch: 0, line: curr_from.line + 1
-                            });
-                            this.ed.mirror.replaceRange('##' + px + sx, {
-                                ch: 0, line: curr_from.line - 1
-                            });
-                            this.ed.mirror.setCursor({
-                                ch: 4, line: curr_from.line - 1
-                            });
-                        }
-                        else if (h6s && h6s.length > 0) {
-                            this.ed.mirror.replaceRange('', curr_from, {
-                                ch: line.text.match(/\s*#{6}\s*/).toString().length,
-                                line: curr_from.line,
-                            });
-                        }
-                        else {
-                            this.ed.mirror.replaceRange(px, {
-                                ch: hs[0].start, line: curr_from.line
-                            });
-                        }
-                    }
-                    else {
-                        if (next_ts.length > 0) {
-                            var next_tok = next_ts[next_ts.length - 1];
-                            if (next_tok.type && next_tok.type.match(/^header/)) {
-                                if (next_tok.string === '=' &&
-                                    next_tok.type.match(/header-1$/)) {
-                                    this.ed.mirror.replaceRange('', next_from, {
-                                        line: next_from.line + 1, ch: 0
-                                    });
-                                    px += '#';
-                                }
-                                if (next_tok.string === '-' &&
-                                    next_tok.type.match(/header-2$/)) {
-                                    this.ed.mirror.replaceRange('', next_from, {
-                                        line: next_from.line + 1, ch: 0
-                                    });
-                                    px += '##';
-                                }
-                            }
-                        }
-                        this.ed.mirror.replaceRange(px + sx, curr_from);
-                    }
-                }
+                this.onHeaderClickMirror();
             }
             else {
+                this.onHeaderClickSimple();
             }
             this.ed.focus();
+        };
+        MdEditorToolbar.prototype.onHeaderClickMirror = function () {
+            var cursor = this.ed.mirror.getCursor(), curr_from = { line: cursor.line, ch: 0 }, next_from = { line: cursor.line + 1, ch: 0 };
+            var curr_ts = this.ed.mirror.getLineTokens(curr_from.line), next_ts = this.ed.mirror.getLineTokens(next_from.line);
+            var line = this.ed.mirror.getLineHandle(curr_from.line), mode = this.ed.mirror.getModeAt(curr_from);
+            var suffix = line.text.match(/^\s+/) ? '' : ' ', prefix = '#';
+            var hs = curr_ts.filter(function (tok) {
+                return tok && tok.type && tok.type.match(/header/);
+            });
+            var h1s = line.text.match(/^\s*=/) && curr_ts.filter(function (tok) {
+                return tok && tok.type && tok.type.match(/header-1/) &&
+                    tok.string === '=';
+            });
+            var h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter(function (tok) {
+                return tok && tok.type && tok.type.match(/header-2/) &&
+                    tok.string === '-';
+            });
+            var h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter(function (tok) {
+                return tok && tok.type && tok.type.match(/header-6/) &&
+                    tok.string === '#';
+            });
+            if (mode && mode.name === 'markdown') {
+                if (hs && hs.length > 0) {
+                    if (h1s && h1s.length > 0) {
+                        this.ed.mirror.replaceRange('', curr_from, {
+                            ch: 0, line: curr_from.line + 1
+                        });
+                        this.ed.mirror.replaceRange('#' + prefix + suffix, {
+                            ch: 0, line: curr_from.line - 1
+                        });
+                        this.ed.mirror.setCursor({
+                            ch: 3, line: curr_from.line - 1
+                        });
+                    }
+                    else if (h2s && h2s.length > 0) {
+                        this.ed.mirror.replaceRange('', curr_from, {
+                            ch: 0, line: curr_from.line + 1
+                        });
+                        this.ed.mirror.replaceRange('##' + prefix + suffix, {
+                            ch: 0, line: curr_from.line - 1
+                        });
+                        this.ed.mirror.setCursor({
+                            ch: 4, line: curr_from.line - 1
+                        });
+                    }
+                    else if (h6s && h6s.length > 0) {
+                        this.ed.mirror.replaceRange('', curr_from, {
+                            ch: line.text.match(/\s*#{6}\s*/).toString().length,
+                            line: curr_from.line,
+                        });
+                    }
+                    else {
+                        this.ed.mirror.replaceRange(prefix, {
+                            ch: hs[0].start, line: curr_from.line
+                        });
+                    }
+                }
+                else {
+                    if (next_ts.length > 0) {
+                        var next_tok = next_ts[next_ts.length - 1];
+                        if (next_tok.type && next_tok.type.match(/^header/)) {
+                            if (next_tok.string === '=' &&
+                                next_tok.type.match(/header-1$/)) {
+                                this.ed.mirror.replaceRange('', next_from, {
+                                    line: next_from.line + 1, ch: 0
+                                });
+                                prefix += '#';
+                            }
+                            if (next_tok.string === '-' &&
+                                next_tok.type.match(/header-2$/)) {
+                                this.ed.mirror.replaceRange('', next_from, {
+                                    line: next_from.line + 1, ch: 0
+                                });
+                                prefix += '##';
+                            }
+                        }
+                    }
+                    this.ed.mirror.replaceRange(prefix + suffix, curr_from);
+                }
+            }
+        };
+        MdEditorToolbar.prototype.onHeaderClickSimple = function () {
+            var value = this.ed.$input.val(), start = this.ed.$input[0].selectionStart, end = this.ed.$input[0].selectionEnd, idx = start;
+            while (idx-- > 0) {
+                if (value[idx] === '\n') {
+                    break;
+                }
+            }
+            var prefix = value.substring(0, idx + 1), suffix = value.substring(idx + 1, value.length);
+            var rx_6 = /^\s*#{6,}\s*/, mm_6 = suffix.match(rx_6);
+            var rx_5 = /^\s*#{1,5}/, mm_5 = suffix.match(rx_5);
+            var rx_0 = /^\s*#{0}/, mm_0 = suffix.match(rx_0);
+            if (mm_6 && mm_6.length > 0) {
+                this.ed.$input[0].setSelectionRange(idx + 1, idx + mm_6[0].length + 1);
+                if (!document.execCommand('insertText', false, '')) {
+                    this.ed.$input.val("" + prefix + suffix.replace(rx_6, ''));
+                }
+                this.ed.$input[0].setSelectionRange(start - mm_6[0].length, end - mm_6[0].length);
+            }
+            else if (mm_5 && mm_5.length > 0) {
+                this.ed.$input[0].setSelectionRange(idx + 1, idx + mm_5[0].length + 1);
+                if (!document.execCommand('insertText', false, mm_5[0] + '#')) {
+                    this.ed.$input.val("" + prefix + suffix.replace(rx_5, mm_5[0] + '#'));
+                }
+                this.ed.$input[0].setSelectionRange(start + 1, end + 1);
+            }
+            else if (mm_0 && mm_0.length > 0) {
+                this.ed.$input[0].setSelectionRange(idx + 1, idx + mm_0[0].length + 1);
+                if (!document.execCommand('insertText', false, '# ' + mm_0[0])) {
+                    this.ed.$input.val("" + prefix + suffix.replace(rx_0, '# ' + mm_0[0]));
+                }
+                this.ed.$input[0].setSelectionRange(start + mm_0[0].length + 2, end + mm_0[0].length + 2);
+            }
+            this.ed.$input.trigger('change');
         };
         MdEditorToolbar.prototype.onBoldClick = function () {
             var _this = this;
