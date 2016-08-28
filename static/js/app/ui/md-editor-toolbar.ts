@@ -482,90 +482,131 @@ export class MdEditorToolbar {
 
     private onItalicClick() {
         if (this.ed.mirror) {
-            let selections = this.ed.mirror.listSelections();
-            if (selections.length > 0 && this.ed.mirror.getSelection()) {
-                this.ed.mirror.setSelections(selections.map((sel) => {
-                    let lhs_mod = this.ed.mirror.getModeAt(sel.head),
-                        rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
-                    if (lhs_mod && lhs_mod.name === 'markdown' &&
-                        rhs_mod && rhs_mod.name === 'markdown')
-                    {
-                        let tok = this.ed.mirror.getTokenAt(sel.head);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/))
-                        {
-                            return {
-                                anchor: this.lhs(sel.anchor, tok),
-                                head: this.rhs(sel.head, tok)
-                            };
-                        } else {
-                            return sel;
-                        }
-                    } else {
-                        return sel;
-                    }
-                }));
-                this.ed.mirror.replaceSelections(selections.map((sel) => {
-                    let sel_lhs = sel.anchor,
-                        sel_rhs = sel.head;
-                    if (sel_lhs.line > sel_rhs.line ||
-                        sel_lhs.line === sel_rhs.line &&
-                        sel_lhs.ch > sel_rhs.ch)
-                    {
-                        sel_lhs = sel.head;
-                        sel_rhs = sel.anchor;
-                    }
-                    let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
-                        mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
-                    if (mod_lhs && mod_lhs.name === 'markdown' &&
-                        mod_rhs && mod_rhs.name === 'markdown')
-                    {
-                        let tok = this.ed.mirror.getTokenAt(sel_rhs);
-                        if (tok.type && tok.type.match(/strong/) ||
-                            tok.type && tok.type.match(/em/)) {
-                            let lhs = this.lhs(sel_lhs, tok),
-                                rhs = this.rhs(sel_rhs, tok);
-                            return this.ed.mirror
-                                .getRange(lhs, rhs).slice(1, -1);
-                        } else {
-                            return `*${this.ed.mirror
-                                .getRange(sel_lhs, sel_rhs)}*`;
-                        }
-                    } else {
-                        return this.ed.mirror
-                            .getRange(sel_lhs, sel_rhs);
-                    }
-                }), 'around');
-            } else {
-                let cur = this.ed.mirror.getCursor(),
-                    mod = this.ed.mirror.getModeAt(cur);
-                if (mod && mod.name === 'markdown') {
-                    let tok = this.ed.mirror.getTokenAt(cur);
+            this.onItalicClickMirror();
+        } else {
+            this.onItalicClickSimple();
+        }
+        this.ed.focus();
+    }
+
+    private onItalicClickMirror() {
+        let selections = this.ed.mirror.listSelections();
+        if (selections.length > 0 && this.ed.mirror.getSelection()) {
+            this.ed.mirror.setSelections(selections.map((sel) => {
+                let lhs_mod = this.ed.mirror.getModeAt(sel.head),
+                    rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+                if (lhs_mod && lhs_mod.name === 'markdown' &&
+                    rhs_mod && rhs_mod.name === 'markdown')
+                {
+                    let tok = this.ed.mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/))
                     {
-                        let lhs = this.lhs(cur, tok),
-                            rhs = this.rhs(cur, tok);
-                        let src = this.ed.mirror.getRange(lhs, rhs),
-                            tgt = src.slice(1, -1);
-                        this.ed.mirror.replaceRange(tgt, lhs, rhs);
-                        this.ed.mirror.setSelection(lhs, {
-                            line: rhs.line, ch: rhs.ch - 2
-                        });
+                        return {
+                            anchor: this.lhs(sel.anchor, tok),
+                            head: this.rhs(sel.head, tok)
+                        };
                     } else {
-                        this.ed.mirror.replaceRange('* *', cur);
-                        this.ed.mirror.setSelection({
-                            line: cur.line, ch: cur.ch + 1
-                        }, {
-                            line: cur.line, ch: cur.ch + 2
-                        });
+                        return sel;
                     }
+                } else {
+                    return sel;
+                }
+            }));
+            this.ed.mirror.replaceSelections(selections.map((sel) => {
+                let sel_lhs = sel.anchor,
+                    sel_rhs = sel.head;
+                if (sel_lhs.line > sel_rhs.line ||
+                    sel_lhs.line === sel_rhs.line &&
+                    sel_lhs.ch > sel_rhs.ch)
+                {
+                    sel_lhs = sel.head;
+                    sel_rhs = sel.anchor;
+                }
+                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
+                    mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                if (mod_lhs && mod_lhs.name === 'markdown' &&
+                    mod_rhs && mod_rhs.name === 'markdown')
+                {
+                    let tok = this.ed.mirror.getTokenAt(sel_rhs);
+                    if (tok.type && tok.type.match(/strong/) ||
+                        tok.type && tok.type.match(/em/)) {
+                        let lhs = this.lhs(sel_lhs, tok),
+                            rhs = this.rhs(sel_rhs, tok);
+                        return this.ed.mirror
+                            .getRange(lhs, rhs).slice(1, -1);
+                    } else {
+                        return `*${this.ed.mirror
+                            .getRange(sel_lhs, sel_rhs)}*`;
+                    }
+                } else {
+                    return this.ed.mirror
+                        .getRange(sel_lhs, sel_rhs);
+                }
+            }), 'around');
+        } else {
+            let cur = this.ed.mirror.getCursor(),
+                mod = this.ed.mirror.getModeAt(cur);
+            if (mod && mod.name === 'markdown') {
+                let tok = this.ed.mirror.getTokenAt(cur);
+                if (tok.type && tok.type.match(/strong/) ||
+                    tok.type && tok.type.match(/em/))
+                {
+                    let lhs = this.lhs(cur, tok),
+                        rhs = this.rhs(cur, tok);
+                    let src = this.ed.mirror.getRange(lhs, rhs),
+                        tgt = src.slice(1, -1);
+                    this.ed.mirror.replaceRange(tgt, lhs, rhs);
+                    this.ed.mirror.setSelection(lhs, {
+                        line: rhs.line, ch: rhs.ch - 2
+                    });
+                } else {
+                    this.ed.mirror.replaceRange('* *', cur);
+                    this.ed.mirror.setSelection({
+                        line: cur.line, ch: cur.ch + 1
+                    }, {
+                        line: cur.line, ch: cur.ch + 2
+                    });
                 }
             }
-        } else {
-            //@TODO: implement!
         }
-        this.ed.focus();
+    }
+
+    private onItalicClickSimple() {
+        let val:string = this.ed.$input.val(),
+            beg = this.ed.$input[0].selectionStart,
+            end = this.ed.$input[0].selectionEnd;
+
+        let px_1 = val.substring(0, beg),
+            ix_1 = val.substring(beg, end),
+            sx_1 = val.substring(end, val.length);
+        let px_2 = val.substring(0, beg - 1),
+            ix_2 = val.substring(beg - 1, end + 1),
+            sx_2 = val.substring(end + 1, val.length);
+
+        let rx_1 =/^\*([^*]+)\*$/,
+            mm_1 = ix_1.match(rx_1);
+        let rx_2 =/^\*([^*]+)\*$/,
+            mm_2 = ix_2.match(rx_2);
+
+        if (mm_1 && mm_1.length > 1) {
+            if (!document.execCommand('insertText', false, mm_1[1])) {
+                this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
+            }
+            this.ed.$input[0].setSelectionRange(beg, end - 2);
+        } else if (mm_2 && mm_2.length > 1) {
+            this.ed.$input[0].setSelectionRange(beg - 1, end + 1);
+            if (!document.execCommand('insertText', false, mm_2[1])) {
+                this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
+            }
+            this.ed.$input[0].setSelectionRange(beg - 1, end - 1);
+        } else {
+            if (!document.execCommand('insertText', false, `*${ix_1}*`)) {
+                this.ed.$input.val(`${px_1}*${ix_1}*${sx_1}`);
+            }
+            this.ed.$input[0].setSelectionRange(beg, end + 2);
+        }
+        this.ed.$input.trigger('change');
     }
 
     private onCommentClick() {
