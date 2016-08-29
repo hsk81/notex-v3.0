@@ -806,7 +806,7 @@ export class MdEditorToolbar {
         if (mm && mm.length > 0) {
             this.ed.$input[0].setSelectionRange(idx + 1, idx + 3);
             if (!document.execCommand('insertText', false, '')) {
-                this.ed.$input.val(`${px}  ${sx}`);
+                this.ed.$input.val(`${px}${sx.substring(2)}`);
             }
             if (beg > 0 && val[beg - 1] === '\n') {
                 this.ed.$input[0].setSelectionRange(beg, end);
@@ -841,13 +841,12 @@ export class MdEditorToolbar {
 
     private onSupscriptClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
             end = this.ed.$input[0].selectionEnd;
 
         this.ed.$input[0].setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '^{ }')) {
-            let px = val.substring(0, beg),
-                sx = val.substring(beg, val.length);
+            let px = val.substring(0, end),
+                sx = val.substring(end, val.length);
 
             this.ed.$input.val(`${px}^{ }${sx}`);
         }
@@ -880,13 +879,12 @@ export class MdEditorToolbar {
 
     private onSubscriptClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
             end = this.ed.$input[0].selectionEnd;
 
         this.ed.$input[0].setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '~{ }')) {
-            let px = val.substring(0, beg),
-                sx = val.substring(beg, val.length);
+            let px = val.substring(0, end),
+                sx = val.substring(end, val.length);
 
             this.ed.$input.val(`${px}~{ }${sx}`);
         }

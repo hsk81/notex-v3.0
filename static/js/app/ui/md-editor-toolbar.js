@@ -704,7 +704,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             if (mm && mm.length > 0) {
                 this.ed.$input[0].setSelectionRange(idx + 1, idx + 3);
                 if (!document.execCommand('insertText', false, '')) {
-                    this.ed.$input.val(px + "  " + sx);
+                    this.ed.$input.val("" + px + sx.substring(2));
                 }
                 if (beg > 0 && val[beg - 1] === '\n') {
                     this.ed.$input[0].setSelectionRange(beg, end);
@@ -736,10 +736,10 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             }
         };
         MdEditorToolbar.prototype.onSupscriptClickSimple = function () {
-            var val = this.ed.$input.val(), beg = this.ed.$input[0].selectionStart, end = this.ed.$input[0].selectionEnd;
+            var val = this.ed.$input.val(), end = this.ed.$input[0].selectionEnd;
             this.ed.$input[0].setSelectionRange(end, end);
             if (!document.execCommand('insertText', false, '^{ }')) {
-                var px = val.substring(0, beg), sx = val.substring(beg, val.length);
+                var px = val.substring(0, end), sx = val.substring(end, val.length);
                 this.ed.$input.val(px + "^{ }" + sx);
             }
             this.ed.$input[0].setSelectionRange(end + 2, end + 3);
@@ -766,10 +766,10 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             }
         };
         MdEditorToolbar.prototype.onSubscriptClickSimple = function () {
-            var val = this.ed.$input.val(), beg = this.ed.$input[0].selectionStart, end = this.ed.$input[0].selectionEnd;
+            var val = this.ed.$input.val(), end = this.ed.$input[0].selectionEnd;
             this.ed.$input[0].setSelectionRange(end, end);
             if (!document.execCommand('insertText', false, '~{ }')) {
-                var px = val.substring(0, beg), sx = val.substring(beg, val.length);
+                var px = val.substring(0, end), sx = val.substring(end, val.length);
                 this.ed.$input.val(px + "~{ }" + sx);
             }
             this.ed.$input[0].setSelectionRange(end + 2, end + 3);
