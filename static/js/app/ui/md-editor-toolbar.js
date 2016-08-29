@@ -89,6 +89,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 $input.scrollTop(scroll_1.top);
                 $input[0].setSelectionRange(Math.min(start, end), Math.max(start, end));
                 this.$mirror.css('transform', 'scale(-1,1)');
+                this.$mirror.tooltip('hide');
             }
             else {
                 var scroll_2 = {
@@ -103,6 +104,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 mirror.scrollTo(scroll_2.left, scroll_2.top);
                 mirror.setSelection(mirror.posFromIndex(sel.start), mirror.posFromIndex(sel.end));
                 this.$mirror.css('transform', 'scale(+1,1)');
+                this.$mirror.tooltip('hide');
             }
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
