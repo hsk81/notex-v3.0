@@ -55,6 +55,12 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                     _this.refresh();
                 });
             }
+            if (this.ed.simple) {
+                this.$mirror.css('transform', 'scale(-1,1)');
+            }
+            else {
+                this.$mirror.css('transform', 'scale(+1,1)');
+            }
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
