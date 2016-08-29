@@ -654,19 +654,61 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         };
         MdEditorToolbar.prototype.onIndentClick = function () {
             if (this.ed.mirror) {
-                this.ed.mirror.execCommand('indentMore');
+                this.onIndentClickMirror();
             }
             else {
+                this.onIndentClickSimple();
             }
             this.ed.focus();
         };
+        MdEditorToolbar.prototype.onIndentClickMirror = function () {
+            this.ed.mirror.execCommand('indentMore');
+        };
+        MdEditorToolbar.prototype.onIndentClickSimple = function () {
+            var val = this.ed.$input.val(), beg = this.ed.$input[0].selectionStart, end = this.ed.$input[0].selectionEnd, idx = beg - 1;
+            while (idx >= 0 && val[idx] !== '\n') {
+                idx -= 1;
+            }
+            var px = val.substring(0, idx + 1), sx = val.substring(idx + 1, val.length);
+            this.ed.$input[0].setSelectionRange(idx + 1, idx + 1);
+            if (!document.execCommand('insertText', false, '  ')) {
+                this.ed.$input.val(px + "  " + sx);
+            }
+            this.ed.$input[0].setSelectionRange(beg + 2, end + 2);
+            this.ed.$input.trigger('change');
+        };
         MdEditorToolbar.prototype.onOutdentClick = function () {
             if (this.ed.mirror) {
-                this.ed.mirror.execCommand('indentLess');
+                this.onOutdentClickMirror();
             }
             else {
+                this.onOutdentClickSimple();
             }
             this.ed.focus();
+        };
+        MdEditorToolbar.prototype.onOutdentClickMirror = function () {
+            this.ed.mirror.execCommand('indentLess');
+        };
+        MdEditorToolbar.prototype.onOutdentClickSimple = function () {
+            var val = this.ed.$input.val(), beg = this.ed.$input[0].selectionStart, end = this.ed.$input[0].selectionEnd, idx = beg - 1;
+            while (idx >= 0 && val[idx] !== '\n') {
+                idx -= 1;
+            }
+            var px = val.substring(0, idx + 1), sx = val.substring(idx + 1, val.length);
+            var rx = /^\s{2}/, mm = sx.match(rx);
+            if (mm && mm.length > 0) {
+                this.ed.$input[0].setSelectionRange(idx + 1, idx + 3);
+                if (!document.execCommand('insertText', false, '')) {
+                    this.ed.$input.val(px + "  " + sx);
+                }
+                if (beg > 0 && val[beg - 1] === '\n') {
+                    this.ed.$input[0].setSelectionRange(beg, end);
+                }
+                else {
+                    this.ed.$input[0].setSelectionRange(beg - 2, end - 2);
+                }
+                this.ed.$input.trigger('change');
+            }
         };
         MdEditorToolbar.prototype.onSupscriptClick = function () {
             if (this.ed.mirror) {
