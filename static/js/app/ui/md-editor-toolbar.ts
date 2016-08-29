@@ -105,6 +105,7 @@ export class MdEditorToolbar {
                 Math.min(start, end), Math.max(start, end));
 
             this.$mirror.css('transform', 'scale(-1,1)');
+            this.$mirror.tooltip('hide');
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -122,6 +123,7 @@ export class MdEditorToolbar {
                 mirror.posFromIndex(sel.end));
 
             this.$mirror.css('transform', 'scale(+1,1)');
+            this.$mirror.tooltip('hide');
         }
     }
 
