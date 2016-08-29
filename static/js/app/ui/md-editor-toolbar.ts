@@ -737,20 +737,79 @@ export class MdEditorToolbar {
 
     private onIndentClick() {
         if (this.ed.mirror) {
-            this.ed.mirror.execCommand('indentMore');
+            this.onIndentClickMirror();
         } else {
-            //@TODO: implement!
+            this.onIndentClickSimple();
         }
         this.ed.focus();
     }
 
+    private onIndentClickMirror() {
+        this.ed.mirror.execCommand('indentMore');
+    }
+
+    private onIndentClickSimple() {
+        let val:string = this.ed.$input.val(),
+            beg = this.ed.$input[0].selectionStart,
+            end = this.ed.$input[0].selectionEnd,
+            idx = beg - 1;
+
+        while (idx >= 0 && val[idx] !== '\n') {
+            idx -= 1;
+        }
+
+        let px = val.substring(0, idx + 1),
+            sx = val.substring(idx + 1, val.length);
+
+        this.ed.$input[0].setSelectionRange(idx + 1, idx + 1);
+        if (!document.execCommand('insertText', false, '  ')) {
+            this.ed.$input.val(`${px}  ${sx}`);
+        }
+
+        this.ed.$input[0].setSelectionRange(beg + 2, end + 2);
+        this.ed.$input.trigger('change');
+    }
+
     private onOutdentClick() {
         if (this.ed.mirror) {
-            this.ed.mirror.execCommand('indentLess');
+            this.onOutdentClickMirror();
         } else {
-            //@TODO: implement!
+            this.onOutdentClickSimple();
         }
         this.ed.focus();
+    }
+
+    private onOutdentClickMirror() {
+        this.ed.mirror.execCommand('indentLess');
+    }
+
+    private onOutdentClickSimple() {
+        let val:string = this.ed.$input.val(),
+            beg = this.ed.$input[0].selectionStart,
+            end = this.ed.$input[0].selectionEnd,
+            idx = beg - 1;
+
+        while (idx >= 0 && val[idx] !== '\n') {
+            idx -= 1;
+        }
+
+        let px = val.substring(0, idx + 1),
+            sx = val.substring(idx + 1, val.length);
+
+        let rx =/^\s{2}/,
+            mm = sx.match(rx);
+        if (mm && mm.length > 0) {
+            this.ed.$input[0].setSelectionRange(idx + 1, idx + 3);
+            if (!document.execCommand('insertText', false, '')) {
+                this.ed.$input.val(`${px}  ${sx}`);
+            }
+            if (beg > 0 && val[beg - 1] === '\n') {
+                this.ed.$input[0].setSelectionRange(beg, end);
+            } else {
+                this.ed.$input[0].setSelectionRange(beg - 2, end - 2);
+            }
+            this.ed.$input.trigger('change');
+        }
     }
 
     private onSupscriptClick() {
