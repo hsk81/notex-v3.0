@@ -25,6 +25,11 @@ export class MdEditorToolbar {
     }
 
     public constructor() {
+        this.$mirror.tooltip({
+            container: 'body', title: (function () {
+                return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
+            }).bind(this)
+        });
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
 
@@ -814,38 +819,80 @@ export class MdEditorToolbar {
 
     private onSupscriptClick() {
         if (this.ed.mirror) {
-            let cur = this.ed.mirror.getCursor(),
-                mod = this.ed.mirror.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
-                this.ed.mirror.replaceRange('^{ }', cur);
-                this.ed.mirror.setSelection({
-                    line: cur.line, ch: cur.ch + 2
-                }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
-            }
+            this.onSupscriptClickMirror();
         } else {
-            //@TODO: implement!
+            this.onSupscriptClickSimple();
         }
         this.ed.focus();
     }
 
+    private onSupscriptClickMirror() {
+        let cur = this.ed.mirror.getCursor(),
+            mod = this.ed.mirror.getModeAt(cur);
+        if (mod && mod.name === 'markdown') {
+            this.ed.mirror.replaceRange('^{ }', cur);
+            this.ed.mirror.setSelection({
+                line: cur.line, ch: cur.ch + 2
+            }, {
+                line: cur.line, ch: cur.ch + 3
+            });
+        }
+    }
+
+    private onSupscriptClickSimple() {
+        let val:string = this.ed.$input.val(),
+            beg = this.ed.$input[0].selectionStart,
+            end = this.ed.$input[0].selectionEnd;
+
+        this.ed.$input[0].setSelectionRange(end, end);
+        if (!document.execCommand('insertText', false, '^{ }')) {
+            let px = val.substring(0, beg),
+                sx = val.substring(beg, val.length);
+
+            this.ed.$input.val(`${px}^{ }${sx}`);
+        }
+
+        this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+        this.ed.$input.trigger('change');
+    }
+
     private onSubscriptClick() {
         if (this.ed.mirror) {
-            let cur = this.ed.mirror.getCursor(),
-                mod = this.ed.mirror.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
-                this.ed.mirror.replaceRange('~{ }', cur);
-                this.ed.mirror.setSelection({
-                    line: cur.line, ch: cur.ch + 2
-                }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
-            }
+            this.onSubscriptClickMirror();
         } else {
-            //@TODO: implement!
+            this.onSubscriptClickSimple();
         }
         this.ed.focus();
+    }
+
+    private onSubscriptClickMirror() {
+        let cur = this.ed.mirror.getCursor(),
+            mod = this.ed.mirror.getModeAt(cur);
+        if (mod && mod.name === 'markdown') {
+            this.ed.mirror.replaceRange('~{ }', cur);
+            this.ed.mirror.setSelection({
+                line: cur.line, ch: cur.ch + 2
+            }, {
+                line: cur.line, ch: cur.ch + 3
+            });
+        }
+    }
+
+    private onSubscriptClickSimple() {
+        let val:string = this.ed.$input.val(),
+            beg = this.ed.$input[0].selectionStart,
+            end = this.ed.$input[0].selectionEnd;
+
+        this.ed.$input[0].setSelectionRange(end, end);
+        if (!document.execCommand('insertText', false, '~{ }')) {
+            let px = val.substring(0, beg),
+                sx = val.substring(beg, val.length);
+
+            this.ed.$input.val(`${px}~{ }${sx}`);
+        }
+
+        this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+        this.ed.$input.trigger('change');
     }
 
     private lhs(cursor, token): {ch: number, line: number} {
