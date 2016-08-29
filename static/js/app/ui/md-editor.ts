@@ -6,6 +6,8 @@ console.debug('[import:app/ui/md-editor.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+import {cookie} from '../cookie/cookie';
+
 import {buffered} from '../decorator/buffered';
 import {named} from '../decorator/named';
 import {traceable} from '../decorator/trace';
@@ -210,6 +212,10 @@ export class MdEditor {
             this.toInput({
                 toolbar: false
             });
+        } else if (this.simple) {
+            this.toInput({
+                toolbar: true
+            });
         } else {
             this.toMirror();
         }
@@ -244,6 +250,7 @@ export class MdEditor {
             });
         }
 
+        this.simple = false;
         this.$input.hide();
         return this.mirror;
     }
@@ -267,6 +274,7 @@ export class MdEditor {
             this.$input.css('width', '100% ');
         }
 
+        this.simple = true;
         return this.$input;
     }
 
@@ -392,6 +400,14 @@ export class MdEditor {
 
     public get mobile(): boolean {
         return $('.lhs').is(':hidden');
+    }
+
+    public get simple(): boolean {
+        return cookie.get<boolean>('simple', false);
+    }
+
+    public set simple(value:boolean) {
+        cookie.set<boolean>('simple', value);
     }
 
     private set spellCheck(value: SpellCheck) {

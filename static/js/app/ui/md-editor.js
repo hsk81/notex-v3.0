@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-check/spell-check'], function (require, exports, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_check_1) {
+define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-check/spell-check'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_check_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
@@ -15,6 +15,11 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             if (this.mobile) {
                 this.toInput({
                     toolbar: false
+                });
+            }
+            else if (this.simple) {
+                this.toInput({
+                    toolbar: true
                 });
             }
             else {
@@ -232,6 +237,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                     _this.mirror.addOverlay(overlay);
                 });
             }
+            this.simple = false;
             this.$input.hide();
             return this.mirror;
         };
@@ -250,6 +256,7 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
             else {
                 this.$input.css('width', '100% ');
             }
+            this.simple = true;
             return this.$input;
         };
         MdEditor.prototype.render = function () {
@@ -362,6 +369,16 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
                 return $('.lhs').is(':hidden');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "simple", {
+            get: function () {
+                return cookie_1.cookie.get('simple', false);
+            },
+            set: function (value) {
+                cookie_1.cookie.set('simple', value);
             },
             enumerable: true,
             configurable: true

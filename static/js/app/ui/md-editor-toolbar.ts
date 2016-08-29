@@ -73,6 +73,12 @@ export class MdEditorToolbar {
                 this.refresh();
             });
         }
+
+        if (this.ed.simple) {
+            this.$mirror.css('transform', 'scale(-1,1)');
+        } else {
+            this.$mirror.css('transform', 'scale(+1,1)');
+        }
     }
 
     public refresh() {
