@@ -322,8 +322,12 @@ define(["require", "exports", '../decorator/buffered', '../decorator/named', '..
                 return this.mirror.setValue(value);
             }
             else {
-                this.$input.val(value);
-                this.render();
+                this.$input[0].setSelectionRange(0, this.$input.val().length);
+                if (!document.execCommand('insertText', false, value)) {
+                    this.$input.val(value);
+                }
+                this.$input[0].setSelectionRange(0, 0);
+                this.$input.trigger('change');
             }
         };
         MdEditor.prototype.getSelection = function () {
