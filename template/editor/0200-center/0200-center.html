@@ -117,6 +117,7 @@
                         -->
                     </div>
                 </div>
+                <!--
                 <div class="md-toolbar-inner">
                     <div class="md-toolbar">
                         <div class="btn-group-vertical" role="group">
@@ -128,8 +129,18 @@
                         </div>
                     </div>
                 </div>
+                -->
             </div>
             <textarea id="md-inp" placeholder="..." autofocus></textarea>
+            <div class="lhs-footer">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default"
+                            data-container="body" data-placement="right">
+                        <span class="glyphicon glyphicon-flash code-mirror"
+                              style="transform: scale(-1,1);"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="rhs col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <div id="md-out">{% include 'editor/0200-center/0201-center.md-out.html' %}</div>
