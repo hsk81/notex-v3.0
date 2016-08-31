@@ -55,12 +55,6 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                     _this.refresh();
                 });
             }
-            if (this.ed.simple) {
-                this.$mirror.css('transform', 'scale(-1,1)');
-            }
-            else {
-                this.$mirror.css('transform', 'scale(+1,1)');
-            }
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
@@ -88,7 +82,6 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 $input.scrollLeft(scroll_1.left);
                 $input.scrollTop(scroll_1.top);
                 $input[0].setSelectionRange(Math.min(start, end), Math.max(start, end));
-                this.$mirror.css('transform', 'scale(-1,1)');
                 this.$mirror.tooltip('hide');
             }
             else {
@@ -103,7 +96,6 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 mirror.focus();
                 mirror.scrollTo(scroll_2.left, scroll_2.top);
                 mirror.setSelection(mirror.posFromIndex(sel.start), mirror.posFromIndex(sel.end));
-                this.$mirror.css('transform', 'scale(+1,1)');
                 this.$mirror.tooltip('hide');
             }
         };
