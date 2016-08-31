@@ -73,12 +73,6 @@ export class MdEditorToolbar {
                 this.refresh();
             });
         }
-
-        if (this.ed.simple) {
-            this.$mirror.css('transform', 'scale(-1,1)');
-        } else {
-            this.$mirror.css('transform', 'scale(+1,1)');
-        }
     }
 
     public refresh() {
@@ -104,7 +98,6 @@ export class MdEditorToolbar {
             $input[0].setSelectionRange(
                 Math.min(start, end), Math.max(start, end));
 
-            this.$mirror.css('transform', 'scale(-1,1)');
             this.$mirror.tooltip('hide');
         } else {
             let scroll = {
@@ -122,7 +115,6 @@ export class MdEditorToolbar {
                 mirror.posFromIndex(sel.start),
                 mirror.posFromIndex(sel.end));
 
-            this.$mirror.css('transform', 'scale(+1,1)');
             this.$mirror.tooltip('hide');
         }
     }
