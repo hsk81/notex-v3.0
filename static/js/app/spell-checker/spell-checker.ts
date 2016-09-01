@@ -14,7 +14,7 @@ export class SpellCheck {
         lingua: ILingua, callback: (overlay: IOverlay) => void
     ) {
         let worker = new Worker(
-            '/static/js/app/spell-check/spell-check.worker.js');
+            '/static/js/app/spell-checker/spell-checker.worker.js');
         worker.onmessage = (ev: any) => {
             if (ev.data && ev.data.typo) {
                 this._typo = Typo.prototype.load(ev.data.typo);

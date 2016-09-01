@@ -15,7 +15,8 @@ import {trace} from '../decorator/trace';
 
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
-import SpellCheck from '../spell-check/spell-check';
+import SpellChecker from '../spell-checker/spell-checker';
+import {IOverlay} from '../spell-checker/spell-checker';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -242,12 +243,11 @@ export class MdEditor {
             });
             this.mirror
                 .on('change', this.onEditorChange.bind(this));
+        }
 
-            this.spellCheck = new SpellCheck({
-                code: 'en_US', charset: 'us-ascii'
-            }, (overlay) => {
-                this.mirror.addOverlay(overlay);
-            });
+        if (this.overlay) {
+            this.mirror.removeOverlay(this.overlay);
+            this.mirror.addOverlay(this.overlay);
         }
 
         this.simple = false;
@@ -259,6 +259,9 @@ export class MdEditor {
         toolbar: boolean
     }): any {
         if (this.mirror) {
+            if (this.overlay) {
+                this.mirror.removeOverlay(this.overlay);
+            }
             this.mirror.toTextArea();
             this.setMirror(undefined);
         }
@@ -399,7 +402,7 @@ export class MdEditor {
     }
 
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden');
+        return $('.lhs').is(':hidden') && false;
     }
 
     public get simple(): boolean {
@@ -410,11 +413,37 @@ export class MdEditor {
         cookie.set<boolean>('simple', value);
     }
 
-    private set spellCheck(value: SpellCheck) {
-        this._spellCheck = value;
+    private set spellchecker(value: SpellChecker) {
+        this._spellchecker = value;
     }
 
-    private _spellCheck: SpellCheck;
+    private get overlay(): IOverlay {
+        return this._overlay;
+    }
+
+    private set overlay(value: IOverlay) {
+        this._overlay = value;
+    }
+
+    public spellcheck(code:string, charset:string = 'utf-8') {
+        if (code) {
+            this.spellchecker = !code ? null : new SpellChecker({
+                code: code, charset: charset
+            }, (overlay) => {
+                this.mirror.removeOverlay('spell-checker');
+                this.overlay = $.extend(overlay, {
+                    name: 'spell-checker'
+                });
+                this.mirror.addOverlay(this.overlay);
+            });
+        } else {
+            this.mirror.removeOverlay('spell-checker');
+            this.spellchecker = null;
+        }
+    }
+
+    private _spellchecker: SpellChecker;
+    private _overlay: IOverlay;
     private _timeoutId: number;
     private _mdOld: string;
 }

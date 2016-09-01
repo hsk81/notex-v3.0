@@ -136,7 +136,7 @@
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default"
                             data-container="body" data-placement="right">
-                        <span class="glyphicon glyphicon-console code-mirror"></span>
+                        <span class="glyphicon glyphicon-console"></span>
                     </button>
                 </div>
                 <div id="my-console" class="input-group">
@@ -145,11 +145,21 @@
                         <button id="spell-check-button" type="button"
                                 class="btn btn-default dropdown-toggle"
                                 data-toggle="dropdown">
-                            <img src="/static/png/fatcow/16x16/flag_turkey.png"
+                            <img src="/static/png/fatcow/16x16/spellcheck.png"
                                  style="margin-bottom: 2px;">
                         </button>
                         <ul id="spell-check-menu"
                             class="dropdown-menu dropdown-menu-right">
+
+                            <li>
+                                <a href="#">
+                                    <img src="/static/png/fatcow/32x32/spellcheck.png">
+                                    <span class="country">Spellchecking</span><br/>
+                                    <span class="language">Disable</span>
+                                </a>
+                            </li>
+
+                            <li role="separator" class="divider"></li>
 
                             <li title="Afrikaans&mdash;Suid-Afrika">
                                 <a href="#" data-lingua="af_ZA" data-charset="utf-8">
@@ -161,7 +171,7 @@
 
                             <li title="Arabic&mdash;International">
                                 <a href="#" data-lingua="ar_ANY" data-charset="utf-8">
-                                    <img src="/static/png/fatcow/32x32/flag_united_nations.png">
+                                    <img src="/static/png/fatcow/32x32/flag_arab.png">
                                     <span class="country">دولي</span><br/>
                                     <span class="language">العربية</span>
                                 </a>
@@ -172,6 +182,14 @@
                                     <img src="/static/png/fatcow/32x32/flag_azerbaijan.png">
                                     <span class="country">Azərbaycan</span><br/>
                                     <span class="language">Azərbaycanca</span>
+                                </a>
+                            </li>
+
+                            <li title="Bahasa&mdash;Indonesia">
+                                <a href="#" data-lingua="id_ID" data-charset="iso-8859-1">
+                                    <img src="/static/png/fatcow/32x32/flag_indonesia.png">
+                                    <span class="country">Indonesia</span><br/>
+                                    <span class="language">Bahasa</span>
                                 </a>
                             </li>
 
@@ -719,14 +737,6 @@
                                 </a>
                             </li>
 
-                            <li title="Bahasa Indonesia&mdash;Indonesia">
-                                <a href="#" data-lingua="id_ID" data-charset="iso-8859-1">
-                                    <img src="/static/png/fatcow/32x32/flag_indonesia.png">
-                                    <span class="country">Indonesia</span><br/>
-                                    <span class="language">Bahasa Indonesia</span>
-                                </a>
-                            </li>
-
                             <li title="Íslenska&mdash;Ísland">
                                 <a href="#" data-lingua="is_IS" data-charset="utf-8">
                                     <img src="/static/png/fatcow/32x32/flag_iceland.png">
@@ -783,9 +793,9 @@
                                 </a>
                             </li>
 
-                            <li title="Latīna&mdash;International" style="display: none;">
+                            <li title="Latīna&mdash;International">
                                 <a href="#" data-lingua="la_ANY" data-charset="utf-8">
-                                    <img src="/static/png/fatcow/32x32/flag_united_nations.png">
+                                    <img src="/static/png/fatcow/32x32/flag_vatican_city.png">
                                     <span class="country">International</span><br/>
                                     <span class="language">Latīna</span>
                                 </a>
