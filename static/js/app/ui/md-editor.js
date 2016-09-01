@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-check/spell-check'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_check_1) {
+define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-checker/spell-checker'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
@@ -212,7 +212,6 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             configurable: true
         });
         MdEditor.prototype.toMirror = function () {
-            var _this = this;
             if (!this.mirror) {
                 this.setMirror(CodeMirror.fromTextArea(document.getElementById('md-inp'), {
                     mode: MdEditor.defineMode(),
@@ -231,11 +230,10 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 });
                 this.mirror
                     .on('change', this.onEditorChange.bind(this));
-                this.spellCheck = new spell_check_1.default({
-                    code: 'en_US', charset: 'us-ascii'
-                }, function (overlay) {
-                    _this.mirror.addOverlay(overlay);
-                });
+            }
+            if (this.overlay) {
+                this.mirror.removeOverlay(this.overlay);
+                this.mirror.addOverlay(this.overlay);
             }
             this.simple = false;
             this.$input.hide();
@@ -243,6 +241,9 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         MdEditor.prototype.toInput = function (options) {
             if (this.mirror) {
+                if (this.overlay) {
+                    this.mirror.removeOverlay(this.overlay);
+                }
                 this.mirror.toTextArea();
                 this.setMirror(undefined);
             }
@@ -368,7 +369,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
-                return $('.lhs').is(':hidden');
+                return $('.lhs').is(':hidden') && false;
             },
             enumerable: true,
             configurable: true
@@ -383,13 +384,42 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "spellCheck", {
+        Object.defineProperty(MdEditor.prototype, "spellchecker", {
             set: function (value) {
-                this._spellCheck = value;
+                this._spellchecker = value;
             },
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(MdEditor.prototype, "overlay", {
+            get: function () {
+                return this._overlay;
+            },
+            set: function (value) {
+                this._overlay = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        MdEditor.prototype.spellcheck = function (code, charset) {
+            var _this = this;
+            if (charset === void 0) { charset = 'utf-8'; }
+            if (code) {
+                this.spellchecker = !code ? null : new spell_checker_1.default({
+                    code: code, charset: charset
+                }, function (overlay) {
+                    _this.mirror.removeOverlay('spell-checker');
+                    _this.overlay = $.extend(overlay, {
+                        name: 'spell-checker'
+                    });
+                    _this.mirror.addOverlay(_this.overlay);
+                });
+            }
+            else {
+                this.mirror.removeOverlay('spell-checker');
+                this.spellchecker = null;
+            }
+        };
         __decorate([
             buffered_1.buffered(600), 
             __metadata('design:type', Function), 

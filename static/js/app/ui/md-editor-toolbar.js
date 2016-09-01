@@ -55,6 +55,13 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                     _this.refresh();
                 });
             }
+            this.$dictionary.on('click', function (ev) {
+                var $li = $(ev.target).closest('li'), $a = $li.find('a');
+                var $img = $li.find('img'), $img_button = _this.$spellcheck.find('img');
+                var url = $img.prop('src'), lingua = $a.data('lingua'), charset = $a.data('charset');
+                $img_button.prop('src', url.replace('32x32', '16x16'));
+                _this.ed.spellcheck(lingua, charset);
+            });
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
@@ -857,7 +864,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         });
         Object.defineProperty(MdEditorToolbar.prototype, "$mirror", {
             get: function () {
-                return $('.glyphicon.code-mirror').closest('button');
+                return $('.glyphicon-console').closest('button');
             },
             enumerable: true,
             configurable: true
@@ -956,6 +963,20 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         Object.defineProperty(MdEditorToolbar.prototype, "$subscript", {
             get: function () {
                 return $('.glyphicon-subscript').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$spellcheck", {
+            get: function () {
+                return $('#spell-check-button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$dictionary", {
+            get: function () {
+                return $('ul#spell-check-menu').find('li');
             },
             enumerable: true,
             configurable: true

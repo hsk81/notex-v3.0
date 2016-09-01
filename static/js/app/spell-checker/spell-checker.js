@@ -3,7 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var SpellCheck = (function () {
         function SpellCheck(lingua, callback) {
             var _this = this;
-            var worker = new Worker('/static/js/app/spell-check/spell-check.worker.js');
+            var worker = new Worker('/static/js/app/spell-checker/spell-checker.worker.js');
             worker.onmessage = function (ev) {
                 if (ev.data && ev.data.typo) {
                     _this._typo = Typo.prototype.load(ev.data.typo);
@@ -48,4 +48,4 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = SpellCheck;
 });
-//# sourceMappingURL=spell-check.js.map
+//# sourceMappingURL=spell-checker.js.map

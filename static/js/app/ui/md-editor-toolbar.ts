@@ -73,6 +73,21 @@ export class MdEditorToolbar {
                 this.refresh();
             });
         }
+
+        this.$dictionary.on('click', (ev:MouseEvent) => {
+            let $li = $(ev.target).closest('li'),
+                $a = $li.find('a');
+
+            let $img = $li.find('img'),
+                $img_button = this.$spellcheck.find('img');
+
+            let url = $img.prop('src'),
+                lingua = $a.data('lingua'),
+                charset = $a.data('charset');
+
+            $img_button.prop('src', url.replace('32x32', '16x16'));
+            this.ed.spellcheck(lingua, charset);
+        });
     }
 
     public refresh() {
@@ -970,7 +985,7 @@ export class MdEditorToolbar {
     }
 
     private get $mirror() {
-        return $('.glyphicon.code-mirror').closest('button');
+        return $('.glyphicon-console').closest('button');
     }
 
     private get $undo() {
@@ -1027,6 +1042,14 @@ export class MdEditorToolbar {
 
     private get $subscript() {
         return $('.glyphicon-subscript').closest('button');
+    }
+
+    private get $spellcheck() {
+        return $('#spell-check-button');
+    }
+
+    private get $dictionary() {
+        return $('ul#spell-check-menu').find('li');
     }
 
     private get scroll(): any {
