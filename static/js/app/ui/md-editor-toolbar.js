@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../decorator/named', '../decorator/trace', './md-editor'], function (require, exports, named_1, trace_1, md_editor_1) {
+define(["require", "exports", '../cookie/cookie', '../decorator/named', '../decorator/trace', './md-editor'], function (require, exports, cookie_1, named_1, trace_1, md_editor_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
@@ -48,6 +48,10 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 .on('click', this.onSupscriptClick.bind(this));
             this.$subscript
                 .on('click', this.onSubscriptClick.bind(this));
+            this.$dictionaryToggle
+                .on('click', this.onDictionaryToggle.bind(this));
+            this.$dictionary
+                .on('click', this.onDictionaryClick.bind(this));
             if (!this.ed.mobile) {
                 this.$outer.fadeIn('slow', function () {
                     _this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -55,13 +59,20 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                     _this.refresh();
                 });
             }
-            this.$dictionary.on('click', function (ev) {
-                var $li = $(ev.target).closest('li'), $a = $li.find('a');
-                var $img = $li.find('img'), $img_button = _this.$spellcheck.find('img');
-                var url = $img.prop('src'), lingua = $a.data('lingua'), charset = $a.data('charset');
-                $img_button.prop('src', url.replace('32x32', '16x16'));
-                _this.ed.spellcheck(lingua, charset);
-            });
+            if (!this.ed.simple) {
+                this.$spellcheck.removeClass('disabled');
+            }
+            else {
+                this.$spellcheck.addClass('disabled');
+            }
+            var code = cookie_1.cookie.get('language') ||
+                (navigator.language || 'en-US').replace('-', '_');
+            this.$dictionaryToggle.find('a')
+                .data('lingua', code);
+            this.$dictionaryToggle.find('a')
+                .data('state', 'off');
+            this.$dictionaryToggle.find('.line2')
+                .text("Off: Enable [" + code.replace('_', '-') + "]");
         }
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
@@ -90,6 +101,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 $input.scrollTop(scroll_1.top);
                 $input[0].setSelectionRange(Math.min(start, end), Math.max(start, end));
                 this.$mirror.tooltip('hide');
+                this.$spellcheck.addClass('disabled');
             }
             else {
                 var scroll_2 = {
@@ -104,6 +116,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
                 mirror.scrollTo(scroll_2.left, scroll_2.top);
                 mirror.setSelection(mirror.posFromIndex(sel.start), mirror.posFromIndex(sel.end));
                 this.$mirror.tooltip('hide');
+                this.$spellcheck.removeClass('disabled');
             }
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
@@ -782,6 +795,87 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             this.ed.$input[0].setSelectionRange(end + 2, end + 3);
             this.ed.$input.trigger('change');
         };
+        MdEditorToolbar.prototype.onDictionaryToggle = function (ev) {
+            var _this = this;
+            var $li1 = this.$dictionaryToggle, $li1_a = $li1.find('a'), $li1_img = $li1.find('img'), $li1_line2 = $li1.find('.line2'), $button_img = this.$spellcheck.find('img');
+            var lingua = {
+                code: $li1_a.data('lingua'),
+                charset: null
+            };
+            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png', url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+            var url_on_32 = '/static/png/fatcow/32x32/spellcheck.png', url_on_16 = '/static/png/fatcow/16x16/spellcheck.png';
+            var state = $li1_a.data('state');
+            if (state === 'off') {
+                $button_img.prop('src', url_on_16);
+            }
+            else {
+                $button_img.prop('src', url_off_16);
+            }
+            if (state === 'off') {
+                $li1_a.data('state', 'on');
+                $li1_img.prop('src', url_on_32);
+                $li1_line2.text("On: Disable [" + lingua.code.replace('_', '-') + "]");
+            }
+            else {
+                $li1_a.data('state', 'off');
+                $li1_img.prop('src', url_off_32);
+                $li1_line2.text("Off: Enable [" + lingua.code.replace('_', '-') + "]");
+            }
+            if (state !== 'off') {
+                lingua.code = null;
+            }
+            this.$spellcheck.addClass('disabled');
+            this.ed.spellcheck(lingua, function (error) {
+                if (error) {
+                    $button_img.prop('src', url_off_16);
+                }
+                if (error) {
+                    $li1_a.data('state', 'off');
+                    $li1_img.prop('src', url_off_32);
+                    $li1_line2.text("Off: Enable [" + lingua.code.replace('_', '-') + "]");
+                }
+                if (!error) {
+                    cookie_1.cookie.set('language', lingua.code);
+                }
+                _this.$spellcheck.removeClass('disabled');
+            });
+        };
+        MdEditorToolbar.prototype.onDictionaryClick = function (ev) {
+            var _this = this;
+            var $li1 = this.$dictionaryToggle, $li1_a = $li1.find('a'), $li1_img = $li1.find('img'), $li1_line2 = $li1.find('.line2');
+            var $lii = $(ev.target).closest('li'), $lii_a = $lii.find('a'), $lii_img = $lii.find('img');
+            var url = $lii_img.prop('src'), code = cookie_1.cookie.get('language') ||
+                (navigator.language || 'en-US').replace('-', '_'), lingua = {
+                code: $lii_a.data('lingua'),
+                charset: $lii_a.data('charset')
+            };
+            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png', url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+            var url_on_32 = '/static/png/fatcow/32x32/spellcheck.png', url_on_16 = url.replace('32x32', '16x16');
+            var $button_img = this.$spellcheck.find('img');
+            $button_img.prop('src', url_on_16);
+            this.$spellcheck.addClass('disabled');
+            this.ed.spellcheck(lingua, function (error) {
+                if (error) {
+                    $button_img.prop('src', url_off_16);
+                }
+                if (error) {
+                    $li1_a.data('state', 'off');
+                    $li1_a.data('lingua', code);
+                    $li1_img.prop('src', url_off_32);
+                    $li1_line2.text("Off: Enable [" + code.replace('_', '-') + "]");
+                }
+                else {
+                    $li1_a.data('state', 'on');
+                    $li1_a.data('lingua', lingua.code);
+                    $li1_img.prop('src', url_on_32);
+                    $li1_line2.text("On: Disable [" + lingua.code.replace('_', '-') + "]");
+                }
+                if (!error) {
+                    cookie_1.cookie.set('language', lingua.code);
+                }
+                _this.$spellcheck.removeClass('disabled');
+            });
+        };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
             if (this.ed.mirror) {
                 var last = { line: cursor.line, ch: cursor.ch }, next = { line: cursor.line, ch: cursor.ch };
@@ -974,9 +1068,16 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(MdEditorToolbar.prototype, "$dictionaryToggle", {
+            get: function () {
+                return $('ul#spell-check-menu').find('li:first-of-type');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditorToolbar.prototype, "$dictionary", {
             get: function () {
-                return $('ul#spell-check-menu').find('li');
+                return $('ul#spell-check-menu').find('li:not(:first-of-type)');
             },
             enumerable: true,
             configurable: true

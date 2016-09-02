@@ -6,7 +6,7 @@ define(["require", "exports"], function (require, exports) {
             var worker = new Worker('/static/js/app/spell-checker/spell-checker.worker.js');
             worker.onmessage = function (ev) {
                 if (ev.data && ev.data.typo) {
-                    _this._typo = Typo.prototype.load(ev.data.typo);
+                    _this.typo = Typo.prototype.load(ev.data.typo);
                     callback({
                         token: function (stream) {
                             if (stream.match(_this.separator)) {
@@ -18,6 +18,10 @@ define(["require", "exports"], function (require, exports) {
                             return null;
                         }
                     });
+                }
+                else {
+                    _this.typo = null;
+                    callback(null);
                 }
             };
             worker.postMessage({
@@ -38,6 +42,9 @@ define(["require", "exports"], function (require, exports) {
         Object.defineProperty(SpellCheck.prototype, "typo", {
             get: function () {
                 return this._typo;
+            },
+            set: function (value) {
+                this._typo = value;
             },
             enumerable: true,
             configurable: true

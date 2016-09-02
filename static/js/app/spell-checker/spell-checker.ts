@@ -17,7 +17,7 @@ export class SpellCheck {
             '/static/js/app/spell-checker/spell-checker.worker.js');
         worker.onmessage = (ev: any) => {
             if (ev.data && ev.data.typo) {
-                this._typo = Typo.prototype.load(ev.data.typo);
+                this.typo = Typo.prototype.load(ev.data.typo);
                 callback({
                     token: (stream) => {
                         if (stream.match(this.separator)) {
@@ -29,6 +29,9 @@ export class SpellCheck {
                         return null;
                     }
                 })
+            } else {
+                this.typo = null;
+                callback(null);
             }
         };
         worker.postMessage({
@@ -52,6 +55,10 @@ export class SpellCheck {
 
     private get typo(): any {
         return this._typo;
+    }
+
+    private set typo(value: any) {
+        this._typo = value;
     }
 
     private _separator: RegExp;
