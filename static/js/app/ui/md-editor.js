@@ -14,12 +14,12 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         function MdEditor() {
             if (this.mobile) {
                 this.toInput({
-                    toolbar: false
+                    footer: false, toolbar: false
                 });
             }
             else if (this.simple) {
                 this.toInput({
-                    toolbar: true
+                    footer: true, toolbar: true
                 });
             }
             else {
@@ -257,6 +257,14 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             else {
                 this.$input.css('width', '100% ');
             }
+            if (options.footer) {
+                this.$footer.show();
+                this.$input.css('height', 'calc(100% - 47px)');
+            }
+            else {
+                this.$footer.hide();
+                this.$input.css('height', '100%');
+            }
             this.simple = true;
             return this.$input;
         };
@@ -357,6 +365,13 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(MdEditor.prototype, "$footer", {
+            get: function () {
+                return this.$input.siblings('.lhs-footer');
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditor.prototype, "mirror", {
             get: function () {
                 return window['CODE_MIRROR'];
@@ -369,7 +384,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
-                return $('.lhs').is(':hidden') && false;
+                return $('.lhs').is(':hidden');
             },
             enumerable: true,
             configurable: true
