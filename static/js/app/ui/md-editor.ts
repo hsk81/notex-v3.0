@@ -523,8 +523,6 @@ export class MdEditor {
                 });
                 this.mirror.addOverlay(this.searchOverlay);
             }
-        } else {
-            // @TODO: implement!?
         }
     }
 
