@@ -505,8 +505,6 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                     this.mirror.addOverlay(this.searchOverlay);
                 }
             }
-            else {
-            }
         };
         __decorate([
             buffered_1.buffered(600), 
