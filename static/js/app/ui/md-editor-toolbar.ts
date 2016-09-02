@@ -110,7 +110,7 @@ export class MdEditorToolbar {
                 end = this.ed.mirror.indexFromPos(range.head);
 
             let $input = this.ed.toInput({
-                toolbar: true
+                footer: true, toolbar: true
             });
 
             $input.show();

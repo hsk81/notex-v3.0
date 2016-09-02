@@ -93,7 +93,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
                 var scroll_1 = this.ed.mirror.getScrollInfo(), range = this.ed.mirror.listSelections()[0];
                 var start = this.ed.mirror.indexFromPos(range.anchor), end = this.ed.mirror.indexFromPos(range.head);
                 var $input = this.ed.toInput({
-                    toolbar: true
+                    footer: true, toolbar: true
                 });
                 $input.show();
                 $input.focus();

@@ -211,11 +211,11 @@ export class MdEditor {
     public constructor() {
         if (this.mobile) {
             this.toInput({
-                toolbar: false
+                footer: false, toolbar: false
             });
         } else if (this.simple) {
             this.toInput({
-                toolbar: true
+                footer: true, toolbar: true
             });
         } else {
             this.toMirror();
@@ -256,7 +256,7 @@ export class MdEditor {
     }
 
     public toInput(options: {
-        toolbar: boolean
+        footer: boolean, toolbar: boolean
     }): any {
         if (this.mirror) {
             if (this.overlay) {
@@ -275,6 +275,14 @@ export class MdEditor {
             this.$input.css('width', 'calc(100% - 48px)');
         } else {
             this.$input.css('width', '100% ');
+        }
+
+        if (options.footer) {
+            this.$footer.show();
+            this.$input.css('height', 'calc(100% - 47px)');
+        } else {
+            this.$footer.hide();
+            this.$input.css('height', '100%');
         }
 
         this.simple = true;
@@ -393,6 +401,10 @@ export class MdEditor {
         return $('#md-inp');
     }
 
+    public get $footer() {
+        return this.$input.siblings('.lhs-footer');
+    }
+
     public get mirror(): any {
         return window['CODE_MIRROR'];
     }
@@ -402,7 +414,7 @@ export class MdEditor {
     }
 
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden') && false;
+        return $('.lhs').is(':hidden');
     }
 
     public get simple(): boolean {
