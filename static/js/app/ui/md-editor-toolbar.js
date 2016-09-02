@@ -802,7 +802,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
                 code: $li1_a.data('lingua'),
                 charset: null
             };
-            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png', url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_gray.png', url_off_16 = '/static/png/fatcow/16x16/spellcheck_gray.png';
             var url_on_32 = '/static/png/fatcow/32x32/spellcheck.png', url_on_16 = '/static/png/fatcow/16x16/spellcheck.png';
             var state = $li1_a.data('state');
             if (state === 'off') {
@@ -849,14 +849,14 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
                 code: $lii_a.data('lingua'),
                 charset: $lii_a.data('charset')
             };
-            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png', url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+            var url_off_32 = '/static/png/fatcow/32x32/spellcheck_gray.png', url_err_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
             var url_on_32 = '/static/png/fatcow/32x32/spellcheck.png', url_on_16 = url.replace('32x32', '16x16');
             var $button_img = this.$spellcheck.find('img');
             $button_img.prop('src', url_on_16);
             this.$spellcheck.addClass('disabled');
             this.ed.spellcheck(lingua, function (error) {
                 if (error) {
-                    $button_img.prop('src', url_off_16);
+                    $button_img.prop('src', url_err_16);
                 }
                 if (error) {
                     $li1_a.data('state', 'off');

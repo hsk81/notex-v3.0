@@ -447,6 +447,7 @@ export class MdEditor {
             });
         } else {
             this.spellchecker = null;
+            this.overlay = null;
             if (this.mirror) {
                 this.mirror.removeOverlay('spell-checker');
             }
