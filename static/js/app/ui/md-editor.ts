@@ -16,7 +16,7 @@ import {trace} from '../decorator/trace';
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
 import SpellChecker from '../spell-checker/spell-checker';
-import {IOverlay} from '../spell-checker/spell-checker';
+import {ILingua, IOverlay} from '../spell-checker/spell-checker';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -425,20 +425,34 @@ export class MdEditor {
         this._overlay = value;
     }
 
-    public spellcheck(code:string, charset:string = 'utf-8') {
-        if (code) {
-            this.spellchecker = !code ? null : new SpellChecker({
-                code: code, charset: charset
-            }, (overlay) => {
-                this.mirror.removeOverlay('spell-checker');
-                this.overlay = $.extend(overlay, {
-                    name: 'spell-checker'
-                });
-                this.mirror.addOverlay(this.overlay);
+    public spellcheck(
+        lingua: ILingua, callback: (error: boolean) => void
+    ) {
+        if (lingua.code) {
+            this.spellchecker = new SpellChecker(lingua, (overlay) => {
+                if (this.mirror) {
+                    this.mirror.removeOverlay('spell-checker');
+                }
+                if (overlay) {
+                    this.overlay = $.extend(overlay, {
+                        name: 'spell-checker'
+                    });
+                    if (this.mirror) {
+                        this.mirror.addOverlay(this.overlay);
+                    }
+                }
+                if (callback) {
+                    callback(!overlay);
+                }
             });
         } else {
-            this.mirror.removeOverlay('spell-checker');
             this.spellchecker = null;
+            if (this.mirror) {
+                this.mirror.removeOverlay('spell-checker');
+            }
+            if (callback) {
+                callback(false);
+            }
         }
     }
 

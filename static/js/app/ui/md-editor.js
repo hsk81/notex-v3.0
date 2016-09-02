@@ -401,23 +401,34 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        MdEditor.prototype.spellcheck = function (code, charset) {
+        MdEditor.prototype.spellcheck = function (lingua, callback) {
             var _this = this;
-            if (charset === void 0) { charset = 'utf-8'; }
-            if (code) {
-                this.spellchecker = !code ? null : new spell_checker_1.default({
-                    code: code, charset: charset
-                }, function (overlay) {
-                    _this.mirror.removeOverlay('spell-checker');
-                    _this.overlay = $.extend(overlay, {
-                        name: 'spell-checker'
-                    });
-                    _this.mirror.addOverlay(_this.overlay);
+            if (lingua.code) {
+                this.spellchecker = new spell_checker_1.default(lingua, function (overlay) {
+                    if (_this.mirror) {
+                        _this.mirror.removeOverlay('spell-checker');
+                    }
+                    if (overlay) {
+                        _this.overlay = $.extend(overlay, {
+                            name: 'spell-checker'
+                        });
+                        if (_this.mirror) {
+                            _this.mirror.addOverlay(_this.overlay);
+                        }
+                    }
+                    if (callback) {
+                        callback(!overlay);
+                    }
                 });
             }
             else {
-                this.mirror.removeOverlay('spell-checker');
                 this.spellchecker = null;
+                if (this.mirror) {
+                    this.mirror.removeOverlay('spell-checker');
+                }
+                if (callback) {
+                    callback(false);
+                }
             }
         };
         __decorate([

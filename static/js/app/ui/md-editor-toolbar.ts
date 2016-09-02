@@ -6,6 +6,8 @@ console.debug('[import:app/ui/md-editor-toolbar.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+import {cookie} from '../cookie/cookie';
+
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
@@ -66,6 +68,11 @@ export class MdEditorToolbar {
         this.$subscript
             .on('click', this.onSubscriptClick.bind(this));
 
+        this.$dictionaryToggle
+            .on('click', this.onDictionaryToggle.bind(this));
+        this.$dictionary
+            .on('click', this.onDictionaryClick.bind(this));
+
         if (!this.ed.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -74,20 +81,20 @@ export class MdEditorToolbar {
             });
         }
 
-        this.$dictionary.on('click', (ev:MouseEvent) => {
-            let $li = $(ev.target).closest('li'),
-                $a = $li.find('a');
+        if (!this.ed.simple) {
+            this.$spellcheck.removeClass('disabled');
+        } else {
+            this.$spellcheck.addClass('disabled');
+        }
 
-            let $img = $li.find('img'),
-                $img_button = this.$spellcheck.find('img');
-
-            let url = $img.prop('src'),
-                lingua = $a.data('lingua'),
-                charset = $a.data('charset');
-
-            $img_button.prop('src', url.replace('32x32', '16x16'));
-            this.ed.spellcheck(lingua, charset);
-        });
+        let code = cookie.get<string>('language') ||
+            (navigator.language || 'en-US').replace('-', '_');
+        this.$dictionaryToggle.find('a')
+            .data('lingua', code);
+        this.$dictionaryToggle.find('a')
+            .data('state', 'off');
+        this.$dictionaryToggle.find('.line2')
+            .text(`Off: Enable [${code.replace('_', '-')}]`);
     }
 
     public refresh() {
@@ -114,6 +121,7 @@ export class MdEditorToolbar {
                 Math.min(start, end), Math.max(start, end));
 
             this.$mirror.tooltip('hide');
+            this.$spellcheck.addClass('disabled');
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -131,6 +139,7 @@ export class MdEditorToolbar {
                 mirror.posFromIndex(sel.end));
 
             this.$mirror.tooltip('hide');
+            this.$spellcheck.removeClass('disabled');
         }
     }
 
@@ -908,6 +917,112 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
 
+    private onDictionaryToggle(ev: MouseEvent) {
+        let $li1 = this.$dictionaryToggle,
+            $li1_a = $li1.find('a'),
+            $li1_img = $li1.find('img'),
+            $li1_line2 = $li1.find('.line2'),
+            $button_img = this.$spellcheck.find('img');
+
+        let lingua = {
+            code: $li1_a.data('lingua'),
+            charset: null
+        };
+
+        let url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png',
+            url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+        let url_on_32 = '/static/png/fatcow/32x32/spellcheck.png',
+            url_on_16 = '/static/png/fatcow/16x16/spellcheck.png';
+
+        let state = $li1_a.data('state');
+        if (state === 'off') {
+            $button_img.prop('src',  url_on_16);
+        } else {
+            $button_img.prop('src',  url_off_16);
+        }
+        if (state === 'off') {
+            $li1_a.data('state', 'on');
+            $li1_img.prop('src',  url_on_32);
+            $li1_line2.text(
+                `On: Disable [${lingua.code.replace('_', '-')}]`);
+        } else {
+            $li1_a.data('state', 'off');
+            $li1_img.prop('src',  url_off_32);
+            $li1_line2.text(
+                `Off: Enable [${lingua.code.replace('_', '-')}]`);
+        }
+        if (state !== 'off') {
+            lingua.code = null;
+        }
+
+        this.$spellcheck.addClass('disabled');
+        this.ed.spellcheck(lingua, (error: boolean) => {
+            if (error) {
+                $button_img.prop('src',  url_off_16);
+            }
+            if (error) {
+                $li1_a.data('state', 'off');
+                $li1_img.prop('src',  url_off_32);
+                $li1_line2.text(
+                    `Off: Enable [${lingua.code.replace('_', '-')}]`);
+            }
+            if (!error) {
+                cookie.set('language', lingua.code)
+            }
+            this.$spellcheck.removeClass('disabled');
+        });
+    }
+
+    private onDictionaryClick(ev: MouseEvent) {
+        let $li1 = this.$dictionaryToggle,
+            $li1_a = $li1.find('a'),
+            $li1_img = $li1.find('img'),
+            $li1_line2 = $li1.find('.line2');
+        let $lii = $(ev.target).closest('li'),
+            $lii_a = $lii.find('a'),
+            $lii_img = $lii.find('img');
+
+        let url = $lii_img.prop('src'),
+            code = cookie.get<string>('language') ||
+                (navigator.language || 'en-US').replace('-', '_'),
+            lingua = {
+                code: $lii_a.data('lingua'),
+                charset: $lii_a.data('charset')
+            };
+
+        let url_off_32 = '/static/png/fatcow/32x32/spellcheck_error.png',
+            url_off_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
+        let url_on_32 = '/static/png/fatcow/32x32/spellcheck.png',
+            url_on_16 = url.replace('32x32', '16x16');
+
+        let $button_img = this.$spellcheck.find('img');
+        $button_img.prop('src', url_on_16);
+
+        this.$spellcheck.addClass('disabled');
+        this.ed.spellcheck(lingua, (error: boolean) => {
+            if (error) {
+                $button_img.prop('src', url_off_16);
+            }
+            if (error) {
+                $li1_a.data('state', 'off');
+                $li1_a.data('lingua', code);
+                $li1_img.prop('src', url_off_32);
+                $li1_line2.text(
+                    `Off: Enable [${code.replace('_', '-')}]`);
+            } else {
+                $li1_a.data('state', 'on');
+                $li1_a.data('lingua', lingua.code);
+                $li1_img.prop('src', url_on_32);
+                $li1_line2.text(
+                    `On: Disable [${lingua.code.replace('_', '-')}]`);
+            }
+            if (!error) {
+                cookie.set('language', lingua.code)
+            }
+            this.$spellcheck.removeClass('disabled');
+        });
+    }
+
     private lhs(cursor, token): {ch: number, line: number} {
         if (this.ed.mirror) {
             let last = {line: cursor.line, ch: cursor.ch},
@@ -1048,8 +1163,12 @@ export class MdEditorToolbar {
         return $('#spell-check-button');
     }
 
+    private get $dictionaryToggle() {
+        return $('ul#spell-check-menu').find('li:first-of-type');
+    }
+
     private get $dictionary() {
-        return $('ul#spell-check-menu').find('li');
+        return $('ul#spell-check-menu').find('li:not(:first-of-type)');
     }
 
     private get scroll(): any {
