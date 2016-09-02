@@ -71,7 +71,14 @@ html, body {
       }
       div.CodeMirror {
         span.cm-spell-error {
-          background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC) bottom repeat-x;
+          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC);
+          background-position: bottom;
+          background-repeat: repeat-x;
+        }
+        span.CodeMirror-matchingbracket {
+          color: #000000;
+          font-weight: bolder;
+          text-decoration: underline;
         }
         pre.CodeMirror-placeholder {
           color: #999999;

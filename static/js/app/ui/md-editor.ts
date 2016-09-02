@@ -16,7 +16,9 @@ import {trace} from '../decorator/trace';
 import DownloadManager from './download-manager';
 import MarkdownIt from '../markdown-it/markdown-it';
 import SpellChecker from '../spell-checker/spell-checker';
-import {ILingua, IOverlay} from '../spell-checker/spell-checker';
+
+import {ILingua} from '../spell-checker/spell-checker';
+import {IOverlay} from '../spell-checker/spell-checker';
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,6 +230,7 @@ export class MdEditor {
                 document.getElementById('md-inp'), {
                     mode: MdEditor.defineMode(),
                     styleActiveLine: true,
+                    matchBrackets: true,
                     lineWrapping: true,
                     lineNumbers: true,
                     undoDepth: 4096
@@ -245,9 +248,9 @@ export class MdEditor {
                 .on('change', this.onEditorChange.bind(this));
         }
 
-        if (this.overlay) {
-            this.mirror.removeOverlay(this.overlay);
-            this.mirror.addOverlay(this.overlay);
+        if (this.spellCheckOverlay) {
+            this.mirror.removeOverlay(this.spellCheckOverlay);
+            this.mirror.addOverlay(this.spellCheckOverlay);
         }
 
         this.simple = false;
@@ -259,8 +262,8 @@ export class MdEditor {
         footer: boolean, toolbar: boolean
     }): any {
         if (this.mirror) {
-            if (this.overlay) {
-                this.mirror.removeOverlay(this.overlay);
+            if (this.spellCheckOverlay) {
+                this.mirror.removeOverlay(this.spellCheckOverlay);
             }
             this.mirror.toTextArea();
             this.setMirror(undefined);
@@ -425,32 +428,32 @@ export class MdEditor {
         cookie.set<boolean>('simple', value);
     }
 
-    private set spellchecker(value: SpellChecker) {
-        this._spellchecker = value;
+    private set spellChecker(value: SpellChecker) {
+        this._spellChecker = value;
     }
 
-    private get overlay(): IOverlay {
-        return this._overlay;
+    private get spellCheckOverlay(): IOverlay {
+        return this._spellCheckOverlay;
     }
 
-    private set overlay(value: IOverlay) {
-        this._overlay = value;
+    private set spellCheckOverlay(value: IOverlay) {
+        this._spellCheckOverlay = value;
     }
 
-    public spellcheck(
+    public spellCheck(
         lingua: ILingua, callback: (error: boolean) => void
     ) {
         if (lingua.code) {
-            this.spellchecker = new SpellChecker(lingua, (overlay) => {
+            this.spellChecker = new SpellChecker(lingua, (overlay) => {
                 if (this.mirror) {
                     this.mirror.removeOverlay('spell-checker');
                 }
                 if (overlay) {
-                    this.overlay = $.extend(overlay, {
+                    this.spellCheckOverlay = $.extend(overlay, {
                         name: 'spell-checker'
                     });
                     if (this.mirror) {
-                        this.mirror.addOverlay(this.overlay);
+                        this.mirror.addOverlay(this.spellCheckOverlay);
                     }
                 }
                 if (callback) {
@@ -458,8 +461,8 @@ export class MdEditor {
                 }
             });
         } else {
-            this.spellchecker = null;
-            this.overlay = null;
+            this.spellChecker = null;
+            this.spellCheckOverlay = null;
             if (this.mirror) {
                 this.mirror.removeOverlay('spell-checker');
             }
@@ -469,8 +472,66 @@ export class MdEditor {
         }
     }
 
-    private _spellchecker: SpellChecker;
-    private _overlay: IOverlay;
+    private getSearchOverlay(query: any) {
+        if (typeof query === 'string') {
+            if (query === query.toLowerCase()) {
+                query = new RegExp(query.replace(
+                    /[\-\[\]\/{}()*+?.\\\^$|]/g, "\\$&"), 'gi');
+            } else {
+                query = new RegExp(query.replace(
+                    /[\-\[\]\/{}()*+?.\\\^$|]/g, "\\$&"), 'g');
+            }
+        } else {
+            if (query.flags.indexOf('g') < 0) {
+                query = new RegExp(query.source, query.flags + 'g');
+            } else {
+                query = new RegExp(query.source, query.flags);
+            }
+        }
+        return {
+            token: function (stream) {
+                query.lastIndex = stream.pos;
+                let match = query.exec(stream.string);
+                if (match && match.index == stream.pos) {
+                    stream.pos += match[0].length || 1;
+                    return 'searching';
+                } else if (match) {
+                    stream.pos = match.index;
+                } else {
+                    stream.skipToEnd();
+                }
+            }
+        };
+    };
+
+    private get searchOverlay(): IOverlay {
+        return this._searchOverlay;
+    }
+
+    private set searchOverlay(value: IOverlay) {
+        this._searchOverlay = value;
+    }
+
+    public search(query) {
+        if (this.mirror) {
+            if (this.searchOverlay) {
+                this.mirror.removeOverlay('search')
+            }
+            if (query.length > 1 || query.source && query.source.length > 1) {
+                this.searchOverlay = $.extend(this.getSearchOverlay(query), {
+                    name: 'search'
+                });
+                this.mirror.addOverlay(this.searchOverlay);
+            }
+        } else {
+            // @TODO: implement!?
+        }
+    }
+
+
+    private _spellCheckOverlay: IOverlay;
+    private _spellChecker: SpellChecker;
+    private _searchOverlay: IOverlay;
     private _timeoutId: number;
     private _mdOld: string;
 }

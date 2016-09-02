@@ -7,7 +7,6 @@ console.debug('[import:app/ui/md-editor-toolbar.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 
 import {cookie} from '../cookie/cookie';
-
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
@@ -68,6 +67,11 @@ export class MdEditorToolbar {
         this.$subscript
             .on('click', this.onSubscriptClick.bind(this));
 
+        this.$console
+            .on('keydown', this.onConsoleKeyDown.bind(this));
+        this.$console
+            .on('change', this.onConsoleChange.bind(this));
+
         this.$dictionaryToggle
             .on('click', this.onDictionaryToggle.bind(this));
         this.$dictionary
@@ -83,8 +87,10 @@ export class MdEditorToolbar {
 
         if (!this.ed.simple) {
             this.$spellcheck.removeClass('disabled');
+            this.$console.prop('disabled', false);
         } else {
             this.$spellcheck.addClass('disabled');
+            this.$console.prop('disabled', true);
         }
 
         let code = cookie.get<string>('language') ||
@@ -122,6 +128,8 @@ export class MdEditorToolbar {
 
             this.$mirror.tooltip('hide');
             this.$spellcheck.addClass('disabled');
+            this.$console.prop('disabled', true);
+            this.$console.val('');
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -140,6 +148,7 @@ export class MdEditorToolbar {
 
             this.$mirror.tooltip('hide');
             this.$spellcheck.removeClass('disabled');
+            this.$console.prop('disabled', false);
         }
     }
 
@@ -917,6 +926,34 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
 
+    private onConsoleKeyDown(ev: KeyboardEvent) {
+        if (ev.key === 'Escape') {
+            this.$console.val('');
+            this.$console.trigger('change');
+        }
+    }
+
+    private onConsoleChange(ev: KeyboardEvent) {
+        let $input = $(ev.target),
+            value = $input.val();
+
+        let rx_px = /^\//,
+            mm_px = value.match(rx_px);
+        let rx_sx = /\/[gimy]{0,4}$/,
+            mm_sx = value.match(rx_sx);
+
+        if (mm_px && mm_px.length > 0 && mm_sx && mm_sx.length > 0) {
+            let rx_beg = mm_px[0].length,
+                rx_end = value.length - mm_sx[0].length;
+            let rx_flags = mm_sx[0].substring(1),
+                rx_value = value.substring(rx_beg, rx_end);
+
+            this.ed.search(new RegExp(rx_value, rx_flags));
+        } else {
+            this.ed.search(value);
+        }
+    }
+
     private onDictionaryToggle(ev: MouseEvent) {
         let $li1 = this.$dictionaryToggle,
             $li1_a = $li1.find('a'),
@@ -956,7 +993,7 @@ export class MdEditorToolbar {
         }
 
         this.$spellcheck.addClass('disabled');
-        this.ed.spellcheck(lingua, (error: boolean) => {
+        this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src',  url_off_16);
             }
@@ -999,7 +1036,7 @@ export class MdEditorToolbar {
         $button_img.prop('src', url_on_16);
 
         this.$spellcheck.addClass('disabled');
-        this.ed.spellcheck(lingua, (error: boolean) => {
+        this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src', url_err_16);
             }
@@ -1161,6 +1198,10 @@ export class MdEditorToolbar {
 
     private get $spellcheck() {
         return $('#spell-check-button');
+    }
+
+    private get $console() {
+        return $('#my-console').find('input');
     }
 
     private get $dictionaryToggle() {

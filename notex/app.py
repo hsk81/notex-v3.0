@@ -131,15 +131,19 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     concat(out_path,
            'static/js/lib/codemirror/lib/codemirror.js')
     concat(out_path,
-           'static/js/lib/codemirror/addon/selection/active-line.js')
-    concat(out_path,
            'static/js/lib/codemirror/addon/display/placeholder.js')
+    concat(out_path,
+           'static/js/lib/codemirror/addon/edit/matchbrackets.js')
     concat(out_path,
            'static/js/lib/codemirror/addon/mode/multiplex.js')
     concat(out_path,
            'static/js/lib/codemirror/addon/mode/overlay.js')
     concat(out_path,
            'static/js/lib/codemirror/addon/mode/simple.js')
+    concat(out_path,
+           'static/js/lib/codemirror/addon/search/searchcursor.js')
+    concat(out_path,
+           'static/js/lib/codemirror/addon/selection/active-line.js')
     concat(out_path,
            'static/js/lib/codemirror/mode/clike/clike.js')
     concat(out_path,

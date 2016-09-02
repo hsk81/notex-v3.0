@@ -216,6 +216,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.setMirror(CodeMirror.fromTextArea(document.getElementById('md-inp'), {
                     mode: MdEditor.defineMode(),
                     styleActiveLine: true,
+                    matchBrackets: true,
                     lineWrapping: true,
                     lineNumbers: true,
                     undoDepth: 4096
@@ -231,9 +232,9 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.mirror
                     .on('change', this.onEditorChange.bind(this));
             }
-            if (this.overlay) {
-                this.mirror.removeOverlay(this.overlay);
-                this.mirror.addOverlay(this.overlay);
+            if (this.spellCheckOverlay) {
+                this.mirror.removeOverlay(this.spellCheckOverlay);
+                this.mirror.addOverlay(this.spellCheckOverlay);
             }
             this.simple = false;
             this.$input.hide();
@@ -241,8 +242,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         MdEditor.prototype.toInput = function (options) {
             if (this.mirror) {
-                if (this.overlay) {
-                    this.mirror.removeOverlay(this.overlay);
+                if (this.spellCheckOverlay) {
+                    this.mirror.removeOverlay(this.spellCheckOverlay);
                 }
                 this.mirror.toTextArea();
                 this.setMirror(undefined);
@@ -399,36 +400,36 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "spellchecker", {
+        Object.defineProperty(MdEditor.prototype, "spellChecker", {
             set: function (value) {
-                this._spellchecker = value;
+                this._spellChecker = value;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "overlay", {
+        Object.defineProperty(MdEditor.prototype, "spellCheckOverlay", {
             get: function () {
-                return this._overlay;
+                return this._spellCheckOverlay;
             },
             set: function (value) {
-                this._overlay = value;
+                this._spellCheckOverlay = value;
             },
             enumerable: true,
             configurable: true
         });
-        MdEditor.prototype.spellcheck = function (lingua, callback) {
+        MdEditor.prototype.spellCheck = function (lingua, callback) {
             var _this = this;
             if (lingua.code) {
-                this.spellchecker = new spell_checker_1.default(lingua, function (overlay) {
+                this.spellChecker = new spell_checker_1.default(lingua, function (overlay) {
                     if (_this.mirror) {
                         _this.mirror.removeOverlay('spell-checker');
                     }
                     if (overlay) {
-                        _this.overlay = $.extend(overlay, {
+                        _this.spellCheckOverlay = $.extend(overlay, {
                             name: 'spell-checker'
                         });
                         if (_this.mirror) {
-                            _this.mirror.addOverlay(_this.overlay);
+                            _this.mirror.addOverlay(_this.spellCheckOverlay);
                         }
                     }
                     if (callback) {
@@ -437,14 +438,74 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 });
             }
             else {
-                this.spellchecker = null;
-                this.overlay = null;
+                this.spellChecker = null;
+                this.spellCheckOverlay = null;
                 if (this.mirror) {
                     this.mirror.removeOverlay('spell-checker');
                 }
                 if (callback) {
                     callback(false);
                 }
+            }
+        };
+        MdEditor.prototype.getSearchOverlay = function (query) {
+            if (typeof query === 'string') {
+                if (query === query.toLowerCase()) {
+                    query = new RegExp(query.replace(/[\-\[\]\/{}()*+?.\\\^$|]/g, "\\$&"), 'gi');
+                }
+                else {
+                    query = new RegExp(query.replace(/[\-\[\]\/{}()*+?.\\\^$|]/g, "\\$&"), 'g');
+                }
+            }
+            else {
+                if (query.flags.indexOf('g') < 0) {
+                    query = new RegExp(query.source, query.flags + 'g');
+                }
+                else {
+                    query = new RegExp(query.source, query.flags);
+                }
+            }
+            return {
+                token: function (stream) {
+                    query.lastIndex = stream.pos;
+                    var match = query.exec(stream.string);
+                    if (match && match.index == stream.pos) {
+                        stream.pos += match[0].length || 1;
+                        return 'searching';
+                    }
+                    else if (match) {
+                        stream.pos = match.index;
+                    }
+                    else {
+                        stream.skipToEnd();
+                    }
+                }
+            };
+        };
+        ;
+        Object.defineProperty(MdEditor.prototype, "searchOverlay", {
+            get: function () {
+                return this._searchOverlay;
+            },
+            set: function (value) {
+                this._searchOverlay = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        MdEditor.prototype.search = function (query) {
+            if (this.mirror) {
+                if (this.searchOverlay) {
+                    this.mirror.removeOverlay('search');
+                }
+                if (query.length > 1 || query.source && query.source.length > 1) {
+                    this.searchOverlay = $.extend(this.getSearchOverlay(query), {
+                        name: 'search'
+                    });
+                    this.mirror.addOverlay(this.searchOverlay);
+                }
+            }
+            else {
             }
         };
         __decorate([
