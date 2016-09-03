@@ -72,10 +72,8 @@ export class MdEditorToolbar {
         this.$console
             .on('change', this.onConsoleChange.bind(this));
 
-        this.$dictionaryToggle
-            .on('click', this.onDictionaryToggle.bind(this));
-        this.$dictionary
-            .on('click', this.onDictionaryClick.bind(this));
+        this.$spellCheckButton
+            .on('click', this.onSpellCheckButtonClick.bind(this));
 
         if (!this.ed.mobile) {
             this.$outer.fadeIn('slow', () => {
@@ -86,21 +84,12 @@ export class MdEditorToolbar {
         }
 
         if (!this.ed.simple) {
-            this.$spellcheck.removeClass('disabled');
+            this.$spellCheckButton.removeClass('disabled');
             this.$console.prop('disabled', false);
         } else {
-            this.$spellcheck.addClass('disabled');
+            this.$spellCheckButton.addClass('disabled');
             this.$console.prop('disabled', true);
         }
-
-        let code = cookie.get<string>('language') ||
-            (navigator.language || 'en-US').replace('-', '_');
-        this.$dictionaryToggle.find('a')
-            .data('lingua', code);
-        this.$dictionaryToggle.find('a')
-            .data('state', 'off');
-        this.$dictionaryToggle.find('.line2')
-            .text(`Off: Enable [${code.replace('_', '-')}]`);
     }
 
     public refresh() {
@@ -127,7 +116,7 @@ export class MdEditorToolbar {
                 Math.min(start, end), Math.max(start, end));
 
             this.$mirror.tooltip('hide');
-            this.$spellcheck.addClass('disabled');
+            this.$spellCheckButton.addClass('disabled');
             this.$console.prop('disabled', true);
             this.$console.val('');
         } else {
@@ -147,7 +136,7 @@ export class MdEditorToolbar {
                 mirror.posFromIndex(sel.end));
 
             this.$mirror.tooltip('hide');
-            this.$spellcheck.removeClass('disabled');
+            this.$spellCheckButton.removeClass('disabled');
             this.$console.prop('disabled', false);
         }
     }
@@ -954,37 +943,36 @@ export class MdEditorToolbar {
         }
     }
 
-    private onDictionaryToggle(ev: MouseEvent) {
-        let $li1 = this.$dictionaryToggle,
+    private onSpellCheckToggle(ev: MouseEvent) {
+        let $li1 = this.$spellCheckToggle,
             $li1_a = $li1.find('a'),
             $li1_img = $li1.find('img'),
-            $li1_line2 = $li1.find('.line2'),
-            $button_img = this.$spellcheck.find('img');
+            $li1_line2 = $li1.find('.line2');
+
+        let $button_span = this.$spellCheckButton.find('span.img-placeholder');
+        $button_span.remove();
+        let $button_img = this.$spellCheckButton.find('img');
+        $button_img.show();
 
         let lingua = {
             code: $li1_a.data('lingua'),
             charset: null
         };
 
-        let url_off_32 = '/static/png/fatcow/32x32/spellcheck_gray.png',
-            url_off_16 = '/static/png/fatcow/16x16/spellcheck_gray.png';
-        let url_on_32 = '/static/png/fatcow/32x32/spellcheck.png',
-            url_on_16 = '/static/png/fatcow/16x16/spellcheck.png';
-
         let state = $li1_a.data('state');
         if (state === 'off') {
-            $button_img.prop('src',  url_on_16);
+            $button_img.prop('src',  this.urls['16x16'].on);
         } else {
-            $button_img.prop('src',  url_off_16);
+            $button_img.prop('src',  this.urls['16x16'].off);
         }
         if (state === 'off') {
             $li1_a.data('state', 'on');
-            $li1_img.prop('src',  url_on_32);
+            $li1_img.prop('src',  this.urls['32x32'].on);
             $li1_line2.text(
                 `On: Disable [${lingua.code.replace('_', '-')}]`);
         } else {
             $li1_a.data('state', 'off');
-            $li1_img.prop('src',  url_off_32);
+            $li1_img.prop('src',  this.urls['32x32'].off);
             $li1_line2.text(
                 `Off: Enable [${lingua.code.replace('_', '-')}]`);
         }
@@ -992,26 +980,26 @@ export class MdEditorToolbar {
             lingua.code = null;
         }
 
-        this.$spellcheck.addClass('disabled');
+        this.$spellCheckButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
-                $button_img.prop('src',  url_off_16);
+                $button_img.prop('src',  this.urls['16x16'].off);
             }
             if (error) {
                 $li1_a.data('state', 'off');
-                $li1_img.prop('src',  url_off_32);
+                $li1_img.prop('src',  this.urls['32x32'].off);
                 $li1_line2.text(
                     `Off: Enable [${lingua.code.replace('_', '-')}]`);
             }
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.$spellcheck.removeClass('disabled');
+            this.$spellCheckButton.removeClass('disabled');
         });
     }
 
-    private onDictionaryClick(ev: MouseEvent) {
-        let $li1 = this.$dictionaryToggle,
+    private onSpellCheckItemClick(ev: MouseEvent) {
+        let $li1 = this.$spellCheckToggle,
             $li1_a = $li1.find('a'),
             $li1_img = $li1.find('img'),
             $li1_line2 = $li1.find('.line2');
@@ -1027,38 +1015,73 @@ export class MdEditorToolbar {
                 charset: $lii_a.data('charset')
             };
 
-        let url_off_32 = '/static/png/fatcow/32x32/spellcheck_gray.png',
-            url_err_16 = '/static/png/fatcow/16x16/spellcheck_error.png';
-        let url_on_32 = '/static/png/fatcow/32x32/spellcheck.png',
-            url_on_16 = url.replace('32x32', '16x16');
+        let $button_span = this.$spellCheckButton.find('span.img-placeholder');
+        $button_span.remove();
+        let $button_img = this.$spellCheckButton.find('img');
+        $button_img.prop('src', url.replace('32x32', '16x16'));
+        $button_img.show();
 
-        let $button_img = this.$spellcheck.find('img');
-        $button_img.prop('src', url_on_16);
-
-        this.$spellcheck.addClass('disabled');
+        this.$spellCheckButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
-                $button_img.prop('src', url_err_16);
+                $button_img.prop('src', this.urls['16x16'].err);
             }
             if (error) {
                 $li1_a.data('state', 'off');
                 $li1_a.data('lingua', code);
-                $li1_img.prop('src', url_off_32);
+                $li1_img.prop('src', this.urls['32x32'].off);
                 $li1_line2.text(
                     `Off: Enable [${code.replace('_', '-')}]`);
             } else {
                 $li1_a.data('state', 'on');
                 $li1_a.data('lingua', lingua.code);
-                $li1_img.prop('src', url_on_32);
+                $li1_img.prop('src', this.urls['32x32'].on);
                 $li1_line2.text(
                     `On: Disable [${lingua.code.replace('_', '-')}]`);
             }
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.$spellcheck.removeClass('disabled');
+            this.$spellCheckButton.removeClass('disabled');
         });
     }
+
+    private onSpellCheckButtonClick(ev: MouseEvent) {
+        var $menu = this.$spellCheckMenu,
+            $item = $menu.find('>li');
+        if ($item.length === 0) {
+            $.get('/static/html/spell-check-menu.html').done((html) => {
+                $menu.html(html);
+
+                this.$spellCheckToggle
+                    .on('click', this.onSpellCheckToggle.bind(this));
+                this.$spellCheckItem
+                    .on('click', this.onSpellCheckItemClick.bind(this));
+
+                let code = cookie.get<string>('language') ||
+                    (navigator.language || 'en-US').replace('-', '_');
+                this.$spellCheckToggle.find('a')
+                    .data('lingua', code);
+                this.$spellCheckToggle.find('a')
+                    .data('state', 'off');
+                this.$spellCheckToggle.find('.line2')
+                    .text(`Off: Enable [${code.replace('_', '-')}]`);
+            });
+        }
+    }
+
+    private urls: any = {
+        '32x32': {
+            err: '/static/png/fatcow/32x32/spellcheck_error.png',
+            off: '/static/png/fatcow/32x32/spellcheck_gray.png',
+            on: '/static/png/fatcow/32x32/spellcheck.png'
+        },
+        '16x16': {
+            err: '/static/png/fatcow/16x16/spellcheck_error.png',
+            off: '/static/png/fatcow/16x16/spellcheck_gray.png',
+            on: '/static/png/fatcow/16x16/spellcheck.png'
+        }
+    };
 
     private lhs(cursor, token): {ch: number, line: number} {
         if (this.ed.mirror) {
@@ -1196,20 +1219,24 @@ export class MdEditorToolbar {
         return $('.glyphicon-subscript').closest('button');
     }
 
-    private get $spellcheck() {
-        return $('#spell-check-button');
-    }
-
     private get $console() {
         return $('#my-console').find('input');
     }
 
-    private get $dictionaryToggle() {
-        return $('ul#spell-check-menu').find('li:first-of-type');
+    private get $spellCheckMenu() {
+        return $('ul#spell-check-menu');
     }
 
-    private get $dictionary() {
-        return $('ul#spell-check-menu').find('li:not(:first-of-type)');
+    private get $spellCheckToggle() {
+        return this.$spellCheckMenu.find('li:first-of-type');
+    }
+
+    private get $spellCheckItem() {
+        return this.$spellCheckMenu.find('li:not(:first-of-type)');
+    }
+
+    private get $spellCheckButton() {
+        return $('#spell-check-button');
     }
 
     private get scroll(): any {
