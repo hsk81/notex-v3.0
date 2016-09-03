@@ -26,7 +26,7 @@ def server_fonts (path):
     return static_file (path, root='./static/fonts')
 
 @app.get ('/robots.txt')
-def server_fonts (*args, **kwargs):
+def server_robots (*args, **kwargs):
 
     app_dns = os.environ.get ('OPENSHIFT_APP_DNS')
     req_dns = request.headers.get ('host')
