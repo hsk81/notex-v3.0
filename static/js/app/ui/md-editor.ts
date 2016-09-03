@@ -417,7 +417,7 @@ export class MdEditor {
     }
 
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden') && false;
+        return $('.lhs').is(':hidden');
     }
 
     public get simple(): boolean {
