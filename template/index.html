@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/static/ico/favicon.ico">
         {% block title %}<title>{{ title }}</title>{% endblock %}
+        <script>window.debug = Boolean({{ 1 if debug else 0 }});</script>
         {% if debug %}
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-3.3.6.min.css">
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css">

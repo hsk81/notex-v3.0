@@ -246,3 +246,34 @@ html, body {
     }
   }
 }
+
+/* ============================================================================
+ * Spin animation:
+ * ========================================================================= */
+
+.spin {
+    animation: spin 0.5s infinite linear;
+}
+
+@keyframes spin {
+    from {
+      transform: scale(1) rotate(0deg);
+    }
+    to {
+      transform: scale(1) rotate(360deg);
+    }
+}
+
+span.spin {
+  color: #ddd;
+  font-size: 3em;
+  left: calc(50% - 0.5em);
+  position: absolute;
+  top: calc(50% - 0.5em);
+}
+
+span.spin {
+  text-shadow: 0 0 1em;
+}
+
+/* ========================================================================= */
