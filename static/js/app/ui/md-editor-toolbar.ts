@@ -7,6 +7,8 @@ console.debug('[import:app/ui/md-editor-toolbar.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 
 import {cookie} from '../cookie/cookie';
+
+import {buffered} from '../decorator/buffered';
 import {named} from '../decorator/named';
 import {trace} from '../decorator/trace';
 
@@ -1015,9 +1017,11 @@ export class MdEditorToolbar {
                 charset: $lii_a.data('charset')
             };
 
-        let $button_span = this.$spellCheckButton.find('span.img-placeholder');
+        let $button = this.$spellCheckButton,
+            $button_img = $button.find('img'),
+            $button_span = $button.find('span.img-placeholder');
+
         $button_span.remove();
-        let $button_img = this.$spellCheckButton.find('img');
         $button_img.prop('src', url.replace('32x32', '16x16'));
         $button_img.show();
 
@@ -1048,10 +1052,14 @@ export class MdEditorToolbar {
 
     private onSpellCheckButtonClick(ev: MouseEvent) {
         var $menu = this.$spellCheckMenu,
+            $spin = $menu.find('>.spin'),
             $item = $menu.find('>li');
         if ($item.length === 0) {
             $.get('/static/html/spell-check-menu.html').done((html) => {
                 $menu.html(html);
+                $menu.append($spin);
+                $item = $menu.find('>li').hide();
+                $item.find('img').on('load', this.onMenuItemLoad.bind(this));
 
                 this.$spellCheckToggle
                     .on('click', this.onSpellCheckToggle.bind(this));
@@ -1068,6 +1076,17 @@ export class MdEditorToolbar {
                     .text(`Off: Enable [${code.replace('_', '-')}]`);
             });
         }
+    }
+
+    @buffered(600)
+    private onMenuItemLoad(ev: Event) {
+        var $menu = this.$spellCheckMenu,
+            $spin = $menu.find('>.spin'),
+            $item = $menu.find('>li');
+
+        $menu.removeClass('disabled');
+        $item.fadeIn('slow');
+        $spin.remove();
     }
 
     private urls: any = {

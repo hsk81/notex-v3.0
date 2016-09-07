@@ -385,7 +385,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
-                return $('.lhs').is(':hidden');
+                return $('.lhs').is(':hidden') && !window['debug'];
             },
             enumerable: true,
             configurable: true

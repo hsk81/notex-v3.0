@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../cookie/cookie', '../decorator/named', '../decorator/trace', './md-editor'], function (require, exports, cookie_1, named_1, trace_1, md_editor_1) {
+define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', './md-editor'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, md_editor_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = (function () {
@@ -881,9 +881,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
                 code: $lii_a.data('lingua'),
                 charset: $lii_a.data('charset')
             };
-            var $button_span = this.$spellCheckButton.find('span.img-placeholder');
+            var $button = this.$spellCheckButton, $button_img = $button.find('img'), $button_span = $button.find('span.img-placeholder');
             $button_span.remove();
-            var $button_img = this.$spellCheckButton.find('img');
             $button_img.prop('src', url.replace('32x32', '16x16'));
             $button_img.show();
             this.$spellCheckButton.addClass('disabled');
@@ -911,10 +910,13 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
         };
         MdEditorToolbar.prototype.onSpellCheckButtonClick = function (ev) {
             var _this = this;
-            var $menu = this.$spellCheckMenu, $item = $menu.find('>li');
+            var $menu = this.$spellCheckMenu, $spin = $menu.find('>.spin'), $item = $menu.find('>li');
             if ($item.length === 0) {
                 $.get('/static/html/spell-check-menu.html').done(function (html) {
                     $menu.html(html);
+                    $menu.append($spin);
+                    $item = $menu.find('>li').hide();
+                    $item.find('img').on('load', _this.onMenuItemLoad.bind(_this));
                     _this.$spellCheckToggle
                         .on('click', _this.onSpellCheckToggle.bind(_this));
                     _this.$spellCheckItem
@@ -929,6 +931,12 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
                         .text("Off: Enable [" + code.replace('_', '-') + "]");
                 });
             }
+        };
+        MdEditorToolbar.prototype.onMenuItemLoad = function (ev) {
+            var $menu = this.$spellCheckMenu, $spin = $menu.find('>.spin'), $item = $menu.find('>li');
+            $menu.removeClass('disabled');
+            $item.fadeIn('slow');
+            $spin.remove();
         };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
             if (this.ed.mirror) {
@@ -1184,6 +1192,12 @@ define(["require", "exports", '../cookie/cookie', '../decorator/named', '../deco
             enumerable: true,
             configurable: true
         });
+        __decorate([
+            buffered_1.buffered(600), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Event]), 
+            __metadata('design:returntype', void 0)
+        ], MdEditorToolbar.prototype, "onMenuItemLoad", null);
         MdEditorToolbar = __decorate([
             trace_1.trace,
             named_1.named('MdEditorToolbar'), 

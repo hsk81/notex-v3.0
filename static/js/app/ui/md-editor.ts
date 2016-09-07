@@ -417,7 +417,7 @@ export class MdEditor {
     }
 
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden');
+        return $('.lhs').is(':hidden') && !window['debug'];
     }
 
     public get simple(): boolean {
