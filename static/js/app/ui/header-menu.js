@@ -20,7 +20,7 @@ define(["require", "exports", '../decorator/mine', '../decorator/named', '../dec
         Object.defineProperty(HeaderMenu, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new HeaderMenu();
+                    this['_me'] = window['HEADER_MENU'] = new HeaderMenu();
                 }
                 return this['_me'];
             },

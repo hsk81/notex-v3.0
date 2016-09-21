@@ -19,7 +19,7 @@ import HeaderMenu from './header-menu';
 export class DownloadManager {
     public static get me():DownloadManager {
         if (this['_me'] === undefined) {
-            this['_me'] = new DownloadManager();
+            this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager();
         }
         return this['_me'];
     }

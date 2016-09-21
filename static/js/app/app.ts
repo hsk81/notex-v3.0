@@ -29,7 +29,7 @@ import {trace} from './decorator/trace';
 class App {
     public static get me():App {
         if (this['_me'] === undefined) {
-            this['_me'] = new App();
+            this['_me'] = window['APP'] = new App();
         }
         return this['_me'];
     }

@@ -25,7 +25,7 @@ import {trace} from '../decorator/trace';
 export class PublishDialog {
     public static get me(): PublishDialog {
         if (this['_me'] === undefined) {
-            this['_me'] = new PublishDialog();
+            this['_me'] = window['PUBLISH_DIALOG'] = new PublishDialog();
         }
         return this['_me'];
     }

@@ -52,7 +52,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         Object.defineProperty(MdEditorToolbar, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new MdEditorToolbar();
+                    this['_me'] = window['MD_EDITOR_TOOLBAR'] = new MdEditorToolbar();
                 }
                 return this['_me'];
             },

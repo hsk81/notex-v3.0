@@ -19,7 +19,7 @@ import MdEditor from './md-editor';
 export class MdEditorToolbar {
     public static get me(): MdEditorToolbar {
         if (this['_me'] === undefined) {
-            this['_me'] = new MdEditorToolbar();
+            this['_me'] = window['MD_EDITOR_TOOLBAR'] = new MdEditorToolbar();
         }
         return this['_me'];
     }
