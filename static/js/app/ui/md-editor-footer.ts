@@ -22,7 +22,7 @@ import MdEditor from './md-editor';
 export class MdEditorFooter {
     public static get me(): MdEditorFooter {
         if (this['_me'] === undefined) {
-            this['_me'] = new MdEditorFooter();
+            this['_me'] = window['MD_EDITOR_FOOTER'] = new MdEditorFooter();
         }
         return this['_me'];
     }
@@ -41,13 +41,24 @@ export class MdEditorFooter {
             .on('keydown', this.onConsoleKeyDown.bind(this));
         this.$spellCheckButton
             .on('click', this.onSpellCheckButtonClick.bind(this));
-        if (!this.ed.simple) {
-            this.$spellCheckButton.removeClass('disabled');
-            this.$console.prop('disabled', false);
+
+        if (this.ed.simple) {
+            this.hide(0);
         } else {
-            this.$spellCheckButton.addClass('disabled');
-            this.$console.prop('disabled', true);
+            this.show(0);
         }
+    }
+
+    private hide(ms: number = 200) {
+        this.$input.animate({'height': '100%'}, 0);
+        this.$footer.animate({'width': '48px'}, ms);
+        this.$console.val('');
+    }
+
+    private show(ms: number = 200) {
+        this.$input.animate({'height': 'calc(100% - 48px)'}, 0);
+        this.$footer.animate({'width': '100%'}, ms);
+        this.$console.val('');
     }
 
     private onMirrorClick() {
@@ -69,9 +80,7 @@ export class MdEditorFooter {
                 Math.min(start, end), Math.max(start, end));
 
             this.$mirror.tooltip('hide');
-            this.$spellCheckButton.addClass('disabled');
-            this.$console.prop('disabled', true);
-            this.$console.val('');
+            this.hide();
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -89,8 +98,7 @@ export class MdEditorFooter {
                 mirror.posFromIndex(sel.end));
 
             this.$mirror.tooltip('hide');
-            this.$spellCheckButton.removeClass('disabled');
-            this.$console.prop('disabled', false);
+            this.show();
         }
     }
 
@@ -279,16 +287,24 @@ export class MdEditorFooter {
         }
     };
 
+    public get $input() {
+        return $('#md-inp');
+    }
+
+    private get $footer() {
+        return $('div.lhs-footer');
+    }
+
     private get $mirror() {
-        return $('.glyphicon-console').closest('button');
+        return this.$footer.find('.glyphicon-console').closest('button');
     }
 
     private get $console() {
-        return $('#my-console').find('input');
+        return this.$footer.find('#my-console').find('input');
     }
 
     private get $spellCheckMenu() {
-        return $('ul#spell-check-menu');
+        return this.$footer.find('ul#spell-check-menu');
     }
 
     private get $spellCheckToggle() {
@@ -300,7 +316,7 @@ export class MdEditorFooter {
     }
 
     private get $spellCheckButton() {
-        return $('#spell-check-button');
+        return this.$footer.find('#spell-check-button');
     }
 
     private get ed() {

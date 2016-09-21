@@ -22,7 +22,7 @@ define(["require", "exports", './ui/download-manager', './ui/header-menu', './ui
         Object.defineProperty(App, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new App();
+                    this['_me'] = window['APP'] = new App();
                 }
                 return this['_me'];
             },

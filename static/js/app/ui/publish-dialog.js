@@ -26,7 +26,7 @@ define(["require", "exports", '../cookie/cookie', '../google-api/blogger-api', '
         Object.defineProperty(PublishDialog, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new PublishDialog();
+                    this['_me'] = window['PUBLISH_DIALOG'] = new PublishDialog();
                 }
                 return this['_me'];
             },

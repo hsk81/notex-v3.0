@@ -204,7 +204,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         Object.defineProperty(MdEditor, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new MdEditor();
+                    this['_me'] = window['MD_EDITOR'] = new MdEditor();
                 }
                 return this['_me'];
             },

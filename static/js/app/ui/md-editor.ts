@@ -205,7 +205,7 @@ export class MdEditor {
 
     public static get me(): MdEditor {
         if (this['_me'] === undefined) {
-            this['_me'] = new MdEditor();
+            this['_me'] = window['MD_EDITOR'] = new MdEditor();
         }
         return this['_me'];
     }

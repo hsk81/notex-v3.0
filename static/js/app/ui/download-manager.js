@@ -16,7 +16,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './hea
         Object.defineProperty(DownloadManager, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new DownloadManager();
+                    this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager();
                 }
                 return this['_me'];
             },

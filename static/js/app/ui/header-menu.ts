@@ -21,7 +21,7 @@ import MdEditorToolbar from './md-editor-toolbar';
 export class HeaderMenu {
     public static get me():HeaderMenu {
         if (this['_me'] === undefined) {
-            this['_me'] = new HeaderMenu();
+            this['_me'] = window['HEADER_MENU'] = new HeaderMenu();
         }
         return this['_me'];
     }
