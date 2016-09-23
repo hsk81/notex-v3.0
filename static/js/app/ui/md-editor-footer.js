@@ -38,10 +38,10 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             this.$spellCheckButton
                 .on('click', this.onSpellCheckButtonClick.bind(this));
             if (this.ed.simple) {
-                this.hide(0);
+                this.hide(600, true);
             }
             else {
-                this.show(0);
+                this.show(600, true);
             }
         }
         Object.defineProperty(MdEditorFooter, "me", {
@@ -54,20 +54,38 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        MdEditorFooter.prototype.hide = function (ms) {
+        MdEditorFooter.prototype.hide = function (ms, fade) {
             if (ms === void 0) { ms = 200; }
+            if (fade === void 0) { fade = false; }
             if (!this.ed.mirror) {
-                this.$input.animate({ 'height': '100%' }, 0);
+                this.$input.css({ 'height': '100%' });
             }
-            this.$footer.animate({ 'width': '48px' }, ms);
+            if (fade) {
+                this.$footer.hide();
+                this.$footer.css({ 'width': '48px' });
+                this.$footer.fadeIn(ms);
+            }
+            else {
+                this.$footer.show();
+                this.$footer.animate({ 'width': '48px' }, ms);
+            }
             this.$console.val('');
         };
-        MdEditorFooter.prototype.show = function (ms) {
+        MdEditorFooter.prototype.show = function (ms, fade) {
             if (ms === void 0) { ms = 200; }
+            if (fade === void 0) { fade = false; }
             if (!this.ed.mirror) {
-                this.$input.animate({ 'height': 'calc(100% - 48px)' }, 0);
+                this.$input.css({ 'height': 'calc(100% - 48px)' });
             }
-            this.$footer.animate({ 'width': '100%' }, ms);
+            if (fade) {
+                this.$footer.hide();
+                this.$footer.css({ 'width': '100%' });
+                this.$footer.fadeIn(ms);
+            }
+            else {
+                this.$footer.show();
+                this.$footer.animate({ 'width': '100%' }, ms);
+            }
             this.$console.val('');
         };
         MdEditorFooter.prototype.onMirrorClick = function () {

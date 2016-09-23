@@ -43,25 +43,39 @@ export class MdEditorFooter {
             .on('click', this.onSpellCheckButtonClick.bind(this));
 
         if (this.ed.simple) {
-            this.hide(0);
+            this.hide(600, true);
         } else {
-            this.show(0);
+            this.show(600, true);
         }
     }
 
-    private hide(ms: number = 200) {
+    private hide(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
-            this.$input.animate({'height': '100%'}, 0);
+            this.$input.css({'height': '100%'});
         }
-        this.$footer.animate({'width': '48px'}, ms);
+        if (fade) {
+            this.$footer.hide();
+            this.$footer.css({'width': '48px'});
+            this.$footer.fadeIn(ms);
+        } else {
+            this.$footer.show();
+            this.$footer.animate({'width': '48px'}, ms);
+        }
         this.$console.val('');
     }
 
-    private show(ms: number = 200) {
+    private show(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
-            this.$input.animate({'height': 'calc(100% - 48px)'}, 0);
+            this.$input.css({'height': 'calc(100% - 48px)'});
         }
-        this.$footer.animate({'width': '100%'}, ms);
+        if (fade) {
+            this.$footer.hide();
+            this.$footer.css({'width': '100%'});
+            this.$footer.fadeIn(ms);
+        } else {
+            this.$footer.show();
+            this.$footer.animate({'width': '100%'}, ms);
+        }
         this.$console.val('');
     }
 
