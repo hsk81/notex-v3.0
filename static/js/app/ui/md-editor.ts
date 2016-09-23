@@ -227,7 +227,7 @@ export class MdEditor {
     public toMirror(): any {
         if (!this.mirror) {
             this.setMirror(CodeMirror.fromTextArea(
-                document.getElementById('md-inp'), {
+                document.getElementById('input'), {
                     mode: MdEditor.defineMode(),
                     styleActiveLine: true,
                     matchBrackets: true,
@@ -248,9 +248,9 @@ export class MdEditor {
                 .on('change', this.onEditorChange.bind(this));
         }
 
-        if (this.spellCheckOverlay) {
-            this.mirror.removeOverlay(this.spellCheckOverlay);
-            this.mirror.addOverlay(this.spellCheckOverlay);
+        if (this.spellCheckerOverlay) {
+            this.mirror.removeOverlay(this.spellCheckerOverlay);
+            this.mirror.addOverlay(this.spellCheckerOverlay);
         }
 
         this.simple = false;
@@ -262,8 +262,8 @@ export class MdEditor {
         footer: boolean, toolbar: boolean
     }): any {
         if (this.mirror) {
-            if (this.spellCheckOverlay) {
-                this.mirror.removeOverlay(this.spellCheckOverlay);
+            if (this.spellCheckerOverlay) {
+                this.mirror.removeOverlay(this.spellCheckerOverlay);
             }
             this.mirror.toTextArea();
             this.setMirror(undefined);
@@ -294,12 +294,12 @@ export class MdEditor {
 
     @buffered(600)
     public render() {
-        let $md_out = $('#md-out'),
-            $md_tmp;
+        let $output = $('#output'),
+            $cached;
 
-        let md_new = this.getValue();
-        if (md_new !== this._mdOld) {
-            this._mdOld = md_new;
+        let value = this.getValue();
+        if (value !== this._mdOld) {
+            this._mdOld = value;
 
             if (this._timeoutId !== undefined) {
                 clearTimeout(this._timeoutId);
@@ -311,18 +311,18 @@ export class MdEditor {
                     MathJax.Hub.Queue([
                         'resetEquationNumbers', MathJax.InputJax.TeX
                     ], [
-                        'Typeset', MathJax.Hub, 'md-out', () => {
-                            $md_out.css('visibility', 'visible');
-                            $md_tmp.remove();
+                        'Typeset', MathJax.Hub, 'output', () => {
+                            $output.css('visibility', 'visible');
+                            $cached.remove();
 
-                            if (md_new.length === 0) {
+                            if (value.length === 0) {
                                 $.get(
-                                    '/static/html/editor-placeholder.html'
+                                    '/static/html/output-placeholder.html'
                                 ).done((html) => {
-                                    $md_out.html(html);
-                                    $md_out.find('>*').hide().fadeIn('fast');
+                                    $output.html(html);
+                                    $output.find('>*').hide().fadeIn('fast');
                                     MathJax.Hub.Queue([
-                                        'Typeset', MathJax.Hub, 'md-out'
+                                        'Typeset', MathJax.Hub, 'output'
                                     ]);
                                 });
                             }
@@ -331,20 +331,20 @@ export class MdEditor {
                 }
             }, 0);
 
-            $md_tmp = $('#md-tmp');
-            $md_tmp.remove();
-            $md_tmp = $md_out.clone();
-            $md_tmp.prop('id', 'md-tmp');
-            $md_tmp.insertBefore($md_out);
-            $md_tmp.scrollTop($md_out.scrollTop());
+            $cached = $('#cached');
+            $cached.remove();
+            $cached = $output.clone();
+            $cached.prop('id', 'cached');
+            $cached.insertBefore($output);
+            $cached.scrollTop($output.scrollTop());
 
-            $md_out.css('visibility', 'hidden');
-            $md_out.html(MarkdownIt.me.render(md_new));
+            $output.css('visibility', 'hidden');
+            $output.html(MarkdownIt.me.render(value));
 
-            let $h = $md_out.find(':header');
+            let $h = $output.find(':header');
             DownloadManager.me.title = ($h.length > 0 ?
                     $($h[0]).text() : new Date().toISOString()) + '.md';
-            DownloadManager.me.content = md_new;
+            DownloadManager.me.content = value;
         }
     }
 
@@ -403,7 +403,7 @@ export class MdEditor {
     }
 
     public get $input() {
-        return $('#md-inp');
+        return $('#input');
     }
 
     public get $footer() {
@@ -434,12 +434,12 @@ export class MdEditor {
         this._spellChecker = value;
     }
 
-    private get spellCheckOverlay(): IOverlay {
-        return this._spellCheckOverlay;
+    private get spellCheckerOverlay(): IOverlay {
+        return this._spellCheckerOverlay;
     }
 
-    private set spellCheckOverlay(value: IOverlay) {
-        this._spellCheckOverlay = value;
+    private set spellCheckerOverlay(value: IOverlay) {
+        this._spellCheckerOverlay = value;
     }
 
     public spellCheck(
@@ -451,11 +451,11 @@ export class MdEditor {
                     this.mirror.removeOverlay('spell-checker');
                 }
                 if (overlay) {
-                    this.spellCheckOverlay = $.extend(overlay, {
+                    this.spellCheckerOverlay = $.extend(overlay, {
                         name: 'spell-checker'
                     });
                     if (this.mirror) {
-                        this.mirror.addOverlay(this.spellCheckOverlay);
+                        this.mirror.addOverlay(this.spellCheckerOverlay);
                     }
                 }
                 if (callback) {
@@ -464,7 +464,7 @@ export class MdEditor {
             });
         } else {
             this.spellChecker = null;
-            this.spellCheckOverlay = null;
+            this.spellCheckerOverlay = null;
             if (this.mirror) {
                 this.mirror.removeOverlay('spell-checker');
             }
@@ -529,7 +529,7 @@ export class MdEditor {
     }
 
 
-    private _spellCheckOverlay: IOverlay;
+    private _spellCheckerOverlay: IOverlay;
     private _spellChecker: SpellChecker;
     private _searchOverlay: IOverlay;
     private _timeoutId: number;

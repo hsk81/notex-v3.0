@@ -916,11 +916,15 @@ export class MdEditorToolbar {
     }
 
     private get $outer() {
-        return $('.md-toolbar-outer');
+        return $('.lhs>.toolbar-outer');
+    }
+
+    private get $inner() {
+        return this.$outer.find('>.toolbar-inner');
     }
 
     private get $toolbar() {
-        return $('.md-toolbar');
+        return this.$inner.find('>.md-toolbar');
     }
 
     private get $undo() {
@@ -981,7 +985,7 @@ export class MdEditorToolbar {
 
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll('.md-toolbar-inner', {
+            this._scroll = new IScroll('.toolbar-inner', {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true

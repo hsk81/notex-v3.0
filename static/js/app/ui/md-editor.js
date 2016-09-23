@@ -213,7 +213,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         });
         MdEditor.prototype.toMirror = function () {
             if (!this.mirror) {
-                this.setMirror(CodeMirror.fromTextArea(document.getElementById('md-inp'), {
+                this.setMirror(CodeMirror.fromTextArea(document.getElementById('input'), {
                     mode: MdEditor.defineMode(),
                     styleActiveLine: true,
                     matchBrackets: true,
@@ -232,9 +232,9 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.mirror
                     .on('change', this.onEditorChange.bind(this));
             }
-            if (this.spellCheckOverlay) {
-                this.mirror.removeOverlay(this.spellCheckOverlay);
-                this.mirror.addOverlay(this.spellCheckOverlay);
+            if (this.spellCheckerOverlay) {
+                this.mirror.removeOverlay(this.spellCheckerOverlay);
+                this.mirror.addOverlay(this.spellCheckerOverlay);
             }
             this.simple = false;
             this.$input.hide();
@@ -242,8 +242,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         MdEditor.prototype.toInput = function (options) {
             if (this.mirror) {
-                if (this.spellCheckOverlay) {
-                    this.mirror.removeOverlay(this.spellCheckOverlay);
+                if (this.spellCheckerOverlay) {
+                    this.mirror.removeOverlay(this.spellCheckerOverlay);
                 }
                 this.mirror.toTextArea();
                 this.setMirror(undefined);
@@ -270,10 +270,10 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             return this.$input;
         };
         MdEditor.prototype.render = function () {
-            var $md_out = $('#md-out'), $md_tmp;
-            var md_new = this.getValue();
-            if (md_new !== this._mdOld) {
-                this._mdOld = md_new;
+            var $output = $('#output'), $cached;
+            var value = this.getValue();
+            if (value !== this._mdOld) {
+                this._mdOld = value;
                 if (this._timeoutId !== undefined) {
                     clearTimeout(this._timeoutId);
                     this._timeoutId = undefined;
@@ -283,15 +283,15 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                         MathJax.Hub.Queue([
                             'resetEquationNumbers', MathJax.InputJax.TeX
                         ], [
-                            'Typeset', MathJax.Hub, 'md-out', function () {
-                                $md_out.css('visibility', 'visible');
-                                $md_tmp.remove();
-                                if (md_new.length === 0) {
-                                    $.get('/static/html/editor-placeholder.html').done(function (html) {
-                                        $md_out.html(html);
-                                        $md_out.find('>*').hide().fadeIn('fast');
+                            'Typeset', MathJax.Hub, 'output', function () {
+                                $output.css('visibility', 'visible');
+                                $cached.remove();
+                                if (value.length === 0) {
+                                    $.get('/static/html/output-placeholder.html').done(function (html) {
+                                        $output.html(html);
+                                        $output.find('>*').hide().fadeIn('fast');
                                         MathJax.Hub.Queue([
-                                            'Typeset', MathJax.Hub, 'md-out'
+                                            'Typeset', MathJax.Hub, 'output'
                                         ]);
                                     });
                                 }
@@ -299,18 +299,18 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                         ]);
                     }
                 }, 0);
-                $md_tmp = $('#md-tmp');
-                $md_tmp.remove();
-                $md_tmp = $md_out.clone();
-                $md_tmp.prop('id', 'md-tmp');
-                $md_tmp.insertBefore($md_out);
-                $md_tmp.scrollTop($md_out.scrollTop());
-                $md_out.css('visibility', 'hidden');
-                $md_out.html(markdown_it_1.default.me.render(md_new));
-                var $h = $md_out.find(':header');
+                $cached = $('#cached');
+                $cached.remove();
+                $cached = $output.clone();
+                $cached.prop('id', 'cached');
+                $cached.insertBefore($output);
+                $cached.scrollTop($output.scrollTop());
+                $output.css('visibility', 'hidden');
+                $output.html(markdown_it_1.default.me.render(value));
+                var $h = $output.find(':header');
                 download_manager_1.default.me.title = ($h.length > 0 ?
                     $($h[0]).text() : new Date().toISOString()) + '.md';
-                download_manager_1.default.me.content = md_new;
+                download_manager_1.default.me.content = value;
             }
         };
         MdEditor.prototype.refresh = function () {
@@ -361,7 +361,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditor.prototype, "$input", {
             get: function () {
-                return $('#md-inp');
+                return $('#input');
             },
             enumerable: true,
             configurable: true
@@ -407,12 +407,12 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MdEditor.prototype, "spellCheckOverlay", {
+        Object.defineProperty(MdEditor.prototype, "spellCheckerOverlay", {
             get: function () {
-                return this._spellCheckOverlay;
+                return this._spellCheckerOverlay;
             },
             set: function (value) {
-                this._spellCheckOverlay = value;
+                this._spellCheckerOverlay = value;
             },
             enumerable: true,
             configurable: true
@@ -425,11 +425,11 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                         _this.mirror.removeOverlay('spell-checker');
                     }
                     if (overlay) {
-                        _this.spellCheckOverlay = $.extend(overlay, {
+                        _this.spellCheckerOverlay = $.extend(overlay, {
                             name: 'spell-checker'
                         });
                         if (_this.mirror) {
-                            _this.mirror.addOverlay(_this.spellCheckOverlay);
+                            _this.mirror.addOverlay(_this.spellCheckerOverlay);
                         }
                     }
                     if (callback) {
@@ -439,7 +439,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             }
             else {
                 this.spellChecker = null;
-                this.spellCheckOverlay = null;
+                this.spellCheckerOverlay = null;
                 if (this.mirror) {
                     this.mirror.removeOverlay('spell-checker');
                 }

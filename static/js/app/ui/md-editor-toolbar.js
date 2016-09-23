@@ -807,14 +807,21 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         };
         Object.defineProperty(MdEditorToolbar.prototype, "$outer", {
             get: function () {
-                return $('.md-toolbar-outer');
+                return $('.lhs>.toolbar-outer');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$inner", {
+            get: function () {
+                return this.$outer.find('>.toolbar-inner');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MdEditorToolbar.prototype, "$toolbar", {
             get: function () {
-                return $('.md-toolbar');
+                return this.$inner.find('>.md-toolbar');
             },
             enumerable: true,
             configurable: true
@@ -920,7 +927,7 @@ define(["require", "exports", '../decorator/named', '../decorator/trace', './md-
         Object.defineProperty(MdEditorToolbar.prototype, "scroll", {
             get: function () {
                 if (this._scroll === undefined) {
-                    this._scroll = new IScroll('.md-toolbar-inner', {
+                    this._scroll = new IScroll('.toolbar-inner', {
                         interactiveScrollbars: true,
                         mouseWheel: true,
                         scrollbars: true
