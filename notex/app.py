@@ -67,13 +67,13 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
     def minify(out_path, inp_path, flag='a'):
         concat(out_path, inp_path, flag=flag, func=rcssmin.cssmin)
 
-    concat(out_path,
+    minify(out_path,
            'static/css/lib/bootstrap/bootstrap-3.3.6.min.css', 'w')
-    concat(out_path,
+    minify(out_path,
            'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
-    concat(out_path,
+    minify(out_path,
            'static/css/lib/highlight/default-9.5.0.min.css')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/lib/codemirror.css')
     minify(out_path,
            'static/css/app/editor.css')
@@ -90,129 +90,129 @@ if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
     def optimy(out_path, inp_path, flag='a'):
         concat(out_path, amd.optimize(inp_path), flag=flag)
 
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/jquery/jquery.set-cursor-position-1.12.1.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/highlight/highlight-9.5.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/iscroll/iscroll-5.2.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/typo/typo-1.1.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-7.0.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-anchor-2.5.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-abbr-1.0.3.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-center-text-1.0.3.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-decorate-1.2.1.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-emoji-1.2.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-figure-0.3.2.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-footnote-3.0.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-math-4.0.1.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-sub-2.0.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-sup-2.0.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.4.0.min.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/lib/codemirror.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/display/placeholder.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/edit/matchbrackets.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/mode/multiplex.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/mode/overlay.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/mode/simple.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/search/searchcursor.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/addon/selection/active-line.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/clike/clike.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/cmake/cmake.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/css/css.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/dockerfile/dockerfile.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/erlang/erlang.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/fortran/fortran.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/go/go.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/haskell/haskell.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/http/http.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/javascript/javascript.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/jinja2/jinja2.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/julia/julia.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/lua/lua.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/mathematica/mathematica.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/markdown/markdown.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/gfm/gfm.js') ## @aft(markdown)
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/mllike/mllike.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/nginx/nginx.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/octave/octave.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/perl/perl.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/php/php.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/python/python.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/r/r.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/rst/rst.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/sass/sass.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/sql/sql.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/spreadsheet/spreadsheet.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/stex/stex.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/swift/swift.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/xml/xml.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/htmlmixed/htmlmixed.js') ## @aft(xml)
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/yaml/yaml.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/vb/vb.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/codemirror/mode/vbscript/vbscript.js')
-    concat(out_path,
+    minify(out_path,
            'static/js/lib/require/require-2.2.0.min.js')
 
     optimy(out_path, 'amd.json')
