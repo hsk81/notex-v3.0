@@ -50,13 +50,17 @@ export class MdEditorFooter {
     }
 
     private hide(ms: number = 200) {
-        this.$input.animate({'height': '100%'}, 0);
+        if (!this.ed.mirror) {
+            this.$input.animate({'height': '100%'}, 0);
+        }
         this.$footer.animate({'width': '48px'}, ms);
         this.$console.val('');
     }
 
     private show(ms: number = 200) {
-        this.$input.animate({'height': 'calc(100% - 48px)'}, 0);
+        if (!this.ed.mirror) {
+            this.$input.animate({'height': 'calc(100% - 48px)'}, 0);
+        }
         this.$footer.animate({'width': '100%'}, ms);
         this.$console.val('');
     }
