@@ -26,7 +26,7 @@ import {trace} from './decorator/trace';
 
 @trace
 @named('App')
-class App {
+export class App {
     public static get me():App {
         if (this['_me'] === undefined) {
             this['_me'] = window['APP'] = new App();
