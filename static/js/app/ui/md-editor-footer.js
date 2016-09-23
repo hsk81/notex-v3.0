@@ -56,13 +56,17 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         });
         MdEditorFooter.prototype.hide = function (ms) {
             if (ms === void 0) { ms = 200; }
-            this.$input.animate({ 'height': '100%' }, 0);
+            if (!this.ed.mirror) {
+                this.$input.animate({ 'height': '100%' }, 0);
+            }
             this.$footer.animate({ 'width': '48px' }, ms);
             this.$console.val('');
         };
         MdEditorFooter.prototype.show = function (ms) {
             if (ms === void 0) { ms = 200; }
-            this.$input.animate({ 'height': 'calc(100% - 48px)' }, 0);
+            if (!this.ed.mirror) {
+                this.$input.animate({ 'height': 'calc(100% - 48px)' }, 0);
+            }
             this.$footer.animate({ 'width': '100%' }, ms);
             this.$console.val('');
         };
