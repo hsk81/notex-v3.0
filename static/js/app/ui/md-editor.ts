@@ -407,7 +407,7 @@ export class MdEditor {
     }
 
     public get $footer() {
-        return this.$input.siblings('.lhs-footer');
+        return this.$input.siblings('.footer');
     }
 
     public get mirror(): any {

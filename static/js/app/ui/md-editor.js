@@ -368,7 +368,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         });
         Object.defineProperty(MdEditor.prototype, "$footer", {
             get: function () {
-                return this.$input.siblings('.lhs-footer');
+                return this.$input.siblings('.footer');
             },
             enumerable: true,
             configurable: true
