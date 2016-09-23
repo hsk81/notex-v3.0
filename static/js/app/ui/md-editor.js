@@ -287,9 +287,9 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                                 $md_out.css('visibility', 'visible');
                                 $md_tmp.remove();
                                 if (md_new.length === 0) {
-                                    var path = '/static/html/md-out.html';
-                                    $.get(path).done(function (html) {
+                                    $.get('/static/html/editor-placeholder.html').done(function (html) {
                                         $md_out.html(html);
+                                        $md_out.find('>*').hide().fadeIn('fast');
                                         MathJax.Hub.Queue([
                                             'Typeset', MathJax.Hub, 'md-out'
                                         ]);
