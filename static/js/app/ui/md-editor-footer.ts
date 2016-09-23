@@ -306,7 +306,7 @@ export class MdEditorFooter {
     };
 
     public get $input() {
-        return $('#md-inp');
+        return $('#input');
     }
 
     private get $footer() {

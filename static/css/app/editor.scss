@@ -16,18 +16,18 @@ html, body {
  * ========================================================================= */
 
 .header {
-  input.md-src, input.md-src-mob {
+  input.source, input.source-mob {
     display: none;
   }
-  label.md-src, label.md-src-mob {
+  label.source, label.source-mob {
     cursor: pointer;
     font-weight: normal;
     margin: 0;
   }
-  label[for=md-src] {
+  label[for=source] {
     padding: 15px;
   }
-  label[for=md-src]:not(:hover){
+  label[for=source]:not(:hover){
     color: #777;
   }
   border-radius: 0;
@@ -45,16 +45,16 @@ html, body {
     .lhs {
       height: 100%;
       padding: 0;
-      div.md-toolbar-outer {
+      div.toolbar-outer {
         display: none;
         float: left;
         height: calc(100% - 47px);
         max-width: 48px;
       }
-      div.md-toolbar-inner:nth-of-type(1) {
+      div.toolbar-inner:nth-of-type(1) {
         height: 100%;
       }
-      div.md-toolbar-inner {
+      div.toolbar-inner {
         overflow-y: hidden;
         position: relative;
         div.md-toolbar {
@@ -90,7 +90,7 @@ html, body {
         height: calc(100% - 47px);
         width: calc(100% - 48px);
       }
-      textarea#md-inp {
+      textarea#input {
         border: none;
         box-shadow: inset 0 0 8px #e7e7e7;
         display: none;
@@ -154,7 +154,7 @@ html, body {
     .rhs {
       height: 100%;
       padding: 0;
-      div#md-out, div#md-tmp {
+      div#output, div#cached {
         border-left: 4px double #e7e7e7;
         box-shadow: inset 0 0 8px #e7e7e7;
         height: 100%;
@@ -164,7 +164,7 @@ html, body {
         position: absolute;
         width: 100%;
       }
-      div#md-out, div#md-tmp {
+      div#output, div#cached {
         @media(max-width: 480px) {
           font-size: medium;
         }
@@ -173,27 +173,27 @@ html, body {
         }
         font-family: "Linux Libertine", serif;
       }
-      div#md-out pre, div#md-tmp pre {
+      div#output pre, div#cached pre {
         @media(max-width: 480px) {
           font-size: x-small;
         }
       }
-      div#md-out p, div#md-tmp p {
+      div#output p, div#cached p {
         text-align: justify;
       }
-      div#md-out .footnote-ref > a,
-      div#md-tmp .footnote-ref > a {
+      div#output .footnote-ref > a,
+      div#cached .footnote-ref > a {
         font-size: smaller;
       }
-      div#md-out .mjx-math,
-      div#md-tmp .mjx-math,
-      div#md-out .mjx-char,
-      div#md-tmp .mjx-char,
-      div#md-out a,
-      div#md-tmp a {
+      div#output .mjx-math,
+      div#cached .mjx-math,
+      div#output .mjx-char,
+      div#cached .mjx-char,
+      div#output a,
+      div#cached a {
         color: navy;
       }
-      div#md-out, div#md-tmp {
+      div#output, div#cached {
         table th {
             border-bottom: 2px solid gray;
         }
@@ -204,17 +204,17 @@ html, body {
             padding: 0.25em;
         }
       }
-      div#md-out figure,
-      div#md-tmp figure {
+      div#output figure,
+      div#cached figure {
         margin: 1em 0;
         text-align: center;
       }
-      div#md-out .header-anchor,
-      div#md-tmp .header-anchor {
+      div#output .header-anchor,
+      div#cached .header-anchor {
         opacity: 0.05;
       }
-      div#md-out .header-anchor:hover,
-      div#md-tmp .header-anchor:hover {
+      div#output .header-anchor:hover,
+      div#cached .header-anchor:hover {
         opacity: 1.00;
       }
     }

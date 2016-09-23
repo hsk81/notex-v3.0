@@ -253,7 +253,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditorFooter.prototype, "$input", {
             get: function () {
-                return $('#md-inp');
+                return $('#input');
             },
             enumerable: true,
             configurable: true

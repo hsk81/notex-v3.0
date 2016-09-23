@@ -116,7 +116,7 @@ export class PublishDialog {
             $blog_url.val(blog_url);
         }
 
-        let $headers = this.$mdOut.find(':header'),
+        let $headers = this.$output.find(':header'),
             title = $headers.first().text();
         if (title && typeof title === 'string') {
             $post_title.val(title.replace('¶', '').trim());
@@ -400,8 +400,8 @@ export class PublishDialog {
         return $content.html();
     }
 
-    private get $mdOut(): any {
-        return $('#md-out');
+    private get $output(): any {
+        return $('#output');
     }
 
     private get $dialog(): any {
