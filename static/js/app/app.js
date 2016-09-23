@@ -36,6 +36,7 @@ define(["require", "exports", './ui/download-manager', './ui/header-menu', './ui
         ], App);
         return App;
     }());
+    exports.App = App;
     window['APP'] = App.me;
 });
 //# sourceMappingURL=app.js.map
