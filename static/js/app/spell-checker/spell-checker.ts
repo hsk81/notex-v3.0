@@ -9,7 +9,7 @@ export interface IOverlay {
     token: (stream: any, state?: any) => void;
 }
 
-export class SpellCheck {
+export class SpellChecker {
     public constructor(
         lingua: ILingua, callback: (overlay: IOverlay) => void
     ) {
@@ -65,4 +65,4 @@ export class SpellCheck {
     private _typo: any;
 }
 
-export default SpellCheck;
+export default SpellChecker;

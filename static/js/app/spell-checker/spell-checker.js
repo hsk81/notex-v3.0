@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var SpellCheck = (function () {
-        function SpellCheck(lingua, callback) {
+    var SpellChecker = (function () {
+        function SpellChecker(lingua, callback) {
             var _this = this;
             var worker = new Worker('/static/js/app/spell-checker/spell-checker.worker.js');
             worker.onmessage = function (ev) {
@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
                 lingua: lingua.code, charset: lingua.charset
             });
         }
-        Object.defineProperty(SpellCheck.prototype, "separator", {
+        Object.defineProperty(SpellChecker.prototype, "separator", {
             get: function () {
                 if (!this._separator) {
                     var rx_bas = "!\"'#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~", rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿", rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾", rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎", rx_xxx = "≈≡×";
@@ -39,7 +39,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(SpellCheck.prototype, "typo", {
+        Object.defineProperty(SpellChecker.prototype, "typo", {
             get: function () {
                 return this._typo;
             },
@@ -49,10 +49,10 @@ define(["require", "exports"], function (require, exports) {
             enumerable: true,
             configurable: true
         });
-        return SpellCheck;
+        return SpellChecker;
     }());
-    exports.SpellCheck = SpellCheck;
+    exports.SpellChecker = SpellChecker;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = SpellCheck;
+    exports.default = SpellChecker;
 });
 //# sourceMappingURL=spell-checker.js.map

@@ -103,7 +103,7 @@ html, body {
         resize: none;
         width: 100%;
       }
-      div.lhs-footer {
+      div.footer {
         bottom: 0;
         border-top: 1px solid #e7e7e7;
         display: none;
@@ -113,11 +113,11 @@ html, body {
         .btn-group {
           margin: 6px 4px;
         }
-        #my-console.input-group {
+        #cli.input-group {
           float: right;
           margin: 6px 4px 6px 0;
           width: calc(100% - 53px);
-          button#spell-check-button {
+          button#spell-checker-button {
             height: 34px;
             width: 42px;
             span.img-placeholder {
@@ -129,7 +129,7 @@ html, body {
               margin-bottom: 2px;
             }
           }
-          ul#spell-check-menu {
+          ul#spell-checker-menu {
             height: 307px;
             overflow: hidden;
             overflow-y: scroll;

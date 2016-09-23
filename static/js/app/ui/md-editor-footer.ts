@@ -35,11 +35,11 @@ export class MdEditorFooter {
         });
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
-        this.$console
+        this.$cli
             .on('change', this.onConsoleChange.bind(this));
-        this.$console
+        this.$cli
             .on('keydown', this.onConsoleKeyDown.bind(this));
-        this.$spellCheckButton
+        this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this));
 
         if (this.ed.simple) {
@@ -61,7 +61,7 @@ export class MdEditorFooter {
             this.$footer.show();
             this.$footer.animate({'width': '48px'}, ms);
         }
-        this.$console.val('');
+        this.$cli.val('');
     }
 
     private show(ms: number = 200, fade: boolean = false) {
@@ -76,7 +76,7 @@ export class MdEditorFooter {
             this.$footer.show();
             this.$footer.animate({'width': '100%'}, ms);
         }
-        this.$console.val('');
+        this.$cli.val('');
     }
 
     private onMirrorClick() {
@@ -122,8 +122,8 @@ export class MdEditorFooter {
 
     private onConsoleKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
-            this.$console.val('');
-            this.$console.trigger('change');
+            this.$cli.val('');
+            this.$cli.trigger('change');
         }
     }
 
@@ -149,14 +149,14 @@ export class MdEditorFooter {
     }
 
     private onSpellCheckToggle(ev: MouseEvent) {
-        let $li1 = this.$spellCheckToggle,
+        let $li1 = this.$spellCheckerToggle,
             $li1_a = $li1.find('a'),
             $li1_img = $li1.find('img'),
             $li1_line2 = $li1.find('.line2');
 
-        let $button_span = this.$spellCheckButton.find('span.img-placeholder');
+        let $button_span = this.$spellCheckerButton.find('span.img-placeholder');
         $button_span.remove();
-        let $button_img = this.$spellCheckButton.find('img');
+        let $button_img = this.$spellCheckerButton.find('img');
         $button_img.show();
 
         let lingua = {
@@ -185,7 +185,7 @@ export class MdEditorFooter {
             lingua.code = null;
         }
 
-        this.$spellCheckButton.addClass('disabled');
+        this.$spellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src',  this.urls['16x16'].off);
@@ -199,12 +199,12 @@ export class MdEditorFooter {
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.$spellCheckButton.removeClass('disabled');
+            this.$spellCheckerButton.removeClass('disabled');
         });
     }
 
     private onSpellCheckItemClick(ev: MouseEvent) {
-        let $li1 = this.$spellCheckToggle,
+        let $li1 = this.$spellCheckerToggle,
             $li1_a = $li1.find('a'),
             $li1_img = $li1.find('img'),
             $li1_line2 = $li1.find('.line2');
@@ -220,7 +220,7 @@ export class MdEditorFooter {
                 charset: $lii_a.data('charset')
             };
 
-        let $button = this.$spellCheckButton,
+        let $button = this.$spellCheckerButton,
             $button_img = $button.find('img'),
             $button_span = $button.find('span.img-placeholder');
 
@@ -228,7 +228,7 @@ export class MdEditorFooter {
         $button_img.prop('src', url.replace('32x32', '16x16'));
         $button_img.show();
 
-        this.$spellCheckButton.addClass('disabled');
+        this.$spellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src', this.urls['16x16'].err);
@@ -249,33 +249,33 @@ export class MdEditorFooter {
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.$spellCheckButton.removeClass('disabled');
+            this.$spellCheckerButton.removeClass('disabled');
         });
     }
 
     private onSpellCheckButtonClick(ev: MouseEvent) {
-        var $menu = this.$spellCheckMenu,
+        var $menu = this.$spellCheckerMenu,
             $spin = $menu.find('>.spin'),
             $item = $menu.find('>li');
         if ($item.length === 0) {
-            $.get('/static/html/spell-check-menu.html').done((html) => {
+            $.get('/static/html/spell-checker-menu.html').done((html) => {
                 $menu.html(html);
                 $menu.append($spin);
                 $item = $menu.find('>li').hide();
                 $item.find('img').on('load', this.onMenuItemLoad.bind(this));
 
-                this.$spellCheckToggle
+                this.$spellCheckerToggle
                     .on('click', this.onSpellCheckToggle.bind(this));
-                this.$spellCheckItem
+                this.$spellCheckerItem
                     .on('click', this.onSpellCheckItemClick.bind(this));
 
                 let code = cookie.get<string>('language') ||
                     (navigator.language || 'en-US').replace('-', '_');
-                this.$spellCheckToggle.find('a')
+                this.$spellCheckerToggle.find('a')
                     .data('lingua', code);
-                this.$spellCheckToggle.find('a')
+                this.$spellCheckerToggle.find('a')
                     .data('state', 'off');
-                this.$spellCheckToggle.find('.line2')
+                this.$spellCheckerToggle.find('.line2')
                     .text(`Off: Enable [${code.replace('_', '-')}]`);
             });
         }
@@ -283,7 +283,7 @@ export class MdEditorFooter {
 
     @buffered(600)
     private onMenuItemLoad(ev: Event) {
-        var $menu = this.$spellCheckMenu,
+        var $menu = this.$spellCheckerMenu,
             $spin = $menu.find('>.spin'),
             $item = $menu.find('>li');
 
@@ -310,31 +310,31 @@ export class MdEditorFooter {
     }
 
     private get $footer() {
-        return $('div.lhs-footer');
+        return this.$input.siblings('.footer');
     }
 
     private get $mirror() {
         return this.$footer.find('.glyphicon-console').closest('button');
     }
 
-    private get $console() {
-        return this.$footer.find('#my-console').find('input');
+    private get $cli() {
+        return this.$footer.find('#cli').find('input');
     }
 
-    private get $spellCheckMenu() {
-        return this.$footer.find('ul#spell-check-menu');
+    private get $spellCheckerButton() {
+        return this.$footer.find('#spell-checker-button');
     }
 
-    private get $spellCheckToggle() {
-        return this.$spellCheckMenu.find('li:first-of-type');
+    private get $spellCheckerMenu() {
+        return this.$footer.find('ul#spell-checker-menu');
     }
 
-    private get $spellCheckItem() {
-        return this.$spellCheckMenu.find('li:not(:first-of-type)');
+    private get $spellCheckerToggle() {
+        return this.$spellCheckerMenu.find('li:first-of-type');
     }
 
-    private get $spellCheckButton() {
-        return this.$footer.find('#spell-check-button');
+    private get $spellCheckerItem() {
+        return this.$spellCheckerMenu.find('li:not(:first-of-type)');
     }
 
     private get ed() {
