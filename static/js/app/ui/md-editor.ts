@@ -316,9 +316,11 @@ export class MdEditor {
                             $md_tmp.remove();
 
                             if (md_new.length === 0) {
-                                let path = '/static/html/md-out.html';
-                                $.get(path).done((html) => {
+                                $.get(
+                                    '/static/html/editor-placeholder.html'
+                                ).done((html) => {
                                     $md_out.html(html);
+                                    $md_out.find('>*').hide().fadeIn('fast');
                                     MathJax.Hub.Queue([
                                         'Typeset', MathJax.Hub, 'md-out'
                                     ]);
