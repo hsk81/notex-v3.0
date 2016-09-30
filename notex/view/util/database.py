@@ -100,7 +100,7 @@ def values_for (db, g_path, a_path=None, a_names=None, a_defaults=None,
 
 ###############################################################################
 
-def type_for (value): ## TODO: refactor?
+def type_for (value):
 
     if type (value) == TypeValue:
         return value.data.path
