@@ -26,8 +26,8 @@ import {IOverlay} from '../spell-checker/spell-checker';
 @trace
 @named('MdEditor')
 export class MdEditor {
-    private static defineMode(mode: string = 'notex-md') {
-        CodeMirror.defineMode(mode, function (config) {
+    private static mode(name:string) {
+        CodeMirror.defineMode(name, function (config) {
             return CodeMirror.multiplexingMode(
                 CodeMirror.getMode(config, 'gfm'), {
                     mode: CodeMirror.getMode(config, 'text/x-stex'),
@@ -200,7 +200,7 @@ export class MdEditor {
                 }
             );
         });
-        return mode;
+        return name;
     }
 
     public static get me(): MdEditor {
@@ -228,9 +228,10 @@ export class MdEditor {
         if (!this.mirror) {
             this.setMirror(CodeMirror.fromTextArea(
                 document.getElementById('input'), {
-                    mode: MdEditor.defineMode(),
+                    mode: MdEditor.mode('notex-md'),
                     styleActiveLine: true,
                     matchBrackets: true,
+                    addModeClass: true,
                     lineWrapping: true,
                     lineNumbers: true,
                     undoDepth: 4096

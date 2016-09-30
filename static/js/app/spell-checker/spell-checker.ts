@@ -1,5 +1,8 @@
 declare let Typo: any;
 
+import {named} from '../decorator/named';
+import {trace} from '../decorator/trace';
+
 export interface ILingua {
     charset: string;
     code: string;
@@ -9,6 +12,8 @@ export interface IOverlay {
     token: (stream: any, state?: any) => void;
 }
 
+@trace
+@named('SpellChecker')
 export class SpellChecker {
     public constructor(
         lingua: ILingua, callback: (overlay: IOverlay) => void
@@ -41,7 +46,7 @@ export class SpellChecker {
 
     private get separator(): RegExp {
         if (!this._separator) {
-            let rx_bas = "!\"'#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~",
+            let rx_bas = "!\"#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~",
                 rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿",
                 rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾",
                 rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎",

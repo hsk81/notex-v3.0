@@ -26,9 +26,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.toMirror();
             }
         }
-        MdEditor.defineMode = function (mode) {
-            if (mode === void 0) { mode = 'notex-md'; }
-            CodeMirror.defineMode(mode, function (config) {
+        MdEditor.mode = function (name) {
+            CodeMirror.defineMode(name, function (config) {
                 return CodeMirror.multiplexingMode(CodeMirror.getMode(config, 'gfm'), {
                     mode: CodeMirror.getMode(config, 'text/x-stex'),
                     open: '{{', close: '}}'
@@ -199,7 +198,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                     open: '```', close: '```'
                 });
             });
-            return mode;
+            return name;
         };
         Object.defineProperty(MdEditor, "me", {
             get: function () {
@@ -214,9 +213,10 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         MdEditor.prototype.toMirror = function () {
             if (!this.mirror) {
                 this.setMirror(CodeMirror.fromTextArea(document.getElementById('input'), {
-                    mode: MdEditor.defineMode(),
+                    mode: MdEditor.mode('notex-md'),
                     styleActiveLine: true,
                     matchBrackets: true,
+                    addModeClass: true,
                     lineWrapping: true,
                     lineNumbers: true,
                     undoDepth: 4096
