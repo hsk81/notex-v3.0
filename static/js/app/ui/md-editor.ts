@@ -400,7 +400,19 @@ export class MdEditor {
     }
 
     private onEditorChange() {
+        if (typeof MathJax === 'undefined') {
+            let script = document.createElement('script'),
+                head = document.getElementsByTagName('head');
+            script.type = 'text/javascript';
+            script.src  = this.mathjaxUrl;
+            head[0].appendChild(script);
+        }
         this.render();
+    }
+
+    private get mathjaxUrl():string {
+        let path = window.debug ? '/static/js/lib' : '//cdn.mathjax.org';
+        return `${path}/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML`;
     }
 
     public get $input() {
@@ -420,7 +432,7 @@ export class MdEditor {
     }
 
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden') && !window['debug'];
+        return $('.lhs').is(':hidden') && !window.debug;
     }
 
     public get simple(): boolean {

@@ -17,9 +17,4 @@
 
 {% block script_mjx %}
 <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']], displayMath: [['$$','$$']]}, TeX: {equationNumbers: {autoNumber: "AMS"}}, asciimath2jax: {delimiters: [['\{\{','\}\}']]}, processEscapes: true, processSectionDelay: 0});</script>
-{% if debug %}
-<script src="/static/js/lib/math-jax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-{% else %}
-<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-{% endif %}
 {% endblock %}
