@@ -357,8 +357,22 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             }
         };
         MdEditor.prototype.onEditorChange = function () {
+            if (typeof MathJax === 'undefined') {
+                var script = document.createElement('script'), head = document.getElementsByTagName('head');
+                script.type = 'text/javascript';
+                script.src = this.mathjaxUrl;
+                head[0].appendChild(script);
+            }
             this.render();
         };
+        Object.defineProperty(MdEditor.prototype, "mathjaxUrl", {
+            get: function () {
+                var path = window.debug ? '/static/js/lib' : '//cdn.mathjax.org';
+                return path + "/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditor.prototype, "$input", {
             get: function () {
                 return $('#input');
@@ -385,7 +399,7 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         };
         Object.defineProperty(MdEditor.prototype, "mobile", {
             get: function () {
-                return $('.lhs').is(':hidden') && !window['debug'];
+                return $('.lhs').is(':hidden') && !window.debug;
             },
             enumerable: true,
             configurable: true
