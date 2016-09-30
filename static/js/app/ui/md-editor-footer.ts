@@ -42,14 +42,34 @@ export class MdEditorFooter {
         this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this));
 
-        if (this.ed.simple) {
-            this.hide(600, true);
+        if (!this.ed.mobile) {
+            if (!this.ed.simple) {
+                this.maximize(600, true);
+            } else {
+                this.minimize(600, true);
+            }
         } else {
-            this.show(600, true);
+            this.hide();
         }
     }
 
-    private hide(ms: number = 200, fade: boolean = false) {
+    private hide() {
+        if (!this.ed.mirror) {
+            this.$input.css({'height': '100%'});
+        }
+        this.$footer.hide();
+        this.$footer.css({'width': '48px'});
+    }
+
+    private show() {
+        if (!this.ed.mirror) {
+            this.$input.css({'height': 'calc(100% - 48px)'});
+        }
+        this.$footer.show();
+        this.$footer.css({'width': '100%'});
+    }
+
+    private minimize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
             this.$input.css({'height': '100%'});
         }
@@ -61,10 +81,9 @@ export class MdEditorFooter {
             this.$footer.show();
             this.$footer.animate({'width': '48px'}, ms);
         }
-        this.$cli.val('');
     }
 
-    private show(ms: number = 200, fade: boolean = false) {
+    private maximize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
             this.$input.css({'height': 'calc(100% - 48px)'});
         }
@@ -76,7 +95,6 @@ export class MdEditorFooter {
             this.$footer.show();
             this.$footer.animate({'width': '100%'}, ms);
         }
-        this.$cli.val('');
     }
 
     private onMirrorClick() {
@@ -98,7 +116,8 @@ export class MdEditorFooter {
                 Math.min(start, end), Math.max(start, end));
 
             this.$mirror.tooltip('hide');
-            this.hide();
+            this.$cli.val('');
+            this.minimize();
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -116,7 +135,8 @@ export class MdEditorFooter {
                 mirror.posFromIndex(sel.end));
 
             this.$mirror.tooltip('hide');
-            this.show();
+            this.$cli.val('');
+            this.maximize();
         }
     }
 

@@ -37,11 +37,16 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 .on('keydown', this.onConsoleKeyDown.bind(this));
             this.$spellCheckerButton
                 .on('click', this.onSpellCheckButtonClick.bind(this));
-            if (this.ed.simple) {
-                this.hide(600, true);
+            if (!this.ed.mobile) {
+                if (!this.ed.simple) {
+                    this.maximize(600, true);
+                }
+                else {
+                    this.minimize(600, true);
+                }
             }
             else {
-                this.show(600, true);
+                this.hide();
             }
         }
         Object.defineProperty(MdEditorFooter, "me", {
@@ -54,7 +59,21 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
             enumerable: true,
             configurable: true
         });
-        MdEditorFooter.prototype.hide = function (ms, fade) {
+        MdEditorFooter.prototype.hide = function () {
+            if (!this.ed.mirror) {
+                this.$input.css({ 'height': '100%' });
+            }
+            this.$footer.hide();
+            this.$footer.css({ 'width': '48px' });
+        };
+        MdEditorFooter.prototype.show = function () {
+            if (!this.ed.mirror) {
+                this.$input.css({ 'height': 'calc(100% - 48px)' });
+            }
+            this.$footer.show();
+            this.$footer.css({ 'width': '100%' });
+        };
+        MdEditorFooter.prototype.minimize = function (ms, fade) {
             if (ms === void 0) { ms = 200; }
             if (fade === void 0) { fade = false; }
             if (!this.ed.mirror) {
@@ -69,9 +88,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.$footer.show();
                 this.$footer.animate({ 'width': '48px' }, ms);
             }
-            this.$cli.val('');
         };
-        MdEditorFooter.prototype.show = function (ms, fade) {
+        MdEditorFooter.prototype.maximize = function (ms, fade) {
             if (ms === void 0) { ms = 200; }
             if (fade === void 0) { fade = false; }
             if (!this.ed.mirror) {
@@ -86,7 +104,6 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.$footer.show();
                 this.$footer.animate({ 'width': '100%' }, ms);
             }
-            this.$cli.val('');
         };
         MdEditorFooter.prototype.onMirrorClick = function () {
             if (this.ed.mirror) {
@@ -101,7 +118,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 $input.scrollTop(scroll_1.top);
                 $input[0].setSelectionRange(Math.min(start, end), Math.max(start, end));
                 this.$mirror.tooltip('hide');
-                this.hide();
+                this.$cli.val('');
+                this.minimize();
             }
             else {
                 var scroll_2 = {
@@ -116,7 +134,8 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 mirror.scrollTo(scroll_2.left, scroll_2.top);
                 mirror.setSelection(mirror.posFromIndex(sel.start), mirror.posFromIndex(sel.end));
                 this.$mirror.tooltip('hide');
-                this.show();
+                this.$cli.val('');
+                this.maximize();
             }
         };
         MdEditorFooter.prototype.onConsoleKeyDown = function (ev) {
