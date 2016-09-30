@@ -70,7 +70,7 @@ html, body {
         }
       }
       div.CodeMirror {
-        span.cm-m-markdown.cm-spell-error {
+        span.cm-m-markdown.cm-spell-error:not(.cm-link):not(.cm-url) {
           background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC);
           background-position: bottom;
           background-repeat: repeat-x;
