@@ -11,5 +11,8 @@
   },
   "exclude": [
     ".git", "./bin", "./build", "./dist", "./include", "./lib", "./share"
+  ],
+  "files": [
+    "typings/index.d.ts"
   ]
 }
