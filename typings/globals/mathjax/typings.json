@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/6ff3ac5f001f960c1434f29b11a2c7e8f968c29c/mathjax/mathjax.d.ts",
+    "raw": "registry:dt/mathjax#0.0.0+20160923130614",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/6ff3ac5f001f960c1434f29b11a2c7e8f968c29c/mathjax/mathjax.d.ts"
+  }
+}

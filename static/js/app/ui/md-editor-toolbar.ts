@@ -252,8 +252,8 @@ export class MdEditorToolbar {
 
     private onHeaderClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd,
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg;
 
         while (idx-- > 0) {
@@ -273,31 +273,31 @@ export class MdEditorToolbar {
             mm_0 = sx.match(rx_0);
 
         if (mm_6 && mm_6.length > 0) {
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 idx + 1, idx + mm_6[0].length + 1);
             if (!document.execCommand('insertText', false, '')) {
                 this.ed.$input.val(
                     `${px}${sx.replace(rx_6, '')}`);
             }
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 beg - mm_6[0].length, end - mm_6[0].length);
         } else if (mm_5 && mm_5.length > 0) {
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 idx + 1, idx + mm_5[0].length + 1);
             if (!document.execCommand('insertText', false, mm_5[0] + '#')) {
                 this.ed.$input.val(
                     `${px}${sx.replace(rx_5, mm_5[0] + '#')}`);
             }
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 beg + 1, end + 1);
         } else if (mm_0 && mm_0.length > 0) {
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 idx + 1, idx + mm_0[0].length + 1);
             if (!document.execCommand('insertText', false, '# ' + mm_0[0])) {
                 this.ed.$input.val(
                     `${px}${sx.replace(rx_0, '# ' + mm_0[0])}`);
             }
-            this.ed.$input[0].setSelectionRange(
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
                 beg + mm_0[0].length + 2, end + mm_0[0].length + 2);
         }
         this.ed.$input.trigger('change');
@@ -404,8 +404,8 @@ export class MdEditorToolbar {
 
     private onBoldClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -423,18 +423,18 @@ export class MdEditorToolbar {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end - 4);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 4);
         } else if (mm_2 && mm_2.length > 1) {
-            this.ed.$input[0].setSelectionRange(beg - 2, end + 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end + 2);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            this.ed.$input[0].setSelectionRange(beg - 2, end - 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end - 2);
         } else {
             if (!document.execCommand('insertText', false, `**${ix_1}**`)) {
                 this.ed.$input.val(`${px_1}**${ix_1}**${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end + 4);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 4);
         }
         this.ed.$input.trigger('change');
     }
@@ -533,8 +533,8 @@ export class MdEditorToolbar {
 
     private onItalicClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -552,18 +552,18 @@ export class MdEditorToolbar {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end - 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
-            this.ed.$input[0].setSelectionRange(beg - 1, end + 1);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            this.ed.$input[0].setSelectionRange(beg - 1, end - 1);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `*${ix_1}*`)) {
                 this.ed.$input.val(`${px_1}*${ix_1}*${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end + 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 2);
         }
         this.ed.$input.trigger('change');
     }
@@ -659,8 +659,8 @@ export class MdEditorToolbar {
 
     private onCommentClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -678,18 +678,18 @@ export class MdEditorToolbar {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end - 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
-            this.ed.$input[0].setSelectionRange(beg - 1, end + 1);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            this.ed.$input[0].setSelectionRange(beg - 1, end - 1);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `\`${ix_1}\``)) {
                 this.ed.$input.val(`${px_1}\`${ix_1}\`${sx_1}`);
             }
-            this.ed.$input[0].setSelectionRange(beg, end + 2);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 2);
         }
         this.ed.$input.trigger('change');
     }
@@ -709,8 +709,8 @@ export class MdEditorToolbar {
 
     private onIndentClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd,
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg - 1;
 
         while (idx >= 0 && val[idx] !== '\n') {
@@ -720,12 +720,12 @@ export class MdEditorToolbar {
         let px = val.substring(0, idx + 1),
             sx = val.substring(idx + 1, val.length);
 
-        this.ed.$input[0].setSelectionRange(idx + 1, idx + 1);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(idx + 1, idx + 1);
         if (!document.execCommand('insertText', false, '  ')) {
             this.ed.$input.val(`${px}  ${sx}`);
         }
 
-        this.ed.$input[0].setSelectionRange(beg + 2, end + 2);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg + 2, end + 2);
         this.ed.$input.trigger('change');
     }
 
@@ -744,8 +744,8 @@ export class MdEditorToolbar {
 
     private onOutdentClickSimple() {
         let val:string = this.ed.$input.val(),
-            beg = this.ed.$input[0].selectionStart,
-            end = this.ed.$input[0].selectionEnd,
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg - 1;
 
         while (idx >= 0 && val[idx] !== '\n') {
@@ -758,14 +758,14 @@ export class MdEditorToolbar {
         let rx =/^\s{2}/,
             mm = sx.match(rx);
         if (mm && mm.length > 0) {
-            this.ed.$input[0].setSelectionRange(idx + 1, idx + 3);
+            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(idx + 1, idx + 3);
             if (!document.execCommand('insertText', false, '')) {
                 this.ed.$input.val(`${px}${sx.substring(2)}`);
             }
             if (beg > 0 && val[beg - 1] === '\n') {
-                this.ed.$input[0].setSelectionRange(beg, end);
+                (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end);
             } else {
-                this.ed.$input[0].setSelectionRange(beg - 2, end - 2);
+                (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end - 2);
             }
             this.ed.$input.trigger('change');
         }
@@ -795,9 +795,9 @@ export class MdEditorToolbar {
 
     private onSupscriptClickSimple() {
         let val:string = this.ed.$input.val(),
-            end = this.ed.$input[0].selectionEnd;
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
-        this.ed.$input[0].setSelectionRange(end, end);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '^{ }')) {
             let px = val.substring(0, end),
                 sx = val.substring(end, val.length);
@@ -805,7 +805,7 @@ export class MdEditorToolbar {
             this.ed.$input.val(`${px}^{ }${sx}`);
         }
 
-        this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
 
@@ -833,9 +833,9 @@ export class MdEditorToolbar {
 
     private onSubscriptClickSimple() {
         let val:string = this.ed.$input.val(),
-            end = this.ed.$input[0].selectionEnd;
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
-        this.ed.$input[0].setSelectionRange(end, end);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '~{ }')) {
             let px = val.substring(0, end),
                 sx = val.substring(end, val.length);
@@ -843,7 +843,7 @@ export class MdEditorToolbar {
             this.ed.$input.val(`${px}~{ }${sx}`);
         }
 
-        this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
 
