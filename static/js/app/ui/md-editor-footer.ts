@@ -6,13 +6,13 @@ console.debug('[import:app/ui/md-editor-footer.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import {cookie} from '../cookie/cookie';
+import {cookie} from "../cookie/cookie";
 
-import {buffered} from '../decorator/buffered';
-import {named} from '../decorator/named';
-import {trace} from '../decorator/trace';
+import {buffered} from "../decorator/buffered";
+import {named} from "../decorator/named";
+import {trace} from "../decorator/trace";
 
-import MdEditor from './md-editor';
+import MdEditor from "./md-editor";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
