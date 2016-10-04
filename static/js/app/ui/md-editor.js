@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-checker/spell-checker', './md-editor-mode'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
+define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
@@ -165,11 +165,13 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 return this.mirror.setValue(value);
             }
             else {
-                this.$input[0].setSelectionRange(0, this.$input.val().length);
+                this.$input[0]
+                    .setSelectionRange(0, this.$input.val().length);
                 if (!document.execCommand('insertText', false, value)) {
                     this.$input.val(value);
                 }
-                this.$input[0].setSelectionRange(0, 0);
+                this.$input[0]
+                    .setSelectionRange(0, 0);
                 this.$input.trigger('change');
             }
         };

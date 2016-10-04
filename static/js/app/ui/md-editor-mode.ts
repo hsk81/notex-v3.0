@@ -7,7 +7,7 @@ console.debug('[import:app/ui/md-editor-mode.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 
 CodeMirror.defineMode('notex-md', function (config) {
-    return CodeMirror.multiplexingMode(
+    return (CodeMirror as any).multiplexingMode(
         CodeMirror.getMode(config, 'gfm'), {
             mode: CodeMirror.getMode(config, 'text/x-stex'),
             open: '{{', close: '}}'

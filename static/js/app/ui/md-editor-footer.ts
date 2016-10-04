@@ -123,8 +123,8 @@ export class MdEditorFooter {
                 left: this.ed.$input.scrollLeft(),
                 top: this.ed.$input.scrollTop()
             }, sel = {
-                start: this.ed.$input[0].selectionStart,
-                end: this.ed.$input[0].selectionEnd
+                start: (this.ed.$input[0] as HTMLInputElement).selectionStart,
+                end: (this.ed.$input[0] as HTMLInputElement).selectionEnd
             };
 
             let mirror = this.ed.toMirror();

@@ -6,21 +6,21 @@ console.debug('[import:app/ui/md-editor.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import {cookie} from '../cookie/cookie';
+import {cookie} from "../cookie/cookie";
 
-import {buffered} from '../decorator/buffered';
-import {named} from '../decorator/named';
-import {traceable} from '../decorator/trace';
-import {trace} from '../decorator/trace';
+import {buffered} from "../decorator/buffered";
+import {named} from "../decorator/named";
+import {traceable} from "../decorator/trace";
+import {trace} from "../decorator/trace";
 
-import DownloadManager from './download-manager';
-import MarkdownIt from '../markdown-it/markdown-it';
-import SpellChecker from '../spell-checker/spell-checker';
+import DownloadManager from "./download-manager";
+import MarkdownIt from "../markdown-it/markdown-it";
+import SpellChecker from "../spell-checker/spell-checker";
 
-import {ILingua} from '../spell-checker/spell-checker';
-import {IOverlay} from '../spell-checker/spell-checker';
+import {ILingua} from "../spell-checker/spell-checker";
+import {IOverlay} from "../spell-checker/spell-checker";
 
-import './md-editor-mode';
+import "./md-editor-mode";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ export class MdEditor {
     public toMirror(): any {
         if (!this.mirror) {
             this.setMirror(CodeMirror.fromTextArea(
-                document.getElementById('input'), {
+                document.getElementById('input') as HTMLTextAreaElement, {
                     addModeClass: true,
                     lineWrapping: true,
                     lineNumbers: true,
@@ -60,7 +60,7 @@ export class MdEditor {
                     mode: 'notex-md',
                     styleActiveLine: true,
                     undoDepth: 4096
-                }
+                } as any
             ));
             this.mirror.setOption('extraKeys', {
                 'Tab': (cm) => {
@@ -134,8 +134,8 @@ export class MdEditor {
 
             this._timeoutId = setTimeout(() => {
                 if (MathJax !== undefined) {
-                    MathJax.Hub.Queue([
-                        'resetEquationNumbers', MathJax.InputJax.TeX
+                    (MathJax as any).Hub.Queue([
+                        'resetEquationNumbers', (MathJax as any).InputJax.TeX
                     ], [
                         'Typeset', MathJax.Hub, 'output', () => {
                             $output.css('visibility', 'visible');
@@ -202,12 +202,14 @@ export class MdEditor {
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
-            this.$input[0].setSelectionRange(0, this.$input.val().length);
+            (this.$input[0] as HTMLInputElement)
+                .setSelectionRange(0, this.$input.val().length);
             if (!document.execCommand('insertText', false, value)) {
                 this.$input.val(value);
             }
 
-            this.$input[0].setSelectionRange(0, 0);
+            (this.$input[0] as HTMLInputElement)
+                .setSelectionRange(0, 0);
             this.$input.trigger('change');
         }
     }
@@ -216,7 +218,7 @@ export class MdEditor {
         if (this.mirror) {
             return this.mirror.getSelection();
         } else {
-            let inp = this.$input[0],
+            let inp = this.$input[0] as HTMLInputElement,
                 beg = inp.selectionStart,
                 end = inp.selectionEnd;
 
