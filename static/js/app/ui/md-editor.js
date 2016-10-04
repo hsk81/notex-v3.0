@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-checker/spell-checker'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
+define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../decorator/named', '../decorator/trace', '../decorator/trace', './download-manager', '../markdown-it/markdown-it', '../spell-checker/spell-checker', './md-editor-mode'], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
     "use strict";
     console.debug('[import:app/ui/md-editor.ts]');
     var MdEditor = (function () {
@@ -26,180 +26,6 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
                 this.toMirror();
             }
         }
-        MdEditor.mode = function (name) {
-            CodeMirror.defineMode(name, function (config) {
-                return CodeMirror.multiplexingMode(CodeMirror.getMode(config, 'gfm'), {
-                    mode: CodeMirror.getMode(config, 'text/x-stex'),
-                    open: '{{', close: '}}'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-stex'),
-                    open: '$$', close: '$$'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-stex'),
-                    open: '$', close: '$'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-sh'),
-                    open: '```bash', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-ceylon'),
-                    open: '```ceylon', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-cmake'),
-                    open: '```cmake', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-csharp'),
-                    open: '```csharp', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/css'),
-                    open: '```css', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-cython'),
-                    open: '```cython', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-c++src'),
-                    open: '```c++', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-csrc'),
-                    open: '```c', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-dockerfile'),
-                    open: /```(?:docker|dockerfile)/, close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-erlang'),
-                    open: '```erlang', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-spreadsheet'),
-                    open: '```exel', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-fortran'),
-                    open: '```fortran', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'x-shader/x-fragment'),
-                    open: '```fragment', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-fsharp'),
-                    open: '```fsharp', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-go'),
-                    open: '```go', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-haskell'),
-                    open: '```haskell', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/html'),
-                    open: '```html', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'message/http'),
-                    open: '```http', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/javascript'),
-                    open: '```javascript', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-java'),
-                    open: '```java', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'jinja2'),
-                    open: /```jinja2?/, close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-julia'),
-                    open: '```julia', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-stex'),
-                    open: '```latex', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-less'),
-                    open: '```less', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-lua'),
-                    open: '```lua', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-markdown'),
-                    open: '```markdown', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-mathematica'),
-                    open: '```mathematica', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-octave'),
-                    open: '```matlab', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'mllike'),
-                    open: '```ml', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-nginx-conf'),
-                    open: '```nginx', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-objectivec'),
-                    open: '```objective-c', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-ocaml'),
-                    open: '```ocaml', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-octave'),
-                    open: '```octave', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-perl'),
-                    open: '```perl', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-php'),
-                    open: '```php', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-python'),
-                    open: '```python', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-squirrel'),
-                    open: '```squirrel', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-rst'),
-                    open: '```rst', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-rsrc'),
-                    open: '```r', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-sass'),
-                    open: '```sass', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-scss'),
-                    open: '```scss', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-scala'),
-                    open: '```scala', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-sh'),
-                    open: '```sh', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-sql'),
-                    open: '```sql', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-spreadsheet'),
-                    open: '```spreadsheet', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-swift'),
-                    open: '```swift', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/typescript'),
-                    open: '```typescript', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-vertex'),
-                    open: '```vertex', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'application/xml'),
-                    open: '```xml', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-yaml'),
-                    open: '```yaml', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/x-vb'),
-                    open: '```vb', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/vbscript'),
-                    open: '```vbscript', close: '```'
-                }, {
-                    mode: CodeMirror.getMode(config, 'text/plain'),
-                    open: '```', close: '```'
-                });
-            });
-            return name;
-        };
         Object.defineProperty(MdEditor, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
@@ -213,12 +39,12 @@ define(["require", "exports", '../cookie/cookie', '../decorator/buffered', '../d
         MdEditor.prototype.toMirror = function () {
             if (!this.mirror) {
                 this.setMirror(CodeMirror.fromTextArea(document.getElementById('input'), {
-                    mode: MdEditor.mode('notex-md'),
-                    styleActiveLine: true,
-                    matchBrackets: true,
                     addModeClass: true,
                     lineWrapping: true,
                     lineNumbers: true,
+                    matchBrackets: true,
+                    mode: 'notex-md',
+                    styleActiveLine: true,
                     undoDepth: 4096
                 }));
                 this.mirror.setOption('extraKeys', {
