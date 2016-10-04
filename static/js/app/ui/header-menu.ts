@@ -6,12 +6,12 @@ console.debug('[import:app/ui/header-menu.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import {mine} from '../decorator/mine';
-import {named} from '../decorator/named';
-import {trace} from '../decorator/trace';
+import {mine} from "../decorator/mine";
+import {named} from "../decorator/named";
+import {trace} from "../decorator/trace";
 
-import MdEditor from './md-editor';
-import MdEditorToolbar from './md-editor-toolbar';
+import MdEditor from "./md-editor";
+import MdEditorToolbar from "./md-editor-toolbar";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
