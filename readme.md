@@ -9,7 +9,7 @@ Further, it enables you to craft complex mathematical formulae using [MathJax][3
 Pre-requisites: [NoTex][0] depends on Python 2, PostgreSQL 9.2, Redis and Memcached. Further, you require GIT to get the source code:
 
 ```bash
-$ git clone https://bitbucket.org/hsk81/notex notex.git
+$ git clone https://github.com/hsk81/notex-v3.0 notex.git
 ```
 
 Switch to the cloned GIT repository and setup the Python environment. This step requires `virtualenv2` - please make sure that you have `virtualenv2` for `python2` installed:
