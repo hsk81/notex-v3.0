@@ -30,7 +30,6 @@ setup (
         'sass>=2.3',
         'SQLAlchemy>=1.0.12',
         'ujson>=1.35',
-        'waitress>=0.8.10',
         'Werkzeug>=0.11.4'
     ],
 )
