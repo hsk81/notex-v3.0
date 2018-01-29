@@ -11,13 +11,13 @@ import ARGs
 ###############################################################################
 ###############################################################################
 
-application = app_main
+app = app_main
 
 ###############################################################################
 
-if ARGs.get ('debug'):
-    application.catchall = False
-    application = DebuggedApplication(application, evalex=True)
+if ARGs.debug():
+    app.catchall = False
+    app = DebuggedApplication(app, evalex=True)
 
 ###############################################################################
 
@@ -25,19 +25,24 @@ if ARGs.get ('debug'):
 ## Beaker Documentation: http://beaker.readthedocs.org/en/latest/index.html
 ##
 
-application = SessionMiddleware(application, {
+app = SessionMiddleware(app, {
     'session.auto': True,
-    'session.cookie_expires': ARGs.get ('session_expiry'),
-    'session.encrypt_key': ARGs.get ('session_key'),
+    'session.cookie_expires': ARGs.get('SESSION_EXPIRY', True),
+    'session.encrypt_key': ARGs.get('SESSION_KEY', 'secret'),
     'session.httponly': True,
-    'session.timeout': ARGs.get ('session_timeout'),
+    'session.timeout': ARGs.get('SESSION_TIMEOUT', None),
     'session.type': 'cookie',
     'session.validate_key': True
 })
 
 @app_main.hook('before_request')
-def before_request ():
+def before_request():
     request.session = request.environ['beaker.session']
+
+###############################################################################
+###############################################################################
+
+application = app
 
 ###############################################################################
 ###############################################################################

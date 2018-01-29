@@ -3,21 +3,35 @@ __author__ = 'hsk81'
 ###############################################################################
 ###############################################################################
 
-def put (namespace):
-    global _ARGs; _ARGs = dict (namespace._get_kwargs ())
+import os
+import ujson as JSON
 
-def get (key, default=None):
+###############################################################################
+###############################################################################
+
+def put(lookup):
+    global _ARGs; _ARGs = dict(lookup)
+
+def get(key, default=None):
     global _ARGs
 
-    if '_ARGs' not in globals ():
+    if '_ARGs' not in globals():
         _ARGs = {}
 
-    return _ARGs.get (key, default)
+    if hasattr(_ARGs, key):
+        return _ARGs.get (key, default)
+    else:
+        try:
+            return JSON.decode(os.environ.get(key, default))
+        except TypeError:
+            return os.environ.get(key, default)
+        except ValueError:
+            return os.environ.get(key, default)
 
 ###############################################################################
 
 def debug (*args, **kwargs):
-    return get ('debug')
+    return get('debug')
 
 ###############################################################################
 ###############################################################################

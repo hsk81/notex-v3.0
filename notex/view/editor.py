@@ -4,7 +4,7 @@
 from bottle import Bottle
 
 from notex.aaa import aaa_plugin as aaa
-from notex.cache import memcached_plugin as mdb
+from notex.cache import memcached_cache as mdb
 from notex.db import db_plugin
 
 from notex.view.util.database import html_for

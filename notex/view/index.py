@@ -2,7 +2,7 @@
 ###############################################################################
 
 from bottle import Bottle, redirect
-from notex.cache import memcached_plugin as mdb
+from notex.cache import memcached_cache as mdb
 
 import ARGs
 

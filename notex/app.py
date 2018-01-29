@@ -31,13 +31,13 @@ app_main.merge(app_now)
 app_main.merge(app_static)
 app_main.mount('/api', app_api)
 
-if ARGs.get('debug'):
+if ARGs.debug():
     app_main.merge(app_debug)
 
 ###############################################################################
 ###############################################################################
 
-if not ARGs.get('no_sass') or ARGs.get('debug'):
+if not ARGs.get('NO_SASS') or ARGs.debug():
     for path, dns, fns in os.walk('static/css'):
         for filename in filter(lambda fn: fn.endswith('.scss'), fns):
             inp_path = os.path.join(path, filename)
@@ -61,7 +61,7 @@ def zipify(out_path):
 
 ###############################################################################
 
-if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
+if not ARGs.get('NO_CSS_MINIFY') and not ARGs.debug():
     out_path = 'static/build/all.css'
 
     def minify(out_path, inp_path, flag='a'):
@@ -81,7 +81,7 @@ if not ARGs.get('no_css_minify') and not ARGs.get('debug'):
 
 ###############################################################################
 
-if not ARGs.get('no_js_minify') and not ARGs.get('debug'):
+if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     out_path = 'static/build/all.js'
 
     def minify(out_path, inp_path, flag='a'):
