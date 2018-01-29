@@ -185,8 +185,8 @@ class NotexOrmPlugin (object):
 ###############################################################################
 
 db_plugin = NotexOrmPlugin (
-    create=ARGs.get('DATABASE_CREATE', False),
-    drop=ARGs.get('DATABASE_DROP', False),
+    create=ARGs.get('DATABASE_CREATE', ARGs.get('DATABASE_RESET', False)),
+    drop=ARGs.get('DATABASE_DROP', ARGs.get('DATABASE_RESET', False)),
     echo=ARGs.get('DATABASE_ECHO', False),
     uri=ARGs.get('DATABASE_URL', 'sqlite:///:memory:'))
 
