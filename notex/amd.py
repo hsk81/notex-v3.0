@@ -11,7 +11,7 @@ import gzip
 ###############################################################################
 ###############################################################################
 
-def optimize (amd_conf, optimizer="./static/js/lib/require/r-2.2.0.min.js"):
+def optimize(amd_conf, optimizer="./static/js/lib/require/r-2.2.0.min.js"):
 
     subprocess.call(["/usr/bin/env", "node", optimizer, "-v"])
     subprocess.call(["/usr/bin/env", "node", optimizer, "-o", amd_conf])
