@@ -185,10 +185,10 @@ class NotexOrmPlugin (object):
 ###############################################################################
 
 db_plugin = NotexOrmPlugin (
-    create=ARGs.get('DB_CREATE', False),
-    drop=ARGs.get('DB_DROP', False),
-    echo=ARGs.get('DB_ECHO', False),
-    uri=ARGs.get('DB_URI', 'sqlite:///:memory:'))
+    create=ARGs.get('DATABASE_CREATE', False),
+    drop=ARGs.get('DATABASE_DROP', False),
+    echo=ARGs.get('DATABASE_ECHO', False),
+    uri=ARGs.get('DATABASE_URL', 'sqlite:///:memory:'))
 
 Base = db_plugin.base
 Polymorphic = NotexPolymorphic
