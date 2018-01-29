@@ -17,6 +17,8 @@ setup (
         'Beaker>=1.8.0',
         'bottle>=0.12.9',
         'compressinja>=0.0.2',
+        'gevent>=1.2.1',
+        'gunicorn>=19.6.0',
         'Jinja2>=2.8',
         'marshmallow>=2.6.0 ',
         'psycopg2>=2.6.1',
