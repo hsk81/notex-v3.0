@@ -204,7 +204,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 var script = document.createElement('script'), head = document.getElementsByTagName('head');
                 script.type = 'text/javascript';
                 script.src = this.mathjaxUrl;
-                script.async = true;
                 head[0].appendChild(script);
             } catch (ex) {
                 console.error(ex);
