@@ -111,7 +111,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     this._timeoutId = undefined;
                 }
                 this._timeoutId = setTimeout(function () {
-                    if (MathJax !== undefined) {
+                    if (typeof MathJax !== 'undefined') {
                         MathJax.Hub.Queue([
                             'resetEquationNumbers', MathJax.InputJax.TeX
                         ], [
@@ -129,6 +129,15 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                                 }
                             }
                         ]);
+                    } else {
+                        $output.css('visibility', 'visible');
+                        $cached.remove();
+                        if (value.length === 0) {
+                            $.get('/static/html/output-placeholder.html').done(function (html) {
+                                $output.html(html);
+                                $output.find('>*').hide().fadeIn('fast');
+                            });
+                        }
                     }
                 }, 0);
                 $cached = $('#cached');
@@ -191,18 +200,20 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             }
         };
         MdEditor.prototype.onEditorChange = function () {
-            if (typeof MathJax === 'undefined') {
+            if (typeof MathJax === 'undefined') try {
                 var script = document.createElement('script'), head = document.getElementsByTagName('head');
                 script.type = 'text/javascript';
                 script.src = this.mathjaxUrl;
+                script.async = true;
                 head[0].appendChild(script);
+            } catch (ex) {
+                console.error(ex);
             }
             this.render();
         };
         Object.defineProperty(MdEditor.prototype, "mathjaxUrl", {
             get: function () {
-                var path = window.debug ? '/static/js/lib' : '//cdn.mathjax.org';
-                return path + "/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+                return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
             },
             enumerable: true,
             configurable: true

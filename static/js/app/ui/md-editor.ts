@@ -133,7 +133,7 @@ export class MdEditor {
             }
 
             this._timeoutId = setTimeout(() => {
-                if (MathJax !== undefined) {
+                if (typeof MathJax !== 'undefined') {
                     (MathJax as any).Hub.Queue([
                         'resetEquationNumbers', (MathJax as any).InputJax.TeX
                     ], [
@@ -154,6 +154,18 @@ export class MdEditor {
                             }
                         }
                     ]);
+                } else {
+                    $output.css('visibility', 'visible');
+                    $cached.remove();
+
+                    if (value.length === 0) {
+                        $.get(
+                            '/static/html/output-placeholder.html'
+                        ).done((html) => {
+                            $output.html(html);
+                            $output.find('>*').hide().fadeIn('fast');
+                        });
+                    }
                 }
             }, 0);
 
@@ -227,19 +239,20 @@ export class MdEditor {
     }
 
     private onEditorChange() {
-        if (typeof MathJax === 'undefined') {
+        if (typeof MathJax === 'undefined') try {
             let script = document.createElement('script'),
                 head = document.getElementsByTagName('head');
             script.type = 'text/javascript';
             script.src  = this.mathjaxUrl;
             head[0].appendChild(script);
+        } catch (ex) {
+            console.error(ex);
         }
         this.render();
     }
 
     private get mathjaxUrl():string {
-        let path = window.debug ? '/static/js/lib' : '//cdn.mathjax.org';
-        return `${path}/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML`;
+        return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
     }
 
     public get $input() {
