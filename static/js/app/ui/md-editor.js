@@ -13,6 +13,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/ui/md-editor.ts]');
+    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     var MdEditor = /** @class */ (function () {
         function MdEditor() {
             if (this.mobile) {

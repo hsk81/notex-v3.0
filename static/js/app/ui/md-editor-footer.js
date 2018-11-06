@@ -13,8 +13,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/ui/md-editor-footer.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var MdEditorFooter = /** @class */ (function () {
         function MdEditorFooter() {
             this.urls = {

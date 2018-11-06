@@ -13,8 +13,6 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/ui/header-menu.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var HeaderMenu = /** @class */ (function () {
         function HeaderMenu() {
             this.$openItem

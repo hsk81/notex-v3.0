@@ -13,8 +13,6 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/ui/publish-dialog.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var PublishDialog = /** @class */ (function () {
         function PublishDialog() {
             this.$dialog.on('show.bs.modal', this.onBsModalShow.bind(this));

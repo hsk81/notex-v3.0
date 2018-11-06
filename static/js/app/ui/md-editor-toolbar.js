@@ -13,8 +13,6 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/ui/md-editor-toolbar.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var MdEditorToolbar = /** @class */ (function () {
         function MdEditorToolbar() {
             var _this = this;
