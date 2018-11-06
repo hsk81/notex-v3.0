@@ -251,7 +251,7 @@ export class MdEditorToolbar {
     }
 
     private onHeaderClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg;
@@ -403,7 +403,7 @@ export class MdEditorToolbar {
     }
 
     private onBoldClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
@@ -532,7 +532,7 @@ export class MdEditorToolbar {
     }
 
     private onItalicClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
@@ -658,7 +658,7 @@ export class MdEditorToolbar {
     }
 
     private onCommentClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
@@ -708,7 +708,7 @@ export class MdEditorToolbar {
     }
 
     private onIndentClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg - 1;
@@ -743,7 +743,7 @@ export class MdEditorToolbar {
     }
 
     private onOutdentClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
             idx = beg - 1;
@@ -794,7 +794,7 @@ export class MdEditorToolbar {
     }
 
     private onSupscriptClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
         (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
@@ -832,7 +832,7 @@ export class MdEditorToolbar {
     }
 
     private onSubscriptClickSimple() {
-        let val:string = this.ed.$input.val(),
+        let val = this.ed.$input.val() as string,
             end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
 
         (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);

@@ -41,7 +41,7 @@ function _buffered(ms:number) {
                 id = setTimeout(() => {
                     fn.apply(this, args);
                     id = undefined;
-                }, ms);
+                }, ms) as any;
             }
         };
         for (let el in fn) {

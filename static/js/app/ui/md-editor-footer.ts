@@ -149,7 +149,7 @@ export class MdEditorFooter {
 
     private onConsoleChange(ev: KeyboardEvent) {
         let $input = $(ev.target),
-            value = $input.val();
+            value = $input.val() as string;
 
         let rx_px = /^\//,
             mm_px = value.match(rx_px);

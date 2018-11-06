@@ -91,9 +91,9 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
         concat(out_path, amd.optimize(inp_path), flag=flag)
 
     minify(out_path,
-           'static/js/lib/jquery/jquery-1.12.1.min.js', 'w')
+           'static/js/lib/jquery/jquery-2.2.4.min.js', 'w')
     minify(out_path,
-           'static/js/lib/jquery/jquery.set-cursor-position-1.12.1.min.js')
+           'static/js/lib/jquery/jquery.set-cursor-position-2.2.4.min.js')
     minify(out_path,
            'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
     minify(out_path,

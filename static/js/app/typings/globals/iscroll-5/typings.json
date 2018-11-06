@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/207c34882b22d10ce31a788a03d77c45e40f95cb/iscroll/iscroll-5.d.ts",
-    "raw": "registry:dt/iscroll-5#0.0.0+20160720063259",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/207c34882b22d10ce31a788a03d77c45e40f95cb/iscroll/iscroll-5.d.ts"
-  }
-}

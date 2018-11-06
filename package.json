@@ -1,4 +1,11 @@
 {
   "name": "notex",
-  "version": "3.0.1"
+  "version": "3.0.1",
+  "dependencies": {
+    "@types/bootstrap": "^3.3.0",
+    "@types/codemirror": "^0.0.61",
+    "@types/iscroll": "^5.2.0",
+    "@types/jquery": "^2.0.0",
+    "@types/mathjax": "^0.0.35"
+  }
 }

@@ -25,6 +25,8 @@ import "./md-editor-mode";
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+declare const CodeMirror: any;
+
 @trace
 @named('MdEditor')
 export class MdEditor {
@@ -167,7 +169,7 @@ export class MdEditor {
                         });
                     }
                 }
-            }, 0);
+            }, 0) as any;
 
             $cached = $('#cached');
             $cached.remove();
@@ -215,7 +217,7 @@ export class MdEditor {
             return this.mirror.setValue(value);
         } else {
             (this.$input[0] as HTMLInputElement)
-                .setSelectionRange(0, this.$input.val().length);
+                .setSelectionRange(0, (this.$input.val() as string).length);
             if (!document.execCommand('insertText', false, value)) {
                 this.$input.val(value);
             }
