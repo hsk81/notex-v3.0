@@ -244,6 +244,7 @@ export class MdEditor {
                 head = document.getElementsByTagName('head');
             script.type = 'text/javascript';
             script.src  = this.mathjaxUrl;
+            script.async = true;
             head[0].appendChild(script);
         } catch (ex) {
             console.error(ex);
