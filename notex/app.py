@@ -213,7 +213,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/js/lib/codemirror/mode/vbscript/vbscript.js')
     minify(out_path,
-           'static/js/lib/require/require-2.2.0.min.js')
+           'static/js/lib/require/require-2.3.6.min.js')
 
     optimy(out_path, 'amd.json')
     zipify(out_path)
