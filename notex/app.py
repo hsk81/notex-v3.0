@@ -72,7 +72,7 @@ if not ARGs.get('NO_CSS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
     minify(out_path,
-           'static/css/lib/highlight/default-9.5.0.min.css')
+           'static/css/lib/highlight/default-9.13.1.min.css')
     minify(out_path,
            'static/js/lib/codemirror/lib/codemirror.css')
     minify(out_path,
@@ -97,7 +97,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
     minify(out_path,
-           'static/js/lib/highlight/highlight-9.5.0.min.js')
+           'static/js/lib/highlight/highlight-9.13.1.min.js')
     minify(out_path,
            'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     minify(out_path,
