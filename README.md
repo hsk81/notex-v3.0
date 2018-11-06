@@ -29,20 +29,20 @@ Now, you can install all the `python2` dependencies with the help of the `setup.
 
 It's time for you to start your `postgresql`, `redis` and `memcached` instances. Once done, we can start the application:
 ```bash
-[notex] $ ./app.py --db-drop --db-create
+[notex] $ DEBUG=1 DATABASE_URL=$DATABASE_URL DATABASE_RESET=1 gunicorn wsgi:app --reload --worker-class gevent
 ```
 
-If any database `notex` has been created before, it will be dropped and a new instance will be created. Obviously, these two parameters should *only* be used once at the very beginning and can later be omitted! So later on, you should start the application via:
-```bash
-[notex] $ ./app.py --debug --reload
-```
-
-The database is created, but we still need to fill it with some basic structures defined in the `__init__.sh` script:
+with for example `DATABASE_URL=postgres://notex@localhost:5432`, where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be created. Then, we still need to fill it with some basic structures with the help of the `__init__.sh` script:
 ```bash
 [notex] $ ./script/db/__init__.sh
 ```
 
-Now navigate to `http://127.0.0.1:8881` and you should see a fully functional [NoTex][0] instance.
+Later on, you can start the application via:
+```bash
+[notex] $ DEBUG=1 DATABASE_URL=$DATABASE_URL DATABASE_RESET=0 gunicorn wsgi:app --reload --worker-class gevent
+```
+
+where `DATABASE_RESET=0` can be omitted, since it is the default. Now navigate to `http://localhost:8000` and you should see a fully functional [NoTex][0] instance.
 
 [0]: https://www.notex.ch/editor
 [1]: https://daringfireball.net/projects/markdown/
