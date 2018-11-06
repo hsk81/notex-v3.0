@@ -30,7 +30,7 @@ class PolymorphicField (fields.Field):
         schema = self.mapping.get (nested_type, self.default_schema)
 
         if isinstance (schema, basestring): schema = get_schema(schema)
-        return schema (**self.nested_kwargs).dump (nested).data
+        return schema (**self.nested_kwargs).dump (self).get ('data')
 
 ###############################################################################
 ###############################################################################
@@ -58,7 +58,7 @@ class Group (db.Base):
 
     @property
     def json (self):
-        return GroupSerializer ().dump (self).data
+        return GroupSerializer ().dump (self).get ('data')
 
     @property
     def path (self): ## TODO: implement caching!
@@ -131,7 +131,7 @@ class Attribute (db.Base):
 
     @property
     def json (self):
-        return AttributeSerializer ().dump (self).data
+        return AttributeSerializer ().dump (self).get ('data')
 
 class AttributeSerializer (Schema):
 
@@ -185,7 +185,7 @@ class TypeValue (Value):
 
     @property
     def json (self):
-        return TypeValueSerializer ().dump (self).data
+        return TypeValueSerializer ().dump (self).get ('data')
 
 class TypeValueSerializer (Schema):
     data = fields.Nested ('GroupSerializer')
@@ -210,7 +210,7 @@ class TextValue (Value):
 
     @property
     def json (self):
-        return TextValueSerializer ().dump (self).data
+        return TextValueSerializer ().dump (self).get ('data')
 
 class TextValueSerializer (Schema):
     class Meta: json_module = JSON; fields = tuple (['data', 'mime'])
@@ -233,7 +233,7 @@ class RealValue (Value):
 
     @property
     def json (self):
-        return RealValueSerializer ().dump (self).data
+        return RealValueSerializer ().dump (self).get ('data')
 
 class RealValueSerializer (Schema):
     class Meta: json_module = JSON; fields = tuple (['data'])
@@ -256,7 +256,7 @@ class BoolValue (Value):
 
     @property
     def json (self):
-        return BoolValueSerializer ().dump (self).data
+        return BoolValueSerializer ().dump (self).get ('data')
 
 class BoolValueSerializer (Schema):
     class Meta: json_module = JSON; fields = tuple (['data'])

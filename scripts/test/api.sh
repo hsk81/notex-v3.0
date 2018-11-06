@@ -45,10 +45,10 @@ curl -vs -XPUT $NOTEX/api/attribute/g:group/a:test \
      -d'{"name":"tested"}' \
      -H'content-type:application/json' ;
 curl -vs -XPUT $NOTEX/api/attribute/g:group/a:tested \
-     -d'{"type":"real-value", "data":"0.0"}' \
+     -d'{"type":"real-value", "data":0.0}' \
      -H'content-type:application/json' ;
 curl -vs -XPUT $NOTEX/api/attribute/g:group/a:tested \
-     -d'{"type":"bool-value", "data":"true"}' \
+     -d'{"type":"bool-value", "data":true}' \
      -H'content-type:application/json' ;
 
 curl -vs -XGET $NOTEX/api/attribute/g:group/a:tested ;
@@ -75,10 +75,10 @@ curl -vs -XPUT $NOTEX/api/sub-attribute/g:group/a:root/a:test \
      -d'{"name":"tested"}' \
      -H'content-type:application/json' ;
 curl -vs -XPUT $NOTEX/api/sub-attribute/g:group/a:root/a:tested \
-     -d'{"type":"real-value", "data":"0.0"}' \
+     -d'{"type":"real-value", "data":0.0}' \
      -H'content-type:application/json' ;
 curl -vs -XPUT $NOTEX/api/sub-attribute/g:group/a:root/a:tested \
-     -d'{"type":"bool-value", "data":"true"}' \
+     -d'{"type":"bool-value", "data":true}' \
      -H'content-type:application/json' ;
 
 curl -vs -XGET $NOTEX/api/sub-attribute/g:group/a:root/a:tested ;
