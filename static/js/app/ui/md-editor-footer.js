@@ -339,6 +339,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             enumerable: true,
             configurable: true
         });
+        var MdEditorFooter_1;
         __decorate([
             buffered_1.buffered(600),
             __metadata("design:type", Function),
@@ -351,7 +352,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             __metadata("design:paramtypes", [])
         ], MdEditorFooter);
         return MdEditorFooter;
-        var MdEditorFooter_1;
     }());
     exports.MdEditorFooter = MdEditorFooter;
     ///////////////////////////////////////////////////////////////////////////////

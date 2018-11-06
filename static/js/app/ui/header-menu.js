@@ -93,6 +93,7 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
             enumerable: true,
             configurable: true
         });
+        var HeaderMenu_1;
         __decorate([
             mine_1.mine,
             __metadata("design:type", Function),
@@ -105,7 +106,6 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
             __metadata("design:paramtypes", [])
         ], HeaderMenu);
         return HeaderMenu;
-        var HeaderMenu_1;
     }());
     exports.HeaderMenu = HeaderMenu;
     ///////////////////////////////////////////////////////////////////////////////

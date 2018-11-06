@@ -47,12 +47,12 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./hea
             enumerable: true,
             configurable: true
         });
+        var DownloadManager_1;
         DownloadManager = DownloadManager_1 = __decorate([
             trace_1.trace,
             named_1.named('DownloadManager')
         ], DownloadManager);
         return DownloadManager;
-        var DownloadManager_1;
     }());
     exports.DownloadManager = DownloadManager;
     ///////////////////////////////////////////////////////////////////////////////

@@ -964,13 +964,13 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
             enumerable: true,
             configurable: true
         });
+        var MdEditorToolbar_1;
         MdEditorToolbar = MdEditorToolbar_1 = __decorate([
             trace_1.trace,
             named_1.named('MdEditorToolbar'),
             __metadata("design:paramtypes", [])
         ], MdEditorToolbar);
         return MdEditorToolbar;
-        var MdEditorToolbar_1;
     }());
     exports.MdEditorToolbar = MdEditorToolbar;
     ///////////////////////////////////////////////////////////////////////////////

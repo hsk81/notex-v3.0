@@ -35,13 +35,13 @@ define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui
             enumerable: true,
             configurable: true
         });
+        var App_1;
         App = App_1 = __decorate([
             trace_1.trace,
             named_1.named('App'),
             __metadata("design:paramtypes", [])
         ], App);
         return App;
-        var App_1;
     }());
     exports.App = App;
     ///////////////////////////////////////////////////////////////////////////////

@@ -481,13 +481,13 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
             enumerable: true,
             configurable: true
         });
+        var PublishDialog_1;
         PublishDialog = PublishDialog_1 = __decorate([
             trace_1.trace,
             named_1.named('PublishDialog'),
             __metadata("design:paramtypes", [])
         ], PublishDialog);
         return PublishDialog;
-        var PublishDialog_1;
     }());
     exports.PublishDialog = PublishDialog;
     ///////////////////////////////////////////////////////////////////////////////

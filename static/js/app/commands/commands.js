@@ -67,13 +67,13 @@ define(["require", "exports", "../decorator/named", "../decorator/trace"], funct
         Commands.pop = function (array) {
             return array.pop();
         };
+        var Commands_1;
         Commands = Commands_1 = __decorate([
             trace_1.trace,
             named_1.named('Commands'),
             __metadata("design:paramtypes", [])
         ], Commands);
         return Commands;
-        var Commands_1;
     }());
     exports.Commands = Commands;
     exports.default = Commands;

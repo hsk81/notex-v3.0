@@ -129,7 +129,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                                 }
                             }
                         ]);
-                    } else {
+                    }
+                    else {
                         $output.css('visibility', 'visible');
                         $cached.remove();
                         if (value.length === 0) {
@@ -200,15 +201,17 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             }
         };
         MdEditor.prototype.onEditorChange = function () {
-            if (typeof MathJax === 'undefined') try {
-                var script = document.createElement('script'), head = document.getElementsByTagName('head');
-                script.type = 'text/javascript';
-                script.src = this.mathjaxUrl;
-                script.async = true;
-                head[0].appendChild(script);
-            } catch (ex) {
-                console.error(ex);
-            }
+            if (typeof MathJax === 'undefined')
+                try {
+                    var script = document.createElement('script'), head = document.getElementsByTagName('head');
+                    script.type = 'text/javascript';
+                    script.src = this.mathjaxUrl;
+                    script.async = true;
+                    head[0].appendChild(script);
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
             this.render();
         };
         Object.defineProperty(MdEditor.prototype, "mathjaxUrl", {
@@ -365,6 +368,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 }
             }
         };
+        var MdEditor_1;
         __decorate([
             buffered_1.buffered(600),
             __metadata("design:type", Function),
@@ -389,7 +393,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             __metadata("design:paramtypes", [])
         ], MdEditor);
         return MdEditor;
-        var MdEditor_1;
     }());
     exports.MdEditor = MdEditor;
     ///////////////////////////////////////////////////////////////////////////////
