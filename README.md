@@ -30,38 +30,51 @@ Now, you can install all the `python2` dependencies with the help of the `setup.
 [notex] $ ./setup.py install
 ```
 
-It's time for you to start your `postgresql`, `redis` and `memcached` instances. Once done, we can start the application:
+It's then time for you to install (and start) your `postgresql`, `redis` and `memcached` instances, which has not been shown here. Please consult the corresponding resources for your operating system, to learn how that is accomplished.
+
+## Execution
+
+Once all the necessary pre-requisites have been installed, we can start the application with:
 
 ```bash
-[notex] $ DEBUG=1 DATABASE_URL=$DATABASE_URL DATABASE_RESET=1 gunicorn wsgi:app --reload --worker-class gevent
+[notex] $ DEBUG=1 DATABASE_RESET=1 DATABASE_URL=postgres://notex@localhost:5432 gunicorn --config gunicorn.py wsgi:app
 ```
 
-with for example `DATABASE_URL=postgres://notex@localhost:5432`, where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be created. Then, we still need to fill it with some basic structures with the help of the `__init__.sh` script:
+where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be re-created. Then, we still need to fill it with some basic structures using the `__init__.sh` script:
 
 ```bash
 [notex] $ ./script/db/__init__.sh
 ```
 
-Later on, you can start the application via:
+Later on, you can start the application much simpler via:
 
 ```bash
-[notex] $ DEBUG=0 DATABASE_URL=$DATABASE_URL DATABASE_RESET=0 gunicorn wsgi:app --reload --worker-class gevent
+[notex] $ export DATABASE_URL=postgres://notex@localhost:5432
+```
+```bash
+[notex] $ DEBUG=1 gunicorn --config gunicorn.py wsgi:app
 ```
 
-where `DEBUG=0` and `DATABASE_RESET=0` can be omitted. Now, navigate to `http://localhost:8000` and you should see a fully functional [NoTex][0] instance.
+Now, navigate to `http://localhost:8000` and you should see a fully functional [NoTex][0] instance.
 
 ## Transpilation
 
 Since most of the code is written with [TypeScript] it is required to transpile it into JavaScript. For this first some dependencies (`@types`) from `package.json` need to be installed
 
 ```bash
-$ npm install && tsc --build tsconfig.json
+$ npm install
 ```
 
-Once, this step is done you can run `tsc` after editing a script to have it transpiled:
+Once, this step is done you can use `tsc` after editing a script to have it transpiled:
 
 ```bash
 $ tsc --build tsconfig.json
+```
+
+Or, watching for any change in a script is also possible, which will then automatically run an incremental step:
+
+```bash
+$ tsc --watch
 ```
 
 [0]: https://www.notex.ch/editor
