@@ -37,7 +37,7 @@ It's then time for you to install (and start) your `postgresql`, `redis` and `me
 Once all the necessary pre-requisites have been installed, we can start the application with:
 
 ```bash
-[notex] $ DEBUG=1 DATABASE_RESET=1 DATABASE_URL=postgres://notex@localhost:5432 gunicorn --config gunicorn.py wsgi:app
+[notex] $ DEBUG=1 DATABASE_RESET=1 DATABASE_URL=postgres://notex@localhost:5432 gunicorn -c config.py wsgi:app
 ```
 
 where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be re-created. Then, we still need to fill it with some basic structures using the `__init__.sh` script:
@@ -52,7 +52,7 @@ Later on, you can start the application much simpler via:
 [notex] $ export DATABASE_URL=postgres://notex@localhost:5432
 ```
 ```bash
-[notex] $ DEBUG=1 gunicorn --config gunicorn.py wsgi:app
+[notex] $ DEBUG=1 gunicorn -c config.py wsgi:app
 ```
 
 Now, navigate to `http://localhost:8000` and you should see a fully functional [NoTex][0] instance.
