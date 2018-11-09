@@ -16,6 +16,8 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
     var MdEditorToolbar = /** @class */ (function () {
         function MdEditorToolbar() {
             var _this = this;
+            this.$publish
+                .on('click', this.onPublishClick.bind(this));
             this.$undo
                 .on('click', this.onUndoClick.bind(this));
             this.$redo
@@ -66,6 +68,9 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
         MdEditorToolbar.prototype.refresh = function () {
             this.ed.refresh();
             this.scroll.refresh();
+        };
+        MdEditorToolbar.prototype.onPublishClick = function () {
+            $('#publish-dlg').modal();
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
             if (this.ed.mirror) {
@@ -826,6 +831,13 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
         Object.defineProperty(MdEditorToolbar.prototype, "$toolbar", {
             get: function () {
                 return this.$inner.find('>.md-toolbar');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$publish", {
+            get: function () {
+                return $('.glyphicon.publish').closest('button');
             },
             enumerable: true,
             configurable: true

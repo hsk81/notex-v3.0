@@ -39,7 +39,12 @@ html, body {
  * ========================================================================= */
 
 .center {
-  height: calc(100% - 52px);
+  height: 100%;
+  @media(max-width: 480px) {
+    height: calc(100% - 52px);
+  }
+}
+.center {
   .row {
     height: 100%;
     .lhs {
