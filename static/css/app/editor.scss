@@ -16,19 +16,10 @@ html, body {
  * ========================================================================= */
 
 .header {
-  input.source, input.source-mob {
-    display: none;
-  }
-  label.source, label.source-mob {
+  label.source-mob {
     cursor: pointer;
     font-weight: normal;
     margin: 0;
-  }
-  label[for=source] {
-    padding: 15px;
-  }
-  label[for=source]:not(:hover){
-    color: #777;
   }
   border-radius: 0;
   margin-bottom: 0;

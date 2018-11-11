@@ -58,7 +58,7 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
         };
         Object.defineProperty(HeaderMenu.prototype, "$openItem", {
             get: function () {
-                return $('#source,#source-mob');
+                return $('#source-bar,#source-mob');
             },
             enumerable: true,
             configurable: true

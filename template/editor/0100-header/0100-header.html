@@ -1,45 +1,23 @@
 <nav class="header navbar navbar-default hidden-md hidden-lg">
-    <!--
-    <div class="container-fluid hidden-xs hidden-sm">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">NoTex.ch</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><label name="open" for="source" class="source">
-                    <span class="glyphicon glyphicon-open">
-                    </span>&nbsp;Open</label>
-                <input id="source" type="file" class="source"></li>
-            <li><a name="save" href="#">
-                <span class="glyphicon glyphicon-save">
-                </span>&nbsp;Save</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a name="publish" href="#"
-                   data-toggle="modal" data-target="#publish-dlg">
-                <span class="glyphicon glyphicon-cloud-upload">
-                </span>&nbsp;Publish</a></li>
-        </ul>
-    </div>
-    -->
     <div class="container-fluid">
-        <label name="open" for="source-mob"
-               class="source-mob btn btn-default navbar-btn">
-            <span class="glyphicon glyphicon-open"></span>
-            <input id="source-mob" type="file" class="source-mob">
-        </label>
-        <a name="save" href="#"
-           class="btn btn-default navbar-btn">
-            <span class="glyphicon glyphicon-save"></span>
-        </a>
-        <button name="swap" type="button"
-                class="btn btn-default navbar-btn"
-                style="width: calc(100% - 136px)">
-            <span class="glyphicon glyphicon-transfer"></span>
-        </button>
         <button name="publish" type="button"
                 class="btn btn-default navbar-btn"
                 data-toggle="modal" data-target="#publish-dlg">
             <span class="glyphicon glyphicon-cloud-upload"></span>
         </button>
+        <button name="swap" type="button"
+                class="btn btn-default navbar-btn"
+                style="width: calc(100% - 136px)">
+            <span class="glyphicon glyphicon-transfer"></span>
+        </button>
+        <label name="open" for="source-mob"
+               class="source-mob btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-floppy-open"></span>
+            <input id="source-mob" type="file" style="display: none;">
+        </label>
+        <a name="save" href="#"
+           class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-floppy-save"></span>
+        </a>
     </div>
 </nav>

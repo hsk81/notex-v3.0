@@ -1,31 +1,29 @@
 <div class="toolbar-outer">
     <div class="toolbar-inner">
         <div class="md-toolbar">
-            <div class="btn-group-vertical" role="group">
-                <!--
-                <label name="open" for="source-mob"
-                       class="source-mob btn btn-default navbar-btn">
-                    <span class="glyphicon glyphicon-open"></span>
-                    <input id="source-mob" type="file" class="source-mob">
-                </label>
-                --><!--
-                <a name="save" href="#"
-                    class="btn btn-default navbar-btn">
-                    <span class="glyphicon glyphicon-save"></span>
-                </a>
-                -->
-                <!--
-                <button data-toggle="modal" data-target="#publish-dlg"
-                        name="publish"
-                    >
-                -->
+            <div class="btn-group-vertical hidden-xs hidden-sm" role="group">
                 <button type="button" class="btn btn-default"
                         data-container="body" data-toggle="tooltip"
-                        data-placement="right" title="Publish"
-                    >
+                        data-placement="right" title="Publish">
                     <span class="glyphicon glyphicon-cloud-upload publish">
                     </span>
                 </button>
+            </div>
+            <div class="btn-group-vertical hidden-xs hidden-sm" role="group">
+                <label name="open" for="source-bar"
+                       class="btn btn-default source-bar"
+                       data-container="body" data-toggle="tooltip"
+                       data-placement="right" title="Open">
+                    <span class="glyphicon glyphicon-floppy-open"></span>
+                    <input id="source-bar" type="file" style="display: none;">
+                </label>
+                <a name="save" href="#"
+                   class="btn btn-default"
+                   data-container="body" data-toggle="tooltip"
+                   data-placement="right" title="Save"
+                   >
+                   <span class="glyphicon glyphicon-floppy-save"></span>
+                </a>
 
             </div>
             <div class="btn-group-vertical" role="group">

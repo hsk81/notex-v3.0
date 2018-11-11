@@ -66,7 +66,7 @@ export class HeaderMenu {
     }
 
     public get $openItem():any {
-        return $('#source,#source-mob');
+        return $('#source-bar,#source-mob');
     }
 
     public get $saveItem():any {
