@@ -60,9 +60,9 @@ def get_keywords(view, domain):
 
     base = [domain.lower()]
     if view == 'editor':
-        return ARGs.get('KEYWORDs_EDITOR', base + ['editor'])
+        return ARGs.get('KEYWORDS_EDITOR', base + ['editor'])
     else:
-        return ARGs.get('KEYWORDs', base)
+        return ARGs.get('KEYWORDS', base)
 
 def get_mailto():
 

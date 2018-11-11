@@ -3,8 +3,6 @@
 
 DEF_VIRTENV='virtualenv2'
 DEF_APPNAME='notex'
-DEF_IMGNAME='hsk81/notex:run'
-DEF_PORTMAP='8000:8000'
 GIT_REFNAME='HEAD'
 
 ###############################################################################

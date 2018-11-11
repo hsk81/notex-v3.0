@@ -28,10 +28,7 @@ def server_fonts (path):
 @app.get ('/robots.txt')
 def server_robots (*args, **kwargs):
 
-    app_dns = os.environ.get ('OPENSHIFT_APP_DNS')
-    req_dns = request.headers.get ('host')
-
-    if app_dns == req_dns:
+    if not os.environ.get ('ROBOTS_TXT', True):
         return static_file ('robots-disallow.txt', root='./static/txt')
     else:
         return static_file('robots-allow.txt', root='./static/txt')
