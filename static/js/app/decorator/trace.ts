@@ -79,6 +79,7 @@ function _traceable(
                         this: any, ...args:any[]
                     ) {
                         const name =
+                            target._named ||
                             target.constructor &&
                             target.constructor.name || "@";
                         setTimeout(() => {

@@ -53,8 +53,9 @@ define(["require", "exports"], function (require, exports) {
                             for (var _i = 0; _i < arguments.length; _i++) {
                                 args[_i] = arguments[_i];
                             }
-                            var name = target.constructor &&
-                                target.constructor.name || "@";
+                            var name = target._named ||
+                                target.constructor &&
+                                    target.constructor.name || "@";
                             setTimeout(function () {
                                 console.group(name + "." + key);
                                 if (args.length > 0) {
