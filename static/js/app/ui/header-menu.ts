@@ -39,7 +39,7 @@ export class HeaderMenu {
     private onOpenItemChange(self, ev) {
         var files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
-            if (files[i].type && files[i].type.match(/text/)) {
+            if (!files[i].type || files[i].type.match(/text/)) {
                 let reader = new FileReader();
                 reader.onload = function (progress_ev) {
                     var target = <any>progress_ev.target;

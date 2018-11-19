@@ -34,7 +34,7 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
         HeaderMenu.prototype.onOpenItemChange = function (self, ev) {
             var files = ev.target.files;
             for (var i = 0; i < files.length; i++) {
-                if (files[i].type && files[i].type.match(/text/)) {
+                if (!files[i].type || files[i].type.match(/text/)) {
                     var reader = new FileReader();
                     reader.onload = function (progress_ev) {
                         var target = progress_ev.target;
