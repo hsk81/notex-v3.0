@@ -1,82 +1,78 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-define(["require", "exports", "../string/random"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     console.debug('[import:app/decorator/trace.ts]');
-    function trace(arg0, arg1, arg2) {
-        if (typeof arg0 === 'boolean') {
-            return _trace(arg0, arg1, arg2);
+    function trace(arg) {
+        if (typeof arg === "boolean") {
+            return _trace(arg);
         }
         else {
-            _trace(true)(arg0);
+            _trace(true)(arg);
         }
     }
     exports.trace = trace;
-    function _trace(flag, bef, aft) {
+    function _trace(flag) {
         return function (ctor) {
             Object.keys(ctor.prototype).forEach(function (key) {
                 var dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
-                if (dtor && typeof dtor.value === 'function') {
-                    _traceable(flag, bef, aft)(ctor.prototype, key);
+                if (dtor && typeof dtor.value === "function") {
+                    _traceable(flag)(ctor.prototype, key);
                 }
             });
             Object.keys(ctor).forEach(function (key) {
                 var dtor = Object.getOwnPropertyDescriptor(ctor, key);
-                if (dtor && typeof dtor.value === 'function') {
-                    _traceable(flag, bef, aft)(ctor, key);
+                if (dtor && typeof dtor.value === "function") {
+                    _traceable(flag)(ctor, key);
                 }
             });
         };
     }
     function traceable(arg0, arg1, arg2) {
         if (typeof arg0 === 'boolean') {
-            return _traceable(arg0, arg1, arg2);
+            return _traceable(arg0);
         }
         else {
             _traceable(true)(arg0, arg1, arg2);
         }
     }
     exports.traceable = traceable;
-    function _traceable(flag, bef, aft) {
+    function _traceable(flag) {
         return function (target, key, dtor) {
             var wrap = function (fn, callback) {
+                var gn = fn;
                 if (!flag) {
-                    fn['_traced'] = false;
+                    gn._traced = false;
                 }
                 else {
-                    if (fn['_traced'] === undefined) {
-                        fn['_traced'] = true;
+                    if (gn._traced === undefined) {
+                        gn._traced = true;
                         var tn = function () {
                             var args = [];
                             for (var _i = 0; _i < arguments.length; _i++) {
                                 args[_i] = arguments[_i];
                             }
-                            var _named = target._named || '@', random = String.random(4, 16), dt_beg = new Date().toISOString();
-                            if (bef)
-                                bef({
-                                    name: _named, nonce: random, timestamp: dt_beg
-                                }, args);
-                            else
-                                setTimeout(function () {
-                                    console.log("[" + dt_beg + "]#" + random + " >>> " + _named + "." + key);
-                                    console.log("[" + dt_beg + "]#" + random, args);
-                                }, 0);
-                            var result = fn.apply(this, args), dt_end = new Date().toISOString();
-                            if (aft)
-                                aft({
-                                    name: _named, nonce: random, timestamp: dt_end
-                                }, result, args);
-                            else
-                                setTimeout(function () {
-                                    console.log("[" + dt_end + "]#" + random + " <<< " + _named + "." + key);
-                                    console.log("[" + dt_end + "]#" + random, result);
-                                }, 0);
+                            var name = target.constructor &&
+                                target.constructor.name || "@";
+                            setTimeout(function () {
+                                console.group(name + "." + key);
+                                if (args.length > 0) {
+                                    console.debug.apply(console, args);
+                                }
+                                if (result !== undefined) {
+                                    console.debug(result);
+                                }
+                            }, 0);
+                            var result = gn.apply(this, args);
+                            setTimeout(function () {
+                                console.groupEnd();
+                            }, 0);
                             return result;
                         };
-                        for (var el in fn) {
-                            if (fn.hasOwnProperty(el)) {
-                                tn[el] = fn[el];
+                        for (var el in gn) {
+                            if (gn.hasOwnProperty(el)) {
+                                tn[el] = gn[el];
                             }
                         }
                         callback(tn);

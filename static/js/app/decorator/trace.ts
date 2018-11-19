@@ -6,37 +6,35 @@ console.debug('[import:app/decorator/trace.ts]');
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import '../string/random';
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export function trace(
-    flag:boolean, bef?:Function, aft?:Function):Function;
+    flag: boolean): Function;
 export function trace(
-    ctor:Function):void;
+    ctor: Function): void;
 export function trace(
-    arg0:boolean|Function, arg1?:Function, arg2?:Function):Function|void
-{
-    if (typeof arg0 === 'boolean') {
-        return _trace(<boolean>arg0, <Function>arg1, <Function>arg2);
+    arg: boolean | Function): Function | void {
+    if (typeof arg === "boolean") {
+        return _trace(arg);
     } else {
-        _trace(true)(<Function>arg0);
+        _trace(true)(arg as Function);
     }
 }
 
-function _trace(flag:boolean, bef?:Function, aft?:Function):Function {
-    return function (ctor:Function) {
-        Object.keys(ctor.prototype).forEach((key:string) => {
-            let dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
-            if (dtor && typeof dtor.value === 'function') {
-                _traceable(flag, bef, aft)(ctor.prototype, key);
+function _trace(flag: boolean): Function {
+    return function (ctor: Function) {
+        Object.keys(ctor.prototype).forEach((key: string) => {
+            const dtor = Object.getOwnPropertyDescriptor(
+                ctor.prototype, key,
+            );
+            if (dtor && typeof dtor.value === "function") {
+                _traceable(flag)(ctor.prototype, key);
             }
         });
-        Object.keys(ctor).forEach((key:string) => {
-            let dtor = Object.getOwnPropertyDescriptor(ctor, key);
-            if (dtor && typeof dtor.value === 'function') {
-                _traceable(flag, bef, aft)(ctor, key);
+        Object.keys(ctor).forEach((key: string) => {
+            const dtor = Object.getOwnPropertyDescriptor(
+                ctor, key,
+            );
+            if (dtor && typeof dtor.value === "function") {
+                _traceable(flag)(ctor, key);
             }
         });
     };
@@ -44,6 +42,10 @@ function _trace(flag:boolean, bef?:Function, aft?:Function):Function {
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+interface ITracedFunction extends Function {
+    _traced: Boolean;
+}
 
 export function traceable(
     flag:boolean, bef?:Function, aft?:Function):Function;
@@ -53,58 +55,52 @@ export function traceable(
     arg0:boolean|any, arg1?:Function|string, arg2?:Function|PropertyDescriptor
 ):Function|void {
     if (typeof arg0 === 'boolean') {
-        return _traceable(<boolean>arg0, <Function>arg1, <Function>arg2);
+        return _traceable(<boolean>arg0);
     } else {
         _traceable(true)(<any>arg0, <string>arg1, <PropertyDescriptor>arg2);
     }
 }
 
 function _traceable(
-    flag:boolean, bef?:Function, aft?:Function
+    flag:boolean
 ):Function {
     return function (target:any, key:string, dtor?:PropertyDescriptor) {
-        let wrap = (fn:Function, callback:Function) => {
+        const wrap = (
+            fn:Function, callback:Function
+        ) => {
+            const gn = fn as ITracedFunction;
             if (!flag) {
-                (<any>fn)['_traced'] = false;
+                gn._traced = false;
             } else {
-                if ((<any>fn)['_traced'] === undefined) {
-                    (<any>fn)['_traced'] = true;
+                if (gn._traced === undefined) {
+                    gn._traced = true;
 
-                    let tn:Function = function (...args:any[]) {
-                        let _named = target._named || '@',
-                            random = String.random(4, 16),
-                            dt_beg = new Date().toISOString();
-
-                        if (bef) bef({
-                            name: _named, nonce: random, timestamp: dt_beg
-                        }, args);
-
-                        else setTimeout(() => {
-                            console.log(
-                                `[${dt_beg}]#${random} >>> ${_named}.${key}`);
-                            console.log(
-                                `[${dt_beg}]#${random}`, args);
+                    const tn:Function = function (
+                        this: any, ...args:any[]
+                    ) {
+                        const name =
+                            target.constructor &&
+                            target.constructor.name || "@";
+                        setTimeout(() => {
+                            console.group(`${name}.${key}`);
+                            if (args.length > 0) {
+                                console.debug(...args);
+                            }
+                            if (result !== undefined) {
+                                console.debug(result);
+                            }
                         }, 0);
 
-                        let result = fn.apply(this, args),
-                            dt_end = new Date().toISOString();
-
-                        if (aft) aft({
-                            name: _named, nonce: random, timestamp: dt_end
-                        }, result, args);
-
-                        else setTimeout(() => {
-                            console.log(
-                                `[${dt_end}]#${random} <<< ${_named}.${key}`);
-                            console.log(
-                                `[${dt_end}]#${random}`, result);
+                        const result = gn.apply(this, args);
+                        setTimeout(() => {
+                            console.groupEnd();
                         }, 0);
 
                         return result;
                     };
-                    for (let el in fn) {
-                        if (fn.hasOwnProperty(el)) {
-                            (<any>tn)[el] = (<any>fn)[el];
+                    for (const el in gn) {
+                        if (gn.hasOwnProperty(el)) {
+                            (tn as any)[el] = (gn as any)[el];
                         }
                     }
                     callback(tn);
