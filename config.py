@@ -4,6 +4,7 @@
 
 import fnmatch
 import os
+import json
 
 def glob(path, pattern):
 
@@ -12,7 +13,7 @@ def glob(path, pattern):
             yield os.path.join(root, filename)
 
 # see: docs.gunicorn.org/en/stable/settings.html#reload
-reload = True
+reload = bool(json.loads(os.environ.get('DEBUG', 'false')))
 
 # see: docs.gunicorn.org/en/stable/settings.html#reload-engine
 reload_extra_files = []
