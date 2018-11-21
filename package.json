@@ -8,8 +8,7 @@
   },
   "name": "notex",
   "scripts": {
-    "postinstall": "./static/postinstall.sh",
-    "start": "gunicorn -c config.py --preload wsgi:app",
+    "postinstall": "postinstall.sh",
     "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
     "build": "tsc --build",
     "watch": "tsc --watch"
