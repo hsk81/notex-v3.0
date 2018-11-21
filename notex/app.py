@@ -74,7 +74,7 @@ if not ARGs.get('NO_CSS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/css/lib/highlight/default-9.13.1.min.css')
     minify(out_path,
-           'static/js/lib/codemirror/lib/codemirror.css')
+           'static/js/lib/codemirror.lib/codemirror.css')
     minify(out_path,
            'static/css/app/editor.css')
     zipify(out_path)
@@ -129,7 +129,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-video-0.4.0.min.js')
     minify(out_path,
-           'static/js/lib/codemirror/lib/codemirror.js')
+           'static/js/lib/codemirror.lib/codemirror.js')
     minify(out_path,
            'static/js/lib/codemirror/addon/display/placeholder.js')
     minify(out_path,
