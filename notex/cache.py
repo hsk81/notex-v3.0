@@ -114,7 +114,8 @@ class AppMemcached(AppCache):
         self.password = password
 
     def get(self, key):
-        return JSON.decode(self.connection.get(self.prefixed(key)))
+        value = self.connection.get(self.prefixed(key))
+        return JSON.decode(value) if type(value) == str else value
 
     def set(self, key, value, expiry=0): ## self.NEVER
         if expiry == self.ASAP:
@@ -173,7 +174,8 @@ class AppRedis(AppCache):
         self.url, self.db = url, db
 
     def get(self, key):
-        return JSON.decode(self.connection.get(self.prefixed(key)))
+        value = self.connection.get(self.prefixed(key))
+        return JSON.decode(value) if type(value) == str else value
 
     def set(self, key, value, expiry=None): ## self.NEVER
         if expiry == self.NEVER:
