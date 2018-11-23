@@ -12,6 +12,7 @@
   "name": "notex",
   "scripts": {
     "start": "gunicorn -c config.py --preload wsgi:app",
+    "local": "DEBUG=0 gunicorn -c config.py wsgi:app",
     "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
     "build": "npx tsc --build",
     "watch": "npx tsc --watch"

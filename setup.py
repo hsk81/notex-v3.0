@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup (
     name='notex',
-    version='3.0.2',
+    version='3.0.3',
     description='blog editor',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
