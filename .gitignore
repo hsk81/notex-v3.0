@@ -15,6 +15,7 @@
 
 /build
 /dist
+/local
 /*.egg-info
 
 ## pip
