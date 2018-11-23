@@ -17,5 +17,5 @@
     "build": "npx tsc --build",
     "watch": "npx tsc --watch"
   },
-  "version": "3.0.2"
+  "version": "3.0.3"
 }
