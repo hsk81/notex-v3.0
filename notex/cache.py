@@ -9,6 +9,7 @@ import functools
 import hashlib
 import os
 import redis
+import ujson as JSON
 
 ###############################################################################
 ###############################################################################
@@ -113,13 +114,13 @@ class AppMemcached(AppCache):
         self.password = password
 
     def get(self, key):
-        return self.connection.get(self.prefixed(key))
+        return JSON.decode(self.connection.get(self.prefixed(key)))
 
     def set(self, key, value, expiry=0): ## self.NEVER
         if expiry == self.ASAP:
             self.connection.delete(self.prefixed(key))
         else:
-            self.connection.set(self.prefixed(key), value, time=expiry)
+            self.connection.set(self.prefixed(key), JSON.encode(value), time=expiry)
 
     def delete(self, key):
         self.connection.delete(self.prefixed(key))
@@ -133,7 +134,7 @@ class AppMemcached(AppCache):
                 time=expiry)
 
     def exists(self, key):
-        return self.connection.get(self.prefixed(key)) is not None
+        return JSON.decode(self.connection.get(self.prefixed(key))) is not None
 
     def flush_all(self):
         self.connection.flush_all()
@@ -172,14 +173,14 @@ class AppRedis(AppCache):
         self.url, self.db = url, db
 
     def get(self, key):
-        return self.connection.get(self.prefixed(key))
+        return JSON.decode(self.connection.get(self.prefixed(key)))
 
     def set(self, key, value, expiry=None): ## self.NEVER
         if expiry == self.NEVER:
-            self.connection.pipeline().set(self.prefixed(key), value) \
+            self.connection.pipeline().set(self.prefixed(key), JSON.encode(value)) \
                 .persist(self.prefixed(key)).execute()
         else:
-            self.connection.pipeline().set(self.prefixed(key), value) \
+            self.connection.pipeline().set(self.prefixed(key), JSON.encode(value)) \
                 .expire(self.prefixed(key), time=expiry).execute()
 
     def delete(self, key):
