@@ -276,7 +276,7 @@ export class MdEditorFooter {
     }
 
     private onSpellCheckButtonClick(ev: MouseEvent) {
-        var $menu = this.$spellCheckerMenu,
+        let $menu = this.$spellCheckerMenu,
             $spin = $menu.find('>.spin'),
             $item = $menu.find('>li');
         if ($item.length === 0) {
@@ -291,8 +291,8 @@ export class MdEditorFooter {
                 this.$spellCheckerItem
                     .on('click', this.onSpellCheckItemClick.bind(this));
 
-                let code = cookie.get<string>('language') ||
-                    (navigator.language || 'en-US').replace('-', '_');
+                let code = this.normalize(cookie.get<string>('language') ||
+                    (navigator.language || 'en-US').replace('-', '_'));
                 this.$spellCheckerToggle.find('a')
                     .data('lingua', code);
                 this.$spellCheckerToggle.find('a')
@@ -301,6 +301,36 @@ export class MdEditorFooter {
                     .text(`Off: Enable [${code.replace('_', '-')}]`);
             });
         }
+    }
+
+    private normalize(code: string): string {
+        const linguae_all: string[] = this.$spellCheckerMenu.find('>li>a')
+            .map((i, li) => $(li).data('lingua'))
+            .toArray() as any;
+
+        const linguae_std: string[] = this.$spellCheckerMenu.find('>li>a')
+            .map((i, li) => $(li).data('standard') && $(li).data('lingua'))
+            .toArray() as any;
+
+        const linguae_eql: string[] = linguae_all.filter((lingua) => {
+            const split = lingua.toLowerCase().split('_');
+            return split[0] === split[1];
+        });
+
+        if (linguae_all.indexOf(code) < 0) {
+            const override = (lingua) => {
+                const lhs = lingua.split('_')[0];
+                const rhs = code.split('_')[0];
+                if (lhs === rhs) {
+                    code = lingua;
+                }
+                return code !== lingua;
+            }
+            linguae_eql.every(override);
+            linguae_std.every(override);
+        }
+
+        return code;
     }
 
     @buffered(600)

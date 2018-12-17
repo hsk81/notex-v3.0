@@ -257,8 +257,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                         .on('click', _this.onSpellCheckToggle.bind(_this));
                     _this.$spellCheckerItem
                         .on('click', _this.onSpellCheckItemClick.bind(_this));
-                    var code = cookie_1.cookie.get('language') ||
-                        (navigator.language || 'en-US').replace('-', '_');
+                    var code = _this.normalize(cookie_1.cookie.get('language') ||
+                        (navigator.language || 'en-US').replace('-', '_'));
                     _this.$spellCheckerToggle.find('a')
                         .data('lingua', code);
                     _this.$spellCheckerToggle.find('a')
@@ -267,6 +267,31 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                         .text("Off: Enable [" + code.replace('_', '-') + "]");
                 });
             }
+        };
+        MdEditorFooter.prototype.normalize = function (code) {
+            var linguae_all = this.$spellCheckerMenu.find('>li>a')
+                .map(function (i, li) { return $(li).data('lingua'); })
+                .toArray();
+            var linguae_std = this.$spellCheckerMenu.find('>li>a')
+                .map(function (i, li) { return $(li).data('standard') && $(li).data('lingua'); })
+                .toArray();
+            var linguae_eql = linguae_all.filter(function (lingua) {
+                var split = lingua.toLowerCase().split('_');
+                return split[0] === split[1];
+            });
+            if (linguae_all.indexOf(code) < 0) {
+                var override = function (lingua) {
+                    var lhs = lingua.split('_')[0];
+                    var rhs = code.split('_')[0];
+                    if (lhs === rhs) {
+                        code = lingua;
+                    }
+                    return code !== lingua;
+                };
+                linguae_eql.every(override);
+                linguae_std.every(override);
+            }
+            return code;
         };
         MdEditorFooter.prototype.onMenuItemLoad = function (ev) {
             var $menu = this.$spellCheckerMenu, $spin = $menu.find('>.spin'), $item = $menu.find('>li');
