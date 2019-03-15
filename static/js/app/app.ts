@@ -9,8 +9,8 @@ console.debug('[import:app/app.ts]');
 import DownloadManager from "./ui/download-manager";
 import HeaderMenu from "./ui/header-menu";
 import MdEditor from "./ui/md-editor";
-import MdEditorFooter from "ui/md-editor-footer";
-import MdEditorToolbar from "ui/md-editor-toolbar";
+import MdEditorFooter from "./ui/md-editor-footer";
+import MdEditorToolbar from "./ui/md-editor-toolbar";
 import PublishDialog from "./ui/publish-dialog";
 
 import {named} from "./decorator/named";

@@ -43,7 +43,7 @@ Once all the necessary pre-requisites have been installed, we can start the appl
 where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be re-created. Then, we still need to fill it with some basic structures using the `__init__.sh` script:
 
 ```bash
-[notex] $ ./script/db/__init__.sh
+[notex] $ ./scripts/db/__init__.sh
 ```
 
 Later on, you can start the application much simpler via:
@@ -68,13 +68,13 @@ $ npm install
 Once, this step is done you can use `tsc` after editing a script to have it transpiled:
 
 ```bash
-$ tsc --build tsconfig.json
+$ npm run build
 ```
 
 Or, watching for any change in a script is also possible, which will then automatically run an incremental step:
 
 ```bash
-$ tsc --watch
+$ npm run watch
 ```
 
 [0]: https://www.notex.ch/editor

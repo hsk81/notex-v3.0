@@ -394,7 +394,6 @@ export class MdEditor {
         }
     }
 
-
     private _spellCheckerOverlay: IOverlay;
     private _spellChecker: SpellChecker;
     private _searchOverlay: IOverlay;

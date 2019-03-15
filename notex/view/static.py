@@ -15,6 +15,16 @@ app = app_static
 ###############################################################################
 ###############################################################################
 
+@app.get ('/<any:path>/@npm/<name:re:[^/]+>/<path:path>.<ext:re:[^/\.]+>')
+@app.get ('/<any:path>/@npm/<name:re:[^/]+>.<ext:re:[^/\.]+>')
+def server_npm (any, name, path=None, ext='js'):
+
+    path = '{0}.min.{1}'.format(path if path is not None else name, ext)
+    root = os.path.normpath('node_modules/{0}/dist'.format(name))
+    return static_file (path, root=root)
+
+###############################################################################
+
 @app.get ('/static/<path:path>')
 def server_static (path):
 
