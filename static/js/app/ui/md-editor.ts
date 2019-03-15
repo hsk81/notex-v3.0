@@ -1,29 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
+import { cookie } from "../cookie/cookie";
 
-console.debug('[import:app/ui/md-editor.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import {cookie} from "../cookie/cookie";
-
-import {buffered} from "../decorator/buffered";
-import {named} from "../decorator/named";
-import {traceable} from "../decorator/trace";
-import {trace} from "../decorator/trace";
+import { buffered } from "../decorator/buffered";
+import { named } from "../decorator/named";
+import { traceable } from "../decorator/trace";
+import { trace } from "../decorator/trace";
 
 import DownloadManager from "./download-manager";
 import MarkdownIt from "../markdown-it/markdown-it";
 import SpellChecker from "../spell-checker/spell-checker";
 
-import {ILingua} from "../spell-checker/spell-checker";
-import {IOverlay} from "../spell-checker/spell-checker";
+import { ILingua } from "../spell-checker/spell-checker";
+import { IOverlay } from "../spell-checker/spell-checker";
 
 import "./md-editor-mode";
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 declare const CodeMirror: {
     fromTextArea: (
@@ -33,9 +22,6 @@ declare const CodeMirror: {
 };
 
 declare const $: JQueryStatic;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 @trace
 @named('MdEditor')
@@ -149,23 +135,23 @@ export class MdEditor {
                     (MathJax as any).Hub.Queue([
                         'resetEquationNumbers', (MathJax as any).InputJax.TeX
                     ], [
-                        'Typeset', MathJax.Hub, 'output', () => {
-                            $output.css('visibility', 'visible');
-                            $cached.remove();
+                            'Typeset', MathJax.Hub, 'output', () => {
+                                $output.css('visibility', 'visible');
+                                $cached.remove();
 
-                            if (value.length === 0) {
-                                $.get(
-                                    '/static/html/output-placeholder.html'
-                                ).done((html) => {
-                                    $output.html(html);
-                                    $output.find('>*').hide().fadeIn('fast');
-                                    MathJax.Hub.Queue([
-                                        'Typeset', MathJax.Hub, 'output'
-                                    ]);
-                                });
+                                if (value.length === 0) {
+                                    $.get(
+                                        '/static/html/output-placeholder.html'
+                                    ).done((html) => {
+                                        $output.html(html);
+                                        $output.find('>*').hide().fadeIn('fast');
+                                        MathJax.Hub.Queue([
+                                            'Typeset', MathJax.Hub, 'output'
+                                        ]);
+                                    });
+                                }
                             }
-                        }
-                    ]);
+                        ]);
                 } else {
                     $output.css('visibility', 'visible');
                     $cached.remove();
@@ -193,7 +179,7 @@ export class MdEditor {
 
             let $h = $output.find(':header');
             DownloadManager.me.title = ($h.length > 0 ?
-                    $($h[0]).text() : new Date().toISOString()) + '.md';
+                $($h[0]).text() : new Date().toISOString()) + '.md';
             DownloadManager.me.content = value;
         }
     }
@@ -238,7 +224,7 @@ export class MdEditor {
         }
     }
 
-    public getSelection():string {
+    public getSelection(): string {
         if (this.mirror) {
             return this.mirror.getSelection();
         } else {
@@ -255,7 +241,7 @@ export class MdEditor {
             let script = document.createElement('script'),
                 head = document.getElementsByTagName('head');
             script.type = 'text/javascript';
-            script.src  = this.mathjaxUrl;
+            script.src = this.mathjaxUrl;
             script.async = true;
             head[0].appendChild(script);
         } catch (ex) {
@@ -264,7 +250,7 @@ export class MdEditor {
         this.render();
     }
 
-    private get mathjaxUrl():string {
+    private get mathjaxUrl(): string {
         return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
     }
 
@@ -292,7 +278,7 @@ export class MdEditor {
         return cookie.get<boolean>('simple', false);
     }
 
-    public set simple(value:boolean) {
+    public set simple(value: boolean) {
         cookie.set<boolean>('simple', value);
     }
 
@@ -401,9 +387,4 @@ export class MdEditor {
     private _mdOld: string;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default MdEditor;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

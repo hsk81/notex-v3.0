@@ -1,47 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
-
-console.debug('[import:app/ui/download-manager.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import {named} from "../decorator/named";
-import {trace} from "../decorator/trace";
+import { named } from "../decorator/named";
+import { trace } from "../decorator/trace";
 
 import HeaderMenu from "./header-menu";
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 @trace
 @named('DownloadManager')
 export class DownloadManager {
-    public static get me():DownloadManager {
+    public static get me(): DownloadManager {
         if (this['_me'] === undefined) {
             this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager();
         }
         return this['_me'];
     }
 
-    public set title(title:string) {
+    public set title(title: string) {
         this.$downloadLink.attr("download", title);
     }
 
-    public set content(content:string) {
+    public set content(content: string) {
         this.$downloadLink.attr("href", URL.createObjectURL(
-            new Blob([content], {type: 'text/markdown'})
+            new Blob([content], { type: 'text/markdown' })
         ));
     }
 
-    private get $downloadLink():any {
+    private get $downloadLink(): any {
         return HeaderMenu.me.$saveItem;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default DownloadManager;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

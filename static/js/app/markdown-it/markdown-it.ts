@@ -1,37 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+declare let markdownit: (any: any) => void;
+declare let markdownitAbbr: () => void;
+declare let markdownitAnchor: () => void;
+declare let markdownitCentertext: () => void;
+declare let markdownitDecorate: () => void;
+declare let markdownitEmoji: () => void;
+declare let markdownitFigure: () => void;
+declare let markdownitFootnote: () => void;
+declare let markdownitMark: () => void;
+declare let markdownitMath: () => void;
+declare let markdownitSub: () => void;
+declare let markdownitSup: () => void;
+declare let markdownitVideo: () => void;
 
-console.debug('[import:app/markdown-it/markdown-it.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-declare let markdownit:(any:any)=> void;
-declare let markdownitAbbr:()=> void;
-declare let markdownitAnchor:()=> void;
-declare let markdownitCentertext:()=> void;
-declare let markdownitDecorate:()=> void;
-declare let markdownitEmoji:()=> void;
-declare let markdownitFigure:()=> void;
-declare let markdownitFootnote:()=> void;
-declare let markdownitMark:()=> void;
-declare let markdownitMath:()=> void;
-declare let markdownitSub:()=> void;
-declare let markdownitSup:()=> void;
-declare let markdownitVideo:()=> void;
-
-///////////////////////////////////////////////////////////////////////////////
-
-declare let hljs:any;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+declare let hljs: any;
 
 /**
  * @see: https://markdown-it.github.io/markdown-it/
  */
 export class MarkdownIt {
-    public static get me():MarkdownIt {
+    public static get me(): MarkdownIt {
         if (this['_me'] === undefined) {
             this['_me'] = new MarkdownIt();
         }
@@ -93,18 +80,11 @@ export class MarkdownIt {
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
      */
-    public render(src:string, env?:any):string {
+    public render(src: string, env?: any): string {
         return this._mdi.render(src, env);
     }
 
-    private _mdi:any;
+    private _mdi: any;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export default MarkdownIt;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-

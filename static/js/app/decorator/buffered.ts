@@ -1,24 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-console.debug('[import:app/decorator/buffered.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export interface IBufferedFunction extends Function {
-    cancel:Function;
+    cancel: Function;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export function buffered(
-    ms:number):Function;
+    ms: number): Function;
 export function buffered(
-    target:any, key:string, descriptor?:PropertyDescriptor):void;
+    target: any, key: string, descriptor?: PropertyDescriptor): void;
 export function buffered(
-    arg:number|any, key?:string, descriptor?:PropertyDescriptor
-):Function|void {
+    arg: number | any, key?: string, descriptor?: PropertyDescriptor
+): Function | void {
     if (typeof arg === 'number') {
         return _buffered(arg);
     } else {
@@ -26,13 +16,13 @@ export function buffered(
     }
 }
 
-function _buffered(ms:number) {
+function _buffered(ms: number) {
     return function (
-        target:any, key:string, descriptor?:PropertyDescriptor
+        target: any, key: string, descriptor?: PropertyDescriptor
     ) {
-        let fn:Function = descriptor ? descriptor.value : target[key],
-            id:number;
-        let bn:Function = function (...args:any[]) {
+        let fn: Function = descriptor ? descriptor.value : target[key],
+            id: number;
+        let bn: Function = function (...args: any[]) {
             if (id !== undefined) {
                 clearTimeout(id);
                 id = undefined;
@@ -63,10 +53,4 @@ function _buffered(ms:number) {
     };
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export default buffered;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

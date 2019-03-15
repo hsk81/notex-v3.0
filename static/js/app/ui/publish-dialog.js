@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "../markdown-it/markdown-it", "./md-editor", "../function/after", "../function/assert", "../function/before", "../decorator/named", "../decorator/trace"], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, md_editor_1, after_1, assert_1, before_1, named_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/ui/publish-dialog.ts]');
     var PublishDialog = /** @class */ (function () {
         function PublishDialog() {
             this.$dialog.on('show.bs.modal', this.onBsModalShow.bind(this));
@@ -488,9 +485,6 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
         return PublishDialog;
     }());
     exports.PublishDialog = PublishDialog;
-    ///////////////////////////////////////////////////////////////////////////////
     exports.default = PublishDialog;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=publish-dialog.js.map

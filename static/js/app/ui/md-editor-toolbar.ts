@@ -1,18 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
-
-console.debug('[import:app/ui/md-editor-toolbar.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import {named} from "../decorator/named";
-import {trace} from "../decorator/trace";
+import { named } from "../decorator/named";
+import { trace } from "../decorator/trace";
 
 import MdEditor from "./md-editor";
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 declare const $: JQueryStatic;
 
@@ -174,8 +163,8 @@ export class MdEditorToolbar {
 
     private onHeaderClickMirror() {
         let cursor = this.ed.mirror.getCursor(),
-            curr_from = {line: cursor.line, ch: 0},
-            next_from = {line: cursor.line + 1, ch: 0};
+            curr_from = { line: cursor.line, ch: 0 },
+            next_from = { line: cursor.line + 1, ch: 0 };
         let curr_ts = this.ed.mirror.getLineTokens(curr_from.line),
             next_ts = this.ed.mirror.getLineTokens(next_from.line);
         let line = this.ed.mirror.getLineHandle(curr_from.line),
@@ -188,15 +177,15 @@ export class MdEditorToolbar {
         });
         let h1s = line.text.match(/^\s*=/) && curr_ts.filter((tok) => {
             return tok && tok.type && tok.type.match(/header-1/) &&
-                   tok.string === '=';
+                tok.string === '=';
         });
         let h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter((tok) => {
             return tok && tok.type && tok.type.match(/header-2/) &&
-                   tok.string === '-';
+                tok.string === '-';
         });
         let h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter((tok) => {
             return tok && tok.type && tok.type.match(/header-6/) &&
-                   tok.string === '#';
+                tok.string === '#';
         });
 
         if (mode && mode.name === 'markdown') {
@@ -274,11 +263,11 @@ export class MdEditorToolbar {
         let px = val.substring(0, idx + 1),
             sx = val.substring(idx + 1, val.length);
 
-        let rx_6 =/^\s*#{6,}\s*/,
+        let rx_6 = /^\s*#{6,}\s*/,
             mm_6 = sx.match(rx_6);
-        let rx_5 =/^\s*#{1,5}/,
+        let rx_5 = /^\s*#{1,5}/,
             mm_5 = sx.match(rx_5);
-        let rx_0 =/^\s*#{0}/,
+        let rx_0 = /^\s*#{0}/,
             mm_0 = sx.match(rx_0);
 
         if (mm_6 && mm_6.length > 0) {
@@ -423,9 +412,9 @@ export class MdEditorToolbar {
             ix_2 = val.substring(beg - 2, end + 2),
             sx_2 = val.substring(end + 2, val.length);
 
-        let rx_1 =/^\*\*((?:(?!\*\*).)+)\*\*$/,
+        let rx_1 = /^\*\*((?:(?!\*\*).)+)\*\*$/,
             mm_1 = ix_1.match(rx_1);
-        let rx_2 =/^\*\*((?:(?!\*\*).)+)\*\*$/,
+        let rx_2 = /^\*\*((?:(?!\*\*).)+)\*\*$/,
             mm_2 = ix_2.match(rx_2);
 
         if (mm_1 && mm_1.length > 1) {
@@ -464,12 +453,10 @@ export class MdEditorToolbar {
                 let lhs_mod = this.ed.mirror.getModeAt(sel.head),
                     rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
-                    rhs_mod && rhs_mod.name === 'markdown')
-                {
+                    rhs_mod && rhs_mod.name === 'markdown') {
                     let tok = this.ed.mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/))
-                    {
+                        tok.type && tok.type.match(/em/)) {
                         return {
                             anchor: this.lhs(sel.anchor, tok),
                             head: this.rhs(sel.head, tok)
@@ -486,16 +473,14 @@ export class MdEditorToolbar {
                     sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
                     sel_lhs.line === sel_rhs.line &&
-                    sel_lhs.ch > sel_rhs.ch)
-                {
+                    sel_lhs.ch > sel_rhs.ch) {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
                 let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
                     mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
-                    mod_rhs && mod_rhs.name === 'markdown')
-                {
+                    mod_rhs && mod_rhs.name === 'markdown') {
                     let tok = this.ed.mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)) {
@@ -518,8 +503,7 @@ export class MdEditorToolbar {
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
-                    tok.type && tok.type.match(/em/))
-                {
+                    tok.type && tok.type.match(/em/)) {
                     let lhs = this.lhs(cur, tok),
                         rhs = this.rhs(cur, tok);
                     let src = this.ed.mirror.getRange(lhs, rhs),
@@ -533,8 +517,8 @@ export class MdEditorToolbar {
                     this.ed.mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
-                        line: cur.line, ch: cur.ch + 2
-                    });
+                            line: cur.line, ch: cur.ch + 2
+                        });
                 }
             }
         }
@@ -552,9 +536,9 @@ export class MdEditorToolbar {
             ix_2 = val.substring(beg - 1, end + 1),
             sx_2 = val.substring(end + 1, val.length);
 
-        let rx_1 =/^\*([^*]+)\*$/,
+        let rx_1 = /^\*([^*]+)\*$/,
             mm_1 = ix_1.match(rx_1);
-        let rx_2 =/^\*([^*]+)\*$/,
+        let rx_2 = /^\*([^*]+)\*$/,
             mm_2 = ix_2.match(rx_2);
 
         if (mm_1 && mm_1.length > 1) {
@@ -593,11 +577,9 @@ export class MdEditorToolbar {
                 let lhs_mod = this.ed.mirror.getModeAt(sel.head),
                     rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
-                    rhs_mod && rhs_mod.name === 'markdown')
-                {
+                    rhs_mod && rhs_mod.name === 'markdown') {
                     let tok = this.ed.mirror.getTokenAt(sel.head);
-                    if (tok.type && tok.type.match(/comment/))
-                    {
+                    if (tok.type && tok.type.match(/comment/)) {
                         return {
                             anchor: this.lhs(sel.anchor, tok),
                             head: this.rhs(sel.head, tok)
@@ -614,16 +596,14 @@ export class MdEditorToolbar {
                     sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
                     sel_lhs.line === sel_rhs.line &&
-                    sel_lhs.ch > sel_rhs.ch)
-                {
+                    sel_lhs.ch > sel_rhs.ch) {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
                 let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
                     mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
-                    mod_rhs && mod_rhs.name === 'markdown')
-                {
+                    mod_rhs && mod_rhs.name === 'markdown') {
                     let tok = this.ed.mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/comment/)) {
                         let lhs = this.lhs(sel_lhs, tok),
@@ -644,8 +624,7 @@ export class MdEditorToolbar {
                 mod = this.ed.mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
-                if (tok.type && tok.type.match(/comment/))
-                {
+                if (tok.type && tok.type.match(/comment/)) {
                     let lhs = this.lhs(cur, tok),
                         rhs = this.rhs(cur, tok);
                     let src = this.ed.mirror.getRange(lhs, rhs),
@@ -659,8 +638,8 @@ export class MdEditorToolbar {
                     this.ed.mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
-                        line: cur.line, ch: cur.ch + 2
-                    });
+                            line: cur.line, ch: cur.ch + 2
+                        });
                 }
             }
         }
@@ -678,9 +657,9 @@ export class MdEditorToolbar {
             ix_2 = val.substring(beg - 1, end + 1),
             sx_2 = val.substring(end + 1, val.length);
 
-        let rx_1 =/^`([^`]+)`$/,
+        let rx_1 = /^`([^`]+)`$/,
             mm_1 = ix_1.match(rx_1);
-        let rx_2 =/^`([^`]+)`$/,
+        let rx_2 = /^`([^`]+)`$/,
             mm_2 = ix_2.match(rx_2);
 
         if (mm_1 && mm_1.length > 1) {
@@ -764,7 +743,7 @@ export class MdEditorToolbar {
         let px = val.substring(0, idx + 1),
             sx = val.substring(idx + 1, val.length);
 
-        let rx =/^\s{2}/,
+        let rx = /^\s{2}/,
             mm = sx.match(rx);
         if (mm && mm.length > 0) {
             (this.ed.$input[0] as HTMLInputElement).setSelectionRange(idx + 1, idx + 3);
@@ -797,8 +776,8 @@ export class MdEditorToolbar {
             this.ed.mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
-                line: cur.line, ch: cur.ch + 3
-            });
+                    line: cur.line, ch: cur.ch + 3
+                });
         }
     }
 
@@ -835,8 +814,8 @@ export class MdEditorToolbar {
             this.ed.mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
-                line: cur.line, ch: cur.ch + 3
-            });
+                    line: cur.line, ch: cur.ch + 3
+                });
         }
     }
 
@@ -856,15 +835,14 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
 
-    private lhs(cursor, token): {ch: number, line: number} {
+    private lhs(cursor, token): { ch: number, line: number } {
         if (this.ed.mirror) {
-            let last = {line: cursor.line, ch: cursor.ch},
-                next = {line: cursor.line, ch: cursor.ch};
+            let last = { line: cursor.line, ch: cursor.ch },
+                next = { line: cursor.line, ch: cursor.ch };
             while (true) {
                 let next_token = this.ed.mirror.getTokenAt(next);
                 if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type)
-                {
+                    !next_token.type && next_token.type !== token.type) {
                     return last = {
                         ch: next.ch, line: next.line
                     };
@@ -891,15 +869,14 @@ export class MdEditorToolbar {
         }
     }
 
-    private rhs(cursor, token): {ch: number, line: number} {
+    private rhs(cursor, token): { ch: number, line: number } {
         if (this.ed.mirror) {
-            let last = {line: cursor.line, ch: cursor.ch},
-                next = {line: cursor.line, ch: cursor.ch};
+            let last = { line: cursor.line, ch: cursor.ch },
+                next = { line: cursor.line, ch: cursor.ch };
             while (true) {
                 let next_token = this.ed.mirror.getTokenAt(next);
                 if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type)
-                {
+                    !next_token.type && next_token.type !== token.type) {
                     return last;
                 } else {
                     last = {
@@ -1026,9 +1003,4 @@ export class MdEditorToolbar {
     private _scroll: any;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default MdEditorToolbar;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

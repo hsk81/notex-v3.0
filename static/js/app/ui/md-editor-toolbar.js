@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-editor"], function (require, exports, named_1, trace_1, md_editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/ui/md-editor-toolbar.ts]');
     var MdEditorToolbar = /** @class */ (function () {
         function MdEditorToolbar() {
             var _this = this;
@@ -983,9 +980,6 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
         return MdEditorToolbar;
     }());
     exports.MdEditorToolbar = MdEditorToolbar;
-    ///////////////////////////////////////////////////////////////////////////////
     exports.default = MdEditorToolbar;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=md-editor-toolbar.js.map

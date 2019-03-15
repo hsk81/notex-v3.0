@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,9 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/ui/md-editor.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var MdEditor = /** @class */ (function () {
         function MdEditor() {
             if (this.mobile) {
@@ -395,9 +390,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         return MdEditor;
     }());
     exports.MdEditor = MdEditor;
-    ///////////////////////////////////////////////////////////////////////////////
     exports.default = MdEditor;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=md-editor.js.map

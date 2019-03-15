@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9,9 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "../decorator/named", "../decorator/trace", "./header-menu"], function (require, exports, named_1, trace_1, header_menu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/ui/download-manager.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var DownloadManager = /** @class */ (function () {
         function DownloadManager() {
         }
@@ -55,9 +50,6 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./hea
         return DownloadManager;
     }());
     exports.DownloadManager = DownloadManager;
-    ///////////////////////////////////////////////////////////////////////////////
     exports.default = DownloadManager;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=download-manager.js.map

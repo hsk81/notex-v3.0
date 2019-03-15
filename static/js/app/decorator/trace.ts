@@ -1,11 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-console.debug('[import:app/decorator/trace.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export function trace(
     flag: boolean): Function;
 export function trace(
@@ -40,20 +32,17 @@ function _trace(flag: boolean): Function {
     };
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 interface ITracedFunction extends Function {
     _traced: Boolean;
 }
 
 export function traceable(
-    flag:boolean, bef?:Function, aft?:Function):Function;
+    flag: boolean, bef?: Function, aft?: Function): Function;
 export function traceable(
-    target:any, key:string, dtor?:PropertyDescriptor):void;
+    target: any, key: string, dtor?: PropertyDescriptor): void;
 export function traceable(
-    arg0:boolean|any, arg1?:Function|string, arg2?:Function|PropertyDescriptor
-):Function|void {
+    arg0: boolean | any, arg1?: Function | string, arg2?: Function | PropertyDescriptor
+): Function | void {
     if (typeof arg0 === 'boolean') {
         return _traceable(<boolean>arg0);
     } else {
@@ -62,11 +51,11 @@ export function traceable(
 }
 
 function _traceable(
-    flag:boolean
-):Function {
-    return function (target:any, key:string, dtor?:PropertyDescriptor) {
+    flag: boolean
+): Function {
+    return function (target: any, key: string, dtor?: PropertyDescriptor) {
         const wrap = (
-            fn:Function, callback:Function
+            fn: Function, callback: Function
         ) => {
             const gn = fn as ITracedFunction;
             if (!flag) {
@@ -75,8 +64,8 @@ function _traceable(
                 if (gn._traced === undefined) {
                     gn._traced = true;
 
-                    const tn:Function = function (
-                        this: any, ...args:any[]
+                    const tn: Function = function (
+                        this: any, ...args: any[]
                     ) {
                         const name =
                             target._named ||
@@ -110,33 +99,27 @@ function _traceable(
         };
         if (dtor) {
             if (typeof dtor.value === 'function') {
-                wrap(dtor.value, (tn:Function) => {
+                wrap(dtor.value, (tn: Function) => {
                     dtor.value = tn;
                 });
             } else {
                 if (typeof dtor.get === 'function') {
-                    wrap(dtor.get, (tn:Function) => {
+                    wrap(dtor.get, (tn: Function) => {
                         dtor.get = <any>tn;
                     });
                 }
                 if (typeof dtor.set === 'function') {
-                    wrap(dtor.set, (tn:Function) => {
+                    wrap(dtor.set, (tn: Function) => {
                         dtor.set = <any>tn;
                     });
                 }
             }
         } else {
-            wrap(target[key], (tn:Function) => {
+            wrap(target[key], (tn: Function) => {
                 target[key] = tn;
             });
         }
     };
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export default trace;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

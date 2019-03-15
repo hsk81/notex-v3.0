@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "./md-editor"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, md_editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/ui/md-editor-footer.ts]');
     var MdEditorFooter = /** @class */ (function () {
         function MdEditorFooter() {
             this.urls = {
@@ -377,9 +374,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         return MdEditorFooter;
     }());
     exports.MdEditorFooter = MdEditorFooter;
-    ///////////////////////////////////////////////////////////////////////////////
     exports.default = MdEditorFooter;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=md-editor-footer.js.map

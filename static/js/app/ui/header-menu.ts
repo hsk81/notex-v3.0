@@ -1,27 +1,16 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
-
-console.debug('[import:app/ui/header-menu.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import {mine} from "../decorator/mine";
-import {named} from "../decorator/named";
-import {trace} from "../decorator/trace";
+import { mine } from "../decorator/mine";
+import { named } from "../decorator/named";
+import { trace } from "../decorator/trace";
 
 import MdEditor from "./md-editor";
 import MdEditorToolbar from "./md-editor-toolbar";
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 declare const $: JQueryStatic;
 
 @trace
 @named('HeaderMenu')
 export class HeaderMenu {
-    public static get me():HeaderMenu {
+    public static get me(): HeaderMenu {
         if (this['_me'] === undefined) {
             this['_me'] = window['HEADER_MENU'] = new HeaderMenu();
         }
@@ -44,8 +33,7 @@ export class HeaderMenu {
                 reader.onload = function (progress_ev) {
                     var target = <any>progress_ev.target;
                     if (target && target.readyState === 2 &&
-                        typeof target.result === 'string')
-                    {
+                        typeof target.result === 'string') {
                         self.editor.setValue(target.result);
                         self.editor.focus();
                     }
@@ -65,15 +53,15 @@ export class HeaderMenu {
         this.editor.focus();
     }
 
-    public get $openItem():any {
+    public get $openItem(): any {
         return $('#source-bar,#source-mob');
     }
 
-    public get $saveItem():any {
+    public get $saveItem(): any {
         return $('a[name=save]');
     }
 
-    public get $swapItem():any {
+    public get $swapItem(): any {
         return $('[name=swap]');
     }
 
@@ -86,9 +74,4 @@ export class HeaderMenu {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default HeaderMenu;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

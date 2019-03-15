@@ -1,5 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="./global/global.d.ts"/>
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,9 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui/md-editor", "./ui/md-editor-footer", "./ui/md-editor-toolbar", "./ui/publish-dialog", "./decorator/named", "./decorator/trace", "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, download_manager_1, header_menu_1, md_editor_1, md_editor_footer_1, md_editor_toolbar_1, publish_dialog_1, named_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    console.debug('[import:app/app.ts]');
-    ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     var App = /** @class */ (function () {
         function App() {
             this._headerMenu = header_menu_1.default.me;
@@ -44,9 +39,6 @@ define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui
         return App;
     }());
     exports.App = App;
-    ///////////////////////////////////////////////////////////////////////////////
     window['APP'] = App.me;
 });
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 //# sourceMappingURL=app.js.map

@@ -1,7 +1,7 @@
 declare let Typo: any;
 
-import {named} from '../decorator/named';
-import {trace} from '../decorator/trace';
+import { named } from '../decorator/named';
+import { trace } from '../decorator/trace';
 
 export interface ILingua {
     charset: string;

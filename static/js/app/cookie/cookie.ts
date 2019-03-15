@@ -1,18 +1,10 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-console.debug('[import:app/cookie/cookie.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export interface ICookie {
-    set:<T>(name:string, value:T, expiry_ms?:number)=> T;
-    get:<T>(name:string, value?:T)=> T;
+    set: <T>(name: string, value: T, expiry_ms?: number) => T;
+    get: <T>(name: string, value?: T) => T;
 }
 
 class Cookie implements ICookie {
-    public static set<T>(name:string, value:T, expiry_ms?:number):T {
+    public static set<T>(name: string, value: T, expiry_ms?: number): T {
         let json = JSON.stringify(value);
         if (expiry_ms === undefined) {
             document.cookie = name + '=' + json;
@@ -25,11 +17,11 @@ class Cookie implements ICookie {
         return value;
     }
 
-    public set<T>(name:string, value:T, expiry_ms?:number):T {
+    public set<T>(name: string, value: T, expiry_ms?: number): T {
         return Cookie.set(name, value, expiry_ms);
     }
 
-    public static get<T>(name:string, value?:T):T {
+    public static get<T>(name: string, value?: T): T {
         let cookies = document.cookie.split(';'),
             cookie_name = name + '=',
             string;
@@ -54,16 +46,10 @@ class Cookie implements ICookie {
         }
     }
 
-    public get<T>(name:string, value?:T):T {
+    public get<T>(name: string, value?: T): T {
         return Cookie.get(name, value);
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-export let cookie:ICookie = new Cookie();
+export const cookie: ICookie = new Cookie();
 export default cookie;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

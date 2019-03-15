@@ -1,5 +1,5 @@
-import {named} from '../decorator/named';
-import {trace} from '../decorator/trace';
+import { named } from '../decorator/named';
+import { trace } from '../decorator/trace';
 
 export interface ICommand {
     redo: () => ICommand;

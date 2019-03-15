@@ -1,18 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-console.debug('[import:app/google-api/blogger-api.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import GoogleApi from "./google-api";
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 export class BloggerApi {
-    public static get me():BloggerApi {
+    public static get me(): BloggerApi {
         if (this['_me'] === undefined) {
             this['_me'] = new BloggerApi();
         }
@@ -26,7 +15,7 @@ export class BloggerApi {
         };
     }
 
-    public get(callback:Function, ms:number = 2048, n:number = 2) {
+    public get(callback: Function, ms: number = 2048, n: number = 2) {
         GoogleApi.me.get((gapi) => {
 
             if (gapi) {
@@ -51,7 +40,7 @@ export class BloggerApi {
                     if (res.error) switch (res.error) {
                         case 'immediate_failed':
                             let opts = $.extend(
-                                {}, this._options, {immediate: false});
+                                {}, this._options, { immediate: false });
                             gapi.auth.authorize(
                                 opts, on_done, on_fail);
                             callback(false);
@@ -78,7 +67,7 @@ export class BloggerApi {
                 };
 
                 let opts = $.extend(
-                    {}, this._options, {immediate: true});
+                    {}, this._options, { immediate: true });
                 gapi.auth.authorize(
                     opts, on_done, on_fail);
             } else {
@@ -87,12 +76,7 @@ export class BloggerApi {
         });
     }
 
-    private _options:any;
+    private _options: any;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default BloggerApi;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

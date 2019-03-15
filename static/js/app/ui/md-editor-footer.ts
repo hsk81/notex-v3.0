@@ -1,21 +1,10 @@
-///////////////////////////////////////////////////////////////////////////////
-///<reference path="../global/global.d.ts"/>
+import { cookie } from "../cookie/cookie";
 
-console.debug('[import:app/ui/md-editor-footer.ts]');
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-import {cookie} from "../cookie/cookie";
-
-import {buffered} from "../decorator/buffered";
-import {named} from "../decorator/named";
-import {trace} from "../decorator/trace";
+import { buffered } from "../decorator/buffered";
+import { named } from "../decorator/named";
+import { trace } from "../decorator/trace";
 
 import MdEditor from "./md-editor";
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 declare const $: JQueryStatic;
 
@@ -57,45 +46,45 @@ export class MdEditorFooter {
 
     private hide() {
         if (!this.ed.mirror) {
-            this.$input.css({'height': '100%'});
+            this.$input.css({ 'height': '100%' });
         }
         this.$footer.hide();
-        this.$footer.css({'width': '48px'});
+        this.$footer.css({ 'width': '48px' });
     }
 
     private show() {
         if (!this.ed.mirror) {
-            this.$input.css({'height': 'calc(100% - 48px)'});
+            this.$input.css({ 'height': 'calc(100% - 48px)' });
         }
         this.$footer.show();
-        this.$footer.css({'width': '100%'});
+        this.$footer.css({ 'width': '100%' });
     }
 
     private minimize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
-            this.$input.css({'height': '100%'});
+            this.$input.css({ 'height': '100%' });
         }
         if (fade) {
             this.$footer.hide();
-            this.$footer.css({'width': '48px'});
+            this.$footer.css({ 'width': '48px' });
             this.$footer.fadeIn(ms);
         } else {
             this.$footer.show();
-            this.$footer.animate({'width': '48px'}, ms);
+            this.$footer.animate({ 'width': '48px' }, ms);
         }
     }
 
     private maximize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
-            this.$input.css({'height': 'calc(100% - 48px)'});
+            this.$input.css({ 'height': 'calc(100% - 48px)' });
         }
         if (fade) {
             this.$footer.hide();
-            this.$footer.css({'width': '100%'});
+            this.$footer.css({ 'width': '100%' });
             this.$footer.fadeIn(ms);
         } else {
             this.$footer.show();
-            this.$footer.animate({'width': '100%'}, ms);
+            this.$footer.animate({ 'width': '100%' }, ms);
         }
     }
 
@@ -188,18 +177,18 @@ export class MdEditorFooter {
 
         let state = $li1_a.data('state');
         if (state === 'off') {
-            $button_img.prop('src',  this.urls['16x16'].on);
+            $button_img.prop('src', this.urls['16x16'].on);
         } else {
-            $button_img.prop('src',  this.urls['16x16'].off);
+            $button_img.prop('src', this.urls['16x16'].off);
         }
         if (state === 'off') {
             $li1_a.data('state', 'on');
-            $li1_img.prop('src',  this.urls['32x32'].on);
+            $li1_img.prop('src', this.urls['32x32'].on);
             $li1_line2.text(
                 `On: Disable [${lingua.code.replace('_', '-')}]`);
         } else {
             $li1_a.data('state', 'off');
-            $li1_img.prop('src',  this.urls['32x32'].off);
+            $li1_img.prop('src', this.urls['32x32'].off);
             $li1_line2.text(
                 `Off: Enable [${lingua.code.replace('_', '-')}]`);
         }
@@ -210,11 +199,11 @@ export class MdEditorFooter {
         this.$spellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
-                $button_img.prop('src',  this.urls['16x16'].off);
+                $button_img.prop('src', this.urls['16x16'].off);
             }
             if (error) {
                 $li1_a.data('state', 'off');
-                $li1_img.prop('src',  this.urls['32x32'].off);
+                $li1_img.prop('src', this.urls['32x32'].off);
                 $li1_line2.text(
                     `Off: Enable [${lingua.code.replace('_', '-')}]`);
             }
@@ -394,9 +383,4 @@ export class MdEditorFooter {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 export default MdEditorFooter;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
