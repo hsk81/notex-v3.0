@@ -16,7 +16,7 @@ import "./string/random";
 @trace
 @named('App')
 export class App {
-    public static get me(): App {
+    public static get me(this: any): App {
         if (this['_me'] === undefined) {
             this['_me'] = window['APP'] = new App();
         }

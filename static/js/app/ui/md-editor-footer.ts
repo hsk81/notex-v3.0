@@ -11,7 +11,7 @@ declare const $: JQueryStatic;
 @trace
 @named('MdEditorFooter')
 export class MdEditorFooter {
-    public static get me(): MdEditorFooter {
+    public static get me(this: any): MdEditorFooter {
         if (this['_me'] === undefined) {
             this['_me'] = window['MD_EDITOR_FOOTER'] = new MdEditorFooter();
         }
@@ -20,18 +20,18 @@ export class MdEditorFooter {
 
     public constructor() {
         this.$mirror.tooltip({
-            container: 'body', title: (function () {
+            container: 'body', title: (function (this: any) {
                 return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
             }).bind(this)
         });
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
         this.$cli
-            .on('change', this.onConsoleChange.bind(this));
+            .on('change', this.onConsoleChange.bind(this) as any);
         this.$cli
-            .on('keydown', this.onConsoleKeyDown.bind(this));
+            .on('keydown', this.onConsoleKeyDown.bind(this) as any);
         this.$spellCheckerButton
-            .on('click', this.onSpellCheckButtonClick.bind(this));
+            .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
         if (!this.ed.mobile) {
             if (!this.ed.simple) {
@@ -139,7 +139,7 @@ export class MdEditorFooter {
     }
 
     private onConsoleChange(ev: KeyboardEvent) {
-        let $input = $(ev.target),
+        let $input = $(ev.target as any),
             value = $input.val() as string;
 
         let rx_px = /^\//,
@@ -219,7 +219,7 @@ export class MdEditorFooter {
             $li1_a = $li1.find('a'),
             $li1_img = $li1.find('img'),
             $li1_line2 = $li1.find('.line2');
-        let $lii = $(ev.target).closest('li'),
+        let $lii = $(ev.target as any).closest('li'),
             $lii_a = $lii.find('a'),
             $lii_img = $lii.find('img');
 
@@ -276,9 +276,9 @@ export class MdEditorFooter {
                 $item.find('img').on('load', this.onMenuItemLoad.bind(this));
 
                 this.$spellCheckerToggle
-                    .on('click', this.onSpellCheckToggle.bind(this));
+                    .on('click', this.onSpellCheckToggle.bind(this) as any);
                 this.$spellCheckerItem
-                    .on('click', this.onSpellCheckItemClick.bind(this));
+                    .on('click', this.onSpellCheckItemClick.bind(this) as any);
 
                 let code = this.normalize(cookie.get<string>('language') ||
                     (navigator.language || 'en-US').replace('-', '_'));
@@ -307,7 +307,7 @@ export class MdEditorFooter {
         });
 
         if (linguae_all.indexOf(code) < 0) {
-            const override = (lingua) => {
+            const override = (lingua: string) => {
                 const lhs = lingua.split('_')[0];
                 const rhs = code.split('_')[0];
                 if (lhs === rhs) {
@@ -359,7 +359,7 @@ export class MdEditorFooter {
     }
 
     private get $cli() {
-        return this.$footer.find('#cli').find('input');
+        return this.$footer.find('#cli').find('input') as JQuery<HTMLElement>;
     }
 
     private get $spellCheckerButton() {

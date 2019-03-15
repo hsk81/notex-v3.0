@@ -4,8 +4,8 @@ import { named } from '../decorator/named';
 import { trace } from '../decorator/trace';
 
 export interface ILingua {
-    charset: string;
-    code: string;
+    charset: string | null;
+    code: string | null;
 }
 
 export interface IOverlay {
@@ -16,7 +16,7 @@ export interface IOverlay {
 @named('SpellChecker')
 export class SpellChecker {
     public constructor(
-        lingua: ILingua, callback: (overlay: IOverlay) => void
+        lingua: ILingua, callback: (overlay: IOverlay | null) => void
     ) {
         let worker = new Worker(
             '/static/js/app/spell-checker/spell-checker.worker.js');
@@ -66,7 +66,7 @@ export class SpellChecker {
         this._typo = value;
     }
 
-    private _separator: RegExp;
+    private _separator: RegExp | undefined;
     private _typo: any;
 }
 

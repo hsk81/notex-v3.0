@@ -1,4 +1,4 @@
-declare let markdownit: (any: any) => void;
+declare let markdownit: any;
 declare let markdownitAbbr: () => void;
 declare let markdownitAnchor: () => void;
 declare let markdownitCentertext: () => void;
@@ -18,7 +18,7 @@ declare let hljs: any;
  * @see: https://markdown-it.github.io/markdown-it/
  */
 export class MarkdownIt {
-    public static get me(): MarkdownIt {
+    public static get me(this: any): MarkdownIt {
         if (this['_me'] === undefined) {
             this['_me'] = new MarkdownIt();
         }
@@ -27,7 +27,7 @@ export class MarkdownIt {
 
     public constructor() {
         this._mdi = new markdownit({
-            highlight: function (text, language) {
+            highlight: function (text: any, language: any) {
                 if (language && hljs.getLanguage(language)) {
                     try {
                         return hljs.highlight(language, text).value;
@@ -63,12 +63,12 @@ export class MarkdownIt {
         this._mdi.use(markdownitMath, {
             inlineOpen: '$',
             inlineClose: '$',
-            inlineRenderer: function (string) {
+            inlineRenderer: function (string: string) {
                 return '$' + string + '$';
             },
             blockOpen: '$$',
             blockClose: '$$',
-            blockRenderer: function (string) {
+            blockRenderer: function (string: string) {
                 return '$$' + string + '$$';
             }
         });

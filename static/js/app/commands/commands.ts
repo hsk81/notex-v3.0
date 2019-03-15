@@ -21,7 +21,7 @@ export class Command implements ICommand {
 @trace
 @named('Commands')
 export class Commands {
-    public static get me(): Commands {
+    public static get me(this: any): Commands {
         if (this['_me'] === undefined) {
             this['_me'] = new Commands();
         }
@@ -69,10 +69,10 @@ export class Commands {
         }
     }
 
-    private static top(array: Array<IExCommand>): IExCommand {
+    private static top(array: Array<IExCommand>): IExCommand | undefined {
         return array[array.length - 1];
     }
-    private static pop(array: Array<IExCommand>): IExCommand {
+    private static pop(array: Array<IExCommand>): IExCommand | undefined {
         return array.pop();
     }
 }

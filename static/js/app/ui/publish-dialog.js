@@ -292,7 +292,7 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
             var on_done = function (res) {
                 var url = assert_1.assert(res.result.url), id = assert_1.assert(res.result.id);
                 var tab = open(url, 'post:' + id);
-                if (tab !== undefined)
+                if (tab)
                     tab.focus();
             };
             var on_fail = function (res) {
@@ -310,7 +310,7 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
             var on_done = function (res) {
                 var url = assert_1.assert(res.result.url), id = assert_1.assert(res.result.id);
                 var tab = open(url, 'post:' + id);
-                if (tab !== undefined)
+                if (tab)
                     tab.focus();
             };
             var on_fail = function (res) {

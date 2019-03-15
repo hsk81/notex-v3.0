@@ -12,7 +12,7 @@ export function buffered(
     if (typeof arg === 'number') {
         return _buffered(arg);
     } else {
-        _buffered(200)(<any>arg, key, descriptor);
+        _buffered(200)(<any>arg, key as string, descriptor);
     }
 }
 
@@ -21,8 +21,8 @@ function _buffered(ms: number) {
         target: any, key: string, descriptor?: PropertyDescriptor
     ) {
         let fn: Function = descriptor ? descriptor.value : target[key],
-            id: number;
-        let bn: Function = function (...args: any[]) {
+            id: number | undefined;
+        let bn: Function = function (this: any, ...args: any[]) {
             if (id !== undefined) {
                 clearTimeout(id);
                 id = undefined;

@@ -10,7 +10,7 @@ declare const $: JQueryStatic;
 @trace
 @named('HeaderMenu')
 export class HeaderMenu {
-    public static get me(): HeaderMenu {
+    public static get me(this: any): HeaderMenu {
         if (this['_me'] === undefined) {
             this['_me'] = window['HEADER_MENU'] = new HeaderMenu();
         }
@@ -25,7 +25,7 @@ export class HeaderMenu {
     }
 
     @mine
-    private onOpenItemChange(self, ev) {
+    private onOpenItemChange(self: any, ev: any) {
         var files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (!files[i].type || files[i].type.match(/text/)) {

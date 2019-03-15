@@ -295,8 +295,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 });
             }
             else {
-                this.spellChecker = null;
-                this.spellCheckerOverlay = null;
+                this.spellChecker = undefined;
+                this.spellCheckerOverlay = undefined;
                 if (this.mirror) {
                     this.mirror.removeOverlay('spell-checker');
                 }

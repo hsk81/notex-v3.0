@@ -8,7 +8,7 @@ declare const $: JQueryStatic;
 @trace
 @named('MdEditorToolbar')
 export class MdEditorToolbar {
-    public static get me(): MdEditorToolbar {
+    public static get me(this: any): MdEditorToolbar {
         if (this['_me'] === undefined) {
             this['_me'] = window['MD_EDITOR_TOOLBAR'] = new MdEditorToolbar();
         }
@@ -172,18 +172,18 @@ export class MdEditorToolbar {
         let suffix = line.text.match(/^\s+/) ? '' : ' ',
             prefix = '#';
 
-        let hs = curr_ts.filter((tok) => {
+        let hs = curr_ts.filter((tok: any) => {
             return tok && tok.type && tok.type.match(/header/);
         });
-        let h1s = line.text.match(/^\s*=/) && curr_ts.filter((tok) => {
+        let h1s = line.text.match(/^\s*=/) && curr_ts.filter((tok: any) => {
             return tok && tok.type && tok.type.match(/header-1/) &&
                 tok.string === '=';
         });
-        let h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter((tok) => {
+        let h2s = line.text.match(/^\s*-{2}/) && curr_ts.filter((tok: any) => {
             return tok && tok.type && tok.type.match(/header-2/) &&
                 tok.string === '-';
         });
-        let h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter((tok) => {
+        let h6s = line.text.match(/^\s*#{6}/) && curr_ts.filter((tok: any) => {
             return tok && tok.type && tok.type.match(/header-6/) &&
                 tok.string === '#';
         });
@@ -250,9 +250,9 @@ export class MdEditorToolbar {
 
     private onHeaderClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
-            idx = beg;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
+            idx = beg as number;
 
         while (idx-- > 0) {
             if (val[idx] === '\n') {
@@ -313,7 +313,7 @@ export class MdEditorToolbar {
     private onBoldClickMirror() {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel) => {
+            this.ed.mirror.setSelections(selections.map((sel: any) => {
                 let lhs_mod = this.ed.mirror.getModeAt(sel.head),
                     rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
@@ -332,7 +332,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel) => {
+            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor,
                     sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -373,8 +373,8 @@ export class MdEditorToolbar {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
                     tok.type && tok.type.match(/em/)) {
-                    let lhs = this.lhs(cur, tok),
-                        rhs = this.rhs(cur, tok);
+                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
+                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
                     if (tok.type.match(/em/)) {
                         let src = this.ed.mirror.getRange(lhs, rhs),
                             tgt = `*${src}*`;
@@ -402,8 +402,8 @@ export class MdEditorToolbar {
 
     private onBoldClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -449,7 +449,7 @@ export class MdEditorToolbar {
     private onItalicClickMirror() {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel) => {
+            this.ed.mirror.setSelections(selections.map((sel: any) => {
                 let lhs_mod = this.ed.mirror.getModeAt(sel.head),
                     rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
@@ -468,7 +468,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel) => {
+            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor,
                     sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -504,8 +504,8 @@ export class MdEditorToolbar {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
                     tok.type && tok.type.match(/em/)) {
-                    let lhs = this.lhs(cur, tok),
-                        rhs = this.rhs(cur, tok);
+                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
+                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
                     let src = this.ed.mirror.getRange(lhs, rhs),
                         tgt = src.slice(1, -1);
                     this.ed.mirror.replaceRange(tgt, lhs, rhs);
@@ -526,8 +526,8 @@ export class MdEditorToolbar {
 
     private onItalicClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -573,7 +573,7 @@ export class MdEditorToolbar {
     private onCommentClickMirror() {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel) => {
+            this.ed.mirror.setSelections(selections.map((sel: any) => {
                 let lhs_mod = this.ed.mirror.getModeAt(sel.head),
                     rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
@@ -591,7 +591,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel) => {
+            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor,
                     sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -625,8 +625,8 @@ export class MdEditorToolbar {
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/comment/)) {
-                    let lhs = this.lhs(cur, tok),
-                        rhs = this.rhs(cur, tok);
+                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
+                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
                     let src = this.ed.mirror.getRange(lhs, rhs),
                         tgt = src.slice(1, -1);
                     this.ed.mirror.replaceRange(tgt, lhs, rhs);
@@ -647,8 +647,8 @@ export class MdEditorToolbar {
 
     private onCommentClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
 
         let px_1 = val.substring(0, beg),
             ix_1 = val.substring(beg, end),
@@ -697,8 +697,8 @@ export class MdEditorToolbar {
 
     private onIndentClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
             idx = beg - 1;
 
         while (idx >= 0 && val[idx] !== '\n') {
@@ -732,8 +732,8 @@ export class MdEditorToolbar {
 
     private onOutdentClickSimple() {
         let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd,
+            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
             idx = beg - 1;
 
         while (idx >= 0 && val[idx] !== '\n') {
@@ -783,7 +783,7 @@ export class MdEditorToolbar {
 
     private onSupscriptClickSimple() {
         let val = this.ed.$input.val() as string,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
 
         (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '^{ }')) {
@@ -821,7 +821,7 @@ export class MdEditorToolbar {
 
     private onSubscriptClickSimple() {
         let val = this.ed.$input.val() as string,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd;
+            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
 
         (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '~{ }')) {
@@ -835,7 +835,7 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
 
-    private lhs(cursor, token): { ch: number, line: number } {
+    private lhs(cursor: any, token: any): { ch: number, line: number } | null {
         if (this.ed.mirror) {
             let last = { line: cursor.line, ch: cursor.ch },
                 next = { line: cursor.line, ch: cursor.ch };
@@ -869,7 +869,7 @@ export class MdEditorToolbar {
         }
     }
 
-    private rhs(cursor, token): { ch: number, line: number } {
+    private rhs(cursor: any, token: any): { ch: number, line: number } | null {
         if (this.ed.mirror) {
             let last = { line: cursor.line, ch: cursor.ch },
                 next = { line: cursor.line, ch: cursor.ch };
@@ -999,7 +999,7 @@ export class MdEditorToolbar {
         this._clipboard = value;
     }
 
-    private _clipboard: string; //@TODO: [I]Clipboard?
+    private _clipboard: string | undefined; //@TODO: [I]Clipboard?
     private _scroll: any;
 }
 

@@ -7,7 +7,7 @@ export class AssertException {
         return 'AssertException: ' + this.message;
     }
 
-    private message: string;
+    private message: string | undefined;
 }
 
 export function assert(expression: any, message?: string) {

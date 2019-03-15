@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Allows to bind any *consecutive and initial* arguments, e.g. from a function
  *

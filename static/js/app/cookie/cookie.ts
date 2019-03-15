@@ -1,6 +1,6 @@
 export interface ICookie {
     set: <T>(name: string, value: T, expiry_ms?: number) => T;
-    get: <T>(name: string, value?: T) => T;
+    get: <T>(name: string, value?: T) => T | undefined;
 }
 
 class Cookie implements ICookie {
@@ -21,7 +21,7 @@ class Cookie implements ICookie {
         return Cookie.set(name, value, expiry_ms);
     }
 
-    public static get<T>(name: string, value?: T): T {
+    public static get<T>(name: string, value?: T): T | undefined {
         let cookies = document.cookie.split(';'),
             cookie_name = name + '=',
             string;
@@ -46,7 +46,7 @@ class Cookie implements ICookie {
         }
     }
 
-    public get<T>(name: string, value?: T): T {
+    public get<T>(name: string, value?: T): T | undefined {
         return Cookie.get(name, value);
     }
 }

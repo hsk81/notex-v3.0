@@ -1,7 +1,7 @@
 import GoogleApi from "./google-api";
 
 export class BloggerApi {
-    public static get me(): BloggerApi {
+    public static get me(this: any): BloggerApi {
         if (this['_me'] === undefined) {
             this['_me'] = new BloggerApi();
         }
@@ -16,7 +16,7 @@ export class BloggerApi {
     }
 
     public get(callback: Function, ms: number = 2048, n: number = 2) {
-        GoogleApi.me.get((gapi) => {
+        GoogleApi.me.get((gapi: any) => {
 
             if (gapi) {
                 let timeout_id1 = setTimeout(() => {
@@ -27,13 +27,13 @@ export class BloggerApi {
                     }
                 }, ms);
 
-                let on_fail = (res) => {
+                let on_fail = (res: any) => {
                     if (timeout_id1) clearTimeout(timeout_id1);
                     console.error('[with:google-api/fail]', res);
                     callback(false);
                 };
 
-                let on_done = (res) => {
+                let on_done = (res: any) => {
                     if (timeout_id1) {
                         clearTimeout(timeout_id1);
                     }

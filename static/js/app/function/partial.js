@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Allows to bind *any* argument using their names rather their positions; this
  * approach is more flexible if the initial arguments are to be left unbound.

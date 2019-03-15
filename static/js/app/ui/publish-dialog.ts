@@ -14,7 +14,7 @@ declare const $: JQueryStatic;
 @trace
 @named('PublishDialog')
 export class PublishDialog {
-    public static get me(): PublishDialog {
+    public static get me(this: any): PublishDialog {
         if (this['_me'] === undefined) {
             this['_me'] = window['PUBLISH_DIALOG'] = new PublishDialog();
         }
@@ -22,7 +22,7 @@ export class PublishDialog {
     }
 
     private get blogUrl(): string {
-        return cookie.get<string>('blog-url');
+        return cookie.get<string>('blog-url') as string;
     }
 
     private set blogUrl(value: string) {
@@ -30,7 +30,7 @@ export class PublishDialog {
     }
 
     private get scripts(): string {
-        return localStorage.getItem('post-scripts');
+        return localStorage.getItem('post-scripts') as string;
     }
 
     private set scripts(value: string) {
@@ -38,7 +38,7 @@ export class PublishDialog {
     }
 
     private get scriptsFlag(): boolean {
-        return cookie.get<boolean>('post-scripts-flag', true);
+        return cookie.get<boolean>('post-scripts-flag', true) as boolean;
     }
 
     private set scriptsFlag(value: boolean) {
@@ -46,7 +46,7 @@ export class PublishDialog {
     }
 
     private get styles(): string {
-        return localStorage.getItem('post-styles');
+        return localStorage.getItem('post-styles') as string;
     }
 
     private set styles(value: string) {
@@ -54,7 +54,7 @@ export class PublishDialog {
     }
 
     private get stylesFlag(): boolean {
-        return cookie.get<boolean>('post-styles-flag', true);
+        return cookie.get<boolean>('post-styles-flag', true) as boolean;
     }
 
     private set stylesFlag(value: boolean) {
@@ -195,8 +195,8 @@ export class PublishDialog {
         this.$post_scripts_textarea.focus();
     }
 
-    private onScriptsCheckboxClick(ev) {
-        this.scriptsFlag = $(ev.target).prop('checked');
+    private onScriptsCheckboxClick(ev: MouseEvent) {
+        this.scriptsFlag = $(ev.target as any).prop('checked');
     }
 
     private onStylesNavClick() {
@@ -207,8 +207,8 @@ export class PublishDialog {
         this.$post_styles_textarea.focus();
     }
 
-    private onStylesCheckboxClick(ev) {
-        this.stylesFlag = $(ev.target).prop('checked');
+    private onStylesCheckboxClick(ev: MouseEvent) {
+        this.stylesFlag = $(ev.target as any).prop('checked');
     }
 
     private onPrimaryClick() {
@@ -240,14 +240,14 @@ export class PublishDialog {
         } else if ($post_title_ig.hasClass('has-error')) {
             $post_title.focus();
         } else {
-            BloggerApi.me.get((blogger) => {
-                let on_done = (res) => {
+            BloggerApi.me.get((blogger: any) => {
+                let on_done = (res: any) => {
                     let blog = assert(res && res.result),
                         update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
-                        let on_done = (res) => {
+                        let on_done = (res: any) => {
                             let posts = res.result && res.result.items || [],
-                                post = posts.find((p) => {
+                                post = posts.find((p: any) => {
                                     return p.title === title;
                                 });
                             if (post !== undefined) {
@@ -256,7 +256,7 @@ export class PublishDialog {
                                 this.doInsert(blogger, blog, title);
                             }
                         };
-                        let on_fail = (res) => {
+                        let on_fail = (res: any) => {
                             console.error('[on:blogger.posts.list]', res);
                         };
                         let all_request = blogger.posts.list({
@@ -268,7 +268,7 @@ export class PublishDialog {
                         this.doInsert(blogger, blog, title);
                     }
                 };
-                let on_fail = (res) => {
+                let on_fail = (res: any) => {
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', () => {
                         let url = $blog_url.val();
@@ -318,14 +318,14 @@ export class PublishDialog {
         }
     }
 
-    private doInsert(blogger, blog, title) {
-        let on_done = (res) => {
+    private doInsert(blogger: any, blog: any, title: any) {
+        let on_done = (res: any) => {
             let url = assert(res.result.url),
                 id = assert(res.result.id);
             let tab = open(url, 'post:' + id);
-            if (tab !== undefined) tab.focus();
+            if (tab) tab.focus();
         };
-        let on_fail = (res) => {
+        let on_fail = (res: any) => {
             console.error('[on:blogger.posts.insert]', res);
         };
         let insert_req = blogger.posts.insert({
@@ -337,14 +337,14 @@ export class PublishDialog {
         insert_req.then(on_done, on_fail);
     }
 
-    private doUpdate(blogger, blog, post) {
-        let on_done = (res) => {
+    private doUpdate(blogger: any, blog: any, post: any) {
+        let on_done = (res: any) => {
             let url = assert(res.result.url),
                 id = assert(res.result.id);
             let tab = open(url, 'post:' + id);
-            if (tab !== undefined) tab.focus();
+            if (tab) tab.focus();
         };
-        let on_fail = (res) => {
+        let on_fail = (res: any) => {
             console.error('[on:blogger.posts.update]', res);
         };
         let update_req = blogger.posts.update({
@@ -381,7 +381,7 @@ export class PublishDialog {
         }
     }
 
-    private toHtml(md_content, with_header?) {
+    private toHtml(md_content: any, with_header?: any) {
         let $content = $('<div>', {
             html: MarkdownIt.me.render(md_content)
         });

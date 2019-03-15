@@ -6,7 +6,7 @@ interface Window {
 declare let window: Window;
 
 export class GoogleApi {
-    public static get me(): GoogleApi {
+    public static get me(this: any): GoogleApi {
         if (this['_me'] === undefined) {
             this['_me'] = new GoogleApi();
         }

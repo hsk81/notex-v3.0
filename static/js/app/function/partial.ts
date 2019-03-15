@@ -21,24 +21,24 @@ interface Function {
 
 Function.prototype.partial = function (): Function {
     let args = (arguments.length > 0) ? arguments[0] : {},
-        negs = {},
+        negs = {} as any,
         func = this;
 
     let str = func.toString(),
         lhs = str.indexOf('(') + 1,
         rhs = str.indexOf(')'),
-        names = str.slice(lhs, rhs).match(/([^\s,]+)/g);
+        names = str.slice(lhs, rhs).match(/([^\s,]+)/g) as any;
 
     let i = 0;
 
-    names.every(function (value) {
+    names.every(function (value: any) {
         if (value in args === false) {
             negs[i++] = value;
         }
         return true;
     });
 
-    return function () {
+    return function (this: any) {
         let union = [];
         for (let i in arguments) {
             if (arguments.hasOwnProperty(i)) {

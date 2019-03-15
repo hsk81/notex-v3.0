@@ -1,5 +1,5 @@
 export function seq(...fns: Function[]) {
-    return function (...args: any[]) {
+    return function (this: any, ...args: any[]) {
         fns.forEach((fn: Function) => {
             fn.apply(this, args)
         });

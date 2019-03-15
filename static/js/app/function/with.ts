@@ -20,7 +20,7 @@ Function.prototype.with = function (): Function {
         args = slice.call(arguments),
         func = this;
 
-    return function () {
+    return function (this: any) {
         return func.apply(this, args.concat(slice.call(arguments)));
     };
 };

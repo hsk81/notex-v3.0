@@ -26,7 +26,7 @@ declare const $: JQueryStatic;
 @trace
 @named('MdEditor')
 export class MdEditor {
-    public static get me(): MdEditor {
+    public static get me(this: any): MdEditor {
         if (this['_me'] === undefined) {
             this['_me'] = window['MD_EDITOR'] = new MdEditor();
         }
@@ -61,10 +61,10 @@ export class MdEditor {
                 } as any
             ));
             this.mirror.setOption('extraKeys', {
-                'Tab': (cm) => {
+                'Tab': (cm: any) => {
                     cm.execCommand('indentMore');
                 },
-                'Shift-Tab': (cm) => {
+                'Shift-Tab': (cm: any) => {
                     cm.execCommand('indentLess');
                 }
             });
@@ -119,7 +119,7 @@ export class MdEditor {
     @buffered(600)
     public render() {
         let $output = $('#output'),
-            $cached;
+            $cached: JQuery<HTMLElement>;
 
         let value = this.getValue();
         if (value !== this._mdOld) {
@@ -229,8 +229,8 @@ export class MdEditor {
             return this.mirror.getSelection();
         } else {
             let inp = this.$input[0] as HTMLInputElement,
-                beg = inp.selectionStart,
-                end = inp.selectionEnd;
+                beg = inp.selectionStart as number,
+                end = inp.selectionEnd as number;
 
             return inp.value.substring(beg, end);
         }
@@ -275,22 +275,22 @@ export class MdEditor {
     }
 
     public get simple(): boolean {
-        return cookie.get<boolean>('simple', false);
+        return cookie.get<boolean>('simple', false) as boolean;
     }
 
     public set simple(value: boolean) {
         cookie.set<boolean>('simple', value);
     }
 
-    private set spellChecker(value: SpellChecker) {
+    private set spellChecker(value: SpellChecker | undefined) {
         this._spellChecker = value;
     }
 
-    private get spellCheckerOverlay(): IOverlay {
+    private get spellCheckerOverlay(): IOverlay | undefined {
         return this._spellCheckerOverlay;
     }
 
-    private set spellCheckerOverlay(value: IOverlay) {
+    private set spellCheckerOverlay(value: IOverlay | undefined) {
         this._spellCheckerOverlay = value;
     }
 
@@ -315,8 +315,8 @@ export class MdEditor {
                 }
             });
         } else {
-            this.spellChecker = null;
-            this.spellCheckerOverlay = null;
+            this.spellChecker = undefined;
+            this.spellCheckerOverlay = undefined;
             if (this.mirror) {
                 this.mirror.removeOverlay('spell-checker');
             }
@@ -343,7 +343,7 @@ export class MdEditor {
             }
         }
         return {
-            token: function (stream) {
+            token: function (stream: any) {
                 query.lastIndex = stream.pos;
                 let match = query.exec(stream.string);
                 if (match && match.index == stream.pos) {
@@ -358,15 +358,15 @@ export class MdEditor {
         };
     };
 
-    private get searchOverlay(): IOverlay {
+    private get searchOverlay(): IOverlay | undefined {
         return this._searchOverlay;
     }
 
-    private set searchOverlay(value: IOverlay) {
+    private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
 
-    public search(query) {
+    public search(query: any) {
         if (this.mirror) {
             if (this.searchOverlay) {
                 this.mirror.removeOverlay('search')
@@ -380,11 +380,11 @@ export class MdEditor {
         }
     }
 
-    private _spellCheckerOverlay: IOverlay;
-    private _spellChecker: SpellChecker;
-    private _searchOverlay: IOverlay;
-    private _timeoutId: number;
-    private _mdOld: string;
+    private _spellCheckerOverlay: IOverlay | undefined;
+    private _spellChecker: SpellChecker | undefined;
+    private _searchOverlay: IOverlay | undefined;
+    private _timeoutId: number | undefined;
+    private _mdOld: string | undefined;
 }
 
 export default MdEditor;
