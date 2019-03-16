@@ -1,56 +1,58 @@
-export interface IBufferedFunction extends Function {
-    cancel: Function;
-}
-
 export function buffered(
-    ms: number): Function;
+    ms: number,
+): MethodDecorator;
 export function buffered(
-    target: any, key: string, descriptor?: PropertyDescriptor): void;
+    tgt: any, key: string|symbol, tpd?: PropertyDescriptor
+): PropertyDescriptor|void;
 export function buffered(
-    arg: number | any, key?: string, descriptor?: PropertyDescriptor
-): Function | void {
-    if (typeof arg === 'number') {
+    arg: number|any, key?: string|symbol, tpd?: PropertyDescriptor
+) {
+    if (typeof arg === "number") {
         return _buffered(arg);
     } else {
-        _buffered(200)(<any>arg, key as string, descriptor);
+        return _buffered()(
+            arg as any,
+            key as string|symbol,
+            tpd as PropertyDescriptor
+        );
     }
 }
-
-function _buffered(ms: number) {
-    return function (
-        target: any, key: string, descriptor?: PropertyDescriptor
-    ) {
-        let fn: Function = descriptor ? descriptor.value : target[key],
-            id: number | undefined;
-        let bn: Function = function (this: any, ...args: any[]) {
-            if (id !== undefined) {
-                clearTimeout(id);
-                id = undefined;
-            }
-            if (id === undefined) {
-                id = setTimeout(() => {
-                    fn.apply(this, args);
-                    id = undefined;
-                }, ms) as any;
-            }
-        };
-        for (let el in fn) {
-            if (fn.hasOwnProperty(el)) {
-                (<any>bn)[el] = (<any>fn)[el];
-            }
-        }
-        (<IBufferedFunction>bn).cancel = function () {
-            if (id !== undefined) {
-                clearTimeout(id);
-                id = undefined;
-            }
-        };
-        if (descriptor) {
-            descriptor.value = bn;
+function _buffered(ms?: number): MethodDecorator {
+    return (
+        tgt: any, key: string|symbol, tpd?: PropertyDescriptor,
+    ): PropertyDescriptor|void => {
+        if (tpd) {
+            tpd.value = buffer(tpd.value, ms);
+            return tpd;
         } else {
-            target[key] = bn;
+            tgt[key] = buffer(tgt[key], ms);
         }
     };
+}
+
+export interface ICancelableFunction {
+    (this: any, ...args: any[]): Promise<any>;
+}
+export interface ICancelableFunction {
+    cancel: () => void;
+}
+export function buffer(
+    fn: Function, ms: number = 200
+): ICancelableFunction {
+    let id: any;
+    const bn = function(
+        this: any, ...args: any[]
+    ): Promise<any> {
+        return new Promise((resolve) => {
+            clearTimeout(id); id = setTimeout(
+                () => resolve(fn.apply(this, args)), ms,
+            );
+        });
+    };
+    (bn as ICancelableFunction).cancel = () => {
+        clearTimeout(id);
+    };
+    return bn as ICancelableFunction;
 }
 
 export default buffered;
