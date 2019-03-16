@@ -20,6 +20,9 @@ import * as snabbdom_style from '@npm/snabbdom/modules/style';
 import { toVNode } from '@npm/snabbdom/tovnode';
 import { VNode } from "@npm/snabbdom/vnode";
 
+window['VDOM'] = snabbdom;
+window['VDOM_TO_VNODE'] = toVNode;
+
 import "./md-editor-mode";
 
 declare const CodeMirror: {
@@ -149,23 +152,28 @@ export class MdEditor {
             });
         }
         if (value.length > 0 && value !== this._mdOld) {
-            const vrender = (vnodes: VNode[] = []) => {
-                $cached.children().each(function (this: Node) {
-                    vnodes.push(toVNode(this));
-                });
-                this.vnode = this.patch(this.vnode ? this.vnode
-                    : $output[0], snabbdom.h('div#output', vnodes));
+            const render = () => {
+                const new_vnode = snabbdom.h(
+                    'div#output', toVNode($cached[0]).children
+                );
+                const old_vnode = (
+                    this.vnode ? this.vnode : $output[0]
+                );
+                this.vnode = this.patch(old_vnode, new_vnode);
             };
             $cached.html(MarkdownIt.me.render(value));
-            if (typeof MathJax !== 'undefined') {
+            if (typeof MathJax !== 'undefined') try {
                 const math_jax = MathJax as any;
                 math_jax.Hub.Queue([
                     'resetEquationNumbers', math_jax.InputJax.TeX
                 ], [
-                    'Typeset', math_jax.Hub, 'cached', vrender
+                    'Typeset', math_jax.Hub, 'cached', render
                 ]);
+            } catch (ex) {
+                console.error(ex);
+                render();
             } else {
-                vrender();
+                render();
             }
         }
         if (value.length > 0 && value !== this._mdOld) {
@@ -271,7 +279,6 @@ export class MdEditor {
     public get simple(): boolean {
         return cookie.get<boolean>('simple', false) as boolean;
     }
-
     public set simple(value: boolean) {
         cookie.set<boolean>('simple', value);
     }
@@ -283,7 +290,6 @@ export class MdEditor {
     private get spellCheckerOverlay(): IOverlay | undefined {
         return this._spellCheckerOverlay;
     }
-
     private set spellCheckerOverlay(value: IOverlay | undefined) {
         this._spellCheckerOverlay = value;
     }
@@ -355,7 +361,6 @@ export class MdEditor {
     private get searchOverlay(): IOverlay | undefined {
         return this._searchOverlay;
     }
-
     private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
@@ -377,17 +382,14 @@ export class MdEditor {
     private get patch(): any {
         return window['VDOM_PATCH'];
     }
-
     private set patch(value: any) {
         window['VDOM_PATCH'] = value;
     }
-
     private get vnode(): VNode | undefined {
-        return window['VDOM_NODE'] as VNode;
+        return window['VDOM_VNODE'] as VNode;
     }
-
     private set vnode(value: VNode | undefined) {
-        window['VDOM_NODE'] = value;
+        window['VDOM_VNODE'] = value;
     }
 
     private _spellCheckerOverlay: IOverlay | undefined;

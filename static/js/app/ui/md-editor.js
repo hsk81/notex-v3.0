@@ -12,6 +12,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
     Object.defineProperty(exports, "__esModule", { value: true });
     var MdEditor_1;
     "use strict";
+    window['VDOM'] = snabbdom;
+    window['VDOM_TO_VNODE'] = tovnode_1.toVNode;
     let MdEditor = MdEditor_1 = class MdEditor {
         constructor() {
             this.patch = snabbdom.init([
@@ -114,24 +116,27 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 });
             }
             if (value.length > 0 && value !== this._mdOld) {
-                const vrender = (vnodes = []) => {
-                    $cached.children().each(function () {
-                        vnodes.push(tovnode_1.toVNode(this));
-                    });
-                    this.vnode = this.patch(this.vnode ? this.vnode
-                        : $output[0], snabbdom.h('div#output', vnodes));
+                const render = () => {
+                    const new_vnode = snabbdom.h('div#output', tovnode_1.toVNode($cached[0]).children);
+                    const old_vnode = (this.vnode ? this.vnode : $output[0]);
+                    this.vnode = this.patch(old_vnode, new_vnode);
                 };
                 $cached.html(markdown_it_1.MarkdownIt.me.render(value));
-                if (typeof MathJax !== 'undefined') {
-                    const math_jax = MathJax;
-                    math_jax.Hub.Queue([
-                        'resetEquationNumbers', math_jax.InputJax.TeX
-                    ], [
-                        'Typeset', math_jax.Hub, 'cached', vrender
-                    ]);
-                }
+                if (typeof MathJax !== 'undefined')
+                    try {
+                        const math_jax = MathJax;
+                        math_jax.Hub.Queue([
+                            'resetEquationNumbers', math_jax.InputJax.TeX
+                        ], [
+                            'Typeset', math_jax.Hub, 'cached', render
+                        ]);
+                    }
+                    catch (ex) {
+                        console.error(ex);
+                        render();
+                    }
                 else {
-                    vrender();
+                    render();
                 }
             }
             if (value.length > 0 && value !== this._mdOld) {
@@ -326,10 +331,10 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             window['VDOM_PATCH'] = value;
         }
         get vnode() {
-            return window['VDOM_NODE'];
+            return window['VDOM_VNODE'];
         }
         set vnode(value) {
-            window['VDOM_NODE'] = value;
+            window['VDOM_VNODE'] = value;
         }
     };
     __decorate([
