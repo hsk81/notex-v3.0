@@ -383,7 +383,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         });
         var MdEditor_1;
         __decorate([
-            buffered_1.buffered(200),
+            buffered_1.buffered(600),
             __metadata("design:type", Function),
             __metadata("design:paramtypes", []),
             __metadata("design:returntype", void 0)

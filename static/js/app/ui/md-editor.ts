@@ -133,7 +133,7 @@ export class MdEditor {
         return this.$input;
     }
 
-    @buffered(200)
+    @buffered(600)
     public render() {
         let $output = $('#output'),
             $cached = $('#cached');
