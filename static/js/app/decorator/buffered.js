@@ -12,25 +12,20 @@ define(["require", "exports"], function (require, exports) {
     exports.buffered = buffered;
     function _buffered(ms) {
         return function (target, key, descriptor) {
-            var fn = descriptor ? descriptor.value : target[key], id;
-            var bn = function () {
-                var _this = this;
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
+            let fn = descriptor ? descriptor.value : target[key], id;
+            let bn = function (...args) {
                 if (id !== undefined) {
                     clearTimeout(id);
                     id = undefined;
                 }
                 if (id === undefined) {
-                    id = setTimeout(function () {
-                        fn.apply(_this, args);
+                    id = setTimeout(() => {
+                        fn.apply(this, args);
                         id = undefined;
                     }, ms);
                 }
             };
-            for (var el in fn) {
+            for (let el in fn) {
                 if (fn.hasOwnProperty(el)) {
                     bn[el] = fn[el];
                 }

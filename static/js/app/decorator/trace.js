@@ -12,14 +12,14 @@ define(["require", "exports"], function (require, exports) {
     exports.trace = trace;
     function _trace(flag) {
         return function (ctor) {
-            Object.keys(ctor.prototype).forEach(function (key) {
-                var dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
+            Object.keys(ctor.prototype).forEach((key) => {
+                const dtor = Object.getOwnPropertyDescriptor(ctor.prototype, key);
                 if (dtor && typeof dtor.value === "function") {
                     _traceable(flag)(ctor.prototype, key);
                 }
             });
-            Object.keys(ctor).forEach(function (key) {
-                var dtor = Object.getOwnPropertyDescriptor(ctor, key);
+            Object.keys(ctor).forEach((key) => {
+                const dtor = Object.getOwnPropertyDescriptor(ctor, key);
                 if (dtor && typeof dtor.value === "function") {
                     _traceable(flag)(ctor, key);
                 }
@@ -37,38 +37,34 @@ define(["require", "exports"], function (require, exports) {
     exports.traceable = traceable;
     function _traceable(flag) {
         return function (target, key, dtor) {
-            var wrap = function (fn, callback) {
-                var gn = fn;
+            const wrap = (fn, callback) => {
+                const gn = fn;
                 if (!flag) {
                     gn._traced = false;
                 }
                 else {
                     if (gn._traced === undefined) {
                         gn._traced = true;
-                        var tn = function () {
-                            var args = [];
-                            for (var _i = 0; _i < arguments.length; _i++) {
-                                args[_i] = arguments[_i];
-                            }
-                            var name = target._named ||
+                        const tn = function (...args) {
+                            const name = target._named ||
                                 target.constructor &&
                                     target.constructor.name || "@";
-                            setTimeout(function () {
-                                console.group(name + "." + key);
+                            setTimeout(() => {
+                                console.group(`${name}.${key}`);
                                 if (args.length > 0) {
-                                    console.debug.apply(console, args);
+                                    console.debug(...args);
                                 }
                                 if (result !== undefined) {
                                     console.debug(result);
                                 }
                             }, 0);
-                            var result = gn.apply(this, args);
-                            setTimeout(function () {
+                            const result = gn.apply(this, args);
+                            setTimeout(() => {
                                 console.groupEnd();
                             }, 0);
                             return result;
                         };
-                        for (var el in gn) {
+                        for (const el in gn) {
                             if (gn.hasOwnProperty(el)) {
                                 tn[el] = gn[el];
                             }
@@ -79,25 +75,25 @@ define(["require", "exports"], function (require, exports) {
             };
             if (dtor) {
                 if (typeof dtor.value === 'function') {
-                    wrap(dtor.value, function (tn) {
+                    wrap(dtor.value, (tn) => {
                         dtor.value = tn;
                     });
                 }
                 else {
                     if (typeof dtor.get === 'function') {
-                        wrap(dtor.get, function (tn) {
+                        wrap(dtor.get, (tn) => {
                             dtor.get = tn;
                         });
                     }
                     if (typeof dtor.set === 'function') {
-                        wrap(dtor.set, function (tn) {
+                        wrap(dtor.set, (tn) => {
                             dtor.set = tn;
                         });
                     }
                 }
             }
             else {
-                wrap(target[key], function (tn) {
+                wrap(target[key], (tn) => {
                     target[key] = tn;
                 });
             }

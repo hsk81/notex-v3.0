@@ -10,71 +10,64 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../decorator/named", "../decorator/trace"], function (require, exports, named_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Command = /** @class */ (function () {
-        function Command(redo, undo) {
-            var _this = this;
-            this.redo = function () { redo(); return _this; };
-            this.undo = function () { undo(); return _this; };
+    var Commands_1;
+    "use strict";
+    class Command {
+        constructor(redo, undo) {
+            this.redo = () => { redo(); return this; };
+            this.undo = () => { undo(); return this; };
         }
-        return Command;
-    }());
+    }
     exports.Command = Command;
-    var Commands = /** @class */ (function () {
-        function Commands() {
+    let Commands = Commands_1 = class Commands {
+        constructor() {
             this._redone = [];
             this._undone = [];
         }
-        Commands_1 = Commands;
-        Object.defineProperty(Commands, "me", {
-            get: function () {
-                if (this['_me'] === undefined) {
-                    this['_me'] = new Commands_1();
-                }
-                return this['_me'];
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Commands.prototype.add = function (command) {
-            var ex_command = command, re_command = Commands_1.top(this._redone);
+        static get me() {
+            if (this['_me'] === undefined) {
+                this['_me'] = new Commands_1();
+            }
+            return this['_me'];
+        }
+        add(command) {
+            let ex_command = command, re_command = Commands_1.top(this._redone);
             if (re_command) {
                 ex_command.link = re_command;
             }
             this._redone.push(ex_command);
-        };
-        Commands.prototype.run = function (command) {
-            var ex_command = command, re_command = Commands_1.top(this._redone);
+        }
+        run(command) {
+            let ex_command = command, re_command = Commands_1.top(this._redone);
             if (re_command) {
                 ex_command.link = re_command;
             }
             this._redone.push(ex_command.redo());
-        };
-        Commands.prototype.undo = function () {
-            var ex_command = Commands_1.pop(this._redone);
+        }
+        undo() {
+            let ex_command = Commands_1.pop(this._redone);
             if (ex_command) {
                 this._undone.push(ex_command.undo());
             }
-        };
-        Commands.prototype.redo = function () {
-            var re_command = Commands_1.top(this._redone), un_command = Commands_1.pop(this._undone);
+        }
+        redo() {
+            let re_command = Commands_1.top(this._redone), un_command = Commands_1.pop(this._undone);
             if (un_command && un_command.link === re_command) {
                 this._redone.push(un_command.redo());
             }
-        };
-        Commands.top = function (array) {
+        }
+        static top(array) {
             return array[array.length - 1];
-        };
-        Commands.pop = function (array) {
+        }
+        static pop(array) {
             return array.pop();
-        };
-        var Commands_1;
-        Commands = Commands_1 = __decorate([
-            trace_1.trace,
-            named_1.named('Commands'),
-            __metadata("design:paramtypes", [])
-        ], Commands);
-        return Commands;
-    }());
+        }
+    };
+    Commands = Commands_1 = __decorate([
+        trace_1.trace,
+        named_1.named('Commands'),
+        __metadata("design:paramtypes", [])
+    ], Commands);
     exports.Commands = Commands;
     exports.default = Commands;
 });

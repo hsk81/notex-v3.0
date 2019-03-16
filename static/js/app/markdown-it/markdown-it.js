@@ -4,8 +4,14 @@ define(["require", "exports"], function (require, exports) {
     /**
      * @see: https://markdown-it.github.io/markdown-it/
      */
-    var MarkdownIt = /** @class */ (function () {
-        function MarkdownIt() {
+    class MarkdownIt {
+        static get me() {
+            if (this['_me'] === undefined) {
+                this['_me'] = window['MARKDOWN_IT'] = new MarkdownIt();
+            }
+            return this['_me'];
+        }
+        constructor() {
             this._mdi = new markdownit({
                 highlight: function (text, language) {
                     if (language && hljs.getLanguage(language)) {
@@ -58,24 +64,13 @@ define(["require", "exports"], function (require, exports) {
             this._mdi.use(markdownitSup);
             this._mdi.use(markdownitVideo);
         }
-        Object.defineProperty(MarkdownIt, "me", {
-            get: function () {
-                if (this['_me'] === undefined) {
-                    this['_me'] = window['MARKDOWN_IT'] = new MarkdownIt();
-                }
-                return this['_me'];
-            },
-            enumerable: true,
-            configurable: true
-        });
         /**
          * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
          */
-        MarkdownIt.prototype.render = function (src, env) {
+        render(src, env) {
             return this._mdi.render(src, env);
-        };
-        return MarkdownIt;
-    }());
+        }
+    }
     exports.MarkdownIt = MarkdownIt;
     exports.default = MarkdownIt;
 });

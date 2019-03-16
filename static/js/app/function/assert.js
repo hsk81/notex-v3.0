@@ -1,15 +1,14 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var AssertException = /** @class */ (function () {
-        function AssertException(message) {
+    class AssertException {
+        constructor(message) {
             this.message = message;
         }
-        AssertException.prototype.toString = function () {
+        toString() {
             return 'AssertException: ' + this.message;
-        };
-        return AssertException;
-    }());
+        }
+    }
     exports.AssertException = AssertException;
     function assert(expression, message) {
         if (!expression) {

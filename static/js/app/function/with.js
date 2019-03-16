@@ -12,7 +12,7 @@
  * curry operation, where `gn` would be invoked like `gn (val{n-2}, val{n-1})`.
  */
 Function.prototype.with = function () {
-    var slice = Array.prototype.slice, args = slice.call(arguments), func = this;
+    let slice = Array.prototype.slice, args = slice.call(arguments), func = this;
     return function () {
         return func.apply(this, args.concat(slice.call(arguments)));
     };

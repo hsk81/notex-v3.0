@@ -10,8 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var MdEditor = /** @class */ (function () {
-        function MdEditor() {
+    var MdEditor_1;
+    "use strict";
+    let MdEditor = MdEditor_1 = class MdEditor {
+        constructor() {
             this.patch = snabbdom.init([
                 snabbdom_attrs.default,
                 snabbdom_class.default,
@@ -33,18 +35,13 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 this.toMirror();
             }
         }
-        MdEditor_1 = MdEditor;
-        Object.defineProperty(MdEditor, "me", {
-            get: function () {
-                if (this['_me'] === undefined) {
-                    this['_me'] = window['MD_EDITOR'] = new MdEditor_1();
-                }
-                return this['_me'];
-            },
-            enumerable: true,
-            configurable: true
-        });
-        MdEditor.prototype.toMirror = function () {
+        static get me() {
+            if (this['_me'] === undefined) {
+                this['_me'] = window['MD_EDITOR'] = new MdEditor_1();
+            }
+            return this['_me'];
+        }
+        toMirror() {
             if (!this.mirror) {
                 this.setMirror(CodeMirror.fromTextArea(document.getElementById('input'), {
                     addModeClass: true,
@@ -56,10 +53,10 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     undoDepth: 4096
                 }));
                 this.mirror.setOption('extraKeys', {
-                    'Tab': function (cm) {
+                    'Tab': (cm) => {
                         cm.execCommand('indentMore');
                     },
-                    'Shift-Tab': function (cm) {
+                    'Shift-Tab': (cm) => {
                         cm.execCommand('indentLess');
                     }
                 });
@@ -73,8 +70,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             this.simple = false;
             this.$input.hide();
             return this.mirror;
-        };
-        MdEditor.prototype.toInput = function (options) {
+        }
+        toInput(options) {
             if (this.mirror) {
                 if (this.spellCheckerOverlay) {
                     this.mirror.removeOverlay(this.spellCheckerOverlay);
@@ -102,33 +99,31 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             }
             this.simple = true;
             return this.$input;
-        };
-        MdEditor.prototype.render = function () {
-            var _this = this;
-            var $output = $('#output'), $cached = $('#cached');
+        }
+        render() {
+            let $output = $('#output'), $cached = $('#cached');
             if (!this._mdOld || this._mdOld.length === 0) {
                 $output.empty();
             }
-            var value = this.getValue();
+            let value = this.getValue();
             if (value.length === 0) {
-                $.get('/static/html/output-placeholder.html').done(function (html) {
+                $.get('/static/html/output-placeholder.html').done((html) => {
                     $output.html(html);
                     $output.find('>*').hide().fadeIn('fast');
-                    _this.vnode = undefined;
+                    this.vnode = undefined;
                 });
             }
             if (value.length > 0 && value !== this._mdOld) {
-                var vrender = function (vnodes) {
-                    if (vnodes === void 0) { vnodes = []; }
+                const vrender = (vnodes = []) => {
                     $cached.children().each(function () {
                         vnodes.push(tovnode_1.toVNode(this));
                     });
-                    _this.vnode = _this.patch(_this.vnode ? _this.vnode
+                    this.vnode = this.patch(this.vnode ? this.vnode
                         : $output[0], snabbdom.h('div#output', vnodes));
                 };
                 $cached.html(markdown_it_1.default.me.render(value));
                 if (typeof MathJax !== 'undefined') {
-                    var math_jax = MathJax;
+                    const math_jax = MathJax;
                     math_jax.Hub.Queue([
                         'resetEquationNumbers', math_jax.InputJax.TeX
                     ], [
@@ -140,36 +135,36 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 }
             }
             if (value.length > 0 && value !== this._mdOld) {
-                var $header = $cached.find(':header');
+                const $header = $cached.find(':header');
                 download_manager_1.default.me.title = $header.length === 0
-                    ? new Date().toISOString() + ".md"
-                    : $($header[0]).text() + ".md";
+                    ? `${new Date().toISOString()}.md`
+                    : `${$($header[0]).text()}.md`;
                 download_manager_1.default.me.content = value;
             }
             this._mdOld = value;
-        };
-        MdEditor.prototype.refresh = function () {
+        }
+        refresh() {
             if (this.mirror) {
                 this.mirror.refresh();
             }
-        };
-        MdEditor.prototype.focus = function () {
+        }
+        focus() {
             if (this.mirror) {
                 this.mirror.focus();
             }
             else {
                 this.$input.focus();
             }
-        };
-        MdEditor.prototype.getValue = function () {
+        }
+        getValue() {
             if (this.mirror) {
                 return this.mirror.getValue();
             }
             else {
                 return this.$input.val();
             }
-        };
-        MdEditor.prototype.setValue = function (value) {
+        }
+        setValue(value) {
             if (this.mirror) {
                 return this.mirror.setValue(value);
             }
@@ -183,20 +178,20 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     .setSelectionRange(0, 0);
                 this.$input.trigger('change');
             }
-        };
-        MdEditor.prototype.getSelection = function () {
+        }
+        getSelection() {
             if (this.mirror) {
                 return this.mirror.getSelection();
             }
             else {
-                var inp = this.$input[0], beg = inp.selectionStart, end = inp.selectionEnd;
+                let inp = this.$input[0], beg = inp.selectionStart, end = inp.selectionEnd;
                 return inp.value.substring(beg, end);
             }
-        };
-        MdEditor.prototype.onEditorChange = function () {
+        }
+        onEditorChange() {
             if (typeof MathJax === 'undefined')
                 try {
-                    var script = document.createElement('script'), head = document.getElementsByTagName('head');
+                    let script = document.createElement('script'), head = document.getElementsByTagName('head');
                     script.type = 'text/javascript';
                     script.src = this.mathjaxUrl;
                     script.async = true;
@@ -206,85 +201,52 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     console.error(ex);
                 }
             this.render();
-        };
-        Object.defineProperty(MdEditor.prototype, "mathjaxUrl", {
-            get: function () {
-                return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "$input", {
-            get: function () {
-                return $('#input');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "$footer", {
-            get: function () {
-                return this.$input.siblings('.footer');
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "mirror", {
-            get: function () {
-                return window['CODE_MIRROR'];
-            },
-            enumerable: true,
-            configurable: true
-        });
-        MdEditor.prototype.setMirror = function (value) {
+        }
+        get mathjaxUrl() {
+            return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
+        }
+        get $input() {
+            return $('#input');
+        }
+        get $footer() {
+            return this.$input.siblings('.footer');
+        }
+        get mirror() {
+            return window['CODE_MIRROR'];
+        }
+        setMirror(value) {
             window['CODE_MIRROR'] = value;
-        };
-        Object.defineProperty(MdEditor.prototype, "mobile", {
-            get: function () {
-                return $('.lhs').is(':hidden') && !window.debug;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "simple", {
-            get: function () {
-                return cookie_1.cookie.get('simple', false);
-            },
-            set: function (value) {
-                cookie_1.cookie.set('simple', value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "spellChecker", {
-            set: function (value) {
-                this._spellChecker = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "spellCheckerOverlay", {
-            get: function () {
-                return this._spellCheckerOverlay;
-            },
-            set: function (value) {
-                this._spellCheckerOverlay = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        MdEditor.prototype.spellCheck = function (lingua, callback) {
-            var _this = this;
+        }
+        get mobile() {
+            return $('.lhs').is(':hidden') && !window.debug;
+        }
+        get simple() {
+            return cookie_1.cookie.get('simple', false);
+        }
+        set simple(value) {
+            cookie_1.cookie.set('simple', value);
+        }
+        set spellChecker(value) {
+            this._spellChecker = value;
+        }
+        get spellCheckerOverlay() {
+            return this._spellCheckerOverlay;
+        }
+        set spellCheckerOverlay(value) {
+            this._spellCheckerOverlay = value;
+        }
+        spellCheck(lingua, callback) {
             if (lingua.code) {
-                this.spellChecker = new spell_checker_1.default(lingua, function (overlay) {
-                    if (_this.mirror) {
-                        _this.mirror.removeOverlay('spell-checker');
+                this.spellChecker = new spell_checker_1.default(lingua, (overlay) => {
+                    if (this.mirror) {
+                        this.mirror.removeOverlay('spell-checker');
                     }
                     if (overlay) {
-                        _this.spellCheckerOverlay = $.extend(overlay, {
+                        this.spellCheckerOverlay = $.extend(overlay, {
                             name: 'spell-checker'
                         });
-                        if (_this.mirror) {
-                            _this.mirror.addOverlay(_this.spellCheckerOverlay);
+                        if (this.mirror) {
+                            this.mirror.addOverlay(this.spellCheckerOverlay);
                         }
                     }
                     if (callback) {
@@ -302,8 +264,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     callback(false);
                 }
             }
-        };
-        MdEditor.prototype.getSearchOverlay = function (query) {
+        }
+        getSearchOverlay(query) {
             if (typeof query === 'string') {
                 if (query === query.toLowerCase()) {
                     query = new RegExp(query.replace(/[\-\[\]\/{}()*+?.\\\^$|]/g, "\\$&"), 'gi');
@@ -323,7 +285,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             return {
                 token: function (stream) {
                     query.lastIndex = stream.pos;
-                    var match = query.exec(stream.string);
+                    let match = query.exec(stream.string);
                     if (match && match.index == stream.pos) {
                         stream.pos += match[0].length || 1;
                         return 'searching';
@@ -336,19 +298,15 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     }
                 }
             };
-        };
+        }
         ;
-        Object.defineProperty(MdEditor.prototype, "searchOverlay", {
-            get: function () {
-                return this._searchOverlay;
-            },
-            set: function (value) {
-                this._searchOverlay = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        MdEditor.prototype.search = function (query) {
+        get searchOverlay() {
+            return this._searchOverlay;
+        }
+        set searchOverlay(value) {
+            this._searchOverlay = value;
+        }
+        search(query) {
             if (this.mirror) {
                 if (this.searchOverlay) {
                     this.mirror.removeOverlay('search');
@@ -360,53 +318,43 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     this.mirror.addOverlay(this.searchOverlay);
                 }
             }
-        };
-        Object.defineProperty(MdEditor.prototype, "patch", {
-            get: function () {
-                return window['VDOM_PATCH'];
-            },
-            set: function (value) {
-                window['VDOM_PATCH'] = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MdEditor.prototype, "vnode", {
-            get: function () {
-                return window['VDOM_NODE'];
-            },
-            set: function (value) {
-                window['VDOM_NODE'] = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        var MdEditor_1;
-        __decorate([
-            buffered_1.buffered(600),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", []),
-            __metadata("design:returntype", void 0)
-        ], MdEditor.prototype, "render", null);
-        __decorate([
-            trace_1.traceable(false),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", []),
-            __metadata("design:returntype", void 0)
-        ], MdEditor.prototype, "getValue", null);
-        __decorate([
-            trace_1.traceable(false),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [String]),
-            __metadata("design:returntype", void 0)
-        ], MdEditor.prototype, "setValue", null);
-        MdEditor = MdEditor_1 = __decorate([
-            trace_2.trace,
-            named_1.named('MdEditor'),
-            __metadata("design:paramtypes", [])
-        ], MdEditor);
-        return MdEditor;
-    }());
+        }
+        get patch() {
+            return window['VDOM_PATCH'];
+        }
+        set patch(value) {
+            window['VDOM_PATCH'] = value;
+        }
+        get vnode() {
+            return window['VDOM_NODE'];
+        }
+        set vnode(value) {
+            window['VDOM_NODE'] = value;
+        }
+    };
+    __decorate([
+        buffered_1.buffered(600),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], MdEditor.prototype, "render", null);
+    __decorate([
+        trace_1.traceable(false),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], MdEditor.prototype, "getValue", null);
+    __decorate([
+        trace_1.traceable(false),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String]),
+        __metadata("design:returntype", void 0)
+    ], MdEditor.prototype, "setValue", null);
+    MdEditor = MdEditor_1 = __decorate([
+        trace_2.trace,
+        named_1.named('MdEditor'),
+        __metadata("design:paramtypes", [])
+    ], MdEditor);
     exports.MdEditor = MdEditor;
     exports.default = MdEditor;
 });
