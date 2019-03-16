@@ -12,6 +12,16 @@ import SpellChecker from "../spell-checker/spell-checker";
 import { ILingua } from "../spell-checker/spell-checker";
 import { IOverlay } from "../spell-checker/spell-checker";
 
+import * as snabbdom from '@npm/snabbdom';
+import * as snabbdom_attrs from '@npm/snabbdom/modules/attributes';
+import * as snabbdom_class from '@npm/snabbdom/modules/class';
+import * as snabbdom_event from '@npm/snabbdom/modules/eventlisteners';
+import * as snabbdom_props from '@npm/snabbdom/modules/props';
+import * as snabbdom_style from '@npm/snabbdom/modules/style';
+
+import { toVNode } from '@npm/snabbdom/tovnode';
+import { VNode } from "@npm/snabbdom/vnode";
+
 import "./md-editor-mode";
 
 declare const CodeMirror: {
@@ -34,6 +44,13 @@ export class MdEditor {
     }
 
     public constructor() {
+        this.patch = snabbdom.init([
+            snabbdom_attrs.default,
+            snabbdom_class.default,
+            snabbdom_props.default,
+            snabbdom_style.default,
+            snabbdom_event.default
+        ]);
         if (this.mobile) {
             this.toInput({
                 footer: false, toolbar: false
@@ -116,72 +133,52 @@ export class MdEditor {
         return this.$input;
     }
 
-    @buffered(600)
+    @buffered(200)
     public render() {
         let $output = $('#output'),
-            $cached: JQuery<HTMLElement>;
-
-        let value = this.getValue();
-        if (value !== this._mdOld) {
-            this._mdOld = value;
-
-            if (this._timeoutId !== undefined) {
-                clearTimeout(this._timeoutId);
-                this._timeoutId = undefined;
-            }
-
-            this._timeoutId = setTimeout(() => {
-                if (typeof MathJax !== 'undefined') {
-                    (MathJax as any).Hub.Queue([
-                        'resetEquationNumbers', (MathJax as any).InputJax.TeX
-                    ], [
-                            'Typeset', MathJax.Hub, 'output', () => {
-                                $output.css('visibility', 'visible');
-                                $cached.remove();
-
-                                if (value.length === 0) {
-                                    $.get(
-                                        '/static/html/output-placeholder.html'
-                                    ).done((html) => {
-                                        $output.html(html);
-                                        $output.find('>*').hide().fadeIn('fast');
-                                        MathJax.Hub.Queue([
-                                            'Typeset', MathJax.Hub, 'output'
-                                        ]);
-                                    });
-                                }
-                            }
-                        ]);
-                } else {
-                    $output.css('visibility', 'visible');
-                    $cached.remove();
-
-                    if (value.length === 0) {
-                        $.get(
-                            '/static/html/output-placeholder.html'
-                        ).done((html) => {
-                            $output.html(html);
-                            $output.find('>*').hide().fadeIn('fast');
-                        });
-                    }
-                }
-            }, 0) as any;
-
             $cached = $('#cached');
-            $cached.remove();
-            $cached = $output.clone();
-            $cached.prop('id', 'cached');
-            $cached.insertBefore($output);
-            $cached.scrollTop($output.scrollTop());
 
-            $output.css('visibility', 'hidden');
-            $output.html(MarkdownIt.me.render(value));
-
-            let $h = $output.find(':header');
-            DownloadManager.me.title = ($h.length > 0 ?
-                $($h[0]).text() : new Date().toISOString()) + '.md';
+        if (!this._mdOld || this._mdOld.length === 0) {
+            $output.empty();
+        }
+        let value = this.getValue();
+        if (value.length === 0) {
+            $.get(
+                '/static/html/output-placeholder.html'
+            ).done((html) => {
+                $output.html(html);
+                $output.find('>*').hide().fadeIn('fast');
+                this.vnode = undefined;
+            });
+        }
+        if (value.length > 0 && value !== this._mdOld) {
+            const vrender = (vnodes: VNode[] = []) => {
+                $cached.children().each(function (this: Node) {
+                    vnodes.push(toVNode(this));
+                });
+                this.vnode = this.patch(this.vnode ? this.vnode
+                    : $output[0], snabbdom.h('div#output', vnodes));
+            };
+            $cached.html(MarkdownIt.me.render(value));
+            if (typeof MathJax !== 'undefined') {
+                const math_jax = MathJax as any;
+                math_jax.Hub.Queue([
+                    'resetEquationNumbers', math_jax.InputJax.TeX
+                ], [
+                    'Typeset', math_jax.Hub, 'cached', vrender
+                ]);
+            } else {
+                vrender();
+            }
+        }
+        if (value.length > 0 && value !== this._mdOld) {
+            const $header = $cached.find(':header');
+            DownloadManager.me.title = $header.length === 0
+                ? `${new Date().toISOString()}.md`
+                : `${$($header[0]).text()}.md`;
             DownloadManager.me.content = value;
         }
+        this._mdOld = value;
     }
 
     public refresh() {
@@ -380,10 +377,25 @@ export class MdEditor {
         }
     }
 
+    private get patch(): any {
+        return window['VDOM_PATCH'];
+    }
+
+    private set patch(value: any) {
+        window['VDOM_PATCH'] = value;
+    }
+
+    private get vnode(): VNode | undefined {
+        return window['VDOM_NODE'] as VNode;
+    }
+
+    private set vnode(value: VNode | undefined) {
+        window['VDOM_NODE'] = value;
+    }
+
     private _spellCheckerOverlay: IOverlay | undefined;
     private _spellChecker: SpellChecker | undefined;
     private _searchOverlay: IOverlay | undefined;
-    private _timeoutId: number | undefined;
     private _mdOld: string | undefined;
 }
 

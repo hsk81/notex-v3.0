@@ -7,11 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1) {
+define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var MdEditor = /** @class */ (function () {
         function MdEditor() {
+            this.patch = snabbdom.init([
+                snabbdom_attrs.default,
+                snabbdom_class.default,
+                snabbdom_props.default,
+                snabbdom_style.default,
+                snabbdom_event.default
+            ]);
             if (this.mobile) {
                 this.toInput({
                     footer: false, toolbar: false
@@ -97,58 +104,49 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             return this.$input;
         };
         MdEditor.prototype.render = function () {
-            var $output = $('#output'), $cached;
+            var _this = this;
+            var $output = $('#output'), $cached = $('#cached');
+            if (!this._mdOld || this._mdOld.length === 0) {
+                $output.empty();
+            }
             var value = this.getValue();
-            if (value !== this._mdOld) {
-                this._mdOld = value;
-                if (this._timeoutId !== undefined) {
-                    clearTimeout(this._timeoutId);
-                    this._timeoutId = undefined;
+            if (value.length === 0) {
+                $.get('/static/html/output-placeholder.html').done(function (html) {
+                    $output.html(html);
+                    $output.find('>*').hide().fadeIn('fast');
+                    _this.vnode = undefined;
+                });
+            }
+            if (value.length > 0 && value !== this._mdOld) {
+                var vrender = function (vnodes) {
+                    if (vnodes === void 0) { vnodes = []; }
+                    $cached.children().each(function () {
+                        vnodes.push(tovnode_1.toVNode(this));
+                    });
+                    _this.vnode = _this.patch(_this.vnode ? _this.vnode
+                        : $output[0], snabbdom.h('div#output', vnodes));
+                };
+                $cached.html(markdown_it_1.default.me.render(value));
+                if (typeof MathJax !== 'undefined') {
+                    var math_jax = MathJax;
+                    math_jax.Hub.Queue([
+                        'resetEquationNumbers', math_jax.InputJax.TeX
+                    ], [
+                        'Typeset', math_jax.Hub, 'cached', vrender
+                    ]);
                 }
-                this._timeoutId = setTimeout(function () {
-                    if (typeof MathJax !== 'undefined') {
-                        MathJax.Hub.Queue([
-                            'resetEquationNumbers', MathJax.InputJax.TeX
-                        ], [
-                            'Typeset', MathJax.Hub, 'output', function () {
-                                $output.css('visibility', 'visible');
-                                $cached.remove();
-                                if (value.length === 0) {
-                                    $.get('/static/html/output-placeholder.html').done(function (html) {
-                                        $output.html(html);
-                                        $output.find('>*').hide().fadeIn('fast');
-                                        MathJax.Hub.Queue([
-                                            'Typeset', MathJax.Hub, 'output'
-                                        ]);
-                                    });
-                                }
-                            }
-                        ]);
-                    }
-                    else {
-                        $output.css('visibility', 'visible');
-                        $cached.remove();
-                        if (value.length === 0) {
-                            $.get('/static/html/output-placeholder.html').done(function (html) {
-                                $output.html(html);
-                                $output.find('>*').hide().fadeIn('fast');
-                            });
-                        }
-                    }
-                }, 0);
-                $cached = $('#cached');
-                $cached.remove();
-                $cached = $output.clone();
-                $cached.prop('id', 'cached');
-                $cached.insertBefore($output);
-                $cached.scrollTop($output.scrollTop());
-                $output.css('visibility', 'hidden');
-                $output.html(markdown_it_1.default.me.render(value));
-                var $h = $output.find(':header');
-                download_manager_1.default.me.title = ($h.length > 0 ?
-                    $($h[0]).text() : new Date().toISOString()) + '.md';
+                else {
+                    vrender();
+                }
+            }
+            if (value.length > 0 && value !== this._mdOld) {
+                var $header = $cached.find(':header');
+                download_manager_1.default.me.title = $header.length === 0
+                    ? new Date().toISOString() + ".md"
+                    : $($header[0]).text() + ".md";
                 download_manager_1.default.me.content = value;
             }
+            this._mdOld = value;
         };
         MdEditor.prototype.refresh = function () {
             if (this.mirror) {
@@ -363,9 +361,29 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 }
             }
         };
+        Object.defineProperty(MdEditor.prototype, "patch", {
+            get: function () {
+                return window['VDOM_PATCH'];
+            },
+            set: function (value) {
+                window['VDOM_PATCH'] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "vnode", {
+            get: function () {
+                return window['VDOM_NODE'];
+            },
+            set: function (value) {
+                window['VDOM_NODE'] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         var MdEditor_1;
         __decorate([
-            buffered_1.buffered(600),
+            buffered_1.buffered(200),
             __metadata("design:type", Function),
             __metadata("design:paramtypes", []),
             __metadata("design:returntype", void 0)

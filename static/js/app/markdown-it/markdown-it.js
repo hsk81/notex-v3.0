@@ -61,7 +61,7 @@ define(["require", "exports"], function (require, exports) {
         Object.defineProperty(MarkdownIt, "me", {
             get: function () {
                 if (this['_me'] === undefined) {
-                    this['_me'] = new MarkdownIt();
+                    this['_me'] = window['MARKDOWN_IT'] = new MarkdownIt();
                 }
                 return this['_me'];
             },
