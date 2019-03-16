@@ -7,19 +7,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui/md-editor", "./ui/md-editor-footer", "./ui/md-editor-toolbar", "./ui/publish-dialog", "./decorator/named", "./decorator/trace", "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, download_manager_1, header_menu_1, md_editor_1, md_editor_footer_1, md_editor_toolbar_1, publish_dialog_1, named_1, trace_1) {
+define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui/md-editor", "./ui/md-editor-footer", "./ui/md-editor-toolbar", "./ui/publish-dialog", "./decorator/trace", "./function/named", "./function/partial", "./function/with", "./string/random"], function (require, exports, download_manager_1, header_menu_1, md_editor_1, md_editor_footer_1, md_editor_toolbar_1, publish_dialog_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var App_1;
     "use strict";
     let App = App_1 = class App {
         constructor() {
-            this._headerMenu = header_menu_1.default.me;
-            this._markdownEditor = md_editor_1.default.me;
-            this._editorToolbar = md_editor_toolbar_1.default.me;
-            this._editorFooter = md_editor_footer_1.default.me;
-            this._publishDialog = publish_dialog_1.default.me;
-            this._downloadManager = download_manager_1.default.me;
+            this._headerMenu = header_menu_1.HeaderMenu.me;
+            this._markdownEditor = md_editor_1.MdEditor.me;
+            this._editorToolbar = md_editor_toolbar_1.MdEditorToolbar.me;
+            this._editorFooter = md_editor_footer_1.MdEditorFooter.me;
+            this._publishDialog = publish_dialog_1.PublishDialog.me;
+            this._downloadManager = download_manager_1.DownloadManager.me;
         }
         static get me() {
             if (this['_me'] === undefined) {
@@ -30,7 +30,6 @@ define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui
     };
     App = App_1 = __decorate([
         trace_1.trace,
-        named_1.named('App'),
         __metadata("design:paramtypes", [])
     ], App);
     exports.App = App;

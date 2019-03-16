@@ -1,7 +1,5 @@
 import { cookie } from "../cookie/cookie";
-
 import { buffered } from "../decorator/buffered";
-import { named } from "../decorator/named";
 import { traceable } from "../decorator/trace";
 import { trace } from "../decorator/trace";
 
@@ -34,7 +32,6 @@ declare const CodeMirror: {
 declare const $: JQueryStatic;
 
 @trace
-@named('MdEditor')
 export class MdEditor {
     public static get me(this: any): MdEditor {
         if (this['_me'] === undefined) {

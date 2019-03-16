@@ -1,14 +1,12 @@
 import { mine } from "../decorator/mine";
-import { named } from "../decorator/named";
 import { trace } from "../decorator/trace";
 
-import MdEditor from "./md-editor";
-import MdEditorToolbar from "./md-editor-toolbar";
+import { MdEditor } from "./md-editor";
+import { MdEditorToolbar } from "./md-editor-toolbar";
 
 declare const $: JQueryStatic;
 
 @trace
-@named('HeaderMenu')
 export class HeaderMenu {
     public static get me(this: any): HeaderMenu {
         if (this['_me'] === undefined) {

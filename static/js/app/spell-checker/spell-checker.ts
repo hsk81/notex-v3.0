@@ -1,6 +1,3 @@
-declare let Typo: any;
-
-import { named } from '../decorator/named';
 import { trace } from '../decorator/trace';
 
 export interface ILingua {
@@ -12,8 +9,9 @@ export interface IOverlay {
     token: (stream: any, state?: any) => void;
 }
 
+declare let Typo: any;
+
 @trace
-@named('SpellChecker')
 export class SpellChecker {
     public constructor(
         lingua: ILingua, callback: (overlay: IOverlay | null) => void

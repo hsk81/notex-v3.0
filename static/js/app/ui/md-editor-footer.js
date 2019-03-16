@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/named", "../decorator/trace", "./md-editor"], function (require, exports, cookie_1, buffered_1, named_1, trace_1, md_editor_1) {
+define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/trace", "./md-editor"], function (require, exports, cookie_1, buffered_1, trace_1, md_editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var MdEditorFooter_1;
@@ -311,7 +311,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             return this.$spellCheckerMenu.find('li:not(:first-of-type)');
         }
         get ed() {
-            return md_editor_1.default.me;
+            return md_editor_1.MdEditor.me;
         }
     };
     __decorate([
@@ -322,7 +322,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
     ], MdEditorFooter.prototype, "onMenuItemLoad", null);
     MdEditorFooter = MdEditorFooter_1 = __decorate([
         trace_1.trace,
-        named_1.named('MdEditorFooter'),
         __metadata("design:paramtypes", [])
     ], MdEditorFooter);
     exports.MdEditorFooter = MdEditorFooter;

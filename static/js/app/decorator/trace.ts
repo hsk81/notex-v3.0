@@ -1,3 +1,11 @@
+/* tslint:disable:ban-types */
+/* tslint:disable:only-arrow-functions */
+/* tslint:disable:space-before-function-paren */
+/* tslint:disable:trailing-comma */
+
+import { _traceable } from "./traceable";
+export { traceable } from "./traceable";
+
 export function trace(
     flag: boolean): Function;
 export function trace(
@@ -11,114 +19,24 @@ export function trace(
     }
 }
 
-function _trace(flag: boolean): Function {
+export function _trace(flag: boolean): Function {
     return function (ctor: Function) {
-        Object.keys(ctor.prototype).forEach((key: string) => {
+        Object.getOwnPropertyNames(ctor.prototype).forEach((name: string) => {
             const dtor = Object.getOwnPropertyDescriptor(
-                ctor.prototype, key,
+                ctor.prototype, name
             );
             if (dtor && typeof dtor.value === "function") {
-                _traceable(flag)(ctor.prototype, key);
+                _traceable(flag, ctor.name)(ctor.prototype, name);
             }
         });
-        Object.keys(ctor).forEach((key: string) => {
+        Object.getOwnPropertyNames(ctor).forEach((name: string) => {
             const dtor = Object.getOwnPropertyDescriptor(
-                ctor, key,
+                ctor, name
             );
             if (dtor && typeof dtor.value === "function") {
-                _traceable(flag)(ctor, key);
+                _traceable(flag, ctor.name)(ctor, name);
             }
         });
-    };
-}
-
-interface ITracedFunction extends Function {
-    _traced: Boolean;
-}
-
-export function traceable(
-    flag: boolean, bef?: Function, aft?: Function): Function;
-export function traceable(
-    target: any, key: string, dtor?: PropertyDescriptor): void;
-export function traceable(
-    arg0: boolean | any, arg1?: Function | string, arg2?: Function | PropertyDescriptor
-): Function | void {
-    if (typeof arg0 === 'boolean') {
-        return _traceable(<boolean>arg0);
-    } else {
-        _traceable(true)(<any>arg0, <string>arg1, <PropertyDescriptor>arg2);
-    }
-}
-
-function _traceable(
-    flag: boolean
-): Function {
-    return function (target: any, key: string, dtor?: PropertyDescriptor) {
-        const wrap = (
-            fn: Function, callback: Function
-        ) => {
-            const gn = fn as ITracedFunction;
-            if (!flag) {
-                gn._traced = false;
-            } else {
-                if (gn._traced === undefined) {
-                    gn._traced = true;
-
-                    const tn: Function = function (
-                        this: any, ...args: any[]
-                    ) {
-                        const name =
-                            target._named ||
-                            target.constructor &&
-                            target.constructor.name || "@";
-                        setTimeout(() => {
-                            console.group(`${name}.${key}`);
-                            if (args.length > 0) {
-                                console.debug(...args);
-                            }
-                            if (result !== undefined) {
-                                console.debug(result);
-                            }
-                        }, 0);
-
-                        const result = gn.apply(this, args);
-                        setTimeout(() => {
-                            console.groupEnd();
-                        }, 0);
-
-                        return result;
-                    };
-                    for (const el in gn) {
-                        if (gn.hasOwnProperty(el)) {
-                            (tn as any)[el] = (gn as any)[el];
-                        }
-                    }
-                    callback(tn);
-                }
-            }
-        };
-        if (dtor) {
-            if (typeof dtor.value === 'function') {
-                wrap(dtor.value, (tn: Function) => {
-                    dtor.value = tn;
-                });
-            } else {
-                if (typeof dtor.get === 'function') {
-                    wrap(dtor.get, (tn: Function) => {
-                        dtor.get = <any>tn;
-                    });
-                }
-                if (typeof dtor.set === 'function') {
-                    wrap(dtor.set, (tn: Function) => {
-                        dtor.set = <any>tn;
-                    });
-                }
-            }
-        } else {
-            wrap(target[key], (tn: Function) => {
-                target[key] = tn;
-            });
-        }
     };
 }
 

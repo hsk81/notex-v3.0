@@ -1,11 +1,10 @@
-import DownloadManager from "./ui/download-manager";
-import HeaderMenu from "./ui/header-menu";
-import MdEditor from "./ui/md-editor";
-import MdEditorFooter from "./ui/md-editor-footer";
-import MdEditorToolbar from "./ui/md-editor-toolbar";
-import PublishDialog from "./ui/publish-dialog";
+import { DownloadManager } from "./ui/download-manager";
+import { HeaderMenu } from "./ui/header-menu";
+import { MdEditor } from "./ui/md-editor";
+import { MdEditorFooter } from "./ui/md-editor-footer";
+import { MdEditorToolbar } from "./ui/md-editor-toolbar";
+import { PublishDialog } from "./ui/publish-dialog";
 
-import { named } from "./decorator/named";
 import { trace } from "./decorator/trace";
 
 import "./function/named";
@@ -14,7 +13,6 @@ import "./function/with";
 import "./string/random";
 
 @trace
-@named('App')
 export class App {
     public static get me(this: any): App {
         if (this['_me'] === undefined) {

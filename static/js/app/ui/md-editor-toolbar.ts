@@ -1,12 +1,9 @@
-import { named } from "../decorator/named";
 import { trace } from "../decorator/trace";
-
-import MdEditor from "./md-editor";
+import { MdEditor } from "./md-editor";
 
 declare const $: JQueryStatic;
 
 @trace
-@named('MdEditorToolbar')
 export class MdEditorToolbar {
     public static get me(this: any): MdEditorToolbar {
         if (this['_me'] === undefined) {

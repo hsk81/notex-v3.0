@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-editor"], function (require, exports, named_1, trace_1, md_editor_1) {
+define(["require", "exports", "../decorator/trace", "./md-editor"], function (require, exports, trace_1, md_editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var MdEditorToolbar_1;
@@ -869,7 +869,7 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
             return this._scroll;
         }
         get ed() {
-            return md_editor_1.default.me;
+            return md_editor_1.MdEditor.me;
         }
         get clipboard() {
             if (this._clipboard === undefined) {
@@ -883,7 +883,6 @@ define(["require", "exports", "../decorator/named", "../decorator/trace", "./md-
     };
     MdEditorToolbar = MdEditorToolbar_1 = __decorate([
         trace_1.trace,
-        named_1.named('MdEditorToolbar'),
         __metadata("design:paramtypes", [])
     ], MdEditorToolbar);
     exports.MdEditorToolbar = MdEditorToolbar;

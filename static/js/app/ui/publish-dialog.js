@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "../markdown-it/markdown-it", "./md-editor", "../function/after", "../function/assert", "../function/before", "../decorator/named", "../decorator/trace"], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, md_editor_1, after_1, assert_1, before_1, named_1, trace_1) {
+define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "../markdown-it/markdown-it", "./md-editor", "../function/after", "../function/assert", "../function/before", "../decorator/trace"], function (require, exports, cookie_1, blogger_api_1, markdown_it_1, md_editor_1, after_1, assert_1, before_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var PublishDialog_1;
@@ -386,7 +386,6 @@ define(["require", "exports", "../cookie/cookie", "../google-api/blogger-api", "
     };
     PublishDialog = PublishDialog_1 = __decorate([
         trace_1.trace,
-        named_1.named('PublishDialog'),
         __metadata("design:paramtypes", [])
     ], PublishDialog);
     exports.PublishDialog = PublishDialog;

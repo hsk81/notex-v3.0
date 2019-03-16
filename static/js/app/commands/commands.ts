@@ -1,4 +1,3 @@
-import { named } from '../decorator/named';
 import { trace } from '../decorator/trace';
 
 export interface ICommand {
@@ -19,7 +18,6 @@ export class Command implements ICommand {
 }
 
 @trace
-@named('Commands')
 export class Commands {
     public static get me(this: any): Commands {
         if (this['_me'] === undefined) {

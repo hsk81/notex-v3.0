@@ -1,15 +1,12 @@
 import { cookie } from "../cookie/cookie";
-
 import { buffered } from "../decorator/buffered";
-import { named } from "../decorator/named";
 import { trace } from "../decorator/trace";
 
-import MdEditor from "./md-editor";
+import { MdEditor } from "./md-editor";
 
 declare const $: JQueryStatic;
 
 @trace
-@named('MdEditorFooter')
 export class MdEditorFooter {
     public static get me(this: any): MdEditorFooter {
         if (this['_me'] === undefined) {

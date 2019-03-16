@@ -6,13 +6,11 @@ import MdEditor from "./md-editor";
 import { after } from "../function/after";
 import { assert } from "../function/assert";
 import { before } from "../function/before";
-import { named } from "../decorator/named";
 import { trace } from "../decorator/trace";
 
 declare const $: JQueryStatic;
 
 @trace
-@named('PublishDialog')
 export class PublishDialog {
     public static get me(this: any): PublishDialog {
         if (this['_me'] === undefined) {

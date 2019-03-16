@@ -1,10 +1,7 @@
-import { named } from "../decorator/named";
 import { trace } from "../decorator/trace";
-
-import HeaderMenu from "./header-menu";
+import { HeaderMenu } from "./header-menu";
 
 @trace
-@named('DownloadManager')
 export class DownloadManager {
     public static get me(this: any): DownloadManager {
         if (this['_me'] === undefined) {

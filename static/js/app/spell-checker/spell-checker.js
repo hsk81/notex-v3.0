@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../decorator/named", "../decorator/trace"], function (require, exports, named_1, trace_1) {
+define(["require", "exports", "../decorator/trace"], function (require, exports, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let SpellChecker = class SpellChecker {
@@ -53,7 +53,6 @@ define(["require", "exports", "../decorator/named", "../decorator/trace"], funct
     };
     SpellChecker = __decorate([
         trace_1.trace,
-        named_1.named('SpellChecker'),
         __metadata("design:paramtypes", [Object, Function])
     ], SpellChecker);
     exports.SpellChecker = SpellChecker;

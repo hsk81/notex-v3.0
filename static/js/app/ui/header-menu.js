@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../decorator/mine", "../decorator/named", "../decorator/trace", "./md-editor", "./md-editor-toolbar"], function (require, exports, mine_1, named_1, trace_1, md_editor_1, md_editor_toolbar_1) {
+define(["require", "exports", "../decorator/mine", "../decorator/trace", "./md-editor", "./md-editor-toolbar"], function (require, exports, mine_1, trace_1, md_editor_1, md_editor_toolbar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var HeaderMenu_1;
@@ -60,10 +60,10 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
             return $('[name=swap]');
         }
         get toolbar() {
-            return md_editor_toolbar_1.default.me;
+            return md_editor_toolbar_1.MdEditorToolbar.me;
         }
         get editor() {
-            return md_editor_1.default.me;
+            return md_editor_1.MdEditor.me;
         }
     };
     __decorate([
@@ -74,7 +74,6 @@ define(["require", "exports", "../decorator/mine", "../decorator/named", "../dec
     ], HeaderMenu.prototype, "onOpenItemChange", null);
     HeaderMenu = HeaderMenu_1 = __decorate([
         trace_1.trace,
-        named_1.named('HeaderMenu'),
         __metadata("design:paramtypes", [])
     ], HeaderMenu);
     exports.HeaderMenu = HeaderMenu;
