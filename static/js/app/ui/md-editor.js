@@ -121,7 +121,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     this.vnode = this.patch(this.vnode ? this.vnode
                         : $output[0], snabbdom.h('div#output', vnodes));
                 };
-                $cached.html(markdown_it_1.default.me.render(value));
+                $cached.html(markdown_it_1.MarkdownIt.me.render(value));
                 if (typeof MathJax !== 'undefined') {
                     const math_jax = MathJax;
                     math_jax.Hub.Queue([
@@ -136,10 +136,10 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             }
             if (value.length > 0 && value !== this._mdOld) {
                 const $header = $cached.find(':header');
-                download_manager_1.default.me.title = $header.length === 0
+                download_manager_1.DownloadManager.me.title = $header.length === 0
                     ? `${new Date().toISOString()}.md`
                     : `${$($header[0]).text()}.md`;
-                download_manager_1.default.me.content = value;
+                download_manager_1.DownloadManager.me.content = value;
             }
             this._mdOld = value;
         }
@@ -237,7 +237,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         }
         spellCheck(lingua, callback) {
             if (lingua.code) {
-                this.spellChecker = new spell_checker_1.default(lingua, (overlay) => {
+                this.spellChecker = new spell_checker_1.SpellChecker(lingua, (overlay) => {
                     if (this.mirror) {
                         this.mirror.removeOverlay('spell-checker');
                     }

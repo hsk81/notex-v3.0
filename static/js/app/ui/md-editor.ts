@@ -5,12 +5,12 @@ import { named } from "../decorator/named";
 import { traceable } from "../decorator/trace";
 import { trace } from "../decorator/trace";
 
-import DownloadManager from "./download-manager";
-import MarkdownIt from "../markdown-it/markdown-it";
-import SpellChecker from "../spell-checker/spell-checker";
+import { DownloadManager } from "./download-manager";
+import { MarkdownIt } from "../markdown-it/markdown-it";
 
 import { ILingua } from "../spell-checker/spell-checker";
 import { IOverlay } from "../spell-checker/spell-checker";
+import { SpellChecker } from "../spell-checker/spell-checker";
 
 import * as snabbdom from '@npm/snabbdom';
 import * as snabbdom_attrs from '@npm/snabbdom/modules/attributes';
