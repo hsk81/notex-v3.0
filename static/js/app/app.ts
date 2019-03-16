@@ -6,10 +6,6 @@ import { MdEditorToolbar } from "./ui/md-editor-toolbar";
 import { PublishDialog } from "./ui/publish-dialog";
 
 import { trace } from "./decorator/trace";
-
-import "./function/named";
-import "./function/partial";
-import "./function/with";
 import "./string/random";
 
 @trace
