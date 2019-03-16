@@ -1,5 +1,21 @@
 {
   "baseUrl": "./static/js/app",
   "out": "./static/build/app.js",
-  "name": "app"
+  "name": "app",
+  "paths": {
+    "@npm/snabbdom/modules/attributes":
+      "../../../node_modules/snabbdom/dist/snabbdom-attributes.min",
+    "@npm/snabbdom/modules/class":
+      "../../../node_modules/snabbdom/dist/snabbdom-class.min",
+    "@npm/snabbdom/modules/eventlisteners":
+      "../../../node_modules/snabbdom/dist/snabbdom-eventlisteners.min",
+    "@npm/snabbdom/modules/props":
+      "../../../node_modules/snabbdom/dist/snabbdom-props.min",
+    "@npm/snabbdom/modules/style":
+      "../../../node_modules/snabbdom/dist/snabbdom-style.min",
+    "@npm/snabbdom/tovnode":
+      "../../../node_modules/snabbdom/dist/tovnode.min",
+    "@npm/snabbdom":
+      "../../../node_modules/snabbdom/dist/snabbdom.min"
+  }
 }
