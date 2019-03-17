@@ -115,7 +115,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-figure-0.3.2.min.js')
     minify(out_path,
-           'static/js/lib/markdown-it/markdown-it-footnote-3.0.0.min.js')
+           'node_modules/markdown-it-footnote/dist/markdown-it-footnote.min.js')
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-mark-2.0.0.min.js')
     minify(out_path,
