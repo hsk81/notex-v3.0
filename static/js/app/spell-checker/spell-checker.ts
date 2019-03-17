@@ -1,5 +1,3 @@
-import { trace } from '../decorator/trace';
-
 export interface ILingua {
     charset: string | null;
     code: string | null;
@@ -11,7 +9,6 @@ export interface IOverlay {
 
 declare let Typo: any;
 
-@trace
 export class SpellChecker {
     public constructor(
         lingua: ILingua, callback: (overlay: IOverlay | null) => void
