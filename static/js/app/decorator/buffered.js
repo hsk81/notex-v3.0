@@ -11,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.buffered = buffered;
     function _buffered(ms) {
-        return (tgt, key, tpd) => {
+        return function (tgt, key, tpd) {
             if (tpd) {
                 tpd.value = buffer(tpd.value, ms);
                 return tpd;
@@ -21,15 +21,21 @@ define(["require", "exports"], function (require, exports) {
             }
         };
     }
-    function buffer(fn, ms = 200) {
-        let id;
-        const bn = function (...args) {
-            return new Promise((resolve) => {
+    function buffer(fn, ms) {
+        if (ms === void 0) { ms = 200; }
+        var id;
+        var bn = function () {
+            var _this = this;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return new Promise(function (resolve) {
                 clearTimeout(id);
-                id = setTimeout(() => resolve(fn.apply(this, args)), ms);
+                id = setTimeout(function () { return resolve(fn.apply(_this, args)); }, ms);
             });
         };
-        bn.cancel = () => {
+        bn.cancel = function () {
             clearTimeout(id);
         };
         return bn;

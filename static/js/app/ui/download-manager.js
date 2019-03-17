@@ -7,28 +7,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "../decorator/trace", "./header-menu"], function (require, exports, trace_1, header_menu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var DownloadManager_1;
-    "use strict";
-    let DownloadManager = DownloadManager_1 = class DownloadManager {
-        static get me() {
-            if (this['_me'] === undefined) {
-                this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager_1();
-            }
-            return this['_me'];
+    var DownloadManager = /** @class */ (function () {
+        function DownloadManager() {
         }
-        set title(title) {
-            this.$downloadLink.attr("download", title);
-        }
-        set content(content) {
-            this.$downloadLink.attr("href", URL.createObjectURL(new Blob([content], { type: 'text/markdown' })));
-        }
-        get $downloadLink() {
-            return header_menu_1.HeaderMenu.me.$saveItem;
-        }
-    };
-    DownloadManager = DownloadManager_1 = __decorate([
-        trace_1.trace
-    ], DownloadManager);
+        DownloadManager_1 = DownloadManager;
+        Object.defineProperty(DownloadManager, "me", {
+            get: function () {
+                if (this['_me'] === undefined) {
+                    this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager_1();
+                }
+                return this['_me'];
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DownloadManager.prototype, "title", {
+            set: function (title) {
+                this.$downloadLink.attr("download", title);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DownloadManager.prototype, "content", {
+            set: function (content) {
+                this.$downloadLink.attr("href", URL.createObjectURL(new Blob([content], { type: 'text/markdown' })));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DownloadManager.prototype, "$downloadLink", {
+            get: function () {
+                return header_menu_1.HeaderMenu.me.$saveItem;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        var DownloadManager_1;
+        DownloadManager = DownloadManager_1 = __decorate([
+            trace_1.trace
+        ], DownloadManager);
+        return DownloadManager;
+    }());
     exports.DownloadManager = DownloadManager;
     exports.default = DownloadManager;
 });

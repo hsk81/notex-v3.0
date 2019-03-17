@@ -15,11 +15,11 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.traceable = traceable;
-    const trace = window.TRACE || JSON.parse(localStorage.getItem('TRACE'));
+    var trace = window.TRACE || JSON.parse(localStorage.getItem('TRACE'));
     function _traceable(flag, name) {
         return function (target, key, dtor) {
-            const wrap = (fn, callback) => {
-                const gn = fn;
+            var wrap = function (fn, callback) {
+                var gn = fn;
                 if (!flag) {
                     gn.__traced__ = null;
                 }
@@ -40,21 +40,25 @@ define(["require", "exports"], function (require, exports) {
                                 gn.__traced__ = "@";
                             }
                         }
-                        const tn = function (...args) {
+                        var tn = function () {
+                            var args = [];
+                            for (var _i = 0; _i < arguments.length; _i++) {
+                                args[_i] = arguments[_i];
+                            }
                             if (trace || window.TRACE) {
                                 if (args.length > 0) {
-                                    console.group(`${gn.__traced__}.${key}`, args);
+                                    console.group(gn.__traced__ + "." + key, args);
                                 }
                                 else {
-                                    console.group(`${gn.__traced__}.${key}`);
+                                    console.group(gn.__traced__ + "." + key);
                                 }
-                                const t0 = new Date();
-                                const result = gn.apply(this, args);
-                                const dt = new Date() - t0;
+                                var t0 = new Date();
+                                var result = gn.apply(this, args);
+                                var dt = new Date() - t0;
                                 if (result !== undefined) {
                                     console.info(result);
                                 }
-                                console.debug(`${dt}ms`);
+                                console.debug(dt + "ms");
                                 console.groupEnd();
                                 return result;
                             }
@@ -62,7 +66,7 @@ define(["require", "exports"], function (require, exports) {
                                 return gn.apply(this, args);
                             }
                         };
-                        for (const el in gn) {
+                        for (var el in gn) {
                             if (gn.hasOwnProperty(el)) {
                                 tn[el] = gn[el];
                             }
@@ -73,25 +77,25 @@ define(["require", "exports"], function (require, exports) {
             };
             if (dtor) {
                 if (typeof dtor.value === "function") {
-                    wrap(dtor.value, (tn) => {
+                    wrap(dtor.value, function (tn) {
                         dtor.value = tn;
                     });
                 }
                 else {
                     if (typeof dtor.get === "function") {
-                        wrap(dtor.get, (tn) => {
+                        wrap(dtor.get, function (tn) {
                             dtor.get = tn;
                         });
                     }
                     if (typeof dtor.set === "function") {
-                        wrap(dtor.set, (tn) => {
+                        wrap(dtor.set, function (tn) {
                             dtor.set = tn;
                         });
                     }
                 }
             }
             else {
-                wrap(target[key], (tn) => {
+                wrap(target[key], function (tn) {
                     target[key] = tn;
                 });
             }

@@ -1,32 +1,34 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Cookie {
-        static set(name, value, expiry_ms) {
-            let json = JSON.stringify(value);
+    var Cookie = /** @class */ (function () {
+        function Cookie() {
+        }
+        Cookie.set = function (name, value, expiry_ms) {
+            var json = JSON.stringify(value);
             if (expiry_ms === undefined) {
                 document.cookie = name + '=' + json;
             }
             else {
-                let date = new Date();
+                var date = new Date();
                 date.setTime(date.getTime() + expiry_ms);
-                let expires = 'expires=' + date.toUTCString();
+                var expires = 'expires=' + date.toUTCString();
                 document.cookie = name + '=' + json + '; ' + expires;
             }
             return value;
-        }
-        set(name, value, expiry_ms) {
+        };
+        Cookie.prototype.set = function (name, value, expiry_ms) {
             return Cookie.set(name, value, expiry_ms);
-        }
-        static get(name, value) {
-            let cookies = document.cookie.split(';'), cookie_name = name + '=', string;
-            for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i];
-                while (cookie.charAt(0) === ' ') {
-                    cookie = cookie.substring(1);
+        };
+        Cookie.get = function (name, value) {
+            var cookies = document.cookie.split(';'), cookie_name = name + '=', string;
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie_1 = cookies[i];
+                while (cookie_1.charAt(0) === ' ') {
+                    cookie_1 = cookie_1.substring(1);
                 }
-                if (cookie.indexOf(cookie_name) === 0) {
-                    string = cookie.substring(cookie_name.length, cookie.length);
+                if (cookie_1.indexOf(cookie_name) === 0) {
+                    string = cookie_1.substring(cookie_name.length, cookie_1.length);
                     break;
                 }
             }
@@ -40,11 +42,12 @@ define(["require", "exports"], function (require, exports) {
             else {
                 return value;
             }
-        }
-        get(name, value) {
+        };
+        Cookie.prototype.get = function (name, value) {
             return Cookie.get(name, value);
-        }
-    }
+        };
+        return Cookie;
+    }());
     exports.cookie = new Cookie();
     exports.default = exports.cookie;
 });

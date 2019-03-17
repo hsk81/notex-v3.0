@@ -17,14 +17,14 @@ define(["require", "exports", "./traceable", "./traceable"], function (require, 
     exports.trace = trace;
     function _trace(flag) {
         return function (ctor) {
-            Object.getOwnPropertyNames(ctor.prototype).forEach((name) => {
-                const dtor = Object.getOwnPropertyDescriptor(ctor.prototype, name);
+            Object.getOwnPropertyNames(ctor.prototype).forEach(function (name) {
+                var dtor = Object.getOwnPropertyDescriptor(ctor.prototype, name);
                 if (dtor && typeof dtor.value === "function") {
                     traceable_1._traceable(flag, ctor.name)(ctor.prototype, name);
                 }
             });
-            Object.getOwnPropertyNames(ctor).forEach((name) => {
-                const dtor = Object.getOwnPropertyDescriptor(ctor, name);
+            Object.getOwnPropertyNames(ctor).forEach(function (name) {
+                var dtor = Object.getOwnPropertyDescriptor(ctor, name);
                 if (dtor && typeof dtor.value === "function") {
                     traceable_1._traceable(flag, ctor.name)(ctor, name);
                 }

@@ -10,10 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui/md-editor", "./ui/md-editor-footer", "./ui/md-editor-toolbar", "./ui/publish-dialog", "./decorator/trace", "./string/random"], function (require, exports, download_manager_1, header_menu_1, md_editor_1, md_editor_footer_1, md_editor_toolbar_1, publish_dialog_1, trace_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var App_1;
-    "use strict";
-    let App = App_1 = class App {
-        constructor() {
+    var App = /** @class */ (function () {
+        function App() {
             this._headerMenu = header_menu_1.HeaderMenu.me;
             this._markdownEditor = md_editor_1.MdEditor.me;
             this._editorToolbar = md_editor_toolbar_1.MdEditorToolbar.me;
@@ -21,17 +19,24 @@ define(["require", "exports", "./ui/download-manager", "./ui/header-menu", "./ui
             this._publishDialog = publish_dialog_1.PublishDialog.me;
             this._downloadManager = download_manager_1.DownloadManager.me;
         }
-        static get me() {
-            if (this['_me'] === undefined) {
-                this['_me'] = window['APP'] = new App_1();
-            }
-            return this['_me'];
-        }
-    };
-    App = App_1 = __decorate([
-        trace_1.trace,
-        __metadata("design:paramtypes", [])
-    ], App);
+        App_1 = App;
+        Object.defineProperty(App, "me", {
+            get: function () {
+                if (this['_me'] === undefined) {
+                    this['_me'] = window['APP'] = new App_1();
+                }
+                return this['_me'];
+            },
+            enumerable: true,
+            configurable: true
+        });
+        var App_1;
+        App = App_1 = __decorate([
+            trace_1.trace,
+            __metadata("design:paramtypes", [])
+        ], App);
+        return App;
+    }());
     exports.App = App;
     window['APP'] = App.me;
 });

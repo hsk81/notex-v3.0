@@ -1,32 +1,39 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class GoogleApi {
-        static get me() {
-            if (this['_me'] === undefined) {
-                this['_me'] = new GoogleApi();
-            }
-            return this['_me'];
-        }
-        constructor() {
+    var GoogleApi = /** @class */ (function () {
+        function GoogleApi() {
             this._loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
         }
-        get(callback, ms = 2048, n = 2) {
+        Object.defineProperty(GoogleApi, "me", {
+            get: function () {
+                if (this['_me'] === undefined) {
+                    this['_me'] = new GoogleApi();
+                }
+                return this['_me'];
+            },
+            enumerable: true,
+            configurable: true
+        });
+        GoogleApi.prototype.get = function (callback, ms, n) {
+            var _this = this;
+            if (ms === void 0) { ms = 2048; }
+            if (n === void 0) { n = 2; }
             if (typeof window.gapi !== 'undefined') {
                 callback(window.gapi);
             }
             else {
-                let timeout_id = setTimeout(() => {
+                var timeout_id_1 = setTimeout(function () {
                     if (n - 1 > 0) {
-                        this.get(callback, ms, n - 1);
+                        _this.get(callback, ms, n - 1);
                     }
                     else {
                         callback(false);
                     }
                 }, ms);
                 window.onGoogleApiClientLoad = function onGoogleApiClientLoad() {
-                    if (timeout_id) {
-                        clearTimeout(timeout_id);
+                    if (timeout_id_1) {
+                        clearTimeout(timeout_id_1);
                     }
                     if (typeof window.gapi !== 'undefined') {
                         callback(window.gapi);
@@ -39,8 +46,9 @@ define(["require", "exports"], function (require, exports) {
                     src: this._loadUrlTpl.replace('{0}', window.onGoogleApiClientLoad.name)
                 }));
             }
-        }
-    }
+        };
+        return GoogleApi;
+    }());
     exports.GoogleApi = GoogleApi;
     exports.default = GoogleApi;
 });
