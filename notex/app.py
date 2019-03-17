@@ -109,8 +109,6 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'node_modules/markdown-it-abbr/dist/markdown-it-abbr.min.js')
     minify(out_path,
-           'static/js/lib/markdown-it/markdown-it-center-text-1.0.3.min.js')
-    minify(out_path,
            'static/js/lib/markdown-it/markdown-it-decorate-1.2.1.min.js')
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-emoji-1.2.0.min.js')

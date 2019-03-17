@@ -51,7 +51,6 @@ export class MarkdownIt {
             level: 2,
             permalink: true
         });
-        this._mdi.use(markdownitCentertext);
         this._mdi.use(markdownitDecorate);
         this._mdi.use(markdownitEmoji);
         this._mdi.use(markdownitFigure, {
