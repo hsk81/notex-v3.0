@@ -119,7 +119,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'node_modules/markdown-it-mark/dist/markdown-it-mark.min.js')
     minify(out_path,
-           'static/js/lib/markdown-it/markdown-it-math-4.0.1.min.js')
+           'node_modules/markdown-it-math/dist/markdown-it-math.min.js')
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-sub-2.0.0.min.js')
     minify(out_path,
