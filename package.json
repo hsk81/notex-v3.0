@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "markdown-it": "^8.4.2",
     "snabbdom": "^0.7.3",
     "typescript": "^3.3.3333"
   },

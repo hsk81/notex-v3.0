@@ -103,7 +103,7 @@ if not ARGs.get('NO_JS_MINIFY') and not ARGs.debug():
     minify(out_path,
            'static/js/lib/typo/typo-1.1.0.min.js')
     minify(out_path,
-           'static/js/lib/markdown-it/markdown-it-7.0.0.min.js')
+           'node_modules/markdown-it/dist/markdown-it.min.js')
     minify(out_path,
            'static/js/lib/markdown-it/markdown-it-anchor-2.5.0.min.js')
     minify(out_path,
