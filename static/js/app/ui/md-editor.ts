@@ -170,7 +170,6 @@ export class MdEditor {
                     'Typeset', math_jax.Hub, 'cached', render
                 ]);
             } catch (ex) {
-                console.error(ex);
                 render();
             } else {
                 render();

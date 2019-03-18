@@ -136,7 +136,6 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                         ]);
                     }
                     catch (ex) {
-                        console.error(ex);
                         render();
                     }
                 else {
