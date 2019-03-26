@@ -2,12 +2,14 @@
  * HTML, Body:
  * ========================================================================= */
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
 }
 
-html, body {
+html,
+body {
   overflow-y: hidden;
 }
 
@@ -31,7 +33,7 @@ html, body {
 
 .center {
   height: 100%;
-  @media(max-width: 480px) {
+  @media (max-width: 480px) {
     height: calc(100% - 52px);
   }
 }
@@ -60,7 +62,7 @@ html, body {
           }
         }
         .iScrollVerticalScrollbar {
-          left: 0 !important;;
+          left: 0 !important;
           width: 4px !important;
           z-index: 999 !important;
         }
@@ -117,7 +119,8 @@ html, body {
             height: 34px;
             width: 42px;
             span.img-placeholder {
-              background: no-repeat center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkCCzgSlfo5igAAAiRJREFUOMudkj9LI1EUxX83M6MZsp1rttiUdmFBMGuVYusUAbdPu2AzxTSjOB8gFtHkM+wHEMyKhUUCacQ/OCghjcUWC0JcMQaLIZnkbpMZ4qKw7IEL7x3euedc3hXf9zmI1hVgwzwTILmvvBv1P4XBh5v0av/2eWEZ4Kt1LqqKiKCqpG7Sq/0c9w857h9u0qt3zNCtliu3zwtZgNvnheVutVzpVssVgCiKGI/HRFGE5LcOtVstfwHIbx22N8wziRPktP/7s/Vz+SBa1w3zTESE8XiMqsY+pGJhfuuwzRy61XLll2Tfz3Oq+qIAzPjxrNF3ESE+51KDIcDH1HAYpypNOxJFkQKYpikAa6qK7/sAa9vb2wBrs1qZ8Ssx5ziOPj4+6tPTk7quq+L7Pq/NJiJYlpXwk8mE0WikOzs7nJycoKr9IAiyJpA8mk6nxPEMw5C4YSz2PI9Wq4Vt23Q6nWy9Xi+Y8cwzF3Vdl+l0Sq1WU8uyZGagrutyenqKbdu0223q9XrB87zL1N/Rr6+vubq6wnEcwjDUMAzVcRyCICCdTtNqtdjf3y94nncJYMZiEWFvb68wmUwuSqUSvV6Pzc1NAHq9HrZtc3x8nDjHhkaxWEzci8XiXa1W+7G0tPQtn88zGAwYDocsLi5ydHREo9F4IU4WaR6e5102Go1Cs9kkk8mQyWRoNpuvipNFeq3J7u5uwTCMC+BN8b8gXqg3IfM/8D/4A1nMPcmZBpljAAAAAElFTkSuQmCC);
+              background: no-repeat center
+                url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkCCzgSlfo5igAAAiRJREFUOMudkj9LI1EUxX83M6MZsp1rttiUdmFBMGuVYusUAbdPu2AzxTSjOB8gFtHkM+wHEMyKhUUCacQ/OCghjcUWC0JcMQaLIZnkbpMZ4qKw7IEL7x3euedc3hXf9zmI1hVgwzwTILmvvBv1P4XBh5v0av/2eWEZ4Kt1LqqKiKCqpG7Sq/0c9w857h9u0qt3zNCtliu3zwtZgNvnheVutVzpVssVgCiKGI/HRFGE5LcOtVstfwHIbx22N8wziRPktP/7s/Vz+SBa1w3zTESE8XiMqsY+pGJhfuuwzRy61XLll2Tfz3Oq+qIAzPjxrNF3ESE+51KDIcDH1HAYpypNOxJFkQKYpikAa6qK7/sAa9vb2wBrs1qZ8Ssx5ziOPj4+6tPTk7quq+L7Pq/NJiJYlpXwk8mE0WikOzs7nJycoKr9IAiyJpA8mk6nxPEMw5C4YSz2PI9Wq4Vt23Q6nWy9Xi+Y8cwzF3Vdl+l0Sq1WU8uyZGagrutyenqKbdu0223q9XrB87zL1N/Rr6+vubq6wnEcwjDUMAzVcRyCICCdTtNqtdjf3y94nncJYMZiEWFvb68wmUwuSqUSvV6Pzc1NAHq9HrZtc3x8nDjHhkaxWEzci8XiXa1W+7G0tPQtn88zGAwYDocsLi5ydHREo9F4IU4WaR6e5102Go1Cs9kkk8mQyWRoNpuvipNFeq3J7u5uwTCMC+BN8b8gXqg3IfM/8D/4A1nMPcmZBpljAAAAAElFTkSuQmCC);
               padding: 6px;
             }
             img {
@@ -136,9 +139,11 @@ html, body {
                   float: right;
                   margin-top: 5px;
                 }
-                span.line1, span.country {
-                }
-                span.line2, span.language {
+                // span.line1,
+                // span.country {
+                // }
+                span.line2,
+                span.language {
                   font-size: smaller;
                 }
               }
@@ -150,7 +155,8 @@ html, body {
     .rhs {
       height: 100%;
       padding: 0;
-      div#output, div#cached {
+      div#output,
+      div#cached {
         border-left: 4px double #e7e7e7;
         box-shadow: inset 0 0 8px #e7e7e7;
         height: 100%;
@@ -160,21 +166,24 @@ html, body {
         position: absolute;
         width: 100%;
       }
-      div#output, div#cached {
-        @media(max-width: 480px) {
+      div#output,
+      div#cached {
+        @media (max-width: 480px) {
           font-size: medium;
         }
-        @media(min-width: 480px) {
+        @media (min-width: 480px) {
           font-size: large;
         }
-        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-family: Georgia, "Times New Roman", Times, serif;
       }
-      div#output pre, div#cached pre {
-        @media(max-width: 480px) {
+      div#output pre,
+      div#cached pre {
+        @media (max-width: 480px) {
           font-size: x-small;
         }
       }
-      div#output p, div#cached p {
+      div#output p,
+      div#cached p {
         text-align: justify;
       }
       div#output .footnote-ref > a,
@@ -189,15 +198,17 @@ html, body {
       div#cached a {
         color: navy;
       }
-      div#output, div#cached {
+      div#output,
+      div#cached {
         table th {
-            border-bottom: 2px solid gray;
+          border-bottom: 2px solid gray;
         }
         table tr {
-            border-bottom: 1px solid gray;
+          border-bottom: 1px solid gray;
         }
-        table th, table td {
-            padding: 0.25em;
+        table th,
+        table td {
+          padding: 0.25em;
         }
       }
       div#output figure,
@@ -211,9 +222,10 @@ html, body {
       }
       div#output .header-anchor:hover,
       div#cached .header-anchor:hover {
-        opacity: 1.00;
+        opacity: 1;
       }
-      div#output, div#cached {
+      div#output,
+      div#cached {
         pre {
           border-bottom: 1px solid lightgray;
           border-left: none;
@@ -249,7 +261,8 @@ html, body {
       margin-bottom: 1em;
     }
     .post-settings {
-      #post-scripts, #post-styles {
+      #post-scripts,
+      #post-styles {
         font-family: monospace;
         font-size: smaller;
         height: 13em;
@@ -264,16 +277,16 @@ html, body {
  * ========================================================================= */
 
 .spin {
-    animation: spin 0.5s infinite linear;
+  animation: spin 0.5s infinite linear;
 }
 
 @keyframes spin {
-    from {
-      transform: scale(1) rotate(0deg);
-    }
-    to {
-      transform: scale(1) rotate(360deg);
-    }
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
 }
 
 span.spin {
@@ -286,6 +299,44 @@ span.spin {
 
 span.spin {
   text-shadow: 0 0 1em;
+}
+
+/* ============================================================================
+ * Print support:
+ * ========================================================================= */
+
+@media print {
+  html,
+  body,
+  div.center,
+  div.rhs,
+  #cached {
+    overflow: visible !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #cached,
+  #cached * {
+    visibility: visible;
+  }
+  #cached {
+    position: absolute;
+  }
+  #cached {
+    left: 0;
+    top: 0;
+  }
+}
+
+@media print {
+  #cached > pre {
+    border: none !important;
+  }
+  #cached > pre {
+    margin: 0 auto;
+    width: 72ch;
+  }
 }
 
 /* ========================================================================= */
