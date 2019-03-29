@@ -15,6 +15,8 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             var _this = this;
             this.$publish
                 .on('click', this.onPublishClick.bind(this));
+            this.$print
+                .on('click', this.onPrintClick.bind(this));
             this.$undo
                 .on('click', this.onUndoClick.bind(this));
             this.$redo
@@ -68,6 +70,9 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         };
         MdEditorToolbar.prototype.onPublishClick = function () {
             $('#publish-dlg').modal();
+        };
+        MdEditorToolbar.prototype.onPrintClick = function () {
+            window.print();
         };
         MdEditorToolbar.prototype.onUndoClick = function () {
             if (this.ed.mirror) {
@@ -835,6 +840,13 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         Object.defineProperty(MdEditorToolbar.prototype, "$publish", {
             get: function () {
                 return $('.glyphicon.publish').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$print", {
+            get: function () {
+                return $('.glyphicon.print').closest('button');
             },
             enumerable: true,
             configurable: true

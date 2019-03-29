@@ -16,6 +16,8 @@ export class MdEditorToolbar {
 
         this.$publish
             .on('click', this.onPublishClick.bind(this));
+        this.$print
+            .on('click', this.onPrintClick.bind(this));
 
         this.$undo
             .on('click', this.onUndoClick.bind(this));
@@ -66,6 +68,10 @@ export class MdEditorToolbar {
 
     private onPublishClick() {
         $('#publish-dlg').modal();
+    }
+
+    private onPrintClick() {
+        window.print();
     }
 
     private onUndoClick() {
@@ -912,6 +918,10 @@ export class MdEditorToolbar {
 
     private get $publish() {
         return $('.glyphicon.publish').closest('button');
+    }
+
+    private get $print() {
+        return $('.glyphicon.print').closest('button');
     }
 
     private get $undo() {
