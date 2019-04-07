@@ -105,8 +105,9 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             this.simple = true;
             return this.$input;
         };
-        MdEditor.prototype.render = function () {
+        MdEditor.prototype.render = function (force) {
             var _this = this;
+            if (force === void 0) { force = false; }
             var $output = $('#output'), $cached = $('#cached');
             if (!this._mdOld || this._mdOld.length === 0) {
                 $output.empty();
@@ -119,7 +120,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                     _this.vnode = undefined;
                 });
             }
-            if (value.length > 0 && value !== this._mdOld) {
+            if (value.length > 0 && value !== this._mdOld ||
+                value.length > 0 && force) {
                 var render = function () {
                     var new_vnode = snabbdom.h('div#output', tovnode_1.toVNode($cached[0]).children);
                     var old_vnode = (_this.vnode ? _this.vnode : $output[0]);
@@ -388,7 +390,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         __decorate([
             buffered_1.buffered(600),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", []),
+            __metadata("design:paramtypes", [Object]),
             __metadata("design:returntype", void 0)
         ], MdEditor.prototype, "render", null);
         __decorate([

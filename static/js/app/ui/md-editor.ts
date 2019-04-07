@@ -134,14 +134,14 @@ export class MdEditor {
     }
 
     @buffered(600)
-    public render() {
-        let $output = $('#output'),
-            $cached = $('#cached');
+    public render(force = false) {
+        const $output = $('#output'),
+              $cached = $('#cached');
 
         if (!this._mdOld || this._mdOld.length === 0) {
             $output.empty();
         }
-        let value = this.getValue();
+        const value = this.getValue();
         if (value.length === 0) {
             $.get(
                 '/static/html/output-placeholder.html'
@@ -151,7 +151,9 @@ export class MdEditor {
                 this.vnode = undefined;
             });
         }
-        if (value.length > 0 && value !== this._mdOld) {
+        if (value.length > 0 && value !== this._mdOld ||
+            value.length > 0 && force)
+        {
             const render = () => {
                 const new_vnode = snabbdom.h(
                     'div#output', toVNode($cached[0]).children

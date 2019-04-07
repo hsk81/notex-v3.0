@@ -52,6 +52,9 @@ export class MdEditorToolbar {
         this.$subscript
             .on('click', this.onSubscriptClick.bind(this));
 
+        this.$refresh
+            .on('click', this.onRefreshClick.bind(this));
+
         if (!this.ed.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -64,6 +67,10 @@ export class MdEditorToolbar {
     public refresh() {
         this.ed.refresh();
         this.scroll.refresh();
+    }
+
+    private onRefreshClick() {
+        this.ed.render(true);
     }
 
     private onPublishClick() {
@@ -978,6 +985,10 @@ export class MdEditorToolbar {
 
     private get $subscript() {
         return $('.glyphicon-subscript').closest('button');
+    }
+
+    private get $refresh() {
+        return $('.glyphicon.refresh').closest('button');
     }
 
     private get scroll(): any {

@@ -45,6 +45,8 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
                 .on('click', this.onSupscriptClick.bind(this));
             this.$subscript
                 .on('click', this.onSubscriptClick.bind(this));
+            this.$refresh
+                .on('click', this.onRefreshClick.bind(this));
             if (!this.ed.mobile) {
                 this.$outer.fadeIn('slow', function () {
                     _this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -67,6 +69,9 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         MdEditorToolbar.prototype.refresh = function () {
             this.ed.refresh();
             this.scroll.refresh();
+        };
+        MdEditorToolbar.prototype.onRefreshClick = function () {
+            this.ed.render(true);
         };
         MdEditorToolbar.prototype.onPublishClick = function () {
             $('#publish-dlg').modal();
@@ -945,6 +950,13 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         Object.defineProperty(MdEditorToolbar.prototype, "$subscript", {
             get: function () {
                 return $('.glyphicon-subscript').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$refresh", {
+            get: function () {
+                return $('.glyphicon.refresh').closest('button');
             },
             enumerable: true,
             configurable: true
