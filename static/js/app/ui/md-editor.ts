@@ -62,6 +62,7 @@ export class MdEditor {
         } else {
             this.toMirror();
         }
+        this.events();
     }
 
     public toMirror(): any {
@@ -239,6 +240,49 @@ export class MdEditor {
         }
     }
 
+    private events() {
+        if (this.mobile) {
+            this.toInput({
+                footer: false, toolbar: false
+            });
+        } else if (this.simple) {
+            this.toInput({
+                footer: true, toolbar: true
+            });
+        } else {
+            this.toMirror();
+        }
+        this.$doc.on(
+            'dragenter dragover dragleave drop', (ev) => 
+        {
+            ev.preventDefault();
+            ev.stopPropagation();
+        });
+        this.$lhs.on('dragenter dragleave', (ev) => {
+            // console.log(`[${ev.type}]`, ev);
+            ev.preventDefault();
+            ev.stopPropagation();
+        });
+        this.$lhs.on('dragover', (ev) => {
+            // console.log(`[${ev.type}]`);
+            const event = ev.originalEvent as DragEvent;
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = 'copy';
+            }
+            ev.preventDefault();
+            ev.stopPropagation();
+        });
+        this.$lhs.on('drop', (ev) => {
+            // console.log(`[${ev.type}]`, ev);
+            const event = ev.originalEvent as DragEvent;
+            if (event.dataTransfer) {
+                alert(event.dataTransfer.files.length);
+            }
+            ev.preventDefault();
+            ev.stopPropagation();
+        });
+    }
+
     private onEditorChange() {
         if (typeof MathJax === 'undefined') try {
             let script = document.createElement('script'),
@@ -391,6 +435,16 @@ export class MdEditor {
     }
     private set vnode(value: VNode | undefined) {
         window['VDOM_VNODE'] = value;
+    }
+
+    private get $doc() {
+        return $(document);
+    }
+    private get $lhs() {
+        return $('.lhs');
+    }
+    private get $rhs() {
+        return $('.rhs');
     }
 
     private _spellCheckerOverlay: IOverlay | undefined;

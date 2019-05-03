@@ -34,6 +34,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             else {
                 this.toMirror();
             }
+            this.events();
         }
         MdEditor_1 = MdEditor;
         Object.defineProperty(MdEditor, "me", {
@@ -197,6 +198,48 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 var inp = this.$input[0], beg = inp.selectionStart, end = inp.selectionEnd;
                 return inp.value.substring(beg, end);
             }
+        };
+        MdEditor.prototype.events = function () {
+            if (this.mobile) {
+                this.toInput({
+                    footer: false, toolbar: false
+                });
+            }
+            else if (this.simple) {
+                this.toInput({
+                    footer: true, toolbar: true
+                });
+            }
+            else {
+                this.toMirror();
+            }
+            this.$doc.on('dragenter dragover dragleave drop', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
+            this.$lhs.on('dragenter dragleave', function (ev) {
+                // console.log(`[${ev.type}]`, ev);
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
+            this.$lhs.on('dragover', function (ev) {
+                // console.log(`[${ev.type}]`);
+                var event = ev.originalEvent;
+                if (event.dataTransfer) {
+                    event.dataTransfer.dropEffect = 'copy';
+                }
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
+            this.$lhs.on('drop', function (ev) {
+                // console.log(`[${ev.type}]`, ev);
+                var event = ev.originalEvent;
+                if (event.dataTransfer) {
+                    alert(event.dataTransfer.files.length);
+                }
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
         };
         MdEditor.prototype.onEditorChange = function () {
             if (typeof MathJax === 'undefined')
@@ -382,6 +425,27 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             },
             set: function (value) {
                 window['VDOM_VNODE'] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "$doc", {
+            get: function () {
+                return $(document);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "$lhs", {
+            get: function () {
+                return $('.lhs');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "$rhs", {
+            get: function () {
+                return $('.rhs');
             },
             enumerable: true,
             configurable: true
