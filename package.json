@@ -17,12 +17,16 @@
     "@types/mathjax": "^0.0.35",
     "@types/node": "^11.11.3"
   },
+  "license": "GPL-3.0",
   "name": "notex",
+  "repository": {
+    "url": "git@bitbucket.org:hsk81/notex.git"
+  },
   "scripts": {
-    "start": "gunicorn -c config.py --preload wsgi:app",
-    "local": "DEBUG=0 gunicorn -c config.py wsgi:app",
-    "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
     "build": "npx tsc --build",
+    "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
+    "local": "DEBUG=0 gunicorn -c config.py wsgi:app",
+    "start": "gunicorn -c config.py --preload wsgi:app",
     "watch": "npx tsc --watch"
   },
   "version": "3.1.0"
