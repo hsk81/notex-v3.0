@@ -16,6 +16,8 @@
     "@npm/snabbdom/tovnode":
       "../../../node_modules/snabbdom/dist/tovnode.min",
     "@npm/snabbdom":
-      "../../../node_modules/snabbdom/dist/snabbdom.min"
+      "../../../node_modules/snabbdom/dist/snabbdom.min",
+    "@npm/ipfs":
+      "../../../node_modules/ipfs/dist/index.min"
   }
 }

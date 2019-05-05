@@ -10,6 +10,8 @@ import { ILingua } from "../spell-checker/spell-checker";
 import { IOverlay } from "../spell-checker/spell-checker";
 import { SpellChecker } from "../spell-checker/spell-checker";
 
+import { Ipfs, Buffer } from "../ipfs/index";
+
 import * as snabbdom from '@npm/snabbdom';
 import * as snabbdom_attrs from '@npm/snabbdom/modules/attributes';
 import * as snabbdom_class from '@npm/snabbdom/modules/class';
@@ -136,8 +138,8 @@ export class MdEditor {
 
     @buffered(600)
     public render(force = false) {
-        const $output = $('#output'),
-              $cached = $('#cached');
+        const $output = $('#output');
+        const $cached = $('#cached');
 
         if (!this._mdOld || this._mdOld.length === 0) {
             $output.empty();
@@ -252,19 +254,19 @@ export class MdEditor {
         } else {
             this.toMirror();
         }
-        this.$doc.on(
-            'dragenter dragover dragleave drop', (ev) => 
-        {
+        this.dnd();
+    }
+
+    public dnd() {
+        this.$doc.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
         });
         this.$lhs.on('dragenter dragleave', (ev) => {
-            // console.log(`[${ev.type}]`, ev);
             ev.preventDefault();
             ev.stopPropagation();
         });
         this.$lhs.on('dragover', (ev) => {
-            // console.log(`[${ev.type}]`);
             const event = ev.originalEvent as DragEvent;
             if (event.dataTransfer) {
                 event.dataTransfer.dropEffect = 'copy';
@@ -273,14 +275,58 @@ export class MdEditor {
             ev.stopPropagation();
         });
         this.$lhs.on('drop', (ev) => {
-            // console.log(`[${ev.type}]`, ev);
-            const event = ev.originalEvent as DragEvent;
-            if (event.dataTransfer) {
-                alert(event.dataTransfer.files.length);
-            }
             ev.preventDefault();
             ev.stopPropagation();
         });
+        this.$lhs.on('drop', (event) => {
+            const ev = event.originalEvent as DragEvent;
+            if (!ev) {
+                return;
+            }
+            const ev_dataTransfer = ev.dataTransfer;
+            if (!ev_dataTransfer) {
+                return;
+            }
+            const ev_files = ev_dataTransfer.files;
+            if (!ev_files || !ev_files.length) {
+                return;
+            }
+            const insert_image = (
+                name: string, hash: string,
+                gateway = 'https://cloudflare-ipfs.com'
+            ) => {
+                this.insert(`![${name||''}](${gateway}/ipfs/${hash})\n`);
+            };
+            Ipfs.me.then((ipfs: any) => {
+                for (let i = 0; i < ev_files.length; i++) {
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        const buffer = Buffer.from(reader.result);
+                        ipfs.add(buffer, (e: any, files: any) => {
+                            if (e) return console.error(e);
+                            insert_image(ev_files[i].name, files[0].hash);
+                        });
+                    };
+                    reader.readAsArrayBuffer(ev_files[i]);
+                }
+            }).catch((e) => {
+                console.error(e);
+            });
+        });
+    }
+
+    private insert(text: string) {
+        if (this.mirror) {
+            this.mirror.replaceSelection(text);
+        } else {
+            try {
+                document.execCommand('insertText', false, text);
+            } catch (ex) {
+                console.error(ex);
+            }
+            this.$input.trigger('change');
+        }
+        this.focus();
     }
 
     private onEditorChange() {

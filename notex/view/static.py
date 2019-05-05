@@ -36,7 +36,7 @@ def npm_snabbdom (any, name='snabbdom', path=None, ext='js'):
 @app.get ('/<any:path>/@npm/<name:re:[^/]+>.<ext:re:[^/\.]+>')
 def npm (any, name, path=None, ext='js'):
 
-    path = '{0}.{1}'.format(path if path is not None else name, ext)
+    path = '{0}.{1}'.format(path if path is not None else 'index', ext)
     root = os.path.normpath('node_modules/{0}/dist'.format(name))
     return static_file (path, root=root)
 

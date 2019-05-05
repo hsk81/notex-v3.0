@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
+define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "../ipfs/index", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1, index_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     window['VDOM'] = snabbdom;
@@ -109,7 +109,8 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         MdEditor.prototype.render = function (force) {
             var _this = this;
             if (force === void 0) { force = false; }
-            var $output = $('#output'), $cached = $('#cached');
+            var $output = $('#output');
+            var $cached = $('#cached');
             if (!this._mdOld || this._mdOld.length === 0) {
                 $output.empty();
             }
@@ -213,17 +214,19 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             else {
                 this.toMirror();
             }
+            this.dnd();
+        };
+        MdEditor.prototype.dnd = function () {
+            var _this = this;
             this.$doc.on('dragenter dragover dragleave drop', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             });
             this.$lhs.on('dragenter dragleave', function (ev) {
-                // console.log(`[${ev.type}]`, ev);
                 ev.preventDefault();
                 ev.stopPropagation();
             });
             this.$lhs.on('dragover', function (ev) {
-                // console.log(`[${ev.type}]`);
                 var event = ev.originalEvent;
                 if (event.dataTransfer) {
                     event.dataTransfer.dropEffect = 'copy';
@@ -232,14 +235,61 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 ev.stopPropagation();
             });
             this.$lhs.on('drop', function (ev) {
-                // console.log(`[${ev.type}]`, ev);
-                var event = ev.originalEvent;
-                if (event.dataTransfer) {
-                    alert(event.dataTransfer.files.length);
-                }
                 ev.preventDefault();
                 ev.stopPropagation();
             });
+            this.$lhs.on('drop', function (event) {
+                var ev = event.originalEvent;
+                if (!ev) {
+                    return;
+                }
+                var ev_dataTransfer = ev.dataTransfer;
+                if (!ev_dataTransfer) {
+                    return;
+                }
+                var ev_files = ev_dataTransfer.files;
+                if (!ev_files || !ev_files.length) {
+                    return;
+                }
+                var insert_image = function (name, hash, gateway) {
+                    if (gateway === void 0) { gateway = 'https://cloudflare-ipfs.com'; }
+                    _this.insert("![" + (name || '') + "](" + gateway + "/ipfs/" + hash + ")\n");
+                };
+                index_1.Ipfs.me.then(function (ipfs) {
+                    var _loop_1 = function (i) {
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var buffer = index_1.Buffer.from(reader.result);
+                            ipfs.add(buffer, function (e, files) {
+                                if (e)
+                                    return console.error(e);
+                                insert_image(ev_files[i].name, files[0].hash);
+                            });
+                        };
+                        reader.readAsArrayBuffer(ev_files[i]);
+                    };
+                    for (var i = 0; i < ev_files.length; i++) {
+                        _loop_1(i);
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                });
+            });
+        };
+        MdEditor.prototype.insert = function (text) {
+            if (this.mirror) {
+                this.mirror.replaceSelection(text);
+            }
+            else {
+                try {
+                    document.execCommand('insertText', false, text);
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
+                this.$input.trigger('change');
+            }
+            this.focus();
         };
         MdEditor.prototype.onEditorChange = function () {
             if (typeof MathJax === 'undefined')

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "ipfs": "^0.36.3",
     "markdown-it": "^8.4.2",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-emoji": "^1.4.0",
@@ -7,7 +8,7 @@
     "markdown-it-mark": "^2.0.0",
     "markdown-it-math": "^4.1.1",
     "snabbdom": "^0.7.3",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.5.1"
   },
   "devDependencies": {
     "@types/bootstrap": "^3.3.42",
@@ -15,7 +16,7 @@
     "@types/iscroll": "^5.2.2",
     "@types/jquery": "^2.0.53",
     "@types/mathjax": "^0.0.35",
-    "@types/node": "^11.11.3"
+    "@types/node": "^11.13.13"
   },
   "license": "GPL-3.0",
   "name": "notex",

@@ -16,7 +16,6 @@ export class App {
         }
         return this['_me'];
     }
-
     public constructor() {
         this._headerMenu = HeaderMenu.me;
         this._markdownEditor = MdEditor.me;
@@ -25,13 +24,12 @@ export class App {
         this._publishDialog = PublishDialog.me;
         this._downloadManager = DownloadManager.me;
     }
-
-    private _headerMenu: HeaderMenu;
-    private _markdownEditor: MdEditor;
-    private _editorFooter: MdEditorFooter;
-    private _editorToolbar: MdEditorToolbar;
-    private _publishDialog: PublishDialog;
-    private _downloadManager: DownloadManager;
+    private readonly _headerMenu: HeaderMenu;
+    private readonly _markdownEditor: MdEditor;
+    private readonly _editorFooter: MdEditorFooter;
+    private readonly _editorToolbar: MdEditorToolbar;
+    private readonly _publishDialog: PublishDialog;
+    private readonly _downloadManager: DownloadManager;
 }
 
 window['APP'] = App.me;

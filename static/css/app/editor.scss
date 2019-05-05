@@ -216,6 +216,10 @@ body {
         margin: 1em 0;
         text-align: center;
       }
+      div#output img,
+      div#cached img {
+        width: 100%;
+      }
       div#output .header-anchor,
       div#cached .header-anchor {
         opacity: 0.05;
