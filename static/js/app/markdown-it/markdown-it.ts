@@ -20,7 +20,7 @@ declare let hljs: any;
 export class MarkdownIt {
     public static get me(this: any): MarkdownIt {
         if (this['_me'] === undefined) {
-            this['_me'] = window['MARKDOWN_IT'] =new MarkdownIt();
+            this['_me'] = window['MARKDOWN_IT'] = new MarkdownIt();
         }
         return this['_me'];
     }
