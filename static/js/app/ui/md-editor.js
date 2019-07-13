@@ -359,7 +359,7 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             get: function () {
                 var value = cookie_1.cookie.get('simple');
                 if (value === undefined) {
-                    this.simple = false;
+                    cookie_1.cookie.set('simple', false);
                     return false;
                 }
                 return value;

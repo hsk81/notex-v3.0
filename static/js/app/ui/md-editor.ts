@@ -377,7 +377,7 @@ export class MdEditor {
     public get simple(): boolean {
         const value = cookie.get<boolean>('simple');
         if (value === undefined) {
-            this.simple = false;
+            cookie.set<boolean>('simple', false);
             return false;
         }
         return value;
