@@ -204,6 +204,10 @@ export class MdEditor {
         }
     }
 
+    public get empty() {
+        return !this.getValue();
+    }
+
     @traceable(false)
     public getValue() {
         if (this.mirror) {
@@ -330,12 +334,15 @@ export class MdEditor {
     }
 
     private onEditorChange() {
+        setTimeout(() => {
+            $(this).trigger('change');
+        }, 0);
         if (typeof MathJax === 'undefined') try {
-            let script = document.createElement('script'),
-                head = document.getElementsByTagName('head');
+            const script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = this.mathjaxUrl;
             script.async = true;
+            const head = document.getElementsByTagName('head');
             head[0].appendChild(script);
         } catch (ex) {
             console.error(ex);
@@ -368,9 +375,15 @@ export class MdEditor {
     }
 
     public get simple(): boolean {
-        return cookie.get<boolean>('simple', false) as boolean;
+        const value = cookie.get<boolean>('simple');
+        if (value === undefined) {
+            this.simple = false;
+            return false;
+        }
+        return value;
     }
     public set simple(value: boolean) {
+        $(this).trigger('simple', { value });
         cookie.set<boolean>('simple', value);
     }
 

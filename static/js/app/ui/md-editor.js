@@ -168,6 +168,13 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 this.$input.focus();
             }
         };
+        Object.defineProperty(MdEditor.prototype, "empty", {
+            get: function () {
+                return !this.getValue();
+            },
+            enumerable: true,
+            configurable: true
+        });
         MdEditor.prototype.getValue = function () {
             if (this.mirror) {
                 return this.mirror.getValue();
@@ -292,12 +299,17 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             this.focus();
         };
         MdEditor.prototype.onEditorChange = function () {
+            var _this = this;
+            setTimeout(function () {
+                $(_this).trigger('change');
+            }, 0);
             if (typeof MathJax === 'undefined')
                 try {
-                    var script = document.createElement('script'), head = document.getElementsByTagName('head');
+                    var script = document.createElement('script');
                     script.type = 'text/javascript';
                     script.src = this.mathjaxUrl;
                     script.async = true;
+                    var head = document.getElementsByTagName('head');
                     head[0].appendChild(script);
                 }
                 catch (ex) {
@@ -345,9 +357,15 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         });
         Object.defineProperty(MdEditor.prototype, "simple", {
             get: function () {
-                return cookie_1.cookie.get('simple', false);
+                var value = cookie_1.cookie.get('simple');
+                if (value === undefined) {
+                    this.simple = false;
+                    return false;
+                }
+                return value;
             },
             set: function (value) {
+                $(this).trigger('simple', { value: value });
                 cookie_1.cookie.set('simple', value);
             },
             enumerable: true,

@@ -1,0 +1,43 @@
+<div class="aibar mirror">
+    <style scoped>
+        div.aibar {
+            display: none;
+            position: absolute;
+        }
+        div.aibar.mirror {
+            background-color: none;
+            border: none;
+        }
+        div.aibar {
+            background-color: white;
+            border-top: 1px solid #e7e7e7;
+        }
+        div.aibar.mirror {
+            bottom: 47px;
+            height: initial;
+            left: 78px;
+            width: calc(100% - 78px);
+        }
+        div.aibar {
+            bottom: 0;
+            height: initial;
+            left: 48px;
+            width: calc(100% - 48px);
+        }
+        div.aibar {
+            margin: 0;
+            padding: 6px;
+        }
+        div.aibar {
+            text-align: center;
+            z-index: 2;
+        }
+    </style>
+    <div class="btn-group btn-group-justified" role="group">
+        <div class="btn-group" role="group">
+            <button type="button" class="mid btn btn-default">
+                Help
+            </button>
+        </div>
+    </div>
+</div>
