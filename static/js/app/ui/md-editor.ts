@@ -1,7 +1,7 @@
-import { cookie } from "../cookie/cookie";
 import { buffered } from "../decorator/buffered";
 import { traceable } from "../decorator/trace";
 import { trace } from "../decorator/trace";
+import { cookie } from "../cookie/cookie";
 
 import { DownloadManager } from "./download-manager";
 import { MarkdownIt } from "../markdown-it/markdown-it";
@@ -35,6 +35,11 @@ declare const CodeMirror: {
 };
 
 declare const $: JQueryStatic;
+
+export enum UiMode {
+    simple = 'ui-simple',
+    mirror = 'ui-mirror'
+}
 
 @trace
 export class MdEditor {
@@ -222,14 +227,22 @@ export class MdEditor {
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
-            (this.$input[0] as HTMLInputElement)
-                .setSelectionRange(0, (this.$input.val() as string).length);
+            (this.$input[0] as HTMLInputElement).select();
             if (!document.execCommand('insertText', false, value)) {
                 this.$input.val(value);
             }
 
             (this.$input[0] as HTMLInputElement)
                 .setSelectionRange(0, 0);
+            this.$input.trigger('change');
+        }
+    }
+
+    public clear() {
+        if (this.mirror) {
+            return this.mirror.setValue('');
+        } else {
+            this.$input.val('');
             this.$input.trigger('change');
         }
     }
@@ -374,17 +387,24 @@ export class MdEditor {
         return $('.lhs').is(':hidden') && !window.debug;
     }
 
-    public get simple(): boolean {
-        const value = cookie.get<boolean>('simple');
+    private get simple(): boolean {
+        const value = cookie.get<boolean>('simple-flag');
         if (value === undefined) {
-            cookie.set<boolean>('simple', false);
+            cookie.set<boolean>('simple-flag', false);
             return false;
         }
         return value;
     }
-    public set simple(value: boolean) {
-        $(this).trigger('simple', { value });
-        cookie.set<boolean>('simple', value);
+    private set simple(value: boolean) {
+        cookie.set<boolean>('simple-flag', value);
+        $(this).trigger('ui-mode', {
+            value: value ? UiMode.simple : UiMode.mirror
+        });
+    }
+
+    public get uiMode(): UiMode {
+        const value = cookie.get<boolean>('simple-flag');
+        return value ? UiMode.simple : UiMode.mirror;
     }
 
     private set spellChecker(value: SpellChecker | undefined) {
@@ -511,5 +531,4 @@ export class MdEditor {
     private _searchOverlay: IOverlay | undefined;
     private _mdOld: string | undefined;
 }
-
 export default MdEditor;

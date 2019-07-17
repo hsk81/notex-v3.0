@@ -8,15 +8,18 @@
             background-color: none;
             border: none;
         }
-        div.aibar {
+        div.aibar:not(.mirror) {
             background-color: white;
+        }
+        div.aibar {
             border-top: 1px solid #e7e7e7;
         }
         div.aibar.mirror {
             bottom: 47px;
             height: initial;
+            margin: 0 1em;
             left: 78px;
-            width: calc(100% - 78px);
+            width: calc(100% - 78px - 2em);
         }
         div.aibar {
             bottom: 0;
@@ -35,8 +38,22 @@
     </style>
     <div class="btn-group btn-group-justified" role="group">
         <div class="btn-group" role="group">
-            <button type="button" class="mid btn btn-default">
+            <button type="button" class="ai-lhs btn btn-default"
+                    data-container="body" data-toggle="tooltip"
+                    data-placement="top" title="Previous Page">
+                ⪡
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="ai-mid btn btn-default">
                 Help
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="ai-rhs btn btn-default"
+                    data-container="body" data-toggle="tooltip"
+                    data-placement="top" title="Next Page">
+                ⪢
             </button>
         </div>
     </div>

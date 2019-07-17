@@ -7,11 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/trace", "../decorator/trace", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "../ipfs/index", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, cookie_1, buffered_1, trace_1, trace_2, download_manager_1, markdown_it_1, spell_checker_1, index_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
+define(["require", "exports", "../decorator/buffered", "../decorator/trace", "../decorator/trace", "../cookie/cookie", "./download-manager", "../markdown-it/markdown-it", "../spell-checker/spell-checker", "../ipfs/index", "@npm/snabbdom", "@npm/snabbdom/modules/attributes", "@npm/snabbdom/modules/class", "@npm/snabbdom/modules/eventlisteners", "@npm/snabbdom/modules/props", "@npm/snabbdom/modules/style", "@npm/snabbdom/tovnode", "./md-editor-mode"], function (require, exports, buffered_1, trace_1, trace_2, cookie_1, download_manager_1, markdown_it_1, spell_checker_1, index_1, snabbdom, snabbdom_attrs, snabbdom_class, snabbdom_event, snabbdom_props, snabbdom_style, tovnode_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     window['VDOM'] = snabbdom;
     window['VDOM_TO_VNODE'] = tovnode_1.toVNode;
+    var UiMode;
+    (function (UiMode) {
+        UiMode["simple"] = "ui-simple";
+        UiMode["mirror"] = "ui-mirror";
+    })(UiMode = exports.UiMode || (exports.UiMode = {}));
     var MdEditor = /** @class */ (function () {
         function MdEditor() {
             this.patch = snabbdom.init([
@@ -188,13 +193,21 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
                 return this.mirror.setValue(value);
             }
             else {
-                this.$input[0]
-                    .setSelectionRange(0, this.$input.val().length);
+                this.$input[0].select();
                 if (!document.execCommand('insertText', false, value)) {
                     this.$input.val(value);
                 }
                 this.$input[0]
                     .setSelectionRange(0, 0);
+                this.$input.trigger('change');
+            }
+        };
+        MdEditor.prototype.clear = function () {
+            if (this.mirror) {
+                return this.mirror.setValue('');
+            }
+            else {
+                this.$input.val('');
                 this.$input.trigger('change');
             }
         };
@@ -357,16 +370,26 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
         });
         Object.defineProperty(MdEditor.prototype, "simple", {
             get: function () {
-                var value = cookie_1.cookie.get('simple');
+                var value = cookie_1.cookie.get('simple-flag');
                 if (value === undefined) {
-                    cookie_1.cookie.set('simple', false);
+                    cookie_1.cookie.set('simple-flag', false);
                     return false;
                 }
                 return value;
             },
             set: function (value) {
-                $(this).trigger('simple', { value: value });
-                cookie_1.cookie.set('simple', value);
+                cookie_1.cookie.set('simple-flag', value);
+                $(this).trigger('ui-mode', {
+                    value: value ? UiMode.simple : UiMode.mirror
+                });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditor.prototype, "uiMode", {
+            get: function () {
+                var value = cookie_1.cookie.get('simple-flag');
+                return value ? UiMode.simple : UiMode.mirror;
             },
             enumerable: true,
             configurable: true

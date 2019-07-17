@@ -1,8 +1,9 @@
-import { cookie } from "../cookie/cookie";
 import { buffered } from "../decorator/buffered";
 import { trace } from "../decorator/trace";
+import { cookie } from "../cookie/cookie";
 
 import { MdEditor } from "./md-editor";
+import { UiMode } from "./md-editor";
 
 declare const $: JQueryStatic;
 
@@ -31,10 +32,10 @@ export class MdEditorFooter {
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
         if (!this.ed.mobile) {
-            if (!this.ed.simple) {
-                this.maximize(600, true);
-            } else {
+            if (this.ed.uiMode === UiMode.simple) {
                 this.minimize(600, true);
+            } else {
+                this.maximize(600, true);
             }
         } else {
             this.hide();

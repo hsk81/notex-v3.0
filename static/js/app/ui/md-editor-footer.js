@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../decorator/trace", "./md-editor"], function (require, exports, cookie_1, buffered_1, trace_1, md_editor_1) {
+define(["require", "exports", "../decorator/buffered", "../decorator/trace", "../cookie/cookie", "./md-editor", "./md-editor"], function (require, exports, buffered_1, trace_1, cookie_1, md_editor_1, md_editor_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var MdEditorFooter = /** @class */ (function () {
@@ -38,11 +38,11 @@ define(["require", "exports", "../cookie/cookie", "../decorator/buffered", "../d
             this.$spellCheckerButton
                 .on('click', this.onSpellCheckButtonClick.bind(this));
             if (!this.ed.mobile) {
-                if (!this.ed.simple) {
-                    this.maximize(600, true);
+                if (this.ed.uiMode === md_editor_2.UiMode.simple) {
+                    this.minimize(600, true);
                 }
                 else {
-                    this.minimize(600, true);
+                    this.maximize(600, true);
                 }
             }
             else {

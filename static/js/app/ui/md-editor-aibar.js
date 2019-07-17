@@ -8,10 +8,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -42,11 +43,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "../decorator/trace", "./md-editor"], function (require, exports, trace_1, md_editor_1) {
+define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"], function (require, exports, trace_1, md_editor_1, md_editor_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var AiMode;
+    (function (AiMode) {
+        AiMode["help"] = "ai-help";
+        AiMode["none"] = "ai-none";
+    })(AiMode = exports.AiMode || (exports.AiMode = {}));
     var MdEditorAibar = /** @class */ (function () {
         function MdEditorAibar() {
+            var _this = this;
+            if (this.ed.uiMode === md_editor_2.UiMode.simple) {
+                this.$aibar.removeClass('mirror');
+            }
+            else {
+                this.$aibar.addClass('mirror');
+            }
+            if (this.ed.empty) {
+                this.$aibar.fadeIn('slow', function () {
+                    _this.$aibar.find('[data-toggle="tooltip"]').tooltip();
+                    _this.$aibar.find('[data-toggle="popover"]').popover();
+                });
+            }
             this.events();
         }
         MdEditorAibar_1 = MdEditorAibar;
@@ -62,18 +81,27 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         });
         MdEditorAibar.prototype.events = function () {
             var _this = this;
-            this.onModeChange(asMode(this.ed.simple));
-            $(this.ed).on('simple', function (ev, _a) {
+            $(this.ed).on('ui-mode', function (ev, _a) {
                 var value = _a.value;
-                _this.onModeChange(asMode(value));
+                _this.onUiModeChange(value);
             });
             $(this.ed).on('change', function (ev) {
                 _this.onEditorChange(_this.ed.empty);
             });
+            $(this.ed).on('ai-mode', function (ev, _a) {
+                var value = _a.value;
+                _this.onAiMode(value);
+            });
+            $(this.ed).on('ai-page', function (ev, _a) {
+                var value = _a.value;
+                _this.onAiPage(value);
+            });
+            this.$lhsButton.on('click', this.onLhsButtonClick.bind(this));
             this.$midButton.on('click', this.onMidButtonClick.bind(this));
+            this.$rhsButton.on('click', this.onRhsButtonClick.bind(this));
         };
-        MdEditorAibar.prototype.onModeChange = function (mode) {
-            if (mode === 'simple') {
+        MdEditorAibar.prototype.onUiModeChange = function (mode) {
+            if (mode === md_editor_2.UiMode.simple) {
                 this.$aibar.removeClass('mirror');
             }
             else {
@@ -84,35 +112,135 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             }
         };
         MdEditorAibar.prototype.onEditorChange = function (empty) {
-            if (empty) {
+            if (empty || this.aiMode === AiMode.help) {
                 this.$aibar.fadeIn('fast');
             }
             else {
                 this.$aibar.hide();
             }
         };
+        MdEditorAibar.prototype.onRhsButtonClick = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    if (this.aiPage !== undefined && this.aiPage < Infinity) {
+                        this.aiPage += 1;
+                    }
+                    else {
+                        this.aiMode = AiMode.help;
+                    }
+                    return [2 /*return*/];
+                });
+            });
+        };
+        MdEditorAibar.prototype.onLhsButtonClick = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    if (this.aiPage !== undefined && this.aiPage > 0) {
+                        this.aiPage -= 1;
+                    }
+                    else {
+                        this.aiMode = AiMode.help;
+                    }
+                    return [2 /*return*/];
+                });
+            });
+        };
         MdEditorAibar.prototype.onMidButtonClick = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var text, ex_1;
+                return __generator(this, function (_a) {
+                    if (this.aiMode !== AiMode.help) {
+                        this.aiMode = AiMode.help;
+                    }
+                    else {
+                        this.aiMode = AiMode.none;
+                    }
+                    return [2 /*return*/];
+                });
+            });
+        };
+        MdEditorAibar.prototype.onAiMode = function (mode) {
+            if (mode !== AiMode.help) {
+                this.$midButton.text('Help');
+            }
+            else {
+                this.$midButton.text('Exit');
+            }
+            if (mode !== AiMode.help) {
+                this.aiPage = undefined;
+            }
+            else {
+                this.aiPage = 0;
+            }
+        };
+        MdEditorAibar.prototype.onAiPage = function (page) {
+            return __awaiter(this, void 0, void 0, function () {
+                var help;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, fetch('/static/md/help.md')
-                                    .then(function (res) { return res.text(); })];
+                            if (!(page !== undefined)) return [3 /*break*/, 2];
+                            return [4 /*yield*/, this.fetch(page)];
                         case 1:
-                            text = _a.sent();
-                            this.ed.setValue(text);
+                            help = _a.sent();
+                            if (help !== null) {
+                                this.ed.setValue(help);
+                            }
+                            else {
+                                this.aiMode = AiMode.none;
+                            }
                             return [3 /*break*/, 3];
                         case 2:
-                            ex_1 = _a.sent();
-                            console.error(ex_1);
-                            return [3 /*break*/, 3];
+                            this.ed.clear();
+                            _a.label = 3;
                         case 3: return [2 /*return*/];
                     }
                 });
             });
         };
+        MdEditorAibar.prototype.fetch = function (page) {
+            return __awaiter(this, void 0, void 0, function () {
+                var padded, path;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            padded = page.toString(16).padStart(4, '0');
+                            path = "/static/md/help-" + padded + ".md";
+                            return [4 /*yield*/, fetch(path)
+                                    .then(function (res) {
+                                    return res.ok ? res.text() : Promise.resolve(null);
+                                })
+                                    .catch(function (reason) {
+                                    return null;
+                                })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
+            });
+        };
+        Object.defineProperty(MdEditorAibar.prototype, "aiMode", {
+            get: function () {
+                return window['ai-mode'];
+            },
+            set: function (value) {
+                $(this.ed).trigger('ai-mode', {
+                    value: window['ai-mode'] = value
+                });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorAibar.prototype, "aiPage", {
+            get: function () {
+                return window['ai-page'];
+            },
+            set: function (value) {
+                $(this.ed).trigger('ai-page', {
+                    value: window['ai-page'] = value
+                });
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MdEditorAibar.prototype, "$aibar", {
             get: function () {
                 return $('.aibar');
@@ -122,21 +250,21 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         });
         Object.defineProperty(MdEditorAibar.prototype, "$lhsButton", {
             get: function () {
-                return this.$aibar.find('button.lhs');
+                return this.$aibar.find('button.ai-lhs');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MdEditorAibar.prototype, "$midButton", {
             get: function () {
-                return this.$aibar.find('button.mid');
+                return this.$aibar.find('button.ai-mid');
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MdEditorAibar.prototype, "$rhsButton", {
             get: function () {
-                return this.$aibar.find('button.rhs');
+                return this.$aibar.find('button.ai-rhs');
             },
             enumerable: true,
             configurable: true
@@ -156,9 +284,6 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         return MdEditorAibar;
     }());
     exports.MdEditorAibar = MdEditorAibar;
-    function asMode(simple) {
-        return simple ? 'simple' : 'mirror';
-    }
     exports.default = MdEditorAibar;
 });
 //# sourceMappingURL=md-editor-aibar.js.map
