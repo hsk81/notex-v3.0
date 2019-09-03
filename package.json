@@ -25,8 +25,8 @@
   },
   "scripts": {
     "build": "npx tsc --build",
-    "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
-    "local": "DEBUG=0 gunicorn -c config.py wsgi:app",
+    "debug": "DEBUG=1 DATABASE_URL=${DATABASE_URL-postgres://notex@localhost:5432} gunicorn -c config.py wsgi:app",
+    "local": "DEBUG=0 DATABASE_URL=${DATABASE_URL-postgres://notex@localhost:5432} gunicorn -c config.py wsgi:app",
     "start": "gunicorn -c config.py --preload wsgi:app",
     "watch": "npx tsc --watch"
   },
