@@ -130,7 +130,7 @@ export class MdEditorAibar {
 
     private async fetch(page: number) {
         const padded = page.toString(16).padStart(4, '0');
-        const path = `/static/md/help-${padded}.md`;
+        const path = `/static/md/help-${padded.toUpperCase()}.md`;
         return await fetch(path)
             .then((res) => {
                 return res.ok ? res.text() : Promise.resolve(null);

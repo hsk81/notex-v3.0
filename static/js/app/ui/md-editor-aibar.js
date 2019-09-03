@@ -204,7 +204,7 @@ define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"
                     switch (_a.label) {
                         case 0:
                             padded = page.toString(16).padStart(4, '0');
-                            path = "/static/md/help-" + padded + ".md";
+                            path = "/static/md/help-" + padded.toUpperCase() + ".md";
                             return [4 /*yield*/, fetch(path)
                                     .then(function (res) {
                                     return res.ok ? res.text() : Promise.resolve(null);
