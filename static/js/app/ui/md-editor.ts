@@ -161,8 +161,8 @@ export class MdEditor {
         }
         if (value.length > 0 && value.length !== this._mdOld.length ||
             value.length > 0 && value !== this._mdOld ||
-            value.length > 0 && force)
-        {
+            value.length > 0 && force
+        ) {
             const render = () => {
                 const new_vnode = snabbdom.h(
                     'div#output', toVNode($cached[0]).children
@@ -263,17 +263,6 @@ export class MdEditor {
     }
 
     private events() {
-        if (this.mobile) {
-            this.toInput({
-                footer: false, toolbar: false
-            });
-        } else if (this.simple) {
-            this.toInput({
-                footer: true, toolbar: true
-            });
-        } else {
-            this.toMirror();
-        }
         this.dnd();
     }
 

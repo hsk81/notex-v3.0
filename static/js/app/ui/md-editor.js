@@ -224,19 +224,6 @@ define(["require", "exports", "../decorator/buffered", "../decorator/trace", "..
             }
         };
         MdEditor.prototype.events = function () {
-            if (this.mobile) {
-                this.toInput({
-                    footer: false, toolbar: false
-                });
-            }
-            else if (this.simple) {
-                this.toInput({
-                    footer: true, toolbar: true
-                });
-            }
-            else {
-                this.toMirror();
-            }
             this.dnd();
         };
         MdEditor.prototype.dnd = function () {
