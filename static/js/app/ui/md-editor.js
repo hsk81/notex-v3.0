@@ -19,6 +19,7 @@ define(["require", "exports", "../decorator/buffered", "../decorator/trace", "..
     })(UiMode = exports.UiMode || (exports.UiMode = {}));
     var MdEditor = /** @class */ (function () {
         function MdEditor() {
+            this._mdOld = '';
             this.patch = snabbdom.init([
                 snabbdom_attrs.default,
                 snabbdom_class.default,
@@ -127,7 +128,8 @@ define(["require", "exports", "../decorator/buffered", "../decorator/trace", "..
                     _this.vnode = undefined;
                 });
             }
-            if (value.length > 0 && value !== this._mdOld ||
+            if (value.length > 0 && value.length !== this._mdOld.length ||
+                value.length > 0 && value !== this._mdOld ||
                 value.length > 0 && force) {
                 var render = function () {
                     var new_vnode = snabbdom.h('div#output', tovnode_1.toVNode($cached[0]).children);
@@ -151,7 +153,8 @@ define(["require", "exports", "../decorator/buffered", "../decorator/trace", "..
                     render();
                 }
             }
-            if (value.length > 0 && value !== this._mdOld) {
+            if (value.length > 0 && value.length !== this._mdOld.length ||
+                value.length > 0 && value !== this._mdOld) {
                 var $header = $cached.find(':header');
                 download_manager_1.DownloadManager.me.title = $header.length === 0
                     ? new Date().toISOString() + ".md"

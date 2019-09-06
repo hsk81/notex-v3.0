@@ -159,7 +159,8 @@ export class MdEditor {
                 this.vnode = undefined;
             });
         }
-        if (value.length > 0 && value !== this._mdOld ||
+        if (value.length > 0 && value.length !== this._mdOld.length ||
+            value.length > 0 && value !== this._mdOld ||
             value.length > 0 && force)
         {
             const render = () => {
@@ -185,7 +186,9 @@ export class MdEditor {
                 render();
             }
         }
-        if (value.length > 0 && value !== this._mdOld) {
+        if (value.length > 0 && value.length !== this._mdOld.length ||
+            value.length > 0 && value !== this._mdOld
+        ) {
             const $header = $cached.find(':header');
             DownloadManager.me.title = $header.length === 0
                 ? `${new Date().toISOString()}.md`
@@ -529,6 +532,6 @@ export class MdEditor {
     private _spellCheckerOverlay: IOverlay | undefined;
     private _spellChecker: SpellChecker | undefined;
     private _searchOverlay: IOverlay | undefined;
-    private _mdOld: string | undefined;
+    private _mdOld: string = '';
 }
 export default MdEditor;
