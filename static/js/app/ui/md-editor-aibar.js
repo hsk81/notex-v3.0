@@ -8,11 +8,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -43,7 +42,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"], function (require, exports, trace_1, md_editor_1, md_editor_2) {
+define(["require", "exports", "../decorator/trace", "./md-editor"], function (require, exports, trace_1, md_editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AiMode;
@@ -54,16 +53,13 @@ define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"
     var MdEditorAibar = /** @class */ (function () {
         function MdEditorAibar() {
             var _this = this;
-            if (this.ed.uiMode === md_editor_2.UiMode.simple) {
-                this.$aibar.removeClass('mirror');
-            }
-            else {
-                this.$aibar.addClass('mirror');
-            }
             if (this.ed.empty) {
                 this.$aibar.fadeIn('slow', function () {
                     _this.$aibar.find('[data-toggle="tooltip"]').tooltip();
                     _this.$aibar.find('[data-toggle="popover"]').popover();
+                });
+                this.$output.css({
+                    height: 'calc(100% - 47px)'
                 });
             }
             this.events();
@@ -101,21 +97,21 @@ define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"
             this.$rhsButton.on('click', this.onRhsButtonClick.bind(this));
         };
         MdEditorAibar.prototype.onUiModeChange = function (mode) {
-            if (mode === md_editor_2.UiMode.simple) {
-                this.$aibar.removeClass('mirror');
-            }
-            else {
-                this.$aibar.addClass('mirror');
-            }
             if (this.ed.empty) {
                 this.$aibar.fadeIn('slow');
             }
         };
         MdEditorAibar.prototype.onEditorChange = function (empty) {
+            var _this = this;
             if (empty || this.aiMode === AiMode.help) {
-                this.$aibar.fadeIn('fast');
+                this.$aibar.fadeIn('fast', function () { return _this.$output.css({
+                    height: 'calc(100% - 47px)'
+                }); });
             }
             else {
+                this.$output.css({
+                    height: 'calc(100%)'
+                });
                 this.$aibar.hide();
             }
         };
@@ -265,6 +261,13 @@ define(["require", "exports", "../decorator/trace", "./md-editor", "./md-editor"
         Object.defineProperty(MdEditorAibar.prototype, "$rhsButton", {
             get: function () {
                 return this.$aibar.find('button.ai-rhs');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorAibar.prototype, "$output", {
+            get: function () {
+                return $('#output');
             },
             enumerable: true,
             configurable: true

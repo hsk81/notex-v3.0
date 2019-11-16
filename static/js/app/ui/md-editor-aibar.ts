@@ -1,5 +1,4 @@
 import { trace } from "../decorator/trace";
-import { cookie } from "../cookie/cookie";
 
 import { MdEditor } from "./md-editor";
 import { UiMode } from "./md-editor";
@@ -21,15 +20,13 @@ export class MdEditorAibar {
     }
 
     public constructor() {
-        if (this.ed.uiMode === UiMode.simple) {
-            this.$aibar.removeClass('mirror');
-        } else {
-            this.$aibar.addClass('mirror');
-        }
         if (this.ed.empty) {
             this.$aibar.fadeIn('slow', () => {
                 this.$aibar.find('[data-toggle="tooltip"]').tooltip();
                 this.$aibar.find('[data-toggle="popover"]').popover();
+            });
+            this.$output.css({
+                height: 'calc(100% - 47px)'
             });
         }
         this.events();
@@ -60,20 +57,19 @@ export class MdEditorAibar {
     }
 
     private onUiModeChange(mode: UiMode) {
-        if (mode === UiMode.simple) {
-            this.$aibar.removeClass('mirror');
-        } else {
-            this.$aibar.addClass('mirror');
-        }
         if (this.ed.empty) {
             this.$aibar.fadeIn('slow');
         }
     }
-
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {
-            this.$aibar.fadeIn('fast');
+            this.$aibar.fadeIn('fast', () => this.$output.css({
+                height: 'calc(100% - 47px)'
+            }));
         } else {
+            this.$output.css({
+                height: 'calc(100%)'
+            });
             this.$aibar.hide();
         }
     }
@@ -85,7 +81,6 @@ export class MdEditorAibar {
             this.aiMode = AiMode.help;
         }
     }
-
     private async onLhsButtonClick() {
         if (this.aiPage !== undefined && this.aiPage > 0) {
             this.aiPage -= 1;
@@ -93,7 +88,6 @@ export class MdEditorAibar {
             this.aiMode = AiMode.help;
         }
     }
-
     private async onMidButtonClick() {
         if (this.aiMode !== AiMode.help) {
             this.aiMode = AiMode.help;
@@ -114,7 +108,6 @@ export class MdEditorAibar {
             this.aiPage = 0;
         }
     }
-
     private async onAiPage(page: number | undefined) {
         if (page !== undefined) {
             const help = await this.fetch(page);
@@ -143,7 +136,6 @@ export class MdEditorAibar {
     private get aiMode() {
         return window['ai-mode'] as AiMode;
     }
-
     private set aiMode(value: AiMode) {
         $(this.ed).trigger('ai-mode', {
             value: window['ai-mode'] = value
@@ -153,7 +145,6 @@ export class MdEditorAibar {
     private get aiPage() {
         return window['ai-page'] as number | undefined;
     }
-
     private set aiPage(value: number | undefined) {
         $(this.ed).trigger('ai-page', {
             value: window['ai-page'] = value
@@ -163,17 +154,17 @@ export class MdEditorAibar {
     private get $aibar() {
         return $('.aibar');
     }
-
     private get $lhsButton() {
         return this.$aibar.find('button.ai-lhs');
     }
-
     private get $midButton() {
         return this.$aibar.find('button.ai-mid');
     }
-
     private get $rhsButton() {
         return this.$aibar.find('button.ai-rhs');
+    }
+    private get $output() {
+        return $('#output');
     }
 
     private get ed() {

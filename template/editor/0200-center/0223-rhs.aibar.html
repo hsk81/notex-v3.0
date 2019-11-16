@@ -1,31 +1,21 @@
-<div class="aibar mirror">
+<div class="aibar">
     <style scoped>
         div.aibar {
             display: none;
             position: absolute;
         }
-        div.aibar.mirror {
-            background-color: none;
-            border: none;
-        }
-        div.aibar:not(.mirror) {
+        div.aibar {
             background-color: white;
         }
         div.aibar {
+            border-left: 4px double #e7e7e7;
             border-top: 1px solid #e7e7e7;
-        }
-        div.aibar.mirror {
-            bottom: 47px;
-            height: initial;
-            margin: 0 1em;
-            left: 78px;
-            width: calc(100% - 78px - 2em);
         }
         div.aibar {
             bottom: 0;
-            height: initial;
-            left: 48px;
-            width: calc(100% - 48px);
+            height: 47px;
+            left: 0;
+            width: 100%;
         }
         div.aibar {
             margin: 0;
@@ -33,7 +23,6 @@
         }
         div.aibar {
             text-align: center;
-            z-index: 2;
         }
     </style>
     <div class="btn-group btn-group-justified" role="group">
