@@ -4,11 +4,9 @@ __author__ = 'hsk81'
 ###############################################################################
 
 import abc
-import bmemcached
 import functools
 import hashlib
 import os
-import redis
 import ujson as JSON
 
 ###############################################################################
@@ -33,7 +31,7 @@ class AppCache(object):
     @abc.abstractmethod
     def exists(self, key): return
     @abc.abstractmethod
-    def flush_all(self): pass
+    def flush(self): pass
 
     ###########################################################################
 
@@ -99,65 +97,6 @@ class AppCache(object):
 
 ###############################################################################
 
-class AppMemcached(AppCache):
-
-    @property
-    def NEVER(self):
-        return 0
-    @property
-    def ASAP(self):
-        return None
-
-    def __init__(self, servers, username=None, password=None):
-        self.servers = servers
-        self.username = username
-        self.password = password
-
-    def get(self, key):
-        value = self.connection.get(self.prefixed(key))
-        return JSON.decode(value) if type(value) == str else value
-
-    def set(self, key, value, expiry=0): ## self.NEVER
-        if expiry == self.ASAP:
-            self.connection.delete(self.prefixed(key))
-        else:
-            self.connection.set(self.prefixed(key), JSON.encode(value), time=expiry)
-
-    def delete(self, key):
-        self.connection.delete(self.prefixed(key))
-
-    def expire(self, key, expiry=None): ## self.ASAP
-        if expiry == self.ASAP:
-            self.connection.delete(self.prefixed(key))
-        else:
-            self.connection.set(
-                self.prefixed(key), self.connection.get(self.prefixed(key)),
-                time=expiry)
-
-    def exists(self, key):
-        return JSON.decode(self.connection.get(self.prefixed(key))) is not None
-
-    def flush_all(self):
-        self.connection.flush_all()
-
-    ###########################################################################
-
-    @property
-    def connection(self):
-        if not hasattr(self, '_connection'):
-            setattr(self, '_connection', self.connect())
-        return getattr(self, '_connection')
-
-    def connect(self):
-        return bmemcached.Client(
-            self.servers, username=self.username, password=self.password)
-
-    def close(self):
-        if hasattr(self, '_connection'):
-            self._connection.disconnect_all()
-
-###############################################################################
-
 class AppRedis(AppCache):
 
     name = 'redis'
@@ -175,7 +114,7 @@ class AppRedis(AppCache):
 
     def get(self, key):
         value = self.connection.get(self.prefixed(key))
-        return JSON.decode(value) if type(value) == str else value
+        return JSON.decode(value) if type(value) in (str, bytes) else value
 
     def set(self, key, value, expiry=None): ## self.NEVER
         if expiry == self.NEVER:
@@ -197,8 +136,8 @@ class AppRedis(AppCache):
     def exists(self, key):
         return self.connection.exists(self.prefixed(key))
 
-    def flush_all(self):
-        self.connection.flushall()
+    def flush(self):
+        self.connection.flushdb()
 
     ###########################################################################
 
@@ -209,35 +148,33 @@ class AppRedis(AppCache):
         return getattr(self, '_connection')
 
     def connect(self):
+        import redis
         return redis.StrictRedis.from_url(self.url, db=self.db)
 
     def close(self):
         if hasattr(self, '_connection'):
-            pass
+            getattr(self, '_connection').close()
+            delattr(self, '_connection')
 
 ###############################################################################
 ###############################################################################
 
-memcached_cache = AppMemcached( ## memoization
-    servers=os.environ.get('MEMCACHED_SERVERS', 'localhost:11211').split(' '),
-    username=os.environ.get('MEMCACHED_USERNAME', None),
-    password=os.environ.get('MEMCACHED_PASSWORD', None))
-
-###############################################################################
-
-redis_cache_0 = AppRedis( ## authentication
+redis_cache_0 = AppRedis( ## memoization
     db=os.environ.get('REDIS_DB', os.environ.get('REDIS_DB0', '0')),
+    url=os.environ.get('REDIS_URL', 'redis://localhost:6379'))
+
+redis_cache_1 = AppRedis( ## authentication
+    db=os.environ.get('REDIS_DB', os.environ.get('REDIS_DB1', '1')),
     url=os.environ.get('REDIS_URL', 'redis://localhost:6379'))
 
 ###############################################################################
 ###############################################################################
 
-if os.environ.get('MEMCACHED_FLUSH') is not None:
-    memcached_cache.flush_all()
-
 if os.environ.get('REDIS_FLUSH_DB') is not None:
-    if '0' in os.environ.get('REDIS_FLUSH_DB').split(' '):
-        redis_cache_0.flush_all()
+    if 0 in JSON.decode(os.environ.get('REDIS_FLUSH_DB', '[0]')):
+        redis_cache_0.flush()
+    if 1 in JSON.decode(os.environ.get('REDIS_FLUSH_DB', '[0]')):
+        redis_cache_1.flush()
 
 ###############################################################################
 ###############################################################################

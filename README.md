@@ -12,45 +12,30 @@ Pre-requisites: [NoTex][0] depends on Python 2, PostgreSQL 10 and Redis (plus po
 $ git clone https://github.com/hsk81/notex-v3.0 notex.git
 ```
 
-Switch to the cloned GIT repository and setup the Python environment. This step requires `virtualenv2` - please make sure that you have `virtualenv2` for `python2` installed:
+Switch to the cloned GIT repository and setup the Python environment. This step requires `virtualenv` - please make sure that you have `virtualenv` for `python` installed:
 
 ```bash
 notex.git $ ./scripts/setup.sh
 ```
 
-Then source to the virtual environment set-up for `python2`, which if successful should prepend the `[notex]` string to your prompt:
+Then source to the virtual environment set-up for `python`, which if successful should prepend the `[notex]` string to your prompt:
 
 ```bash
 notex.git $ source bin/activate
 ```
 
-Now, you can install all the `python2` dependencies with the help of the `setup.py` script. This step might require you to have a development environment set-up (including some headers for Python):
+Now, you can install all the `python` dependencies with the help of the `setup.py` script. This step might require you to have a development environment set-up (including some headers for Python):
 
 ```bash
 [notex] $ ./setup.py install
 ```
 
-It's then time for you to install (and start) your `postgresql`, `redis` and `memcached` instances, which has not been shown here. Please consult the corresponding resources for your operating system, to learn how that is accomplished.
+It's then time for you to install (and start) your `redis` and `memcached` instances, which has not been shown here. Please consult the corresponding resources for your operating system, to learn how that is accomplished.
 
 ## Execution
 
 Once all the necessary pre-requisites have been installed, we can start the application with:
 
-```bash
-[notex] $ DEBUG=1 DATABASE_RESET=1 DATABASE_URL=postgres://notex@localhost:5432 gunicorn -c config.py wsgi:app
-```
-
-where you have to ensure that a `notex` *database user* exists! So, if any database has been created before, it will now be dropped and a new one will be re-created. Then, we still need to fill it with some basic structures using the `__init__.sh` script:
-
-```bash
-[notex] $ ./scripts/db/__init__.sh
-```
-
-Later on, you can start the application much simpler via:
-
-```bash
-[notex] $ export DATABASE_URL=postgres://notex@localhost:5432
-```
 ```bash
 [notex] $ DEBUG=1 gunicorn -c config.py wsgi:app
 ```

@@ -8,31 +8,25 @@ from setuptools import setup
 
 setup (
     name='notex',
-    version='3.0.3',
+    version='3.1.1',
     description='blog editor',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
     url='https://hsk81@bitbucket.org/hsk81/notex.git',
     install_requires=[
-        'Beaker>=1.10.0',
-        'bottle>=0.12.13',
+        'Beaker>=1.11.0',
+        'bottle>=0.12.18',
         'compressinja>=0.0.2',
-        'gevent>=1.3.7',
-        'gunicorn>=19.9.0',
-        'Jinja2>=2.10',
-        'marshmallow>=3.0.0b20',
-        'psycopg2-binary>=2.7.5',
-        'py2-ipaddress>=3.4.1',
-        'python-binary-memcached>=0.24.6',
+        'gevent==1.4.0',
+        'gunicorn>=20.0.4',
+        'Jinja2>=2.10.3',
+        'libsass>=0.19.4',
         'pycrypto>=2.6.1',
         'rcssmin>=1.0.6',
-        'requests>=2.20.0',
-        'redis>=2.10.6',
-        'rjsmin>=1.0.12',
-        'sass>=2.3',
-        'SQLAlchemy>=1.2.13',
+        'redis>=3.3.11',
+        'rjsmin>=1.1.0',
         'ujson>=1.35',
-        'Werkzeug>=0.14.1'
+        'Werkzeug>=0.16.0'
     ],
 )
 

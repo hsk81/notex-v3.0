@@ -1,4 +1,4 @@
-{
+({
   "baseUrl": "./static/js/app",
   "out": "./static/build/app.js",
   "name": "app",
@@ -19,5 +19,14 @@
       "../../../node_modules/snabbdom/dist/snabbdom.min",
     "@npm/ipfs":
       "../../../node_modules/ipfs/dist/index.min"
-  }
-}
+  },
+  onBuildWrite(module_name, path, contents) {
+    const terser = require.nodeRequire("terser");
+    const result = terser.minify(contents);
+    if (result.error) {
+        throw new Error(result.error);
+    }
+    return result.code;
+  },
+  optimize: "none"
+})
