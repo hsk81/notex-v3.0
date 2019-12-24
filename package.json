@@ -10,8 +10,7 @@
     "markdown-it-footnote": "^3.0.2",
     "markdown-it-mark": "^3.0.0",
     "markdown-it-math": "^4.1.1",
-    "snabbdom": "^0.7.4",
-    "terser": "^4.4.3"
+    "snabbdom": "^0.7.4"
   },
   "devDependencies": {
     "@types/bootstrap": "^4.3.1",
@@ -20,14 +19,17 @@
     "@types/jquery": "^3.3.31",
     "@types/mathjax": "^0.0.36",
     "@types/node": "^13.1.0",
+    "terser": "^4.4.3",
     "typescript": "^3.7.4"
   },
   "repository": {
     "url": "git@bitbucket.org:hsk81/notex.git"
   },
   "scripts": {
-    "build": "npx tsc --build",
+    "build": "npx tsc --build && ./notex/minify.py",
+    "predebug": "npx tsc --build",
     "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
+    "prestart": "npm run build",
     "start": "DEBUG=0 gunicorn -c config.py wsgi:app --preload",
     "watch": "npx tsc --watch"
   },

@@ -3,8 +3,8 @@
 
 from bottle import request
 from datetime import date
+from notex import ARGs
 
-import ARGs
 import ipaddress
 import ujson as JSON
 

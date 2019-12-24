@@ -1,71 +1,82 @@
-# NoTex: Blog Editor
+# NoTex: A Markdown Editor
 
-With [NoTex][0] you can write blog posts using the [Markdown][1] notation, and once done the content can be published to [Blogger.com][2].
-
-Further, it enables you to craft complex mathematical formulae using [MathJax][3], which will come handy when you are a finance professional or scientific author. Another feature is its automatic syntax highlighting via [HighlightJS][4], which is for the software developers and computers scientists among you.
+[NoTex] allows you to write blog posts using the [Markdown] notation, and once done the content can be published to the [Blogger.com] platform. Further, it enables you to craft complex mathematical formulae using [MathJax], which is handy for finance professionals or scientific authors. Another feature is its automatic syntax highlighting via [HighlightJS], which is useful to software developers and computer scientists.
 
 ## Installation
 
-Pre-requisites: [NoTex][0] depends on Python 2, PostgreSQL 10 and Redis (plus possibly also Memcached). Further, you require GIT to get the source code:
+[NoTex] depends on [Node.js], [Python] 3 and [Redis]. Further, you require [Git] to fetch the source code and its submodules:
 
 ```bash
-$ git clone https://github.com/hsk81/notex-v3.0 notex.git
+$ git clone https://hsk81@bitbucket.org/hsk81/notex.git notex.git
+```
+```
+$ git submodule update --init
 ```
 
-Switch to the cloned GIT repository and setup the Python environment. This step requires `virtualenv` - please make sure that you have `virtualenv` for `python` installed:
+Switch to the repository and setup a Python virtual environment, which requires [virtualenv] to be available:
 
 ```bash
-notex.git $ ./scripts/setup.sh
+notex.git $ ./setup.sh
 ```
 
-Then source to the virtual environment set-up for `python`, which if successful should prepend the `[notex]` string to your prompt:
+Then activate the virtual environment (causing the `[notex]` prefix to get  prepended to your prompt):
 
 ```bash
 notex.git $ source bin/activate
 ```
 
-Now, you can install all the `python` dependencies with the help of the `setup.py` script. This step might require you to have a development environment set-up (including some headers for Python):
+Now, install the Python and Node.js dependencies, which may be require to have a proper development environment set-up (including some Python related headers):
 
 ```bash
 [notex] $ ./setup.py install
 ```
 
-It's then time for you to install (and start) your `redis` and `memcached` instances, which has not been shown here. Please consult the corresponding resources for your operating system, to learn how that is accomplished.
+```bash
+[notex] $ npm install
+```
 
 ## Execution
 
-Once all the necessary pre-requisites have been installed, we can start the application with:
+First, start an (already installed) `redis` instance – by for example running the following command (which is operating system dependent):
 
 ```bash
-[notex] $ DEBUG=1 gunicorn -c config.py wsgi:app
+[notex] $ sudo systemctl start redis
 ```
 
-Now, navigate to `http://localhost:8000` and you should see a fully functional [NoTex][0] instance.
-
-## Transpilation
-
-Since most of the code is written with [TypeScript] it is required to transpile it into JavaScript. For this first some dependencies (`@types`) from `package.json` need to be installed
+Then, once all the necessary pre-requisites are installed and ready, start the application with the following `npm run-script`:
 
 ```bash
-$ npm install
+[notex] $ npm start
 ```
 
-Once, this step is done you can use `tsc` after editing a script to have it transpiled:
+Now, navigate your browser to `http://localhost:8000` where a functional [NoTex] instance should get rendered.
+
+## Development
+
+First, start the application in *debug* mode:
 
 ```bash
-$ npm run build
+[notex] $ npm run debug
 ```
 
-Or, watching for any change in a script is also possible, which will then automatically run an incremental step:
+Then, also to watch for code changes (of `*.ts` scripts) execute:
 
 ```bash
-$ npm run watch
+[notex] $ npm run watch
 ```
 
-[0]: https://www.notex.ch/editor
-[1]: https://daringfireball.net/projects/markdown/
-[2]: https://www.blogger.com/
-[3]: https://www.mathjax.org/
-[4]: https://highlightjs.org/
+And finally, navigate again to `http://localhost:8000` to interact with the editor.
 
-[TypeScript]: www.typescriptlang.org
+[Blogger.com]: https://www.blogger.com
+[Git]: https://git-scm.com
+[HighlightJS]: https://highlightjs.org
+[Markdown]: https://daringfireball.net/projects/markdown
+[MathJax]: https://www.mathjax.org
+[Node.js]: https://nodejs.org
+[NoTex]: https://www.notex.ch/editor
+[Python]: https://www.python.org
+[Redis]: https://redis.io
+[virtualenv]: https://pypi.org/project/virtualenv
+[TypeScript]: https://www.typescriptlang.org
+
+<style>p { text-align: justify }</style>

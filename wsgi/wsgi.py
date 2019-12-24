@@ -3,10 +3,10 @@
 
 from bottle import request
 from beaker.middleware import SessionMiddleware
-from notex.app import app_main
 from werkzeug.debug import DebuggedApplication
 
-import ARGs
+from notex.app import app_main
+from notex.app import ARGs
 
 ###############################################################################
 ###############################################################################
@@ -37,6 +37,7 @@ app = SessionMiddleware(app, {
 
 @app_main.hook('before_request')
 def before_request():
+
     request.session = request.environ['beaker.session']
 
 ###############################################################################

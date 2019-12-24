@@ -3,8 +3,7 @@
 
 from bottle import Bottle, redirect
 from notex.cache import redis_cache_0 as rdb
-
-import ARGs
+from notex import ARGs
 
 ###############################################################################
 ###############################################################################
@@ -16,7 +15,8 @@ app = app_index
 ###############################################################################
 
 @app.get ('/')
-@rdb.memoize (expiry=rdb.NEVER, name='view.index', unless=lambda: ARGs.debug ())
+@rdb.memoize (
+    expiry=rdb.NEVER, name='view.index', unless=lambda: ARGs.debug ())
 def index (*args, **kwargs):
 
     return redirect ('/editor')

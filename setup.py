@@ -24,7 +24,6 @@ setup (
         'pycrypto>=2.6.1',
         'rcssmin>=1.0.6',
         'redis>=3.3.11',
-        'rjsmin>=1.1.0',
         'ujson>=1.35',
         'Werkzeug>=0.16.0'
     ],

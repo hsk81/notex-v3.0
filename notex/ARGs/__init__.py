@@ -10,9 +10,11 @@ import ujson as JSON
 ###############################################################################
 
 def put(lookup):
+
     global _ARGs; _ARGs = dict(lookup)
 
 def get(key, default=None):
+
     global _ARGs
 
     if '_ARGs' not in globals():
@@ -31,6 +33,7 @@ def get(key, default=None):
 ###############################################################################
 
 def debug (*args, **kwargs):
+
     return get('DEBUG')
 
 ###############################################################################

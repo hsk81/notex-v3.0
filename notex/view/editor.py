@@ -2,14 +2,11 @@
 ###############################################################################
 
 from bottle import Bottle
-
 from notex.aaa import aaa_plugin as aaa
 from notex.cache import redis_cache_0 as rdb
-
 from notex.view.util.generic import generic
 from notex.view.util.language import detect
-
-import ARGs
+from notex import ARGs
 
 ###############################################################################
 ###############################################################################
@@ -23,7 +20,8 @@ app = app_edit
 @app.get ('/editor')
 def edit ():
 
-    @rdb.memoize (expiry=rdb.NEVER, unless=lambda: ARGs.debug () or aaa.current)
+    @rdb.memoize (
+        expiry=rdb.NEVER, unless=lambda: ARGs.debug () or aaa.current)
     def memoized (*args, **kwargs):
 
         return generic ('editor')
