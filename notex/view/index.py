@@ -2,7 +2,7 @@
 ###############################################################################
 
 from bottle import Bottle, redirect
-from notex.cache import redis_cache_0 as rdb
+from notex.cache import redis_cache_1 as rdb
 from notex import ARGs
 
 ###############################################################################

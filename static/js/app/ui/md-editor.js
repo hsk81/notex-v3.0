@@ -122,7 +122,7 @@ define(["require", "exports", "../decorator/buffered", "../decorator/trace", "..
             }
             var value = this.getValue();
             if (value.length === 0) {
-                $.get('/static/html/output-placeholder.html').done(function (html) {
+                $.get('/editor/0200-center/0222-rhs.output-placeholder.html').done(function (html) {
                     $output.html(html);
                     $output.find('>*').hide().fadeIn('fast');
                     _this.vnode = undefined;

@@ -165,19 +165,19 @@ class AppRedis(AppCache):
 ###############################################################################
 ###############################################################################
 
-redis_cache_0 = AppRedis( ## memoization
+redis_cache_0 = AppRedis( ## authentication
     db=ARGs.get('REDIS_DB', ARGs.get('REDIS_DB0', '0')),
     url=ARGs.get('REDIS_URL', 'redis://localhost:6379'))
 
-redis_cache_1 = AppRedis( ## authentication
+redis_cache_1 = AppRedis( ## memoization
     db=ARGs.get('REDIS_DB', ARGs.get('REDIS_DB1', '1')),
     url=ARGs.get('REDIS_URL', 'redis://localhost:6379'))
 
 ###############################################################################
 
-if 0 in ARGs.get('REDIS_FLUSH_DB', [0]):
+if 0 in ARGs.get('REDIS_FLUSH_DB', [1]):
     redis_cache_0.flush()
-if 1 in ARGs.get('REDIS_FLUSH_DB', [0]):
+if 1 in ARGs.get('REDIS_FLUSH_DB', [1]):
     redis_cache_1.flush()
 
 ###############################################################################

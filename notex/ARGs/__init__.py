@@ -10,11 +10,9 @@ import ujson as JSON
 ###############################################################################
 
 def put(lookup):
-
     global _ARGs; _ARGs = dict(lookup)
 
 def get(key, default=None):
-
     global _ARGs
 
     if '_ARGs' not in globals():
