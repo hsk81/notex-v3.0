@@ -114,7 +114,7 @@ class AppRedis(AppCache):
 
     def get(self, key):
         value = self.connection.get(self.prefixed(key))
-        return JSON.decode(value) if type(value) in (str, bytes) else value
+        return JSON.decode(value) if type(value) in(str, bytes) else value
 
     def set(self, key, value, expiry=None): ## self.NEVER
         if expiry == self.NEVER:

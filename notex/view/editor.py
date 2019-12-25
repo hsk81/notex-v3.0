@@ -11,22 +11,22 @@ from notex import ARGs
 ###############################################################################
 ###############################################################################
 
-app_edit = Bottle ()
+app_edit = Bottle()
 app = app_edit
 
 ###############################################################################
 ###############################################################################
 
-@app.get ('/editor')
-def edit ():
+@app.get('/editor')
+def edit():
 
-    @rdb.memoize (
-        expiry=rdb.NEVER, unless=lambda: ARGs.debug () or aaa.current)
-    def memoized (*args, **kwargs):
+    @rdb.memoize(
+        expiry=rdb.NEVER, unless=lambda: ARGs.debug() or aaa.current)
+    def memoized(*args, **kwargs):
 
-        return generic ('editor')
+        return generic('editor')
 
-    return memoized (name='views.editor:' + detect('en'))
+    return memoized(name='views.editor:' + detect('en'))
 
 ###############################################################################
 ###############################################################################

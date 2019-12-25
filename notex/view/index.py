@@ -8,18 +8,18 @@ from notex import ARGs
 ###############################################################################
 ###############################################################################
 
-app_index = Bottle ()
+app_index = Bottle()
 app = app_index
 
 ###############################################################################
 ###############################################################################
 
-@app.get ('/')
-@rdb.memoize (
-    expiry=rdb.NEVER, name='view.index', unless=lambda: ARGs.debug ())
-def index (*args, **kwargs):
+@app.get('/')
+@rdb.memoize(
+    expiry=rdb.NEVER, name='view.index', unless=lambda: ARGs.debug())
+def index(*args, **kwargs):
 
-    return redirect ('/editor')
+    return redirect('/editor')
 
 ###############################################################################
 ###############################################################################

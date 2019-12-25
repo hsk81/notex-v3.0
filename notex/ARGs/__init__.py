@@ -21,7 +21,7 @@ def get(key, default=None):
         _ARGs = {}
 
     if hasattr(_ARGs, key):
-        return _ARGs.get (key, default)
+        return _ARGs.get(key, default)
     else:
         try:
             return JSON.decode(os.environ.get(key, default))
@@ -32,7 +32,7 @@ def get(key, default=None):
 
 ###############################################################################
 
-def debug (*args, **kwargs):
+def debug(*args, **kwargs):
 
     return get('DEBUG')
 
