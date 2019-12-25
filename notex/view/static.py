@@ -3,6 +3,7 @@
 
 from bottle import Bottle, request
 from bottle import static_file
+from notex import ARGs
 
 import os
 
@@ -61,7 +62,7 @@ def fonts(path):
 @app.get('/robots.txt')
 def robots_txt(*args, **kwargs):
 
-    if not os.environ.get('ROBOTS_TXT', True):
+    if not ARGs.get('ROBOTS_TXT', True):
         return static_file('robots-disallow.txt', root='./static/txt')
     else:
         return static_file('robots-allow.txt', root='./static/txt')

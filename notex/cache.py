@@ -3,6 +3,8 @@ __author__ = 'hsk81'
 ###############################################################################
 ###############################################################################
 
+from notex import ARGs
+
 import abc
 import functools
 import hashlib
@@ -114,15 +116,19 @@ class AppRedis(AppCache):
 
     def get(self, key):
         value = self.connection.get(self.prefixed(key))
-        return JSON.decode(value) if type(value) in(str, bytes) else value
+        return JSON.decode(value) if type(value) in (str, bytes) else value
 
     def set(self, key, value, expiry=None): ## self.NEVER
         if expiry == self.NEVER:
-            self.connection.pipeline().set(self.prefixed(key), JSON.encode(value)) \
-                .persist(self.prefixed(key)).execute()
+            self.connection.pipeline() \
+                .set(self.prefixed(key), JSON.encode(value)) \
+                .persist(self.prefixed(key)) \
+                .execute()
         else:
-            self.connection.pipeline().set(self.prefixed(key), JSON.encode(value)) \
-                .expire(self.prefixed(key), time=expiry).execute()
+            self.connection.pipeline() \
+                .set(self.prefixed(key), JSON.encode(value)) \
+                .expire(self.prefixed(key), time=expiry) \
+                .execute()
 
     def delete(self, key):
         self.connection.delete(self.prefixed(key))
@@ -160,21 +166,19 @@ class AppRedis(AppCache):
 ###############################################################################
 
 redis_cache_0 = AppRedis( ## memoization
-    db=os.environ.get('REDIS_DB', os.environ.get('REDIS_DB0', '0')),
-    url=os.environ.get('REDIS_URL', 'redis://localhost:6379'))
+    db=ARGs.get('REDIS_DB', ARGs.get('REDIS_DB0', '0')),
+    url=ARGs.get('REDIS_URL', 'redis://localhost:6379'))
 
 redis_cache_1 = AppRedis( ## authentication
-    db=os.environ.get('REDIS_DB', os.environ.get('REDIS_DB1', '1')),
-    url=os.environ.get('REDIS_URL', 'redis://localhost:6379'))
+    db=ARGs.get('REDIS_DB', ARGs.get('REDIS_DB1', '1')),
+    url=ARGs.get('REDIS_URL', 'redis://localhost:6379'))
 
 ###############################################################################
-###############################################################################
 
-if os.environ.get('REDIS_FLUSH_DB') is not None:
-    if 0 in JSON.decode(os.environ.get('REDIS_FLUSH_DB', '[0]')):
-        redis_cache_0.flush()
-    if 1 in JSON.decode(os.environ.get('REDIS_FLUSH_DB', '[0]')):
-        redis_cache_1.flush()
+if 0 in ARGs.get('REDIS_FLUSH_DB', [0]):
+    redis_cache_0.flush()
+if 1 in ARGs.get('REDIS_FLUSH_DB', [0]):
+    redis_cache_1.flush()
 
 ###############################################################################
 ###############################################################################
