@@ -20,7 +20,6 @@ setup (
         'gevent==1.4.0',
         'gunicorn>=20.0.4',
         'Jinja2>=2.10.3',
-        'libsass>=0.19.4',
         'pycrypto>=2.6.1',
         'rcssmin>=1.0.6',
         'redis>=3.3.11',

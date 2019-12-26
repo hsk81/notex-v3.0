@@ -6,14 +6,11 @@ __author__ = 'hsk81'
 ###############################################################################
 ###############################################################################
 
+import amd
 import gzip
 import os
 import rcssmin
-import sass
 import subprocess
-
-import amd
-import ARGs
 
 ###############################################################################
 ###############################################################################
@@ -32,23 +29,15 @@ def zipify(tgt_path):
 
 ###############################################################################
 
-def sass_compile(src_path):
-
-    for path, dns, fns in os.walk(src_path):
-        for filename in filter(lambda fn: fn.endswith('.scss'), fns):
-            tmp_path = os.path.join(path, filename)
-            tgt_path = tmp_path.replace('.scss', '.css')
-
-            with open(tgt_path, 'w') as out_file:
-                out_file.write(sass.compile(filename=tmp_path))
-
 def css_minify(tgt_path):
 
     def minify(tgt_path, src_path, flag='a'):
         concat(tgt_path, src_path, flag=flag, func=rcssmin.cssmin)
 
     minify(tgt_path,
-        'static/css/lib/bootstrap/bootstrap-3.3.6.min.css', 'w')
+        'static/css/app/font.css', 'w')
+    minify(tgt_path,
+        'static/css/lib/bootstrap/bootstrap-3.3.6.min.css')
     minify(tgt_path,
         'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
     minify(tgt_path,
@@ -202,8 +191,6 @@ def js_minify(tgt_path):
 
 if __name__ == '__main__':
 
-    sass_compile(
-        src_path='./static/css')
     css_minify(
         tgt_path='./static/build/all.css')
     js_minify(
