@@ -925,31 +925,32 @@ export class MdEditorToolbar {
     }
 
     private onSupscriptClickMirror() {
-        let cur = this.ed.mirror.getCursor(),
-            mod = this.ed.mirror.getModeAt(cur);
-        if (mod && mod.name === 'markdown') {
+        let cur = this.ed.mirror.getCursor();
+        let mod = this.ed.mirror.getModeAt(cur);
+        if (mod && mod.name === 'markdown' ||
+            mod && mod.name === 'stex'
+        ) {
             this.ed.mirror.replaceRange('^{ }', cur);
             this.ed.mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
+                line: cur.line, ch: cur.ch + 3
+            });
         }
     }
 
     private onSupscriptClickSimple() {
-        let val = this.ed.$input.val() as string,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let end = inp.selectionEnd as number;
 
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
+        inp.setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '^{ }')) {
-            let px = val.substring(0, end),
-                sx = val.substring(end, val.length);
-
+            let px = val.substring(0, end);
+            let sx = val.substring(end, val.length);
             this.ed.$input.val(`${px}^{ }${sx}`);
         }
-
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end + 2, end + 3);
+        inp.setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
 
@@ -963,31 +964,32 @@ export class MdEditorToolbar {
     }
 
     private onSubscriptClickMirror() {
-        let cur = this.ed.mirror.getCursor(),
-            mod = this.ed.mirror.getModeAt(cur);
-        if (mod && mod.name === 'markdown') {
-            this.ed.mirror.replaceRange('~{ }', cur);
+        let cur = this.ed.mirror.getCursor();
+        let mod = this.ed.mirror.getModeAt(cur);
+        if (mod && mod.name === 'markdown' ||
+            mod && mod.name === 'stex'
+        ) {
+            this.ed.mirror.replaceRange('_{ }', cur);
             this.ed.mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
-                    line: cur.line, ch: cur.ch + 3
-                });
+                line: cur.line, ch: cur.ch + 3
+            });
         }
     }
 
     private onSubscriptClickSimple() {
-        let val = this.ed.$input.val() as string,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let end = inp.selectionEnd as number;
 
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end, end);
-        if (!document.execCommand('insertText', false, '~{ }')) {
-            let px = val.substring(0, end),
-                sx = val.substring(end, val.length);
-
-            this.ed.$input.val(`${px}~{ }${sx}`);
+        inp.setSelectionRange(end, end);
+        if (!document.execCommand('insertText', false, '_{ }')) {
+            let px = val.substring(0, end);
+            let sx = val.substring(end, val.length);
+            this.ed.$input.val(`${px}_{ }${sx}`);
         }
-
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(end + 2, end + 3);
+        inp.setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
 

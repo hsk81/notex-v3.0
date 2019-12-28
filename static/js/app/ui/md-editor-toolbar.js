@@ -829,8 +829,10 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             this.ed.focus();
         };
         MdEditorToolbar.prototype.onSupscriptClickMirror = function () {
-            var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
+            var cur = this.ed.mirror.getCursor();
+            var mod = this.ed.mirror.getModeAt(cur);
+            if (mod && mod.name === 'markdown' ||
+                mod && mod.name === 'stex') {
                 this.ed.mirror.replaceRange('^{ }', cur);
                 this.ed.mirror.setSelection({
                     line: cur.line, ch: cur.ch + 2
@@ -840,13 +842,16 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             }
         };
         MdEditorToolbar.prototype.onSupscriptClickSimple = function () {
-            var val = this.ed.$input.val(), end = this.ed.$input[0].selectionEnd;
-            this.ed.$input[0].setSelectionRange(end, end);
+            var inp = this.ed.$input[0];
+            var val = this.ed.$input.val();
+            var end = inp.selectionEnd;
+            inp.setSelectionRange(end, end);
             if (!document.execCommand('insertText', false, '^{ }')) {
-                var px = val.substring(0, end), sx = val.substring(end, val.length);
+                var px = val.substring(0, end);
+                var sx = val.substring(end, val.length);
                 this.ed.$input.val(px + "^{ }" + sx);
             }
-            this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+            inp.setSelectionRange(end + 2, end + 3);
             this.ed.$input.trigger('change');
         };
         MdEditorToolbar.prototype.onSubscriptClick = function () {
@@ -859,9 +864,11 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             this.ed.focus();
         };
         MdEditorToolbar.prototype.onSubscriptClickMirror = function () {
-            var cur = this.ed.mirror.getCursor(), mod = this.ed.mirror.getModeAt(cur);
-            if (mod && mod.name === 'markdown') {
-                this.ed.mirror.replaceRange('~{ }', cur);
+            var cur = this.ed.mirror.getCursor();
+            var mod = this.ed.mirror.getModeAt(cur);
+            if (mod && mod.name === 'markdown' ||
+                mod && mod.name === 'stex') {
+                this.ed.mirror.replaceRange('_{ }', cur);
                 this.ed.mirror.setSelection({
                     line: cur.line, ch: cur.ch + 2
                 }, {
@@ -870,13 +877,16 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
             }
         };
         MdEditorToolbar.prototype.onSubscriptClickSimple = function () {
-            var val = this.ed.$input.val(), end = this.ed.$input[0].selectionEnd;
-            this.ed.$input[0].setSelectionRange(end, end);
-            if (!document.execCommand('insertText', false, '~{ }')) {
-                var px = val.substring(0, end), sx = val.substring(end, val.length);
-                this.ed.$input.val(px + "~{ }" + sx);
+            var inp = this.ed.$input[0];
+            var val = this.ed.$input.val();
+            var end = inp.selectionEnd;
+            inp.setSelectionRange(end, end);
+            if (!document.execCommand('insertText', false, '_{ }')) {
+                var px = val.substring(0, end);
+                var sx = val.substring(end, val.length);
+                this.ed.$input.val(px + "_{ }" + sx);
             }
-            this.ed.$input[0].setSelectionRange(end + 2, end + 3);
+            inp.setSelectionRange(end + 2, end + 3);
             this.ed.$input.trigger('change');
         };
         MdEditorToolbar.prototype.lhs = function (cursor, token) {
