@@ -41,6 +41,10 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
                 .on('click', this.onIndentClick.bind(this));
             this.$outdent
                 .on('click', this.onOutdentClick.bind(this));
+            this.$sum
+                .on('click', this.onSumClick.bind(this));
+            this.$product
+                .on('click', this.onProductClick.bind(this));
             this.$supscript
                 .on('click', this.onSupscriptClick.bind(this));
             this.$subscript
@@ -695,6 +699,126 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
                 this.ed.$input.trigger('change');
             }
         };
+        MdEditorToolbar.prototype.onSumClick = function (ev) {
+            if (this.ed.mirror) {
+                this.onSumClickMirror(Boolean(ev.ctrlKey));
+            }
+            else {
+                this.onSumClickSimple(Boolean(ev.ctrlKey));
+            }
+            this.ed.focus();
+        };
+        MdEditorToolbar.prototype.onSumClickMirror = function (flag) {
+            var beg = this.ed.mirror.getCursor('from');
+            var beg_mod = this.ed.mirror.getModeAt(beg);
+            var end = this.ed.mirror.getCursor('to');
+            var end_mod = this.ed.mirror.getModeAt(end);
+            var tex = '\\sum_{i=a}^{b}{i}';
+            if (beg_mod && beg_mod.name === 'markdown' &&
+                end_mod && end_mod.name === 'markdown') {
+                if (flag) {
+                    this.ed.mirror.replaceRange("\n$$" + tex + "$$\n", beg, end);
+                    this.ed.mirror.setSelection({
+                        line: beg.line + 1, ch: 8
+                    }, {
+                        line: beg.line + 1, ch: 11
+                    });
+                }
+                else {
+                    this.ed.mirror.replaceRange("$" + tex + "$", beg, end);
+                    this.ed.mirror.setSelection({
+                        line: beg.line, ch: beg.ch + 7
+                    }, {
+                        line: beg.line, ch: beg.ch + 10
+                    });
+                }
+            }
+        };
+        MdEditorToolbar.prototype.onSumClickSimple = function (flag) {
+            var el = this.ed.$input[0];
+            var val = this.ed.$input.val();
+            var beg = el.selectionStart;
+            var end = el.selectionEnd;
+            var tex = '\\sum_{i=a}^{b}{i}';
+            el.setSelectionRange(beg, end);
+            if (flag) {
+                if (!document.execCommand('insertText', false, "\n$$" + tex + "$$\n")) {
+                    var px = val.substring(0, beg);
+                    var sx = val.substring(end, val.length);
+                    this.ed.$input.val(px + "\n$$" + tex + "$$\n" + sx);
+                }
+                el.setSelectionRange(beg + 9, beg + 12);
+            }
+            else {
+                if (!document.execCommand('insertText', false, "$" + tex + "$")) {
+                    var px = val.substring(0, beg);
+                    var sx = val.substring(end, val.length);
+                    this.ed.$input.val(px + "$" + tex + "$" + sx);
+                }
+                el.setSelectionRange(beg + 7, beg + 10);
+            }
+            this.ed.$input.trigger('change');
+        };
+        MdEditorToolbar.prototype.onProductClick = function (ev) {
+            if (this.ed.mirror) {
+                this.onProductClickMirror(Boolean(ev.ctrlKey));
+            }
+            else {
+                this.onProductClickSimple(Boolean(ev.ctrlKey));
+            }
+            this.ed.focus();
+        };
+        MdEditorToolbar.prototype.onProductClickMirror = function (flag) {
+            var beg = this.ed.mirror.getCursor('from');
+            var beg_mod = this.ed.mirror.getModeAt(beg);
+            var end = this.ed.mirror.getCursor('to');
+            var end_mod = this.ed.mirror.getModeAt(end);
+            var tex = '\\prod_{i=a}^{b}{i}';
+            if (beg_mod && beg_mod.name === 'markdown' &&
+                end_mod && end_mod.name === 'markdown') {
+                if (flag) {
+                    this.ed.mirror.replaceRange("\n$$" + tex + "$$\n", beg, end);
+                    this.ed.mirror.setSelection({
+                        line: beg.line + 1, ch: 9
+                    }, {
+                        line: beg.line + 1, ch: 12
+                    });
+                }
+                else {
+                    this.ed.mirror.replaceRange("$" + tex + "$", beg, end);
+                    this.ed.mirror.setSelection({
+                        line: beg.line, ch: beg.ch + 8
+                    }, {
+                        line: beg.line, ch: beg.ch + 11
+                    });
+                }
+            }
+        };
+        MdEditorToolbar.prototype.onProductClickSimple = function (flag) {
+            var el = this.ed.$input[0];
+            var val = this.ed.$input.val();
+            var beg = el.selectionStart;
+            var end = el.selectionEnd;
+            var tex = '\\prod_{i=a}^{b}{i}';
+            el.setSelectionRange(beg, end);
+            if (flag) {
+                if (!document.execCommand('insertText', false, "\n$$" + tex + "$$\n")) {
+                    var px = val.substring(0, beg);
+                    var sx = val.substring(end, val.length);
+                    this.ed.$input.val(px + "\n$$" + tex + "$$\n" + sx);
+                }
+                el.setSelectionRange(beg + 10, beg + 13);
+            }
+            else {
+                if (!document.execCommand('insertText', false, "$" + tex + "$")) {
+                    var px = val.substring(0, beg);
+                    var sx = val.substring(end, val.length);
+                    this.ed.$input.val(px + "$" + tex + "$" + sx);
+                }
+                el.setSelectionRange(beg + 8, beg + 11);
+            }
+            this.ed.$input.trigger('change');
+        };
         MdEditorToolbar.prototype.onSupscriptClick = function () {
             if (this.ed.mirror) {
                 this.onSupscriptClickMirror();
@@ -936,6 +1060,20 @@ define(["require", "exports", "../decorator/trace", "./md-editor"], function (re
         Object.defineProperty(MdEditorToolbar.prototype, "$outdent", {
             get: function () {
                 return $('.glyphicon-indent-right').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$sum", {
+            get: function () {
+                return $('.glyphicon-sum').closest('button');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MdEditorToolbar.prototype, "$product", {
+            get: function () {
+                return $('.glyphicon-product').closest('button');
             },
             enumerable: true,
             configurable: true
