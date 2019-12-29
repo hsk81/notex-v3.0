@@ -2,7 +2,7 @@
 # project ----------------------------------------------------------------------
 # ##############################################################################
 
-.idea
+.vscode
 
 # virtualenv
 
@@ -21,16 +21,6 @@
 ## pip
 
 pip-selfcheck.json
-
-## css
-
-static/css/home.css
-static/css/home.css.map
-
-# private
-
-run-dev.sh
-run-pro.sh
 
 ## minified
 
