@@ -7,6 +7,9 @@ function setup_env () {
     if [ $VIRTUAL_ENV ] ; then
         exit 0
     else
+        if $(hash git) ; then
+            git submodule update --init
+        fi
         if [ $PY3 ] ; then
             virtualenv . --prompt="[$1] " --python=/usr/bin/python3
         elif [ $PY2 ] ; then
