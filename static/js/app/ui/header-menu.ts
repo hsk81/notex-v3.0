@@ -14,22 +14,20 @@ export class HeaderMenu {
         }
         return this['_me'];
     }
-
     public constructor() {
         this.$openItem
             .on('change', this.onOpenItemChange.bind(this));
         this.$swapItem
             .on('click', this.onSwapItemClick.bind(this));
     }
-
     @mine
     private onOpenItemChange(self: any, ev: any) {
-        var files = ev.target.files;
+        let files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (!files[i].type || files[i].type.match(/text/)) {
                 let reader = new FileReader();
                 reader.onload = function (progress_ev) {
-                    var target = <any>progress_ev.target;
+                    let target = <any>progress_ev.target;
                     if (target && target.readyState === 2 &&
                         typeof target.result === 'string') {
                         self.editor.setValue(target.result);
@@ -40,36 +38,28 @@ export class HeaderMenu {
             }
         }
     }
-
     private onSwapItemClick() {
         $('div.lhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
-
         this.toolbar.refresh();
         this.editor.focus();
     }
-
     public get $openItem(): any {
         return $('#source-bar,#source-mob');
     }
-
     public get $saveItem(): any {
         return $('a[name=save]');
     }
-
     public get $swapItem(): any {
         return $('[name=swap]');
     }
-
     private get toolbar(): any {
         return MdEditorToolbar.me;
     }
-
     private get editor(): MdEditor {
         return MdEditor.me;
     }
 }
-
 export default HeaderMenu;

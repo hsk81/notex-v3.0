@@ -45,7 +45,6 @@ export class GoogleApi {
             }));
         }
     }
-
     private _loadUrlTpl: string;
 }
 

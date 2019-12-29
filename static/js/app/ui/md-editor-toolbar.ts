@@ -11,19 +11,15 @@ export class MdEditorToolbar {
         }
         return this['_me'];
     }
-
     public constructor() {
-
         this.$publish
             .on('click', this.onPublishClick.bind(this));
         this.$print
             .on('click', this.onPrintClick.bind(this));
-
         this.$undo
             .on('click', this.onUndoClick.bind(this));
         this.$redo
             .on('click', this.onRedoClick.bind(this));
-
         this.$cut
             .on('click', this.onCutClick.bind(this));
         this.$copy
@@ -32,7 +28,6 @@ export class MdEditorToolbar {
             .on('click', this.onPasteClick.bind(this));
         this.$erase
             .on('click', this.onEraseClick.bind(this));
-
         this.$header
             .on('click', this.onHeaderClick.bind(this));
         this.$bold
@@ -41,12 +36,12 @@ export class MdEditorToolbar {
             .on('click', this.onItalicClick.bind(this));
         this.$font
             .on('click', this.onCommentClick.bind(this));
-
+        this.$link
+            .on('click', this.onLinkClick.bind(this));
         this.$indent
             .on('click', this.onIndentClick.bind(this));
         this.$outdent
             .on('click', this.onOutdentClick.bind(this));
-
         this.$sum
             .on('click', this.onSumClick.bind(this));
         this.$product
@@ -55,10 +50,8 @@ export class MdEditorToolbar {
             .on('click', this.onSupscriptClick.bind(this));
         this.$subscript
             .on('click', this.onSubscriptClick.bind(this));
-
         this.$refresh
             .on('click', this.onRefreshClick.bind(this));
-
         if (!this.ed.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -67,24 +60,19 @@ export class MdEditorToolbar {
             });
         }
     }
-
     public refresh() {
         this.ed.refresh();
         this.scroll.refresh();
     }
-
     private onRefreshClick() {
         this.ed.render(true);
     }
-
     private onPublishClick() {
         $('#publish-dlg').modal();
     }
-
     private onPrintClick() {
         window.print();
     }
-
     private onUndoClick() {
         if (this.ed.mirror) {
             this.ed.mirror.execCommand('undo');
@@ -98,7 +86,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onRedoClick() {
         if (this.ed.mirror) {
             this.ed.mirror.execCommand('redo');
@@ -112,7 +99,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onCutClick() {
         this.clipboard = this.ed.getSelection();
         if (this.ed.mirror) {
@@ -127,7 +113,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onCopyClick() {
         this.clipboard = this.ed.getSelection();
         try {
@@ -137,7 +122,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onPasteClick() {
         if (this.ed.mirror) {
             this.ed.mirror.replaceSelection(this.clipboard);
@@ -151,7 +135,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onEraseClick() {
         if (this.ed.mirror) {
             this.ed.mirror.replaceSelection('');
@@ -165,7 +148,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onHeaderClick() {
         if (this.ed.mirror) {
             this.onHeaderClickMirror();
@@ -174,18 +156,16 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onHeaderClickMirror() {
-        let cursor = this.ed.mirror.getCursor(),
-            curr_from = { line: cursor.line, ch: 0 },
-            next_from = { line: cursor.line + 1, ch: 0 };
-        let curr_ts = this.ed.mirror.getLineTokens(curr_from.line),
-            next_ts = this.ed.mirror.getLineTokens(next_from.line);
-        let line = this.ed.mirror.getLineHandle(curr_from.line),
-            mode = this.ed.mirror.getModeAt(curr_from);
-        let suffix = line.text.match(/^\s+/) ? '' : ' ',
-            prefix = '#';
-
+        let cursor = this.ed.mirror.getCursor();
+        let curr_from = { line: cursor.line, ch: 0 };
+        let next_from = { line: cursor.line + 1, ch: 0 };
+        let curr_ts = this.ed.mirror.getLineTokens(curr_from.line);
+        let next_ts = this.ed.mirror.getLineTokens(next_from.line);
+        let line = this.ed.mirror.getLineHandle(curr_from.line);
+        let mode = this.ed.mirror.getModeAt(curr_from);
+        let suffix = line.text.match(/^\s+/) ? '' : ' ';
+        let prefix = '#';
         let hs = curr_ts.filter((tok: any) => {
             return tok && tok.type && tok.type.match(/header/);
         });
@@ -201,7 +181,6 @@ export class MdEditorToolbar {
             return tok && tok.type && tok.type.match(/header-6/) &&
                 tok.string === '#';
         });
-
         if (mode && mode.name === 'markdown') {
             if (hs && hs.length > 0) {
                 if (h1s && h1s.length > 0) {
@@ -261,60 +240,58 @@ export class MdEditorToolbar {
             }
         }
     }
-
     private onHeaderClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
-            idx = beg as number;
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let idx = beg as number;
         while (idx-- > 0) {
             if (val[idx] === '\n') {
                 break;
             }
         }
-
-        let px = val.substring(0, idx + 1),
-            sx = val.substring(idx + 1, val.length);
-
-        let rx_6 = /^\s*#{6,}\s*/,
-            mm_6 = sx.match(rx_6);
-        let rx_5 = /^\s*#{1,5}/,
-            mm_5 = sx.match(rx_5);
-        let rx_0 = /^\s*#{0}/,
-            mm_0 = sx.match(rx_0);
-
+        let px = val.substring(0, idx + 1);
+        let sx = val.substring(idx + 1, val.length);
+        let rx_6 = /^\s*#{6,}\s*/;
+        let mm_6 = sx.match(rx_6);
+        let rx_5 = /^\s*#{1,5}/;
+        let mm_5 = sx.match(rx_5);
+        let rx_0 = /^\s*#{0}/;
+        let mm_0 = sx.match(rx_0);
         if (mm_6 && mm_6.length > 0) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                idx + 1, idx + mm_6[0].length + 1);
+            inp.setSelectionRange(
+                idx + 1, idx + mm_6[0].length + 1
+            );
             if (!document.execCommand('insertText', false, '')) {
-                this.ed.$input.val(
-                    `${px}${sx.replace(rx_6, '')}`);
+                this.ed.$input.val(`${px}${sx.replace(rx_6, '')}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                beg - mm_6[0].length, end - mm_6[0].length);
+            inp.setSelectionRange(
+                beg - mm_6[0].length, end - mm_6[0].length
+            );
         } else if (mm_5 && mm_5.length > 0) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                idx + 1, idx + mm_5[0].length + 1);
+            inp.setSelectionRange(
+                idx + 1, idx + mm_5[0].length + 1
+            );
             if (!document.execCommand('insertText', false, mm_5[0] + '#')) {
-                this.ed.$input.val(
-                    `${px}${sx.replace(rx_5, mm_5[0] + '#')}`);
+                this.ed.$input.val(`${px}${sx.replace(rx_5, mm_5[0] + '#')}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                beg + 1, end + 1);
+            inp.setSelectionRange(
+                beg + 1, end + 1
+            );
         } else if (mm_0 && mm_0.length > 0) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                idx + 1, idx + mm_0[0].length + 1);
+            inp.setSelectionRange(
+                idx + 1, idx + mm_0[0].length + 1
+            );
             if (!document.execCommand('insertText', false, '# ' + mm_0[0])) {
-                this.ed.$input.val(
-                    `${px}${sx.replace(rx_0, '# ' + mm_0[0])}`);
+                this.ed.$input.val(`${px}${sx.replace(rx_0, '# ' + mm_0[0])}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(
-                beg + mm_0[0].length + 2, end + mm_0[0].length + 2);
+            inp.setSelectionRange(
+                beg + mm_0[0].length + 2, end + mm_0[0].length + 2
+            );
         }
         this.ed.$input.trigger('change');
     }
-
     private onBoldClick() {
         if (this.ed.mirror) {
             this.onBoldClickMirror();
@@ -328,10 +305,11 @@ export class MdEditorToolbar {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
             this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head),
-                    rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
+                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
-                    rhs_mod && rhs_mod.name === 'markdown') {
+                    rhs_mod && rhs_mod.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)) {
@@ -347,23 +325,26 @@ export class MdEditorToolbar {
                 }
             }));
             this.ed.mirror.replaceSelections(selections.map((sel: any) => {
-                let sel_lhs = sel.anchor,
-                    sel_rhs = sel.head;
+                let sel_lhs = sel.anchor;
+                let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
                     sel_lhs.line === sel_rhs.line &&
-                    sel_lhs.ch > sel_rhs.ch) {
+                    sel_lhs.ch > sel_rhs.ch
+                ) {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
-                    mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
+                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
-                    mod_rhs && mod_rhs.name === 'markdown') {
+                    mod_rhs && mod_rhs.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/)) {
-                        let lhs = this.lhs(sel_lhs, tok),
-                            rhs = this.rhs(sel_rhs, tok);
+                        tok.type && tok.type.match(/em/)
+                    ) {
+                        let lhs = this.lhs(sel_lhs, tok);
+                        let rhs = this.rhs(sel_rhs, tok);
                         if (tok.type.match(/em/)) {
                             return `*${this.ed.mirror
                                 .getRange(lhs, rhs)}*`;
@@ -381,24 +362,29 @@ export class MdEditorToolbar {
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor(),
-                mod = this.ed.mirror.getModeAt(cur);
+            let cur = this.ed.mirror.getCursor();
+            let mod = this.ed.mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
-                    tok.type && tok.type.match(/em/)) {
-                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
-                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
+                    tok.type && tok.type.match(/em/)
+                ) {
+                    let lhs = this.lhs(cur, tok) as {
+                        ch: number, line: number
+                    };
+                    let rhs = this.rhs(cur, tok) as {
+                        ch: number, line: number
+                    };
                     if (tok.type.match(/em/)) {
-                        let src = this.ed.mirror.getRange(lhs, rhs),
-                            tgt = `*${src}*`;
+                        let src = this.ed.mirror.getRange(lhs, rhs);
+                        let tgt = `*${src}*`;
                         this.ed.mirror.replaceRange(tgt, lhs, rhs);
                         this.ed.mirror.setSelection(lhs, {
                             line: rhs.line, ch: rhs.ch + 2
                         });
                     } else {
-                        let src = this.ed.mirror.getRange(lhs, rhs),
-                            tgt = src.slice(2, -2);
+                        let src = this.ed.mirror.getRange(lhs, rhs);
+                        let tgt = src.slice(2, -2);
                         this.ed.mirror.replaceRange(tgt, lhs, rhs);
                         this.ed.mirror.setSelection(lhs, {
                             line: rhs.line, ch: rhs.ch - 4
@@ -413,44 +399,40 @@ export class MdEditorToolbar {
             }
         }
     }
-
     private onBoldClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
-
-        let px_1 = val.substring(0, beg),
-            ix_1 = val.substring(beg, end),
-            sx_1 = val.substring(end, val.length);
-        let px_2 = val.substring(0, beg - 2),
-            ix_2 = val.substring(beg - 2, end + 2),
-            sx_2 = val.substring(end + 2, val.length);
-
-        let rx_1 = /^\*\*((?:(?!\*\*).)+)\*\*$/,
-            mm_1 = ix_1.match(rx_1);
-        let rx_2 = /^\*\*((?:(?!\*\*).)+)\*\*$/,
-            mm_2 = ix_2.match(rx_2);
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let px_1 = val.substring(0, beg);
+        let ix_1 = val.substring(beg, end);
+        let sx_1 = val.substring(end, val.length);
+        let px_2 = val.substring(0, beg - 2);
+        let ix_2 = val.substring(beg - 2, end + 2);
+        let sx_2 = val.substring(end + 2, val.length);
+        let rx_1 = /^\*\*((?:(?!\*\*).)+)\*\*$/;
+        let mm_1 = ix_1.match(rx_1);
+        let rx_2 = /^\*\*((?:(?!\*\*).)+)\*\*$/;
+        let mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 4);
+            inp.setSelectionRange(beg, end - 4);
         } else if (mm_2 && mm_2.length > 1) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end + 2);
+            inp.setSelectionRange(beg - 2, end + 2);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end - 2);
+            inp.setSelectionRange(beg - 2, end - 2);
         } else {
             if (!document.execCommand('insertText', false, `**${ix_1}**`)) {
                 this.ed.$input.val(`${px_1}**${ix_1}**${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 4);
+            inp.setSelectionRange(beg, end + 4);
         }
         this.ed.$input.trigger('change');
     }
-
     private onItalicClick() {
         if (this.ed.mirror) {
             this.onItalicClickMirror();
@@ -459,18 +441,19 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onItalicClickMirror() {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
             this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head),
-                    rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
+                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
-                    rhs_mod && rhs_mod.name === 'markdown') {
+                    rhs_mod && rhs_mod.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/)) {
+                        tok.type && tok.type.match(/em/)
+                    ) {
                         return {
                             anchor: this.lhs(sel.anchor, tok),
                             head: this.rhs(sel.head, tok)
@@ -483,23 +466,26 @@ export class MdEditorToolbar {
                 }
             }));
             this.ed.mirror.replaceSelections(selections.map((sel: any) => {
-                let sel_lhs = sel.anchor,
-                    sel_rhs = sel.head;
+                let sel_lhs = sel.anchor;
+                let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
                     sel_lhs.line === sel_rhs.line &&
-                    sel_lhs.ch > sel_rhs.ch) {
+                    sel_lhs.ch > sel_rhs.ch
+                ) {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
-                    mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
+                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
-                    mod_rhs && mod_rhs.name === 'markdown') {
+                    mod_rhs && mod_rhs.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
-                        tok.type && tok.type.match(/em/)) {
-                        let lhs = this.lhs(sel_lhs, tok),
-                            rhs = this.rhs(sel_rhs, tok);
+                        tok.type && tok.type.match(/em/)
+                    ) {
+                        let lhs = this.lhs(sel_lhs, tok);
+                        let rhs = this.rhs(sel_rhs, tok);
                         return this.ed.mirror
                             .getRange(lhs, rhs).slice(1, -1);
                     } else {
@@ -512,16 +498,21 @@ export class MdEditorToolbar {
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor(),
-                mod = this.ed.mirror.getModeAt(cur);
+            let cur = this.ed.mirror.getCursor();
+            let mod = this.ed.mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
-                    tok.type && tok.type.match(/em/)) {
-                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
-                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
-                    let src = this.ed.mirror.getRange(lhs, rhs),
-                        tgt = src.slice(1, -1);
+                    tok.type && tok.type.match(/em/)
+                ) {
+                    let lhs = this.lhs(cur, tok) as {
+                        ch: number, line: number
+                    };
+                    let rhs = this.rhs(cur, tok) as {
+                        ch: number, line: number
+                    };
+                    let src = this.ed.mirror.getRange(lhs, rhs);
+                    let tgt = src.slice(1, -1);
                     this.ed.mirror.replaceRange(tgt, lhs, rhs);
                     this.ed.mirror.setSelection(lhs, {
                         line: rhs.line, ch: rhs.ch - 2
@@ -531,50 +522,46 @@ export class MdEditorToolbar {
                     this.ed.mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
-                            line: cur.line, ch: cur.ch + 2
-                        });
+                        line: cur.line, ch: cur.ch + 2
+                    });
                 }
             }
         }
     }
-
     private onItalicClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
-
-        let px_1 = val.substring(0, beg),
-            ix_1 = val.substring(beg, end),
-            sx_1 = val.substring(end, val.length);
-        let px_2 = val.substring(0, beg - 1),
-            ix_2 = val.substring(beg - 1, end + 1),
-            sx_2 = val.substring(end + 1, val.length);
-
-        let rx_1 = /^\*([^*]+)\*$/,
-            mm_1 = ix_1.match(rx_1);
-        let rx_2 = /^\*([^*]+)\*$/,
-            mm_2 = ix_2.match(rx_2);
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let px_1 = val.substring(0, beg);
+        let ix_1 = val.substring(beg, end);
+        let sx_1 = val.substring(end, val.length);
+        let px_2 = val.substring(0, beg - 1);
+        let ix_2 = val.substring(beg - 1, end + 1);
+        let sx_2 = val.substring(end + 1, val.length);
+        let rx_1 = /^\*([^*]+)\*$/;
+        let mm_1 = ix_1.match(rx_1);
+        let rx_2 = /^\*([^*]+)\*$/;
+        let mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 2);
+            inp.setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end + 1);
+            inp.setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end - 1);
+            inp.setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `*${ix_1}*`)) {
                 this.ed.$input.val(`${px_1}*${ix_1}*${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 2);
+            inp.setSelectionRange(beg, end + 2);
         }
         this.ed.$input.trigger('change');
     }
-
     private onCommentClick() {
         if (this.ed.mirror) {
             this.onCommentClickMirror();
@@ -583,15 +570,15 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onCommentClickMirror() {
         let selections = this.ed.mirror.listSelections();
         if (selections.length > 0 && this.ed.mirror.getSelection()) {
             this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head),
-                    rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
+                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
-                    rhs_mod && rhs_mod.name === 'markdown') {
+                    rhs_mod && rhs_mod.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/comment/)) {
                         return {
@@ -606,22 +593,24 @@ export class MdEditorToolbar {
                 }
             }));
             this.ed.mirror.replaceSelections(selections.map((sel: any) => {
-                let sel_lhs = sel.anchor,
-                    sel_rhs = sel.head;
+                let sel_lhs = sel.anchor;
+                let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
                     sel_lhs.line === sel_rhs.line &&
-                    sel_lhs.ch > sel_rhs.ch) {
+                    sel_lhs.ch > sel_rhs.ch
+                ) {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs),
-                    mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
+                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
-                    mod_rhs && mod_rhs.name === 'markdown') {
+                    mod_rhs && mod_rhs.name === 'markdown'
+                ) {
                     let tok = this.ed.mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/comment/)) {
-                        let lhs = this.lhs(sel_lhs, tok),
-                            rhs = this.rhs(sel_rhs, tok);
+                        let lhs = this.lhs(sel_lhs, tok);
+                        let rhs = this.rhs(sel_rhs, tok);
                         return this.ed.mirror
                             .getRange(lhs, rhs).slice(1, -1);
                     } else {
@@ -634,15 +623,19 @@ export class MdEditorToolbar {
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor(),
-                mod = this.ed.mirror.getModeAt(cur);
+            let cur = this.ed.mirror.getCursor();
+            let mod = this.ed.mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
                 let tok = this.ed.mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/comment/)) {
-                    let lhs = this.lhs(cur, tok) as { ch: number, line: number },
-                        rhs = this.rhs(cur, tok) as { ch: number, line: number };
-                    let src = this.ed.mirror.getRange(lhs, rhs),
-                        tgt = src.slice(1, -1);
+                    let lhs = this.lhs(cur, tok) as {
+                        ch: number, line: number
+                    };
+                    let rhs = this.rhs(cur, tok) as {
+                        ch: number, line: number
+                    };
+                    let src = this.ed.mirror.getRange(lhs, rhs);
+                    let tgt = src.slice(1, -1);
                     this.ed.mirror.replaceRange(tgt, lhs, rhs);
                     this.ed.mirror.setSelection(lhs, {
                         line: rhs.line, ch: rhs.ch - 2
@@ -652,50 +645,46 @@ export class MdEditorToolbar {
                     this.ed.mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
-                            line: cur.line, ch: cur.ch + 2
-                        });
+                        line: cur.line, ch: cur.ch + 2
+                    });
                 }
             }
         }
     }
-
     private onCommentClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number;
-
-        let px_1 = val.substring(0, beg),
-            ix_1 = val.substring(beg, end),
-            sx_1 = val.substring(end, val.length);
-        let px_2 = val.substring(0, beg - 1),
-            ix_2 = val.substring(beg - 1, end + 1),
-            sx_2 = val.substring(end + 1, val.length);
-
-        let rx_1 = /^`([^`]+)`$/,
-            mm_1 = ix_1.match(rx_1);
-        let rx_2 = /^`([^`]+)`$/,
-            mm_2 = ix_2.match(rx_2);
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let px_1 = val.substring(0, beg);
+        let ix_1 = val.substring(beg, end);
+        let sx_1 = val.substring(end, val.length);
+        let px_2 = val.substring(0, beg - 1);
+        let ix_2 = val.substring(beg - 1, end + 1);
+        let sx_2 = val.substring(end + 1, val.length);
+        let rx_1 = /^`([^`]+)`$/;
+        let mm_1 = ix_1.match(rx_1);
+        let rx_2 = /^`([^`]+)`$/;
+        let mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
                 this.ed.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end - 2);
+            inp.setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end + 1);
+            inp.setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
                 this.ed.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 1, end - 1);
+            inp.setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `\`${ix_1}\``)) {
                 this.ed.$input.val(`${px_1}\`${ix_1}\`${sx_1}`);
             }
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end + 2);
+            inp.setSelectionRange(beg, end + 2);
         }
         this.ed.$input.trigger('change');
     }
-
     private onIndentClick() {
         if (this.ed.mirror) {
             this.onIndentClickMirror();
@@ -704,33 +693,189 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onIndentClickMirror() {
         this.ed.mirror.execCommand('indentMore');
     }
-
     private onIndentClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
-            idx = beg - 1;
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let idx = beg - 1;
         while (idx >= 0 && val[idx] !== '\n') {
             idx -= 1;
         }
-
-        let px = val.substring(0, idx + 1),
-            sx = val.substring(idx + 1, val.length);
-
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(idx + 1, idx + 1);
+        let px = val.substring(0, idx + 1);
+        let sx = val.substring(idx + 1, val.length);
+        inp.setSelectionRange(idx + 1, idx + 1);
         if (!document.execCommand('insertText', false, '  ')) {
             this.ed.$input.val(`${px}  ${sx}`);
         }
-
-        (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg + 2, end + 2);
+        inp.setSelectionRange(beg + 2, end + 2);
         this.ed.$input.trigger('change');
     }
-
+    private onLinkClick(ev: JQuery.Event) {
+        if (this.ed.mirror) {
+            this.onLinkClickMirror(
+                Boolean(ev.ctrlKey), Boolean(ev.shiftKey));
+        } else {
+            this.onLinkClickSimple(
+                Boolean(ev.ctrlKey), Boolean(ev.shiftKey));
+        }
+        this.ed.focus();
+    }
+    private onLinkClickMirror(ctrl: boolean, shift: boolean) {
+        let beg_cur = this.ed.mirror.getCursor('from');
+        let beg_mod = this.ed.mirror.getModeAt(beg_cur);
+        let end_cur = this.ed.mirror.getCursor('to');
+        let end_mod = this.ed.mirror.getModeAt(end_cur);
+        let val = this.ed.mirror.getValue().trimEnd();
+        let sel = this.ed.mirror.getSelection();
+        let set_text = (beg: any, end: any) => (
+            value: string | null, range: string
+        ) => {
+            if (value) this.ed.mirror.setValue(value);
+            this.ed.mirror.replaceRange(range, beg, end);
+        };
+        let sel_text = (beg: any, end?: any) => (
+            beg_dif: number, end_dif: number,
+            beg_alt?: any, end_lat?: any
+        ) => {
+            this.ed.mirror.setSelection({
+                ...{ line: (beg||end).line, ch: (beg||end).ch + beg_dif },
+                ...{ ...(beg_alt||end_lat) }
+            }, {
+                ...{ line: (end||beg).line, ch: (end||beg).ch + end_dif },
+                ...{ ...(end_lat||beg_alt) }
+            });
+        };
+        if (beg_mod && beg_mod.name === 'markdown' &&
+            end_mod && end_mod.name === 'markdown'
+        ) {
+            if (ctrl && shift) {
+                set_text(beg_cur, end_cur)(
+                    `${val} \n\n[${sel||'TEXT'}]: URL\n`, `[${sel||'TEXT'}]`
+                );
+                sel.length ? sel_text(beg_cur)(0, 0, {
+                    line: this.ed.mirror.lastLine() - 1, ch: sel.length + 4
+                }, {
+                    line: this.ed.mirror.lastLine() - 1, ch: sel.length + 7
+                }) : sel_text(beg_cur)(1, 5);
+            } else if (ctrl) {
+                set_text(beg_cur, end_cur)(
+                    `${val} \n\n[REF]: URL\n`, `[${sel||'TEXT'}][REF]`
+                );
+                sel.length
+                    ? sel_text(beg_cur)(sel.length + 3, sel.length + 6)
+                    : sel_text(beg_cur)(1, 5);
+            } else {
+                set_text(beg_cur, end_cur)(
+                    null, `[${sel||'TEXT'}](URL)`
+                );
+                sel.length
+                    ? sel_text(beg_cur)(sel.length + 3, sel.length + 6)
+                    : sel_text(beg_cur)(1, 5);
+            }
+        }
+    }
+    private onLinkClickSimple(ctrl: boolean, shift: boolean) {
+        const ins_text = (
+            $input: JQuery<HTMLElement>
+        ) => (
+            text: string, beg?: number, end?: number
+        ) => {
+            if (!document.execCommand(
+                'insertText', false, text
+            )) {
+                let inp = $input[0] as HTMLInputElement;
+                if (beg === undefined) {
+                    beg = inp.selectionStart as number;
+                }
+                if (end === undefined) {
+                    end = inp.selectionEnd as number;
+                }
+                let value = $input.val() as string;
+                let prefix = value.substring(0, beg);
+                let suffix = value.substring(end||beg, value.length);
+                $input.val(`${prefix}${text}${suffix}`);
+            }
+        };
+        const add_text = (
+            $input: JQuery<HTMLElement>
+        ) => (
+            text: string
+        ) => {
+            let val = $input.val() as string;
+            let inp = $input[0] as HTMLInputElement;
+            inp.setSelectionRange(val.length, val.length);
+            if (!document.execCommand(
+                'insertText', false, text
+            )) {
+                $input.val(val + text);
+            }
+        };
+        const get_selection = (
+            $input: JQuery<HTMLElement>
+        ) => (
+            beg?: number, end?: number
+        ) => (
+            n_beg: number=0, n_end: number=0
+        ) => {
+            let inp = $input[0] as HTMLInputElement;
+            if (beg === undefined) {
+                beg = inp.selectionStart as number;
+            }
+            if (end === undefined) {
+                end = inp.selectionEnd as number;
+            }
+            let value = $input.val() as string;
+            return {
+                sel: value.substring(beg + n_beg, end + n_end),
+                beg: beg + n_beg, end: end + n_end
+            }
+        };
+        const set_selection = (
+            $input: JQuery<HTMLElement>
+        ) => (
+            beg: number, end?: number
+        ) => (
+            n_beg: number=0, n_end: number=0
+        ) => {
+            let inp = $input[0] as HTMLInputElement;
+            if (end === undefined) {
+                inp.setSelectionRange(beg + n_beg, beg + n_end);
+            } else {
+                inp.setSelectionRange(beg + n_beg, end + n_end);
+            }
+        };
+        let { sel, beg } = get_selection(this.ed.$input)()();
+        if (ctrl && shift) {
+            ins_text(this.ed.$input)(`[${sel||'TEXT'}]`);
+            add_text(this.ed.$input)(`\n\n[${sel||'TEXT'}]: URL\n`);
+            if (sel.length) {
+                let end = (this.ed.$input.val() as string).length;
+                set_selection(this.ed.$input)(end - 7)(-sel.length, 0);
+            } else {
+                set_selection(this.ed.$input)(beg)(1, 5);
+            }
+        } else if (ctrl) {
+            ins_text(this.ed.$input)(`[${sel||'TEXT'}][REF]`);
+            add_text(this.ed.$input)(`\n\n[REF]: URL\n`);
+            if (sel.length) {
+                set_selection(this.ed.$input)(beg + sel.length)(3, 6);
+            } else {
+                set_selection(this.ed.$input)(beg)(1, 5);
+            }
+        } else {
+            ins_text(this.ed.$input)(`[${sel||'TEXT'}](URL)`);
+            if (sel.length) {
+                set_selection(this.ed.$input)(beg + sel.length)(3, 6);
+            } else {
+                set_selection(this.ed.$input)(beg)(1, 5);
+            }
+        }
+        this.ed.$input.trigger('change');
+    }
     private onOutdentClick() {
         if (this.ed.mirror) {
             this.onOutdentClickMirror();
@@ -739,40 +884,35 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onOutdentClickMirror() {
         this.ed.mirror.execCommand('indentLess');
     }
-
     private onOutdentClickSimple() {
-        let val = this.ed.$input.val() as string,
-            beg = (this.ed.$input[0] as HTMLInputElement).selectionStart as number,
-            end = (this.ed.$input[0] as HTMLInputElement).selectionEnd as number,
-            idx = beg - 1;
-
+        let inp = this.ed.$input[0] as HTMLInputElement;
+        let val = this.ed.$input.val() as string;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
+        let idx = beg - 1;
         while (idx >= 0 && val[idx] !== '\n') {
             idx -= 1;
         }
-
-        let px = val.substring(0, idx + 1),
-            sx = val.substring(idx + 1, val.length);
-
-        let rx = /^\s{2}/,
-            mm = sx.match(rx);
+        let px = val.substring(0, idx + 1);
+        let sx = val.substring(idx + 1, val.length);
+        let rx = /^\s{2}/;
+        let mm = sx.match(rx);
         if (mm && mm.length > 0) {
-            (this.ed.$input[0] as HTMLInputElement).setSelectionRange(idx + 1, idx + 3);
+            inp.setSelectionRange(idx + 1, idx + 3);
             if (!document.execCommand('insertText', false, '')) {
                 this.ed.$input.val(`${px}${sx.substring(2)}`);
             }
             if (beg > 0 && val[beg - 1] === '\n') {
-                (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg, end);
+                inp.setSelectionRange(beg, end);
             } else {
-                (this.ed.$input[0] as HTMLInputElement).setSelectionRange(beg - 2, end - 2);
+                inp.setSelectionRange(beg - 2, end - 2);
             }
             this.ed.$input.trigger('change');
         }
     }
-
     private onSumClick(ev: JQuery.Event) {
         if (this.ed.mirror) {
             this.onSumClickMirror(Boolean(ev.ctrlKey));
@@ -781,14 +921,12 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onSumClickMirror(flag: boolean) {
         let beg = this.ed.mirror.getCursor('from');
         let beg_mod = this.ed.mirror.getModeAt(beg);
         let end = this.ed.mirror.getCursor('to');
         let end_mod = this.ed.mirror.getModeAt(end);
         let tex = '\\sum_{i=a}^{b}{i}';
-
         if (beg_mod && beg_mod.name === 'markdown' &&
             end_mod && end_mod.name === 'markdown'
         ) {
@@ -813,15 +951,13 @@ export class MdEditorToolbar {
             }
         }
     }
-
     private onSumClickSimple(flag: boolean) {
-        let el = this.ed.$input[0] as HTMLInputElement;
+        let inp = this.ed.$input[0] as HTMLInputElement;
         let val = this.ed.$input.val() as string;
-        let beg = el.selectionStart as number;
-        let end = el.selectionEnd as number;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
         let tex = '\\sum_{i=a}^{b}{i}';
-
-        el.setSelectionRange(beg, end);
+        inp.setSelectionRange(beg, end);
         if (flag) {
             if (!document.execCommand(
                 'insertText', false, `\n$$${tex}$$\n`
@@ -830,7 +966,7 @@ export class MdEditorToolbar {
                 let sx = val.substring(end, val.length);
                 this.ed.$input.val(`${px}\n$$${tex}$$\n${sx}`);
             }
-            el.setSelectionRange(beg + 9, beg + 12);
+            inp.setSelectionRange(beg + 9, beg + 12);
         } else {
             if (!document.execCommand(
                 'insertText', false, `$${tex}$`
@@ -839,11 +975,10 @@ export class MdEditorToolbar {
                 let sx = val.substring(end, val.length);
                 this.ed.$input.val(`${px}$${tex}$${sx}`);
             }
-            el.setSelectionRange(beg + 7, beg + 10);
+            inp.setSelectionRange(beg + 7, beg + 10);
         }
         this.ed.$input.trigger('change');
     }
-
     private onProductClick(ev: JQuery.Event) {
         if (this.ed.mirror) {
             this.onProductClickMirror(Boolean(ev.ctrlKey));
@@ -852,14 +987,12 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onProductClickMirror(flag: boolean) {
         let beg = this.ed.mirror.getCursor('from');
         let beg_mod = this.ed.mirror.getModeAt(beg);
         let end = this.ed.mirror.getCursor('to');
         let end_mod = this.ed.mirror.getModeAt(end);
         let tex = '\\prod_{i=a}^{b}{i}';
-
         if (beg_mod && beg_mod.name === 'markdown' &&
             end_mod && end_mod.name === 'markdown'
         ) {
@@ -884,15 +1017,13 @@ export class MdEditorToolbar {
             }
         }
     }
-
     private onProductClickSimple(flag: boolean) {
-        let el = this.ed.$input[0] as HTMLInputElement;
+        let inp = this.ed.$input[0] as HTMLInputElement;
         let val = this.ed.$input.val() as string;
-        let beg = el.selectionStart as number;
-        let end = el.selectionEnd as number;
+        let beg = inp.selectionStart as number;
+        let end = inp.selectionEnd as number;
         let tex = '\\prod_{i=a}^{b}{i}';
-
-        el.setSelectionRange(beg, end);
+        inp.setSelectionRange(beg, end);
         if (flag) {
             if (!document.execCommand(
                 'insertText', false, `\n$$${tex}$$\n`
@@ -901,7 +1032,7 @@ export class MdEditorToolbar {
                 let sx = val.substring(end, val.length);
                 this.ed.$input.val(`${px}\n$$${tex}$$\n${sx}`);
             }
-            el.setSelectionRange(beg + 10, beg + 13);
+            inp.setSelectionRange(beg + 10, beg + 13);
         } else {
             if (!document.execCommand(
                 'insertText', false, `$${tex}$`
@@ -910,11 +1041,10 @@ export class MdEditorToolbar {
                 let sx = val.substring(end, val.length);
                 this.ed.$input.val(`${px}$${tex}$${sx}`);
             }
-            el.setSelectionRange(beg + 8, beg + 11);
+            inp.setSelectionRange(beg + 8, beg + 11);
         }
         this.ed.$input.trigger('change');
     }
-
     private onSupscriptClick() {
         if (this.ed.mirror) {
             this.onSupscriptClickMirror();
@@ -923,7 +1053,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onSupscriptClickMirror() {
         let cur = this.ed.mirror.getCursor();
         let mod = this.ed.mirror.getModeAt(cur);
@@ -938,12 +1067,10 @@ export class MdEditorToolbar {
             });
         }
     }
-
     private onSupscriptClickSimple() {
         let inp = this.ed.$input[0] as HTMLInputElement;
         let val = this.ed.$input.val() as string;
         let end = inp.selectionEnd as number;
-
         inp.setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '^{ }')) {
             let px = val.substring(0, end);
@@ -953,7 +1080,6 @@ export class MdEditorToolbar {
         inp.setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
-
     private onSubscriptClick() {
         if (this.ed.mirror) {
             this.onSubscriptClickMirror();
@@ -962,7 +1088,6 @@ export class MdEditorToolbar {
         }
         this.ed.focus();
     }
-
     private onSubscriptClickMirror() {
         let cur = this.ed.mirror.getCursor();
         let mod = this.ed.mirror.getModeAt(cur);
@@ -977,12 +1102,10 @@ export class MdEditorToolbar {
             });
         }
     }
-
     private onSubscriptClickSimple() {
         let inp = this.ed.$input[0] as HTMLInputElement;
         let val = this.ed.$input.val() as string;
         let end = inp.selectionEnd as number;
-
         inp.setSelectionRange(end, end);
         if (!document.execCommand('insertText', false, '_{ }')) {
             let px = val.substring(0, end);
@@ -992,11 +1115,12 @@ export class MdEditorToolbar {
         inp.setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
-
-    private lhs(cursor: any, token: any): { ch: number, line: number } | null {
+    private lhs(cursor: any, token: any): {
+        ch: number, line: number
+    } | null {
         if (this.ed.mirror) {
-            let last = { line: cursor.line, ch: cursor.ch },
-                next = { line: cursor.line, ch: cursor.ch };
+            let last = { line: cursor.line, ch: cursor.ch };
+            let next = { line: cursor.line, ch: cursor.ch };
             while (true) {
                 let next_token = this.ed.mirror.getTokenAt(next);
                 if (next_token.type && !next_token.type.match(token.type) ||
@@ -1026,15 +1150,17 @@ export class MdEditorToolbar {
             return null;
         }
     }
-
-    private rhs(cursor: any, token: any): { ch: number, line: number } | null {
+    private rhs(cursor: any, token: any): {
+        ch: number, line: number
+    } | null {
         if (this.ed.mirror) {
-            let last = { line: cursor.line, ch: cursor.ch },
-                next = { line: cursor.line, ch: cursor.ch };
+            let last = { line: cursor.line, ch: cursor.ch };
+            let next = { line: cursor.line, ch: cursor.ch };
             while (true) {
                 let next_token = this.ed.mirror.getTokenAt(next);
                 if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type) {
+                    !next_token.type && next_token.type !== token.type
+                ) {
                     return last;
                 } else {
                     last = {
@@ -1046,9 +1172,8 @@ export class MdEditorToolbar {
                 } else {
                     if (next.line < this.ed.mirror.lineCount()) {
                         next.line += 1;
-                        next.ch = this.ed.mirror.getLine(
-                            next.line
-                        ).length;
+                        next.ch = this.ed.mirror
+                            .getLine(next.line).length;
                     } else {
                         return last;
                     }
@@ -1058,95 +1183,81 @@ export class MdEditorToolbar {
             return null;
         }
     }
-
-    private get $outer() {
-        return $('.lhs>.toolbar-outer');
-    }
-
-    private get $inner() {
-        return this.$outer.find('>.toolbar-inner');
-    }
-
-    private get $toolbar() {
-        return this.$inner.find('>.md-toolbar');
-    }
-
-    private get $publish() {
-        return $('.glyphicon.publish').closest('button');
-    }
-
-    private get $print() {
-        return $('.glyphicon.print').closest('button');
-    }
-
-    private get $undo() {
-        return $('.glyphicon.undo').closest('button');
-    }
-
-    private get $redo() {
-        return $('.glyphicon.redo').closest('button');
-    }
-
-    private get $cut() {
-        return $('.glyphicon-scissors').closest('button');
-    }
-
-    private get $copy() {
-        return $('.glyphicon-copy').closest('button');
-    }
-
-    private get $paste() {
-        return $('.glyphicon-paste').closest('button');
-    }
-
-    private get $erase() {
-        return $('.glyphicon-erase').closest('button');
-    }
-
-    private get $header() {
-        return $('.glyphicon-header').closest('button');
-    }
-
     private get $bold() {
         return $('.glyphicon-bold').closest('button');
     }
-
-    private get $italic() {
-        return $('.glyphicon-italic').closest('button');
+    private get $copy() {
+        return $('.glyphicon-copy').closest('button');
     }
-
+    private get $cut() {
+        return $('.glyphicon-scissors').closest('button');
+    }
+    private get $header() {
+        return $('.glyphicon-header').closest('button');
+    }
+    private get $erase() {
+        return $('.glyphicon-erase').closest('button');
+    }
     private get $font() {
         return $('.glyphicon-font').closest('button');
     }
-
     private get $indent() {
         return $('.glyphicon-indent-left').closest('button');
     }
-
+    private get $inner() {
+        return this.$outer.find('>.toolbar-inner');
+    }
+    private get $italic() {
+        return $('.glyphicon-italic').closest('button');
+    }
+    private get $link() {
+        return $('.glyphicon-link').closest('button');
+    }
+    private get $image() {
+        return $('.glyphicon-picture').closest('button');
+    }
+    private get $video() {
+        return $('.glyphicon-film').closest('button');
+    }
     private get $outdent() {
         return $('.glyphicon-indent-right').closest('button');
     }
-
-    private get $sum() {
-        return $('.glyphicon-sum').closest('button');
+    private get $outer() {
+        return $('.lhs>.toolbar-outer');
     }
-
+    private get $paste() {
+        return $('.glyphicon-paste').closest('button');
+    }
+    private get $print() {
+        return $('.glyphicon.print').closest('button');
+    }
     private get $product() {
-        return $('.glyphicon-product').closest('button');
+        return $('.glyphicon.product').closest('button');
     }
-
-    private get $supscript() {
-        return $('.glyphicon-superscript').closest('button');
+    private get $publish() {
+        return $('.glyphicon.publish').closest('button');
     }
-
-    private get $subscript() {
-        return $('.glyphicon-subscript').closest('button');
+    private get $redo() {
+        return $('.glyphicon.redo').closest('button');
     }
-
     private get $refresh() {
         return $('.glyphicon.refresh').closest('button');
     }
-
+    private get $subscript() {
+        return $('.glyphicon-subscript').closest('button');
+    }
+    private get $supscript() {
+        return $('.glyphicon.superscript').closest('button');
+    }
+    private get $sum() {
+        return $('.glyphicon.sum').closest('button');
+    }
+    private get $toolbar() {
+        return this.$inner.find('>.md-toolbar');
+    }
+    private get $undo() {
+        return $('.glyphicon.undo').closest('button');
+    }
     private get scroll(): any {
         if (this._scroll === undefined) {
             this._scroll = new IScroll('.toolbar-inner', {
@@ -1157,24 +1268,19 @@ export class MdEditorToolbar {
         }
         return this._scroll;
     }
-
     private get ed() {
         return MdEditor.me;
     }
-
     private get clipboard(): string {
         if (this._clipboard === undefined) {
             this._clipboard = '';
         }
         return this._clipboard;
     }
-
     private set clipboard(value: string) {
         this._clipboard = value;
     }
-
     private _clipboard: string | undefined; //@TODO: [I]Clipboard?
     private _scroll: any;
 }
-
 export default MdEditorToolbar;

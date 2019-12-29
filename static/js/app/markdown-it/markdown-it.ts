@@ -45,7 +45,6 @@ export class MarkdownIt {
             },
             html: true, linkify: true, typographer: true
         });
-
         this._mdi.use(markdownitAbbr);
         this._mdi.use(markdownitAnchor, {
             level: 2,
@@ -75,7 +74,6 @@ export class MarkdownIt {
         this._mdi.use(markdownitSup);
         this._mdi.use(markdownitVideo);
     }
-
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
      */

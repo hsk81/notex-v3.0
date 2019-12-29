@@ -15,7 +15,6 @@ export class MdEditorFooter {
         }
         return this['_me'];
     }
-
     public constructor() {
         this.$mirror.tooltip({
             container: 'body', title: (function (this: any) {
@@ -41,7 +40,6 @@ export class MdEditorFooter {
             this.hide();
         }
     }
-
     private hide() {
         if (!this.ed.mirror) {
             this.$input.css({ 'height': '100%' });
@@ -49,7 +47,6 @@ export class MdEditorFooter {
         this.$footer.hide();
         this.$footer.css({ 'width': '48px' });
     }
-
     private show() {
         if (!this.ed.mirror) {
             this.$input.css({ 'height': 'calc(100% - 48px)' });
@@ -57,7 +54,6 @@ export class MdEditorFooter {
         this.$footer.show();
         this.$footer.css({ 'width': '100%' });
     }
-
     private minimize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
             this.$input.css({ 'height': '100%' });
@@ -71,7 +67,6 @@ export class MdEditorFooter {
             this.$footer.animate({ 'width': '48px' }, ms);
         }
     }
-
     private maximize(ms: number = 200, fade: boolean = false) {
         if (!this.ed.mirror) {
             this.$input.css({ 'height': 'calc(100% - 48px)' });
@@ -85,25 +80,22 @@ export class MdEditorFooter {
             this.$footer.animate({ 'width': '100%' }, ms);
         }
     }
-
     private onMirrorClick() {
         if (this.ed.mirror) {
-            let scroll = this.ed.mirror.getScrollInfo(),
-                range = this.ed.mirror.listSelections()[0];
-            let start = this.ed.mirror.indexFromPos(range.anchor),
-                end = this.ed.mirror.indexFromPos(range.head);
-
+            let scroll = this.ed.mirror.getScrollInfo();
+            let range = this.ed.mirror.listSelections()[0];
+            let start = this.ed.mirror.indexFromPos(range.anchor);
+            let end = this.ed.mirror.indexFromPos(range.head);
             let $input = this.ed.toInput({
                 footer: true, toolbar: true
             });
-
             $input.show();
             $input.focus();
             $input.scrollLeft(scroll.left);
             $input.scrollTop(scroll.top);
             $input[0].setSelectionRange(
-                Math.min(start, end), Math.max(start, end));
-
+                Math.min(start, end), Math.max(start, end)
+            );
             this.$mirror.tooltip('hide');
             this.$cli.val('');
             this.minimize();
@@ -115,64 +107,54 @@ export class MdEditorFooter {
                 start: (this.ed.$input[0] as HTMLInputElement).selectionStart,
                 end: (this.ed.$input[0] as HTMLInputElement).selectionEnd
             };
-
             let mirror = this.ed.toMirror();
             mirror.focus();
             mirror.scrollTo(scroll.left, scroll.top);
             mirror.setSelection(
                 mirror.posFromIndex(sel.start),
-                mirror.posFromIndex(sel.end));
-
+                mirror.posFromIndex(sel.end)
+            );
             this.$mirror.tooltip('hide');
             this.$cli.val('');
             this.maximize();
         }
     }
-
     private onConsoleKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$cli.val('');
             this.$cli.trigger('change');
         }
     }
-
     private onConsoleChange(ev: KeyboardEvent) {
-        let $input = $(ev.target as any),
-            value = $input.val() as string;
-
-        let rx_px = /^\//,
-            mm_px = value.match(rx_px);
-        let rx_sx = /\/[gimy]{0,4}$/,
-            mm_sx = value.match(rx_sx);
-
+        let $input = $(ev.target as any);
+        let value = $input.val() as string;
+        let rx_px = /^\//;
+        let mm_px = value.match(rx_px);
+        let rx_sx = /\/[gimy]{0,4}$/;
+        let mm_sx = value.match(rx_sx);
         if (mm_px && mm_px.length > 0 && mm_sx && mm_sx.length > 0) {
-            let rx_beg = mm_px[0].length,
-                rx_end = value.length - mm_sx[0].length;
-            let rx_flags = mm_sx[0].substring(1),
-                rx_value = value.substring(rx_beg, rx_end);
-
+            let rx_beg = mm_px[0].length;
+            let rx_end = value.length - mm_sx[0].length;
+            let rx_flags = mm_sx[0].substring(1);
+            let rx_value = value.substring(rx_beg, rx_end);
             this.ed.search(new RegExp(rx_value, rx_flags));
         } else {
             this.ed.search(value);
         }
     }
-
     private onSpellCheckToggle(ev: MouseEvent) {
-        let $li1 = this.$spellCheckerToggle,
-            $li1_a = $li1.find('a'),
-            $li1_img = $li1.find('img'),
-            $li1_line2 = $li1.find('.line2');
-
+        let $li1 = this.$spellCheckerToggle;
+        let $li1_a = $li1.find('a');
+        let $li1_img = $li1.find('img');
+        let $li1_line2 = $li1.find('.line2');
         let $button_span = this.$spellCheckerButton.find('span.img-placeholder');
         $button_span.remove();
         let $button_img = this.$spellCheckerButton.find('img');
         $button_img.show();
-
         let lingua = {
             code: $li1_a.data('lingua'),
             charset: null
         };
-
         let state = $li1_a.data('state');
         if (state === 'off') {
             $button_img.prop('src', this.urls['16x16'].on);
@@ -193,7 +175,6 @@ export class MdEditorFooter {
         if (state !== 'off') {
             lingua.code = null;
         }
-
         this.$spellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
@@ -211,32 +192,27 @@ export class MdEditorFooter {
             this.$spellCheckerButton.removeClass('disabled');
         });
     }
-
     private onSpellCheckItemClick(ev: MouseEvent) {
-        let $li1 = this.$spellCheckerToggle,
-            $li1_a = $li1.find('a'),
-            $li1_img = $li1.find('img'),
-            $li1_line2 = $li1.find('.line2');
-        let $lii = $(ev.target as any).closest('li'),
-            $lii_a = $lii.find('a'),
-            $lii_img = $lii.find('img');
-
-        let url = $lii_img.prop('src'),
-            code = cookie.get<string>('language') ||
-                (navigator.language || 'en-US').replace('-', '_'),
-            lingua = {
-                code: $lii_a.data('lingua'),
-                charset: $lii_a.data('charset')
-            };
-
-        let $button = this.$spellCheckerButton,
-            $button_img = $button.find('img'),
-            $button_span = $button.find('span.img-placeholder');
-
+        let $li1 = this.$spellCheckerToggle;
+        let $li1_a = $li1.find('a');
+        let $li1_img = $li1.find('img');
+        let $li1_line2 = $li1.find('.line2');
+        let $lii = $(ev.target as any).closest('li');
+        let $lii_a = $lii.find('a');
+        let $lii_img = $lii.find('img');
+        let url = $lii_img.prop('src');
+        let code = cookie.get<string>('language') ||
+            (navigator.language || 'en-US').replace('-', '_');
+        let lingua = {
+            code: $lii_a.data('lingua'),
+            charset: $lii_a.data('charset')
+        };
+        let $button = this.$spellCheckerButton;
+        let $button_img = $button.find('img');
+        let $button_span = $button.find('span.img-placeholder');
         $button_span.remove();
         $button_img.prop('src', url.replace('32x32', '16x16'));
         $button_img.show();
-
         this.$spellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
@@ -261,11 +237,10 @@ export class MdEditorFooter {
             this.$spellCheckerButton.removeClass('disabled');
         });
     }
-
     private onSpellCheckButtonClick(ev: MouseEvent) {
-        let $menu = this.$spellCheckerMenu,
-            $spin = $menu.find('>.spin'),
-            $item = $menu.find('>li');
+        let $menu = this.$spellCheckerMenu;
+        let $spin = $menu.find('>.spin');
+        let $item = $menu.find('>li');
         if ($item.length === 0) {
             $.get('/static/html/spell-checker-menu.html').done((html) => {
                 $menu.html(html);
@@ -289,21 +264,17 @@ export class MdEditorFooter {
             });
         }
     }
-
     private normalize(code: string): string {
         const linguae_all: string[] = this.$spellCheckerMenu.find('>li>a')
             .map((i, li) => $(li).data('lingua'))
             .toArray() as any;
-
         const linguae_std: string[] = this.$spellCheckerMenu.find('>li>a')
             .map((i, li) => $(li).data('standard') && $(li).data('lingua'))
             .toArray() as any;
-
         const linguae_eql: string[] = linguae_all.filter((lingua) => {
             const split = lingua.toLowerCase().split('_');
             return split[0] === split[1];
         });
-
         if (linguae_all.indexOf(code) < 0) {
             const override = (lingua: string) => {
                 const lhs = lingua.split('_')[0];
@@ -316,10 +287,8 @@ export class MdEditorFooter {
             linguae_eql.every(override);
             linguae_std.every(override);
         }
-
         return code;
     }
-
     @buffered(600)
     private onMenuItemLoad(ev: Event) {
         var $menu = this.$spellCheckerMenu,
@@ -330,7 +299,6 @@ export class MdEditorFooter {
         $item.fadeIn('slow');
         $spin.remove();
     }
-
     private urls: any = {
         '32x32': {
             err: '/static/png/fatcow/32x32/spellcheck_error.png',
@@ -343,42 +311,32 @@ export class MdEditorFooter {
             on: '/static/png/fatcow/16x16/spellcheck.png'
         }
     };
-
     public get $input() {
         return $('#input');
     }
-
     private get $footer() {
         return this.$input.siblings('.footer');
     }
-
     private get $mirror() {
         return this.$footer.find('.glyphicon-console').closest('button');
     }
-
     private get $cli() {
         return this.$footer.find('#cli').find('input') as JQuery<HTMLElement>;
     }
-
     private get $spellCheckerButton() {
         return this.$footer.find('#spell-checker-button');
     }
-
     private get $spellCheckerMenu() {
         return this.$footer.find('ul#spell-checker-menu');
     }
-
     private get $spellCheckerToggle() {
         return this.$spellCheckerMenu.find('li:first-of-type');
     }
-
     private get $spellCheckerItem() {
         return this.$spellCheckerMenu.find('li:not(:first-of-type)');
     }
-
     private get ed() {
         return MdEditor.me;
     }
 }
-
 export default MdEditorFooter;

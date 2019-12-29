@@ -9,17 +9,14 @@ export class DownloadManager {
         }
         return this['_me'];
     }
-
     public set title(title: string) {
         this.$downloadLink.attr("download", title);
     }
-
     public set content(content: string) {
         this.$downloadLink.attr("href", URL.createObjectURL(
             new Blob([content], { type: 'text/markdown' })
         ));
     }
-
     private get $downloadLink(): any {
         return HeaderMenu.me.$saveItem;
     }

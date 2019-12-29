@@ -35,8 +35,8 @@ export class Commands {
     }
 
     public add(command: ICommand) {
-        let ex_command = <IExCommand>command,
-            re_command = Commands.top(this._redone);
+        let ex_command = <IExCommand>command;
+        let re_command = Commands.top(this._redone);
         if (re_command) {
             ex_command.link = re_command;
         }
@@ -44,8 +44,8 @@ export class Commands {
     }
 
     public run(command: ICommand) {
-        let ex_command = <IExCommand>command,
-            re_command = Commands.top(this._redone);
+        let ex_command = <IExCommand>command;
+        let re_command = Commands.top(this._redone);
         if (re_command) {
             ex_command.link = re_command;
         }
@@ -60,8 +60,8 @@ export class Commands {
     }
 
     public redo() {
-        let re_command = Commands.top(this._redone),
-            un_command = Commands.pop(this._undone);
+        let re_command = Commands.top(this._redone);
+        let un_command = Commands.pop(this._undone);
         if (un_command && un_command.link === re_command) {
             this._redone.push(un_command.redo());
         }

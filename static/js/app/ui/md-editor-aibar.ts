@@ -9,7 +9,6 @@ export enum AiMode {
     help = 'ai-help',
     none = 'ai-none'
 }
-
 @trace
 export class MdEditorAibar {
     public static get me(this: any): MdEditorAibar {
@@ -18,7 +17,6 @@ export class MdEditorAibar {
         }
         return this['_me'];
     }
-
     public constructor() {
         if (this.ed.empty) {
             this.$aibar.fadeIn('slow', () => {
@@ -31,7 +29,6 @@ export class MdEditorAibar {
         }
         this.events();
     }
-
     private events() {
         $(this.ed).on('ui-mode', (ev, { value }) => {
             this.onUiModeChange(value);
@@ -55,7 +52,6 @@ export class MdEditorAibar {
             'click', this.onRhsButtonClick.bind(this)
         );
     }
-
     private onUiModeChange(mode: UiMode) {
         if (this.ed.empty) {
             this.$aibar.fadeIn('slow');
@@ -73,7 +69,6 @@ export class MdEditorAibar {
             this.$aibar.hide();
         }
     }
-
     private async onRhsButtonClick() {
         if (this.aiPage !== undefined && this.aiPage < Infinity) {
             this.aiPage += 1;
@@ -95,7 +90,6 @@ export class MdEditorAibar {
             this.aiMode = AiMode.none;
         }
     }
-
     private onAiMode(mode: AiMode) {
         if (mode !== AiMode.help) {
             this.$midButton.text('Help');
@@ -120,7 +114,6 @@ export class MdEditorAibar {
             this.ed.clear();
         }
     }
-
     private async fetch(page: number) {
         const padded = page.toString(16).padStart(4, '0');
         const path = `/static/md/help-${padded.toUpperCase()}.md`;
@@ -132,7 +125,6 @@ export class MdEditorAibar {
                 return null;
             });
     }
-
     private get aiMode() {
         return window['ai-mode'] as AiMode;
     }
@@ -141,7 +133,6 @@ export class MdEditorAibar {
             value: window['ai-mode'] = value
         });
     }
-
     private get aiPage() {
         return window['ai-page'] as number | undefined;
     }
@@ -150,7 +141,6 @@ export class MdEditorAibar {
             value: window['ai-page'] = value
         });
     }
-
     private get $aibar() {
         return $('.aibar');
     }
@@ -166,7 +156,6 @@ export class MdEditorAibar {
     private get $output() {
         return $('#output');
     }
-
     private get ed() {
         return MdEditor.me;
     }

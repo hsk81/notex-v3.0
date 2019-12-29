@@ -17,7 +17,6 @@ export class BloggerApi {
 
     public get(callback: Function, ms: number = 2048, n: number = 2) {
         GoogleApi.me.get((gapi: any) => {
-
             if (gapi) {
                 let timeout_id1 = setTimeout(() => {
                     if (n - 1 > 0) {
@@ -26,13 +25,11 @@ export class BloggerApi {
                         callback(false);
                     }
                 }, ms);
-
                 let on_fail = (res: any) => {
                     if (timeout_id1) clearTimeout(timeout_id1);
                     console.error('[with:google-api/fail]', res);
                     callback(false);
                 };
-
                 let on_done = (res: any) => {
                     if (timeout_id1) {
                         clearTimeout(timeout_id1);
@@ -65,17 +62,17 @@ export class BloggerApi {
                         callback(gapi.client.blogger, this._options);
                     }
                 };
-
                 let opts = $.extend(
-                    {}, this._options, { immediate: true });
+                    {}, this._options, { immediate: true }
+                );
                 gapi.auth.authorize(
-                    opts, on_done, on_fail);
+                    opts, on_done, on_fail
+                );
             } else {
                 callback(false);
             }
         });
     }
-
     private _options: any;
 }
 

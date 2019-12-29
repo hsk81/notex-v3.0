@@ -40,7 +40,6 @@ export enum UiMode {
     simple = 'ui-simple',
     mirror = 'ui-mirror'
 }
-
 @trace
 export class MdEditor {
     public static get me(this: any): MdEditor {
@@ -49,7 +48,6 @@ export class MdEditor {
         }
         return this['_me'];
     }
-
     public constructor() {
         this.patch = snabbdom.init([
             snabbdom_attrs.default,
@@ -71,11 +69,10 @@ export class MdEditor {
         }
         this.events();
     }
-
     public toMirror(): any {
+        let ta = document.getElementById('input') as HTMLTextAreaElement;
         if (!this.mirror) {
-            this.setMirror(CodeMirror.fromTextArea(
-                document.getElementById('input') as HTMLTextAreaElement, {
+            this.setMirror(CodeMirror.fromTextArea(ta, {
                     addModeClass: true,
                     lineWrapping: true,
                     lineNumbers: true,
@@ -96,17 +93,14 @@ export class MdEditor {
             this.mirror
                 .on('change', this.onEditorChange.bind(this));
         }
-
         if (this.spellCheckerOverlay) {
             this.mirror.removeOverlay(this.spellCheckerOverlay);
             this.mirror.addOverlay(this.spellCheckerOverlay);
         }
-
         this.simple = false;
         this.$input.hide();
         return this.mirror;
     }
-
     public toInput(options: {
         footer: boolean, toolbar: boolean
     }): any {
@@ -117,18 +111,15 @@ export class MdEditor {
             this.mirror.toTextArea();
             this.setMirror(undefined);
         }
-
         this.$input
             .off('keyup change paste')
             .on('keyup change paste', this.onEditorChange.bind(this))
             .show();
-
         if (options.toolbar) {
             this.$input.css('width', 'calc(100% - 48px)');
         } else {
             this.$input.css('width', '100% ');
         }
-
         if (options.footer) {
             this.$footer.show();
             this.$input.css('height', 'calc(100% - 47px)');
@@ -136,16 +127,13 @@ export class MdEditor {
             this.$footer.hide();
             this.$input.css('height', '100%');
         }
-
         this.simple = true;
         return this.$input;
     }
-
     @buffered(600)
     public render(force = false) {
         const $output = $('#output');
         const $cached = $('#cached');
-
         if (!this._mdOld || this._mdOld.length === 0) {
             $output.empty();
         }
@@ -197,13 +185,11 @@ export class MdEditor {
         }
         this._mdOld = value;
     }
-
     public refresh() {
         if (this.mirror) {
             this.mirror.refresh();
         }
     }
-
     public focus() {
         if (this.mirror) {
             this.mirror.focus();
@@ -211,11 +197,9 @@ export class MdEditor {
             this.$input.focus();
         }
     }
-
     public get empty() {
         return !this.getValue();
     }
-
     @traceable(false)
     public getValue() {
         if (this.mirror) {
@@ -224,23 +208,20 @@ export class MdEditor {
             return this.$input.val();
         }
     }
-
     @traceable(false)
     public setValue(value: string) {
+        let inp = this.$input[0] as HTMLInputElement;
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
-            (this.$input[0] as HTMLInputElement).select();
+            inp.select();
             if (!document.execCommand('insertText', false, value)) {
                 this.$input.val(value);
             }
-
-            (this.$input[0] as HTMLInputElement)
-                .setSelectionRange(0, 0);
+            inp.setSelectionRange(0, 0);
             this.$input.trigger('change');
         }
     }
-
     public clear() {
         if (this.mirror) {
             return this.mirror.setValue('');
@@ -249,23 +230,19 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
-
     public getSelection(): string {
         if (this.mirror) {
             return this.mirror.getSelection();
         } else {
-            let inp = this.$input[0] as HTMLInputElement,
-                beg = inp.selectionStart as number,
-                end = inp.selectionEnd as number;
-
+            let inp = this.$input[0] as HTMLInputElement;
+            let beg = inp.selectionStart as number;
+            let end = inp.selectionEnd as number;
             return inp.value.substring(beg, end);
         }
     }
-
     private events() {
         this.dnd();
     }
-
     public dnd() {
         this.$doc.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
@@ -323,7 +300,6 @@ export class MdEditor {
             });
         });
     }
-
     private insert(text: string) {
         if (this.mirror) {
             this.mirror.replaceSelection(text);
@@ -337,7 +313,6 @@ export class MdEditor {
         }
         this.focus();
     }
-
     private onEditorChange() {
         setTimeout(() => {
             $(this).trigger('change');
@@ -354,31 +329,25 @@ export class MdEditor {
         }
         this.render();
     }
-
     private get mathjaxUrl(): string {
-        return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
+        return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js'
+             + '?config=TeX-MML-AM_CHTML';
     }
-
     public get $input() {
         return $('#input');
     }
-
     public get $footer() {
         return this.$input.siblings('.footer');
     }
-
     public get mirror(): any {
         return window['CODE_MIRROR'];
     }
-
     private setMirror(value: any) {
         window['CODE_MIRROR'] = value;
     }
-
     public get mobile(): boolean {
         return $('.lhs').is(':hidden') && !window.debug;
     }
-
     private get simple(): boolean {
         const value = cookie.get<boolean>('simple-flag');
         if (value === undefined) {
@@ -393,23 +362,19 @@ export class MdEditor {
             value: value ? UiMode.simple : UiMode.mirror
         });
     }
-
     public get uiMode(): UiMode {
         const value = cookie.get<boolean>('simple-flag');
         return value ? UiMode.simple : UiMode.mirror;
     }
-
     private set spellChecker(value: SpellChecker | undefined) {
         this._spellChecker = value;
     }
-
     private get spellCheckerOverlay(): IOverlay | undefined {
         return this._spellCheckerOverlay;
     }
     private set spellCheckerOverlay(value: IOverlay | undefined) {
         this._spellCheckerOverlay = value;
     }
-
     public spellCheck(
         lingua: ILingua, callback: (error: boolean) => void
     ) {
@@ -441,7 +406,6 @@ export class MdEditor {
             }
         }
     }
-
     private getSearchOverlay(query: any) {
         if (typeof query === 'string') {
             if (query === query.toLowerCase()) {
@@ -473,14 +437,12 @@ export class MdEditor {
             }
         };
     };
-
     private get searchOverlay(): IOverlay | undefined {
         return this._searchOverlay;
     }
     private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
-
     public search(query: any) {
         if (this.mirror) {
             if (this.searchOverlay) {
@@ -494,7 +456,6 @@ export class MdEditor {
             }
         }
     }
-
     private get patch(): any {
         return window['VDOM_PATCH'];
     }
@@ -507,7 +468,6 @@ export class MdEditor {
     private set vnode(value: VNode | undefined) {
         window['VDOM_VNODE'] = value;
     }
-
     private get $doc() {
         return $(document);
     }
@@ -517,7 +477,6 @@ export class MdEditor {
     private get $rhs() {
         return $('.rhs');
     }
-
     private _spellCheckerOverlay: IOverlay | undefined;
     private _spellChecker: SpellChecker | undefined;
     private _searchOverlay: IOverlay | undefined;

@@ -2,7 +2,6 @@ export interface ILingua {
     charset: string | null;
     code: string | null;
 }
-
 export interface IOverlay {
     token: (stream: any, state?: any) => void;
 }
@@ -14,7 +13,8 @@ export class SpellChecker {
         lingua: ILingua, callback: (overlay: IOverlay | null) => void
     ) {
         let worker = new Worker(
-            '/static/js/app/spell-checker/spell-checker.worker.js');
+            '/static/js/app/spell-checker/spell-checker.worker.js'
+        );
         worker.onmessage = (ev: any) => {
             if (ev.data && ev.data.typo) {
                 this.typo = Typo.prototype.load(ev.data.typo);
@@ -38,31 +38,26 @@ export class SpellChecker {
             lingua: lingua.code, charset: lingua.charset
         });
     }
-
     private get separator(): RegExp {
         if (!this._separator) {
-            let rx_bas = "!\"#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~",
-                rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿",
-                rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾",
-                rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎",
-                rx_xxx = "≈≡×";
-
+            let rx_bas = "!\"#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~";
+            let rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿";
+            let rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾";
+            let rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎";
+            let rx_xxx = "≈≡×";
             this._separator = new RegExp(
-                `^[^${rx_bas}${rx_ext}${rx_sup}${rx_sub}${rx_xxx}\\d\\s]{2,}`);
+                `^[^${rx_bas}${rx_ext}${rx_sup}${rx_sub}${rx_xxx}\\d\\s]{2,}`
+            );
         }
         return this._separator;
     }
-
     private get typo(): any {
         return this._typo;
     }
-
     private set typo(value: any) {
         this._typo = value;
     }
-
     private _separator: RegExp | undefined;
     private _typo: any;
 }
-
 export default SpellChecker;

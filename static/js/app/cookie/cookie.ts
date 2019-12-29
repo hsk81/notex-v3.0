@@ -22,9 +22,9 @@ class Cookie implements ICookie {
     }
 
     public static get<T>(name: string, value?: T): T | undefined {
-        let cookies = document.cookie.split(';'),
-            cookie_name = name + '=',
-            string;
+        let cookies = document.cookie.split(';');
+        let cookie_name = name + '=';
+        let string;
 
         for (let i = 0; i < cookies.length; i++) {
             let cookie = cookies[i];
