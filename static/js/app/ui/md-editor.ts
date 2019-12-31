@@ -230,6 +230,18 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
+    public getRange(beg: number, end?: number): string {
+        if (end === undefined) {
+            end = beg;
+        }
+        if (this.mirror) {
+            let value = this.mirror.getValue();
+            return value.substring(beg, end);
+        } else {
+            let inp = this.$input[0] as HTMLInputElement;
+            return inp.value.substring(beg, end);
+        }
+    }
     public getSelection(): string {
         if (this.mirror) {
             return this.mirror.getSelection();
