@@ -197,6 +197,14 @@ export class MdEditor {
             this.$input.focus();
         }
     }
+    public clear() {
+        if (this.mirror) {
+            return this.mirror.setValue('');
+        } else {
+            this.$input.val('');
+            this.$input.trigger('change');
+        }
+    }
     public get empty() {
         return !this.getValue();
     }
@@ -222,14 +230,6 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
-    public clear() {
-        if (this.mirror) {
-            return this.mirror.setValue('');
-        } else {
-            this.$input.val('');
-            this.$input.trigger('change');
-        }
-    }
     public getSelection(): string {
         if (this.mirror) {
             return this.mirror.getSelection();
@@ -239,6 +239,23 @@ export class MdEditor {
             let end = inp.selectionEnd as number;
             return inp.value.substring(beg, end);
         }
+    }
+    public setSelection(beg: number, end: number) {
+        if (this.mirror) {
+            this.mirror.setSelection(
+                this.line_char(beg), this.line_char(end)
+            );
+        } else {
+            let inp = this.$input[0] as HTMLInputElement;
+            inp.setSelectionRange(beg, end);
+        }
+    }
+    private line_char(index: number) {
+        let value = this.getValue();
+        let lines = value.substring(0, index).split('\n');
+        let line = Math.max(0, lines.length - 1);
+        let ch = Math.max(0, lines[line].length - 1);
+        return { line, ch };
     }
     private events() {
         this.dnd();
