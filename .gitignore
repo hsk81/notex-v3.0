@@ -30,9 +30,13 @@ static/css/**/*.css.gz
 
 ## javascript
 
-node_modules
 static/js/app/**/*.js
 static/js/app/**/*.js.map
+static/js/app/**/*.js.gz
+
+## node
+
+node_modules
 
 # ##############################################################################
 # global -----------------------------------------------------------------------
