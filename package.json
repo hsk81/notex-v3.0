@@ -18,9 +18,9 @@
         "@types/iscroll": "^5.2.3",
         "@types/jquery": "^3.3.31",
         "@types/mathjax": "^0.0.36",
-        "@types/node": "^13.1.0",
+        "@types/node": "^13.1.2",
         "sass": "^1.24.0",
-        "terser": "^4.4.3",
+        "terser": "^4.5.0",
         "typescript": "^3.7.4"
     },
     "repository": {
@@ -28,11 +28,11 @@
     },
     "scripts": {
         "prebuild": "npx tsc -b && npx sass ./static/css --no-source-map",
-        "build": "./notex/minify.py",
+        "build": "source ./bin/activate && ./notex/minify.py",
         "predebug": "npx tsc -b && npx sass ./static/css --no-source-map",
-        "debug": "DEBUG=1 gunicorn -c config.py wsgi:app",
+        "debug": "source ./bin/activate && DEBUG=1 gunicorn -c config.py wsgi:app",
         "prestart": "npm run build",
-        "start": "DEBUG=0 gunicorn -c config.py wsgi:app --preload",
+        "start": "source ./bin/activate && DEBUG=0 gunicorn -c config.py wsgi:app --preload",
         "watch": "npx tsc -w & npx sass ./static/css --no-source-map --watch"
     },
     "version": "3.2.1"
