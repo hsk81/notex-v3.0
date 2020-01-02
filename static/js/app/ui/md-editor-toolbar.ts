@@ -74,8 +74,9 @@ export class MdEditorToolbar {
         window.print();
     }
     private onUndoClick() {
-        if (this.ed.mirror) {
-            this.ed.mirror.execCommand('undo');
+        let mirror = this.ed.mirror;
+        if (mirror) {
+            mirror.execCommand('undo');
         } else {
             try {
                 document.execCommand('undo')
@@ -87,8 +88,9 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onRedoClick() {
-        if (this.ed.mirror) {
-            this.ed.mirror.execCommand('redo');
+        let mirror = this.ed.mirror;
+        if (mirror) {
+            mirror.execCommand('redo');
         } else {
             try {
                 document.execCommand('redo')
@@ -100,9 +102,11 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onCutClick() {
-        this.clipboard = this.ed.getSelection();
-        if (this.ed.mirror) {
-            this.ed.mirror.replaceSelection('');
+        let { value } = this.ed.getSelection();
+        this.clipboard = value;
+        let mirror = this.ed.mirror;
+        if (mirror) {
+            mirror.replaceSelection('');
         } else {
             try {
                 document.execCommand('cut')
@@ -114,7 +118,8 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onCopyClick() {
-        this.clipboard = this.ed.getSelection();
+        let { value } = this.ed.getSelection();
+        this.clipboard = value;
         try {
             document.execCommand('copy');
         } catch (ex) {
@@ -123,8 +128,9 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onPasteClick() {
-        if (this.ed.mirror) {
-            this.ed.mirror.replaceSelection(this.clipboard);
+        let mirror = this.ed.mirror;
+        if (mirror) {
+            mirror.replaceSelection(this.clipboard);
         } else {
             try {
                 document.execCommand('insertText', false, this.clipboard);
@@ -136,8 +142,9 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onEraseClick() {
-        if (this.ed.mirror) {
-            this.ed.mirror.replaceSelection('');
+        let mirror = this.ed.mirror;
+        if (mirror) {
+            mirror.replaceSelection('');
         } else {
             try {
                 document.execCommand('insertText', false, '');
@@ -150,20 +157,22 @@ export class MdEditorToolbar {
     }
     private onHeaderClick() {
         if (this.ed.mirror) {
-            this.onHeaderClickMirror();
+            this.onHeaderClickMirror(this.ed.mirror);
         } else {
             this.onHeaderClickSimple();
         }
         this.ed.focus();
     }
-    private onHeaderClickMirror() {
-        let cursor = this.ed.mirror.getCursor();
+    private onHeaderClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let cursor = mirror.getCursor();
         let curr_from = { line: cursor.line, ch: 0 };
         let next_from = { line: cursor.line + 1, ch: 0 };
-        let curr_ts = this.ed.mirror.getLineTokens(curr_from.line);
-        let next_ts = this.ed.mirror.getLineTokens(next_from.line);
-        let line = this.ed.mirror.getLineHandle(curr_from.line);
-        let mode = this.ed.mirror.getModeAt(curr_from);
+        let curr_ts = mirror.getLineTokens(curr_from.line);
+        let next_ts = mirror.getLineTokens(next_from.line);
+        let line = mirror.getLineHandle(curr_from.line);
+        let mode = mirror.getModeAt(curr_from);
         let suffix = line.text.match(/^\s+/) ? '' : ' ';
         let prefix = '#';
         let hs = curr_ts.filter((tok: any) => {
@@ -184,35 +193,38 @@ export class MdEditorToolbar {
         if (mode && mode.name === 'markdown') {
             if (hs && hs.length > 0) {
                 if (h1s && h1s.length > 0) {
-                    this.ed.mirror.replaceRange('', curr_from, {
+                    mirror.replaceRange('', curr_from, {
                         ch: 0, line: curr_from.line + 1
                     });
-                    this.ed.mirror.replaceRange('#' + prefix + suffix, {
+                    mirror.replaceRange('#' + prefix + suffix, {
                         ch: 0, line: curr_from.line - 1
                     });
-                    this.ed.mirror.setCursor({
+                    mirror.setCursor({
                         ch: 3, line: curr_from.line - 1
                     });
                 }
                 else if (h2s && h2s.length > 0) {
-                    this.ed.mirror.replaceRange('', curr_from, {
+                    mirror.replaceRange('', curr_from, {
                         ch: 0, line: curr_from.line + 1
                     });
-                    this.ed.mirror.replaceRange('##' + prefix + suffix, {
+                    mirror.replaceRange('##' + prefix + suffix, {
                         ch: 0, line: curr_from.line - 1
                     });
-                    this.ed.mirror.setCursor({
+                    mirror.setCursor({
                         ch: 4, line: curr_from.line - 1
                     });
                 }
                 else if (h6s && h6s.length > 0) {
-                    this.ed.mirror.replaceRange('', curr_from, {
-                        ch: line.text.match(/\s*#{6}\s*/).toString().length,
-                        line: curr_from.line,
-                    });
+                    let match = line.text.match(/\s*#{6}\s*/);
+                    if (match) {
+                        mirror.replaceRange('', curr_from, {
+                            ch: match.toString().length,
+                            line: curr_from.line,
+                        });
+                    }
                 }
                 else {
-                    this.ed.mirror.replaceRange(prefix, {
+                    mirror.replaceRange(prefix, {
                         ch: hs[0].start, line: curr_from.line
                     });
                 }
@@ -222,21 +234,21 @@ export class MdEditorToolbar {
                     if (next_tok.type && next_tok.type.match(/^header/)) {
                         if (next_tok.string === '=' &&
                             next_tok.type.match(/header-1$/)) {
-                            this.ed.mirror.replaceRange('', next_from, {
+                            mirror.replaceRange('', next_from, {
                                 line: next_from.line + 1, ch: 0
                             });
                             prefix += '#';
                         }
                         if (next_tok.string === '-' &&
                             next_tok.type.match(/header-2$/)) {
-                            this.ed.mirror.replaceRange('', next_from, {
+                            mirror.replaceRange('', next_from, {
                                 line: next_from.line + 1, ch: 0
                             });
                             prefix += '##';
                         }
                     }
                 }
-                this.ed.mirror.replaceRange(prefix + suffix, curr_from);
+                mirror.replaceRange(prefix + suffix, curr_from);
             }
         }
     }
@@ -294,28 +306,30 @@ export class MdEditorToolbar {
     }
     private onBoldClick() {
         if (this.ed.mirror) {
-            this.onBoldClickMirror();
+            this.onBoldClickMirror(this.ed.mirror);
         } else {
             this.onBoldClickSimple();
         }
         this.ed.focus();
     }
 
-    private onBoldClickMirror() {
-        let selections = this.ed.mirror.listSelections();
-        if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
-                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+    private onBoldClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let selections = mirror.listSelections();
+        if (selections.length > 0 && mirror.getSelection()) {
+            mirror.setSelections(selections.map((sel: any) => {
+                let lhs_mod = mirror.getModeAt(sel.head);
+                let rhs_mod = mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
                     rhs_mod && rhs_mod.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel.head);
+                    let tok = mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)) {
                         return {
-                            anchor: this.lhs(sel.anchor, tok),
-                            head: this.rhs(sel.head, tok)
+                            anchor: this.lhs(mirror, sel.anchor, tok),
+                            head: this.rhs(mirror, sel.head, tok)
                         };
                     } else {
                         return sel;
@@ -324,7 +338,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
+            (mirror as any).replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor;
                 let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -334,65 +348,61 @@ export class MdEditorToolbar {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
-                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = mirror.getModeAt(sel_lhs);
+                let mod_rhs = mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
                     mod_rhs && mod_rhs.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel_rhs);
+                    let tok = mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)
                     ) {
-                        let lhs = this.lhs(sel_lhs, tok);
-                        let rhs = this.rhs(sel_rhs, tok);
+                        let lhs = this.lhs(mirror, sel_lhs, tok);
+                        let rhs = this.rhs(mirror, sel_rhs, tok);
                         if (tok.type.match(/em/)) {
-                            return `*${this.ed.mirror
-                                .getRange(lhs, rhs)}*`;
+                            return `*${mirror.getRange(lhs, rhs)}*`;
                         } else {
-                            return this.ed.mirror
-                                .getRange(lhs, rhs).slice(2, -2);
+                            return mirror.getRange(lhs, rhs).slice(2, -2);
                         }
                     } else {
-                        return `**${this.ed.mirror
-                            .getRange(sel_lhs, sel_rhs)}**`;
+                        return `**${mirror.getRange(sel_lhs, sel_rhs)}**`;
                     }
                 } else {
-                    return this.ed.mirror
-                        .getRange(sel_lhs, sel_rhs);
+                    return mirror.getRange(sel_lhs, sel_rhs);
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor();
-            let mod = this.ed.mirror.getModeAt(cur);
+            let cur = mirror.getCursor();
+            let mod = mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
-                let tok = this.ed.mirror.getTokenAt(cur);
+                let tok = mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
                     tok.type && tok.type.match(/em/)
                 ) {
-                    let lhs = this.lhs(cur, tok) as {
+                    let lhs = this.lhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
-                    let rhs = this.rhs(cur, tok) as {
+                    let rhs = this.rhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
                     if (tok.type.match(/em/)) {
-                        let src = this.ed.mirror.getRange(lhs, rhs);
+                        let src = mirror.getRange(lhs, rhs);
                         let tgt = `*${src}*`;
-                        this.ed.mirror.replaceRange(tgt, lhs, rhs);
-                        this.ed.mirror.setSelection(lhs, {
+                        mirror.replaceRange(tgt, lhs, rhs);
+                        mirror.setSelection(lhs, {
                             line: rhs.line, ch: rhs.ch + 2
                         });
                     } else {
-                        let src = this.ed.mirror.getRange(lhs, rhs);
+                        let src = mirror.getRange(lhs, rhs);
                         let tgt = src.slice(2, -2);
-                        this.ed.mirror.replaceRange(tgt, lhs, rhs);
-                        this.ed.mirror.setSelection(lhs, {
+                        mirror.replaceRange(tgt, lhs, rhs);
+                        mirror.setSelection(lhs, {
                             line: rhs.line, ch: rhs.ch - 4
                         });
                     }
                 } else {
-                    this.ed.mirror.replaceRange('****', cur);
-                    this.ed.mirror.setCursor({
+                    mirror.replaceRange('****', cur);
+                    mirror.setCursor({
                         line: cur.line, ch: cur.ch + 2
                     });
                 }
@@ -435,28 +445,30 @@ export class MdEditorToolbar {
     }
     private onItalicClick() {
         if (this.ed.mirror) {
-            this.onItalicClickMirror();
+            this.onItalicClickMirror(this.ed.mirror);
         } else {
             this.onItalicClickSimple();
         }
         this.ed.focus();
     }
-    private onItalicClickMirror() {
-        let selections = this.ed.mirror.listSelections();
-        if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
-                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+    private onItalicClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let selections = mirror.listSelections();
+        if (selections.length > 0 && mirror.getSelection()) {
+            mirror.setSelections(selections.map((sel: any) => {
+                let lhs_mod = mirror.getModeAt(sel.head);
+                let rhs_mod = mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
                     rhs_mod && rhs_mod.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel.head);
+                    let tok = mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)
                     ) {
                         return {
-                            anchor: this.lhs(sel.anchor, tok),
-                            head: this.rhs(sel.head, tok)
+                            anchor: this.lhs(mirror, sel.anchor, tok),
+                            head: this.rhs(mirror, sel.head, tok)
                         };
                     } else {
                         return sel;
@@ -465,7 +477,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
+            (mirror as any).replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor;
                 let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -475,51 +487,51 @@ export class MdEditorToolbar {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
-                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = mirror.getModeAt(sel_lhs);
+                let mod_rhs = mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
                     mod_rhs && mod_rhs.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel_rhs);
+                    let tok = mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/strong/) ||
                         tok.type && tok.type.match(/em/)
                     ) {
-                        let lhs = this.lhs(sel_lhs, tok);
-                        let rhs = this.rhs(sel_rhs, tok);
-                        return this.ed.mirror
+                        let lhs = this.lhs(mirror, sel_lhs, tok);
+                        let rhs = this.rhs(mirror, sel_rhs, tok);
+                        return mirror
                             .getRange(lhs, rhs).slice(1, -1);
                     } else {
-                        return `*${this.ed.mirror
+                        return `*${mirror
                             .getRange(sel_lhs, sel_rhs)}*`;
                     }
                 } else {
-                    return this.ed.mirror
+                    return mirror
                         .getRange(sel_lhs, sel_rhs);
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor();
-            let mod = this.ed.mirror.getModeAt(cur);
+            let cur = mirror.getCursor();
+            let mod = mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
-                let tok = this.ed.mirror.getTokenAt(cur);
+                let tok = mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/strong/) ||
                     tok.type && tok.type.match(/em/)
                 ) {
-                    let lhs = this.lhs(cur, tok) as {
+                    let lhs = this.lhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
-                    let rhs = this.rhs(cur, tok) as {
+                    let rhs = this.rhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
-                    let src = this.ed.mirror.getRange(lhs, rhs);
+                    let src = mirror.getRange(lhs, rhs);
                     let tgt = src.slice(1, -1);
-                    this.ed.mirror.replaceRange(tgt, lhs, rhs);
-                    this.ed.mirror.setSelection(lhs, {
+                    mirror.replaceRange(tgt, lhs, rhs);
+                    mirror.setSelection(lhs, {
                         line: rhs.line, ch: rhs.ch - 2
                     });
                 } else {
-                    this.ed.mirror.replaceRange('* *', cur);
-                    this.ed.mirror.setSelection({
+                    mirror.replaceRange('* *', cur);
+                    mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
                         line: cur.line, ch: cur.ch + 2
@@ -564,26 +576,28 @@ export class MdEditorToolbar {
     }
     private onCommentClick() {
         if (this.ed.mirror) {
-            this.onCommentClickMirror();
+            this.onCommentClickMirror(this.ed.mirror);
         } else {
             this.onCommentClickSimple();
         }
         this.ed.focus();
     }
-    private onCommentClickMirror() {
-        let selections = this.ed.mirror.listSelections();
-        if (selections.length > 0 && this.ed.mirror.getSelection()) {
-            this.ed.mirror.setSelections(selections.map((sel: any) => {
-                let lhs_mod = this.ed.mirror.getModeAt(sel.head);
-                let rhs_mod = this.ed.mirror.getModeAt(sel.anchor);
+    private onCommentClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let selections = mirror.listSelections();
+        if (selections.length > 0 && mirror.getSelection()) {
+            mirror.setSelections(selections.map((sel: any) => {
+                let lhs_mod = mirror.getModeAt(sel.head);
+                let rhs_mod = mirror.getModeAt(sel.anchor);
                 if (lhs_mod && lhs_mod.name === 'markdown' &&
                     rhs_mod && rhs_mod.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel.head);
+                    let tok = mirror.getTokenAt(sel.head);
                     if (tok.type && tok.type.match(/comment/)) {
                         return {
-                            anchor: this.lhs(sel.anchor, tok),
-                            head: this.rhs(sel.head, tok)
+                            anchor: this.lhs(mirror, sel.anchor, tok),
+                            head: this.rhs(mirror, sel.head, tok)
                         };
                     } else {
                         return sel;
@@ -592,7 +606,7 @@ export class MdEditorToolbar {
                     return sel;
                 }
             }));
-            this.ed.mirror.replaceSelections(selections.map((sel: any) => {
+            (mirror as any).replaceSelections(selections.map((sel: any) => {
                 let sel_lhs = sel.anchor;
                 let sel_rhs = sel.head;
                 if (sel_lhs.line > sel_rhs.line ||
@@ -602,47 +616,47 @@ export class MdEditorToolbar {
                     sel_lhs = sel.head;
                     sel_rhs = sel.anchor;
                 }
-                let mod_lhs = this.ed.mirror.getModeAt(sel_lhs);
-                let mod_rhs = this.ed.mirror.getModeAt(sel_rhs);
+                let mod_lhs = mirror.getModeAt(sel_lhs);
+                let mod_rhs = mirror.getModeAt(sel_rhs);
                 if (mod_lhs && mod_lhs.name === 'markdown' &&
                     mod_rhs && mod_rhs.name === 'markdown'
                 ) {
-                    let tok = this.ed.mirror.getTokenAt(sel_rhs);
+                    let tok = mirror.getTokenAt(sel_rhs);
                     if (tok.type && tok.type.match(/comment/)) {
-                        let lhs = this.lhs(sel_lhs, tok);
-                        let rhs = this.rhs(sel_rhs, tok);
-                        return this.ed.mirror
+                        let lhs = this.lhs(mirror, sel_lhs, tok);
+                        let rhs = this.rhs(mirror, sel_rhs, tok);
+                        return mirror
                             .getRange(lhs, rhs).slice(1, -1);
                     } else {
-                        return `\`${this.ed.mirror
+                        return `\`${mirror
                             .getRange(sel_lhs, sel_rhs)}\``;
                     }
                 } else {
-                    return this.ed.mirror
+                    return mirror
                         .getRange(sel_lhs, sel_rhs);
                 }
             }), 'around');
         } else {
-            let cur = this.ed.mirror.getCursor();
-            let mod = this.ed.mirror.getModeAt(cur);
+            let cur = mirror.getCursor();
+            let mod = mirror.getModeAt(cur);
             if (mod && mod.name === 'markdown') {
-                let tok = this.ed.mirror.getTokenAt(cur);
+                let tok = mirror.getTokenAt(cur);
                 if (tok.type && tok.type.match(/comment/)) {
-                    let lhs = this.lhs(cur, tok) as {
+                    let lhs = this.lhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
-                    let rhs = this.rhs(cur, tok) as {
+                    let rhs = this.rhs(mirror, cur, tok) as {
                         ch: number, line: number
                     };
-                    let src = this.ed.mirror.getRange(lhs, rhs);
+                    let src = mirror.getRange(lhs, rhs);
                     let tgt = src.slice(1, -1);
-                    this.ed.mirror.replaceRange(tgt, lhs, rhs);
-                    this.ed.mirror.setSelection(lhs, {
+                    mirror.replaceRange(tgt, lhs, rhs);
+                    mirror.setSelection(lhs, {
                         line: rhs.line, ch: rhs.ch - 2
                     });
                 } else {
-                    this.ed.mirror.replaceRange('` `', cur);
-                    this.ed.mirror.setSelection({
+                    mirror.replaceRange('` `', cur);
+                    mirror.setSelection({
                         line: cur.line, ch: cur.ch + 1
                     }, {
                         line: cur.line, ch: cur.ch + 2
@@ -687,14 +701,16 @@ export class MdEditorToolbar {
     }
     private onIndentClick() {
         if (this.ed.mirror) {
-            this.onIndentClickMirror();
+            this.onIndentClickMirror(this.ed.mirror);
         } else {
             this.onIndentClickSimple();
         }
         this.ed.focus();
     }
-    private onIndentClickMirror() {
-        this.ed.mirror.execCommand('indentMore');
+    private onIndentClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        mirror.execCommand('indentMore');
     }
     private onIndentClickSimple() {
         let inp = this.ed.$input[0] as HTMLInputElement;
@@ -716,32 +732,37 @@ export class MdEditorToolbar {
     }
     private onLinkClick(ev: JQuery.Event) {
         if (this.ed.mirror) {
-            this.onLinkClickMirror(
-                Boolean(ev.ctrlKey), Boolean(ev.shiftKey));
+            this.onLinkClickMirror(this.ed.mirror,
+                Boolean(ev.ctrlKey), Boolean(ev.shiftKey)
+            );
         } else {
             this.onLinkClickSimple(
-                Boolean(ev.ctrlKey), Boolean(ev.shiftKey));
+                Boolean(ev.ctrlKey), Boolean(ev.shiftKey)
+            );
         }
         this.ed.focus();
     }
-    private onLinkClickMirror(ctrl: boolean, shift: boolean) {
-        let beg_cur = this.ed.mirror.getCursor('from');
-        let beg_mod = this.ed.mirror.getModeAt(beg_cur);
-        let end_cur = this.ed.mirror.getCursor('to');
-        let end_mod = this.ed.mirror.getModeAt(end_cur);
-        let val = this.ed.mirror.getValue().trimEnd();
-        let sel = this.ed.mirror.getSelection();
+    private onLinkClickMirror(
+        mirror: CodeMirror.Editor,
+        ctrl: boolean, shift: boolean
+    ) {
+        let beg_cur = mirror.getCursor('from');
+        let beg_mod = mirror.getModeAt(beg_cur);
+        let end_cur = mirror.getCursor('to');
+        let end_mod = mirror.getModeAt(end_cur);
+        let val = mirror.getValue().trimRight();
+        let sel = mirror.getSelection();
         let set_text = (beg: any, end: any) => (
             value: string | null, range: string
         ) => {
-            if (value) this.ed.mirror.setValue(value);
-            this.ed.mirror.replaceRange(range, beg, end);
+            if (value) mirror.setValue(value);
+            mirror.replaceRange(range, beg, end);
         };
         let sel_text = (beg: any, end?: any) => (
             beg_dif: number, end_dif: number,
             beg_alt?: any, end_lat?: any
         ) => {
-            this.ed.mirror.setSelection({
+            mirror.setSelection({
                 ...{ line: (beg||end).line, ch: (beg||end).ch + beg_dif },
                 ...{ ...(beg_alt||end_lat) }
             }, {
@@ -757,9 +778,9 @@ export class MdEditorToolbar {
                     `${val} \n\n[${sel||'TEXT'}]: URL\n`, `[${sel||'TEXT'}]`
                 );
                 sel.length ? sel_text(beg_cur)(0, 0, {
-                    line: this.ed.mirror.lastLine() - 1, ch: sel.length + 4
+                    line: mirror.lastLine() - 1, ch: sel.length + 4
                 }, {
-                    line: this.ed.mirror.lastLine() - 1, ch: sel.length + 7
+                    line: mirror.lastLine() - 1, ch: sel.length + 7
                 }) : sel_text(beg_cur)(1, 5);
             } else if (ctrl) {
                 set_text(beg_cur, end_cur)(
@@ -878,14 +899,16 @@ export class MdEditorToolbar {
     }
     private onOutdentClick() {
         if (this.ed.mirror) {
-            this.onOutdentClickMirror();
+            this.onOutdentClickMirror(this.ed.mirror);
         } else {
             this.onOutdentClickSimple();
         }
         this.ed.focus();
     }
-    private onOutdentClickMirror() {
-        this.ed.mirror.execCommand('indentLess');
+    private onOutdentClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        mirror.execCommand('indentLess');
     }
     private onOutdentClickSimple() {
         let inp = this.ed.$input[0] as HTMLInputElement;
@@ -915,35 +938,39 @@ export class MdEditorToolbar {
     }
     private onSumClick(ev: JQuery.Event) {
         if (this.ed.mirror) {
-            this.onSumClickMirror(Boolean(ev.ctrlKey));
+            this.onSumClickMirror(
+                this.ed.mirror, Boolean(ev.ctrlKey)
+            );
         } else {
             this.onSumClickSimple(Boolean(ev.ctrlKey));
         }
         this.ed.focus();
     }
-    private onSumClickMirror(flag: boolean) {
-        let beg = this.ed.mirror.getCursor('from');
-        let beg_mod = this.ed.mirror.getModeAt(beg);
-        let end = this.ed.mirror.getCursor('to');
-        let end_mod = this.ed.mirror.getModeAt(end);
+    private onSumClickMirror(
+        mirror: CodeMirror.Editor, flag: boolean
+    ) {
+        let beg = mirror.getCursor('from');
+        let beg_mod = mirror.getModeAt(beg);
+        let end = mirror.getCursor('to');
+        let end_mod = mirror.getModeAt(end);
         let tex = '\\sum_{i=a}^{b}{i}';
         if (beg_mod && beg_mod.name === 'markdown' &&
             end_mod && end_mod.name === 'markdown'
         ) {
             if (flag) {
-                this.ed.mirror.replaceRange(
+                mirror.replaceRange(
                     `\n$$${tex}$$\n`, beg, end
                 );
-                this.ed.mirror.setSelection({
+                mirror.setSelection({
                     line: beg.line + 1, ch: 8
                 }, {
                     line: beg.line + 1, ch: 11
                 });
             } else {
-                this.ed.mirror.replaceRange(
+                mirror.replaceRange(
                     `$${tex}$`, beg, end
                 );
-                this.ed.mirror.setSelection({
+                mirror.setSelection({
                     line: beg.line, ch: beg.ch + 7
                 }, {
                     line: beg.line, ch: beg.ch + 10
@@ -981,35 +1008,41 @@ export class MdEditorToolbar {
     }
     private onProductClick(ev: JQuery.Event) {
         if (this.ed.mirror) {
-            this.onProductClickMirror(Boolean(ev.ctrlKey));
+            this.onProductClickMirror(
+                this.ed.mirror, Boolean(ev.ctrlKey)
+            );
         } else {
-            this.onProductClickSimple(Boolean(ev.ctrlKey));
+            this.onProductClickSimple(
+                Boolean(ev.ctrlKey)
+            );
         }
         this.ed.focus();
     }
-    private onProductClickMirror(flag: boolean) {
-        let beg = this.ed.mirror.getCursor('from');
-        let beg_mod = this.ed.mirror.getModeAt(beg);
-        let end = this.ed.mirror.getCursor('to');
-        let end_mod = this.ed.mirror.getModeAt(end);
+    private onProductClickMirror(
+        mirror: CodeMirror.Editor, flag: boolean
+    ) {
+        let beg = mirror.getCursor('from');
+        let beg_mod = mirror.getModeAt(beg);
+        let end = mirror.getCursor('to');
+        let end_mod = mirror.getModeAt(end);
         let tex = '\\prod_{i=a}^{b}{i}';
         if (beg_mod && beg_mod.name === 'markdown' &&
             end_mod && end_mod.name === 'markdown'
         ) {
             if (flag) {
-                this.ed.mirror.replaceRange(
+                mirror.replaceRange(
                     `\n$$${tex}$$\n`, beg, end
                 );
-                this.ed.mirror.setSelection({
+                mirror.setSelection({
                     line: beg.line + 1, ch: 9
                 }, {
                     line: beg.line + 1, ch: 12
                 });
             } else {
-                this.ed.mirror.replaceRange(
+                mirror.replaceRange(
                     `$${tex}$`, beg, end
                 );
-                this.ed.mirror.setSelection({
+                mirror.setSelection({
                     line: beg.line, ch: beg.ch + 8
                 }, {
                     line: beg.line, ch: beg.ch + 11
@@ -1047,20 +1080,22 @@ export class MdEditorToolbar {
     }
     private onSupscriptClick() {
         if (this.ed.mirror) {
-            this.onSupscriptClickMirror();
+            this.onSupscriptClickMirror(this.ed.mirror);
         } else {
             this.onSupscriptClickSimple();
         }
         this.ed.focus();
     }
-    private onSupscriptClickMirror() {
-        let cur = this.ed.mirror.getCursor();
-        let mod = this.ed.mirror.getModeAt(cur);
+    private onSupscriptClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let cur = mirror.getCursor();
+        let mod = mirror.getModeAt(cur);
         if (mod && mod.name === 'markdown' ||
             mod && mod.name === 'stex'
         ) {
-            this.ed.mirror.replaceRange('^{ }', cur);
-            this.ed.mirror.setSelection({
+            mirror.replaceRange('^{ }', cur);
+            mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
                 line: cur.line, ch: cur.ch + 3
@@ -1082,20 +1117,22 @@ export class MdEditorToolbar {
     }
     private onSubscriptClick() {
         if (this.ed.mirror) {
-            this.onSubscriptClickMirror();
+            this.onSubscriptClickMirror(this.ed.mirror);
         } else {
             this.onSubscriptClickSimple();
         }
         this.ed.focus();
     }
-    private onSubscriptClickMirror() {
-        let cur = this.ed.mirror.getCursor();
-        let mod = this.ed.mirror.getModeAt(cur);
+    private onSubscriptClickMirror(
+        mirror: CodeMirror.Editor
+    ) {
+        let cur = mirror.getCursor();
+        let mod = mirror.getModeAt(cur);
         if (mod && mod.name === 'markdown' ||
             mod && mod.name === 'stex'
         ) {
-            this.ed.mirror.replaceRange('_{ }', cur);
-            this.ed.mirror.setSelection({
+            mirror.replaceRange('_{ }', cur);
+            mirror.setSelection({
                 line: cur.line, ch: cur.ch + 2
             }, {
                 line: cur.line, ch: cur.ch + 3
@@ -1115,72 +1152,64 @@ export class MdEditorToolbar {
         inp.setSelectionRange(end + 2, end + 3);
         this.ed.$input.trigger('change');
     }
-    private lhs(cursor: any, token: any): {
-        ch: number, line: number
-    } | null {
-        if (this.ed.mirror) {
-            let last = { line: cursor.line, ch: cursor.ch };
-            let next = { line: cursor.line, ch: cursor.ch };
-            while (true) {
-                let next_token = this.ed.mirror.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type) {
-                    return last = {
-                        ch: next.ch, line: next.line
-                    };
+    private lhs(
+        mirror: CodeMirror.Editor, cursor: any, token: any
+    ): CodeMirror.Position {
+        let last = { line: cursor.line, ch: cursor.ch };
+        let next = { line: cursor.line, ch: cursor.ch };
+        while (true) {
+            let next_token = mirror.getTokenAt(next);
+            if (next_token.type && !next_token.type.match(token.type) ||
+                !next_token.type && next_token.type !== token.type) {
+                return last = {
+                    ch: next.ch, line: next.line
+                };
+            } else {
+                last = {
+                    ch: next.ch, line: next.line
+                };
+            }
+            if (next.ch > 0) {
+                next.ch -= 1;
+            } else {
+                if (next.line > 0) {
+                    next.line -= 1;
+                    next.ch = mirror.getLine(
+                        next.line
+                    ).length;
                 } else {
-                    last = {
-                        ch: next.ch, line: next.line
-                    };
-                }
-                if (next.ch > 0) {
-                    next.ch -= 1;
-                } else {
-                    if (next.line > 0) {
-                        next.line -= 1;
-                        next.ch = this.ed.mirror.getLine(
-                            next.line
-                        ).length;
-                    } else {
-                        return last;
-                    }
+                    return last;
                 }
             }
-        } else {
-            return null;
         }
     }
-    private rhs(cursor: any, token: any): {
-        ch: number, line: number
-    } | null {
-        if (this.ed.mirror) {
-            let last = { line: cursor.line, ch: cursor.ch };
-            let next = { line: cursor.line, ch: cursor.ch };
-            while (true) {
-                let next_token = this.ed.mirror.getTokenAt(next);
-                if (next_token.type && !next_token.type.match(token.type) ||
-                    !next_token.type && next_token.type !== token.type
-                ) {
+    private rhs(
+        mirror: CodeMirror.Editor, cursor: any, token: any
+    ): CodeMirror.Position {
+        let last = { line: cursor.line, ch: cursor.ch };
+        let next = { line: cursor.line, ch: cursor.ch };
+        while (true) {
+            let next_token = mirror.getTokenAt(next);
+            if (next_token.type && !next_token.type.match(token.type) ||
+                !next_token.type && next_token.type !== token.type
+            ) {
+                return last;
+            } else {
+                last = {
+                    ch: next.ch, line: next.line
+                };
+            }
+            if (next.ch < mirror.getLine(next.line).length) {
+                next.ch += 1;
+            } else {
+                if (next.line < mirror.lineCount()) {
+                    next.line += 1;
+                    next.ch = mirror
+                        .getLine(next.line).length;
+                } else {
                     return last;
-                } else {
-                    last = {
-                        ch: next.ch, line: next.line
-                    };
-                }
-                if (next.ch < this.ed.mirror.getLine(next.line).length) {
-                    next.ch += 1;
-                } else {
-                    if (next.line < this.ed.mirror.lineCount()) {
-                        next.line += 1;
-                        next.ch = this.ed.mirror
-                            .getLine(next.line).length;
-                    } else {
-                        return last;
-                    }
                 }
             }
-        } else {
-            return null;
         }
     }
     private get $bold() {

@@ -27,6 +27,7 @@ window['VDOM_TO_VNODE'] = toVNode;
 
 import "./md-editor-mode";
 
+declare const $: JQueryStatic;
 declare const CodeMirror: {
     fromTextArea: (
         host: HTMLTextAreaElement,
@@ -34,8 +35,7 @@ declare const CodeMirror: {
     ) => CodeMirror.EditorFromTextArea
 };
 
-declare const $: JQueryStatic;
-
+export type Position = number | CodeMirror.Position;
 export enum UiMode {
     simple = 'ui-simple',
     mirror = 'ui-mirror'
@@ -71,18 +71,18 @@ export class MdEditor {
     }
     public toMirror(): any {
         let ta = document.getElementById('input') as HTMLTextAreaElement;
-        if (!this.mirror) {
-            this.setMirror(CodeMirror.fromTextArea(ta, {
-                    addModeClass: true,
-                    lineWrapping: true,
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    mode: 'notex-md',
-                    styleActiveLine: true,
-                    undoDepth: 4096
-                } as any
-            ));
-            this.mirror.setOption('extraKeys', {
+        let mirror = this.mirror;
+        if (mirror === undefined) {
+            mirror = CodeMirror.fromTextArea(ta, {
+                addModeClass: true,
+                lineWrapping: true,
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: 'notex-md',
+                styleActiveLine: true,
+                undoDepth: 4096
+            } as any);
+            mirror.setOption('extraKeys', {
                 'Tab': (cm: any) => {
                     cm.execCommand('indentMore');
                 },
@@ -90,12 +90,14 @@ export class MdEditor {
                     cm.execCommand('indentLess');
                 }
             });
-            this.mirror
-                .on('change', this.onEditorChange.bind(this));
+            mirror.on(
+                'change', this.onEditorChange.bind(this)
+            );
+            this.setMirror(mirror);
         }
         if (this.spellCheckerOverlay) {
-            this.mirror.removeOverlay(this.spellCheckerOverlay);
-            this.mirror.addOverlay(this.spellCheckerOverlay);
+            mirror.removeOverlay(this.spellCheckerOverlay);
+            mirror.addOverlay(this.spellCheckerOverlay);
         }
         this.simple = false;
         this.$input.hide();
@@ -104,11 +106,12 @@ export class MdEditor {
     public toInput(options: {
         footer: boolean, toolbar: boolean
     }): any {
-        if (this.mirror) {
+        let mirror = this.mirror as CodeMirror.EditorFromTextArea;
+        if (mirror) {
             if (this.spellCheckerOverlay) {
-                this.mirror.removeOverlay(this.spellCheckerOverlay);
+                mirror.removeOverlay(this.spellCheckerOverlay);
             }
-            this.mirror.toTextArea();
+            mirror.toTextArea();
             this.setMirror(undefined);
         }
         this.$input
@@ -209,11 +212,11 @@ export class MdEditor {
         return !this.getValue();
     }
     @traceable(false)
-    public getValue() {
+    public getValue(): string {
         if (this.mirror) {
             return this.mirror.getValue();
         } else {
-            return this.$input.val();
+            return this.$input.val() as string;
         }
     }
     @traceable(false)
@@ -230,44 +233,48 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
-    public getRange(beg: number, end?: number): string {
-        if (end === undefined) {
-            end = beg;
+    public getRange(lhs: Position, rhs?: Position): string {
+        if (rhs === undefined) {
+            rhs = lhs;
         }
         if (this.mirror) {
-            let value = this.mirror.getValue();
-            return value.substring(beg, end);
-        } else {
-            let inp = this.$input[0] as HTMLInputElement;
-            return inp.value.substring(beg, end);
-        }
-    }
-    public getSelection(): string {
-        if (this.mirror) {
-            return this.mirror.getSelection();
-        } else {
-            let inp = this.$input[0] as HTMLInputElement;
-            let beg = inp.selectionStart as number;
-            let end = inp.selectionEnd as number;
-            return inp.value.substring(beg, end);
-        }
-    }
-    public setSelection(beg: number, end: number) {
-        if (this.mirror) {
-            this.mirror.setSelection(
-                this.line_char(beg), this.line_char(end)
+            return this.mirror.getRange(
+                lhs as CodeMirror.Position,
+                rhs as CodeMirror.Position
             );
         } else {
             let inp = this.$input[0] as HTMLInputElement;
-            inp.setSelectionRange(beg, end);
+            return inp.value.substring(lhs as number, rhs as number);
         }
     }
-    private line_char(index: number) {
-        let value = this.getValue();
-        let lines = value.substring(0, index).split('\n');
-        let line = Math.max(0, lines.length - 1);
-        let ch = Math.max(0, lines[line].length - 1);
-        return { line, ch };
+    public getSelection(): {
+        lhs: Position, rhs: Position, value: string
+    } {
+        if (this.mirror) {
+            let lhs = this.mirror.getCursor('from');
+            let rhs = this.mirror.getCursor('to');
+            return {
+                lhs, rhs, value: this.mirror.getSelection()
+            };
+        } else {
+            let inp = this.$input[0] as HTMLInputElement;
+            let lhs = inp.selectionStart as number;
+            let rhs = inp.selectionEnd as number;
+            return {
+                lhs, rhs, value: inp.value.substring(lhs, rhs)
+            };
+        }
+    }
+    public setSelection(lhs: Position, rhs: Position) {
+        if (this.mirror) {
+            this.mirror.setSelection(
+                lhs as CodeMirror.Position,
+                rhs as CodeMirror.Position
+            );
+        } else {
+            let inp = this.$input[0] as HTMLInputElement;
+            inp.setSelectionRange(lhs as number, rhs as number);
+        }
     }
     private events() {
         this.dnd();
@@ -368,10 +375,12 @@ export class MdEditor {
     public get $footer() {
         return this.$input.siblings('.footer');
     }
-    public get mirror(): any {
+    public get mirror(): CodeMirror.Editor | undefined {
         return window['CODE_MIRROR'];
     }
-    private setMirror(value: any) {
+    private setMirror(
+        value: CodeMirror.Editor | undefined
+    ) {
         window['CODE_MIRROR'] = value;
     }
     public get mobile(): boolean {
