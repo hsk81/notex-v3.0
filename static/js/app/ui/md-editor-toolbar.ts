@@ -1,5 +1,5 @@
 import { trace } from "../decorator/trace";
-import { MdEditor } from "./md-editor";
+import { MdEditor, Index } from "./md-editor";
 
 declare const $: JQueryStatic;
 
@@ -731,171 +731,61 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
     private onLinkClick(ev: JQuery.Event) {
-        if (this.ed.mirror) {
-            this.onLinkClickMirror(this.ed.mirror,
-                Boolean(ev.ctrlKey), Boolean(ev.shiftKey)
-            );
-        } else {
-            this.onLinkClickSimple(
-                Boolean(ev.ctrlKey), Boolean(ev.shiftKey)
-            );
-        }
-        this.ed.focus();
-    }
-    private onLinkClickMirror(
-        mirror: CodeMirror.Editor,
-        ctrl: boolean, shift: boolean
-    ) {
-        let beg_cur = mirror.getCursor('from');
-        let beg_mod = mirror.getModeAt(beg_cur);
-        let end_cur = mirror.getCursor('to');
-        let end_mod = mirror.getModeAt(end_cur);
-        let val = mirror.getValue().trimRight();
-        let sel = mirror.getSelection();
-        let set_text = (beg: any, end: any) => (
-            value: string | null, range: string
-        ) => {
-            if (value) mirror.setValue(value);
-            mirror.replaceRange(range, beg, end);
-        };
-        let sel_text = (beg: any, end?: any) => (
-            beg_dif: number, end_dif: number,
-            beg_alt?: any, end_lat?: any
-        ) => {
-            mirror.setSelection({
-                ...{ line: (beg||end).line, ch: (beg||end).ch + beg_dif },
-                ...{ ...(beg_alt||end_lat) }
-            }, {
-                ...{ line: (end||beg).line, ch: (end||beg).ch + end_dif },
-                ...{ ...(end_lat||beg_alt) }
-            });
-        };
-        if (beg_mod && beg_mod.name === 'markdown' &&
-            end_mod && end_mod.name === 'markdown'
+        let mode = this.ed.getMode();
+        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
+            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
         ) {
-            if (ctrl && shift) {
-                set_text(beg_cur, end_cur)(
-                    `${val} \n\n[${sel||'TEXT'}]: URL\n`, `[${sel||'TEXT'}]`
-                );
-                sel.length ? sel_text(beg_cur)(0, 0, {
-                    line: mirror.lastLine() - 1, ch: sel.length + 4
-                }, {
-                    line: mirror.lastLine() - 1, ch: sel.length + 7
-                }) : sel_text(beg_cur)(1, 5);
-            } else if (ctrl) {
-                set_text(beg_cur, end_cur)(
-                    `${val} \n\n[REF]: URL\n`, `[${sel||'TEXT'}][REF]`
-                );
-                sel.length
-                    ? sel_text(beg_cur)(sel.length + 3, sel.length + 6)
-                    : sel_text(beg_cur)(1, 5);
-            } else {
-                set_text(beg_cur, end_cur)(
-                    null, `[${sel||'TEXT'}](URL)`
-                );
-                sel.length
-                    ? sel_text(beg_cur)(sel.length + 3, sel.length + 6)
-                    : sel_text(beg_cur)(1, 5);
-            }
+            return;
         }
-    }
-    private onLinkClickSimple(ctrl: boolean, shift: boolean) {
-        const ins_text = (
-            $input: JQuery<HTMLElement>
-        ) => (
-            text: string, beg?: number, end?: number
-        ) => {
-            if (!document.execCommand(
-                'insertText', false, text
-            )) {
-                let inp = $input[0] as HTMLInputElement;
-                if (beg === undefined) {
-                    beg = inp.selectionStart as number;
-                }
-                if (end === undefined) {
-                    end = inp.selectionEnd as number;
-                }
-                let value = $input.val() as string;
-                let prefix = value.substring(0, beg);
-                let suffix = value.substring(end||beg, value.length);
-                $input.val(`${prefix}${text}${suffix}`);
-            }
-        };
-        const add_text = (
-            $input: JQuery<HTMLElement>
-        ) => (
-            text: string
-        ) => {
-            let val = $input.val() as string;
-            let inp = $input[0] as HTMLInputElement;
-            inp.setSelectionRange(val.length, val.length);
-            if (!document.execCommand(
-                'insertText', false, text
-            )) {
-                $input.val(val + text);
-            }
-        };
-        const get_selection = (
-            $input: JQuery<HTMLElement>
-        ) => (
-            beg?: number, end?: number
-        ) => (
-            n_beg: number=0, n_end: number=0
-        ) => {
-            let inp = $input[0] as HTMLInputElement;
-            if (beg === undefined) {
-                beg = inp.selectionStart as number;
-            }
-            if (end === undefined) {
-                end = inp.selectionEnd as number;
-            }
-            let value = $input.val() as string;
-            return {
-                sel: value.substring(beg + n_beg, end + n_end),
-                beg: beg + n_beg, end: end + n_end
-            }
-        };
-        const set_selection = (
-            $input: JQuery<HTMLElement>
-        ) => (
-            beg: number, end?: number
-        ) => (
-            n_beg: number=0, n_end: number=0
-        ) => {
-            let inp = $input[0] as HTMLInputElement;
-            if (end === undefined) {
-                inp.setSelectionRange(beg + n_beg, beg + n_end);
+        let { value: text, lhs } = this.ed.getSelection();
+        let { ctrlKey, shiftKey } = ev;
+        if (ctrlKey && shiftKey) {
+            this.ed.replaceSelection(`[${text||'TEXT'}]`);
+            this.ed.appendValue(`\n\n[${text||'TEXT'}]: URL\n`);
+            if (text.length) {
+                let beg = new Index(
+                    this.ed.value.length, -7 - text.length
+                );
+                let end = new Index(
+                    this.ed.value.length, -7
+                );
+                this.ed.setSelection(beg, end);
             } else {
-                inp.setSelectionRange(beg + n_beg, end + n_end);
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
             }
-        };
-        let { sel, beg } = get_selection(this.ed.$input)()();
-        if (ctrl && shift) {
-            ins_text(this.ed.$input)(`[${sel||'TEXT'}]`);
-            add_text(this.ed.$input)(`\n\n[${sel||'TEXT'}]: URL\n`);
-            if (sel.length) {
-                let end = (this.ed.$input.val() as string).length;
-                set_selection(this.ed.$input)(end - 7)(-sel.length, 0);
+        } else if (ctrlKey) {
+            this.ed.replaceSelection(`[${text||'TEXT'}][REF]`);
+            this.ed.appendValue(`\n\n[REF]: URL\n`);
+            if (text.length) {
+                this.ed.setSelection(
+                    new Index(lhs.number, 3 + text.length),
+                    new Index(lhs.number, 6 + text.length)
+                );
             } else {
-                set_selection(this.ed.$input)(beg)(1, 5);
-            }
-        } else if (ctrl) {
-            ins_text(this.ed.$input)(`[${sel||'TEXT'}][REF]`);
-            add_text(this.ed.$input)(`\n\n[REF]: URL\n`);
-            if (sel.length) {
-                set_selection(this.ed.$input)(beg + sel.length)(3, 6);
-            } else {
-                set_selection(this.ed.$input)(beg)(1, 5);
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
             }
         } else {
-            ins_text(this.ed.$input)(`[${sel||'TEXT'}](URL)`);
-            if (sel.length) {
-                set_selection(this.ed.$input)(beg + sel.length)(3, 6);
+            this.ed.replaceSelection(`[${text||'TEXT'}](URL)`);
+            if (text.length) {
+                this.ed.setSelection(
+                    new Index(lhs.number, 3 + text.length),
+                    new Index(lhs.number, 6 + text.length)
+                );
             } else {
-                set_selection(this.ed.$input)(beg)(1, 5);
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
             }
         }
         this.ed.$input.trigger('change');
+        this.ed.focus();
     }
     private onOutdentClick() {
         if (this.ed.mirror) {

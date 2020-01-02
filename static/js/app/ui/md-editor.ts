@@ -35,7 +35,60 @@ declare const CodeMirror: {
     ) => CodeMirror.EditorFromTextArea
 };
 
-export type Position = number | CodeMirror.Position;
+export class Index {
+    public constructor(
+        index: number | CodeMirror.Position, delta = 0
+    ) {
+        if (typeof index === 'number') {
+            this._position = Index.asPosition(index + delta);
+            this._index = index + delta;
+        } else {
+            this._index = Index.asNumber(index) + delta;
+            if (delta !== 0) {
+                this._position = Index.asPosition(this._index);
+            } else {
+                this._position = index;
+            }
+        }
+    }
+    public get position(): CodeMirror.Position {
+        return this._position;
+    }
+    public static asPosition(index: number): CodeMirror.Position {
+        let mirror = MdEditor.me.mirror;
+        if (mirror) {
+            return mirror.posFromIndex(index);
+        }
+        let values = this.values(index);
+        return {
+            ch: values[values.length - 1].length - 1,
+            line: values.length
+        };
+    }
+    public get number(): number {
+        return this._index;
+    }
+    public static asNumber(position: CodeMirror.Position): number {
+        let mirror = MdEditor.me.mirror;
+        if (mirror) {
+            return mirror.indexFromPos(position);
+        }
+        let values = this.values();
+        values = values.slice(0, position.line - 1);
+        let text = values.join('\n');
+        text += values[position.line].slice(0, position.ch);
+        return text.length;
+    }
+    private static values(index?: number): string[] {
+        let value = MdEditor.me.getValue();
+        if (index !== undefined) {
+            return value.substring(0, index).split('\n');
+        }
+        return value.split('\n');
+    }
+    private _position: CodeMirror.Position;
+    private _index: number;
+}
 export enum UiMode {
     simple = 'ui-simple',
     mirror = 'ui-mirror'
@@ -212,6 +265,10 @@ export class MdEditor {
         return !this.getValue();
     }
     @traceable(false)
+    public get value(): string {
+        return this.getValue();
+    }
+    @traceable(false)
     public getValue(): string {
         if (this.mirror) {
             return this.mirror.getValue();
@@ -233,48 +290,65 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
-    public getRange(lhs: Position, rhs?: Position): string {
-        if (rhs === undefined) {
-            rhs = lhs;
-        }
-        if (this.mirror) {
-            return this.mirror.getRange(
-                lhs as CodeMirror.Position,
-                rhs as CodeMirror.Position
-            );
-        } else {
-            let inp = this.$input[0] as HTMLInputElement;
-            return inp.value.substring(lhs as number, rhs as number);
-        }
+    public appendValue(value: string) {
+        this.setValue(this.value + value);
     }
     public getSelection(): {
-        lhs: Position, rhs: Position, value: string
+        lhs: Index, rhs: Index, value: string
     } {
         if (this.mirror) {
-            let lhs = this.mirror.getCursor('from');
-            let rhs = this.mirror.getCursor('to');
+            let lhs = new Index(this.mirror.getCursor('from'));
+            let rhs = new Index(this.mirror.getCursor('to'));
             return {
                 lhs, rhs, value: this.mirror.getSelection()
             };
         } else {
             let inp = this.$input[0] as HTMLInputElement;
-            let lhs = inp.selectionStart as number;
-            let rhs = inp.selectionEnd as number;
+            let lhs = new Index(inp.selectionStart as number);
+            let rhs = new Index(inp.selectionEnd as number);
             return {
-                lhs, rhs, value: inp.value.substring(lhs, rhs)
+                lhs, rhs, value: inp.value.substring(
+                    lhs.number, rhs.number
+                )
             };
         }
     }
-    public setSelection(lhs: Position, rhs: Position) {
+    public setSelection(
+        lhs: Index, rhs: Index
+    ) {
         if (this.mirror) {
             this.mirror.setSelection(
-                lhs as CodeMirror.Position,
-                rhs as CodeMirror.Position
+                lhs.position, rhs.position
             );
         } else {
             let inp = this.$input[0] as HTMLInputElement;
-            inp.setSelectionRange(lhs as number, rhs as number);
+            inp.setSelectionRange(lhs.number, rhs.number);
         }
+    }
+    public replaceSelection(value: string) {
+        if (this.mirror) {
+            this.mirror.replaceSelection(value);
+        } else {
+            try {
+                document.execCommand('insertText', false, value);
+            } catch (ex) {
+                console.error(ex);
+            }
+            this.$input.trigger('change');
+        }
+        this.focus();
+    }
+    public getMode() {
+        if (this.mirror) {
+            let lhs_cur = this.mirror.getCursor('from');
+            let lhs = this.mirror.getModeAt(lhs_cur);
+            let rhs_cur = this.mirror.getCursor('to');
+            let rhs = this.mirror.getModeAt(rhs_cur);
+            return { lhs, rhs };
+        }
+        return {
+            lhs: undefined, rhs: undefined
+        };
     }
     private events() {
         this.dnd();
@@ -317,7 +391,9 @@ export class MdEditor {
                 name: string, hash: string,
                 gateway = 'https://cloudflare-ipfs.com'
             ) => {
-                this.insert(`![${name||''}](${gateway}/ipfs/${hash})\n`);
+                this.replaceSelection(
+                    `![${name||''}](${gateway}/ipfs/${hash})\n`
+                );
             };
             Ipfs.me.then((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {
@@ -335,19 +411,6 @@ export class MdEditor {
                 console.error(e);
             });
         });
-    }
-    private insert(text: string) {
-        if (this.mirror) {
-            this.mirror.replaceSelection(text);
-        } else {
-            try {
-                document.execCommand('insertText', false, text);
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.$input.trigger('change');
-        }
-        this.focus();
     }
     private onEditorChange() {
         setTimeout(() => {
