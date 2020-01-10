@@ -731,10 +731,7 @@ export class MdEditorToolbar {
         this.ed.$input.trigger('change');
     }
     private onLinkClick(ev: JQuery.Event) {
-        let mode = this.ed.getMode();
-        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
-            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
-        ) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
         let { value: text, lhs } = this.ed.getSelection();
@@ -823,10 +820,7 @@ export class MdEditorToolbar {
         }
     }
     private onSumClick(ev: JQuery.Event) {
-        let mode = this.ed.getMode();
-        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
-            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
-        ) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
         let { lhs, rhs } = this.ed.getSelection();
@@ -850,10 +844,7 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onProductClick(ev: JQuery.Event) {
-        let mode = this.ed.getMode();
-        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
-            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
-        ) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
         let { lhs, rhs } = this.ed.getSelection();
@@ -877,78 +868,32 @@ export class MdEditorToolbar {
         this.ed.focus();
     }
     private onSupscriptClick() {
-        if (this.ed.mirror) {
-            this.onSupscriptClickMirror(this.ed.mirror);
-        } else {
-            this.onSupscriptClickSimple();
-        }
-        this.ed.focus();
-    }
-    private onSupscriptClickMirror(
-        mirror: CodeMirror.Editor
-    ) {
-        let cur = mirror.getCursor();
-        let mod = mirror.getModeAt(cur);
-        if (mod && mod.name === 'markdown' ||
-            mod && mod.name === 'stex'
+        if (this.ed.isMode('markdown') === false &&
+            this.ed.isMode('stex') === false
         ) {
-            mirror.replaceRange('^{ }', cur);
-            mirror.setSelection({
-                line: cur.line, ch: cur.ch + 2
-            }, {
-                line: cur.line, ch: cur.ch + 3
-            });
+            return;
         }
-    }
-    private onSupscriptClickSimple() {
-        let inp = this.ed.$input[0] as HTMLInputElement;
-        let val = this.ed.$input.val() as string;
-        let end = inp.selectionEnd as number;
-        inp.setSelectionRange(end, end);
-        if (!document.execCommand('insertText', false, '^{ }')) {
-            let px = val.substring(0, end);
-            let sx = val.substring(end, val.length);
-            this.ed.$input.val(`${px}^{ }${sx}`);
-        }
-        inp.setSelectionRange(end + 2, end + 3);
-        this.ed.$input.trigger('change');
+        let { rhs } = this.ed.getSelection();
+        this.ed.insertValue(`^{ }`, rhs);
+        this.ed.setSelection(
+            new Index(rhs.number, 2),
+            new Index(rhs.number, 3)
+        );
+        this.ed.focus();
     }
     private onSubscriptClick() {
-        if (this.ed.mirror) {
-            this.onSubscriptClickMirror(this.ed.mirror);
-        } else {
-            this.onSubscriptClickSimple();
-        }
-        this.ed.focus();
-    }
-    private onSubscriptClickMirror(
-        mirror: CodeMirror.Editor
-    ) {
-        let cur = mirror.getCursor();
-        let mod = mirror.getModeAt(cur);
-        if (mod && mod.name === 'markdown' ||
-            mod && mod.name === 'stex'
+        if (this.ed.isMode('markdown') === false &&
+            this.ed.isMode('stex') === false
         ) {
-            mirror.replaceRange('_{ }', cur);
-            mirror.setSelection({
-                line: cur.line, ch: cur.ch + 2
-            }, {
-                line: cur.line, ch: cur.ch + 3
-            });
+            return;
         }
-    }
-    private onSubscriptClickSimple() {
-        let inp = this.ed.$input[0] as HTMLInputElement;
-        let val = this.ed.$input.val() as string;
-        let end = inp.selectionEnd as number;
-        inp.setSelectionRange(end, end);
-        if (!document.execCommand('insertText', false, '_{ }')) {
-            let px = val.substring(0, end);
-            let sx = val.substring(end, val.length);
-            this.ed.$input.val(`${px}_{ }${sx}`);
-        }
-        inp.setSelectionRange(end + 2, end + 3);
-        this.ed.$input.trigger('change');
+        let { rhs } = this.ed.getSelection();
+        this.ed.insertValue(`_{ }`, rhs);
+        this.ed.setSelection(
+            new Index(rhs.number, 2),
+            new Index(rhs.number, 3)
+        );
+        this.ed.focus();
     }
     private lhs(
         mirror: CodeMirror.Editor, cursor: any, token: any
@@ -1074,7 +1019,7 @@ export class MdEditorToolbar {
         return $('.glyphicon-subscript').closest('button');
     }
     private get $supscript() {
-        return $('.glyphicon.superscript').closest('button');
+        return $('.glyphicon-superscript').closest('button');
     }
     private get $sum() {
         return $('.glyphicon.sum').closest('button');

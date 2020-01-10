@@ -290,6 +290,15 @@ export class MdEditor {
             this.$input.trigger('change');
         }
     }
+    public insertValue(value: string, at?: Index) {
+        if (at === undefined) {
+            let { rhs: at } = this.getSelection();
+            this.setSelection(at, at);
+        } else {
+            this.setSelection(at, at);
+        }
+        this.replaceSelection(value);
+    }
     public appendValue(value: string) {
         this.setValue(this.value + value);
     }
@@ -304,8 +313,14 @@ export class MdEditor {
             };
         } else {
             let inp = this.$input[0] as HTMLInputElement;
-            let lhs = new Index(inp.selectionStart as number);
-            let rhs = new Index(inp.selectionEnd as number);
+            let lhs = new Index(Math.min(
+                inp.selectionStart as number,
+                inp.selectionEnd as number
+            ));
+            let rhs = new Index(Math.max(
+                inp.selectionStart as number,
+                inp.selectionEnd as number
+            ));
             return {
                 lhs, rhs, value: inp.value.substring(
                     lhs.number, rhs.number
@@ -338,7 +353,7 @@ export class MdEditor {
         }
         this.focus();
     }
-    public getMode() {
+    public get mode() {
         if (this.mirror) {
             let lhs_cur = this.mirror.getCursor('from');
             let lhs = this.mirror.getModeAt(lhs_cur);
@@ -349,6 +364,16 @@ export class MdEditor {
         return {
             lhs: undefined, rhs: undefined
         };
+    }
+    public isMode(mode: string) {
+        let my_mode = this.mode;
+        if (my_mode.lhs === undefined ||
+            my_mode.rhs === undefined
+        ) {
+            return undefined;
+        }
+        return my_mode.lhs.name === mode &&
+               my_mode.rhs.name === mode;
     }
     private events() {
         this.dnd();
