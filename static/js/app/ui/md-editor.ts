@@ -269,11 +269,18 @@ export class MdEditor {
         return this.getValue();
     }
     @traceable(false)
-    public getValue(): string {
-        if (this.mirror) {
-            return this.mirror.getValue();
+    public getValue(
+        lhs?: Index, rhs?: Index
+    ): string {
+        let value = this.mirror
+            ? this.mirror.getValue()
+            : this.$input.val() as string;
+        if (lhs && rhs) {
+            return value.substring(lhs.number, rhs.number);
+        } else if (lhs && !rhs) {
+            return value.substring(lhs.number);
         } else {
-            return this.$input.val() as string;
+            return value;
         }
     }
     @traceable(false)

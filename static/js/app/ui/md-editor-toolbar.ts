@@ -703,15 +703,29 @@ export class MdEditorToolbar {
         if (this.ed.isMode('markdown') === false) {
             return;
         }
+        let at_next = (
+            sep: string, index?: Index
+        ) => {
+            let v = this.ed.getValue(index);
+            for (var i=0; i<v.length; i++) {
+                if (v[i] === sep) break;
+            }
+            if (index) {
+                return new Index(i + index.number);
+            } else {
+                return new Index(i);
+            }
+        };
         let { value: text, lhs } = this.ed.getSelection();
         let { ctrlKey, shiftKey } = ev;
         if (ctrlKey && shiftKey) {
             this.ed.replaceSelection(`[${text||'TEXT'}]`);
-            this.ed.appendValue(`\n\n[${text||'TEXT'}]: URL\n`);
+            let at = at_next('\n', lhs);
+            this.ed.insertValue(`\n\n[${text||'TEXT'}]: URL\n`, at);
             if (text.length) {
                 this.ed.setSelection(
-                    new Index(this.ed.value.length, -7 - text.length),
-                    new Index(this.ed.value.length, -7)
+                    new Index(at.number, 3),
+                    new Index(at.number, 3 + text.length)
                 );
             } else {
                 this.ed.setSelection(
@@ -721,7 +735,8 @@ export class MdEditorToolbar {
             }
         } else if (ctrlKey) {
             this.ed.replaceSelection(`[${text||'TEXT'}][REF]`);
-            this.ed.appendValue(`\n\n[REF]: URL\n`);
+            let at = at_next('\n', lhs);
+            this.ed.insertValue(`\n\n[REF]: URL\n`, at);
             if (text.length) {
                 this.ed.setSelection(
                     new Index(lhs.number, 3 + text.length),
