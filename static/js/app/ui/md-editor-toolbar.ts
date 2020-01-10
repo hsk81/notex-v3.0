@@ -743,13 +743,10 @@ export class MdEditorToolbar {
             this.ed.replaceSelection(`[${text||'TEXT'}]`);
             this.ed.appendValue(`\n\n[${text||'TEXT'}]: URL\n`);
             if (text.length) {
-                let beg = new Index(
-                    this.ed.value.length, -7 - text.length
+                this.ed.setSelection(
+                    new Index(this.ed.value.length, -7 - text.length),
+                    new Index(this.ed.value.length, -7)
                 );
-                let end = new Index(
-                    this.ed.value.length, -7
-                );
-                this.ed.setSelection(beg, end);
             } else {
                 this.ed.setSelection(
                     new Index(lhs.number, 1),
@@ -784,7 +781,6 @@ export class MdEditorToolbar {
                 );
             }
         }
-        this.ed.$input.trigger('change');
         this.ed.focus();
     }
     private onOutdentClick() {
@@ -827,146 +823,58 @@ export class MdEditorToolbar {
         }
     }
     private onSumClick(ev: JQuery.Event) {
-        if (this.ed.mirror) {
-            this.onSumClickMirror(
-                this.ed.mirror, Boolean(ev.ctrlKey)
+        let mode = this.ed.getMode();
+        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
+            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
+        ) {
+            return;
+        }
+        let { lhs, rhs } = this.ed.getSelection();
+        if (ev.ctrlKey) {
+            this.ed.replaceSelection(
+                `\n$$\\sum_{i=a}^{b}{i}$$\n`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 9),
+                new Index(rhs.number, 12)
             );
         } else {
-            this.onSumClickSimple(Boolean(ev.ctrlKey));
+            this.ed.replaceSelection(
+                `$\\sum_{i=a}^{b}{i}$`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 7),
+                new Index(rhs.number, 10)
+            );
         }
         this.ed.focus();
-    }
-    private onSumClickMirror(
-        mirror: CodeMirror.Editor, flag: boolean
-    ) {
-        let beg = mirror.getCursor('from');
-        let beg_mod = mirror.getModeAt(beg);
-        let end = mirror.getCursor('to');
-        let end_mod = mirror.getModeAt(end);
-        let tex = '\\sum_{i=a}^{b}{i}';
-        if (beg_mod && beg_mod.name === 'markdown' &&
-            end_mod && end_mod.name === 'markdown'
-        ) {
-            if (flag) {
-                mirror.replaceRange(
-                    `\n$$${tex}$$\n`, beg, end
-                );
-                mirror.setSelection({
-                    line: beg.line + 1, ch: 8
-                }, {
-                    line: beg.line + 1, ch: 11
-                });
-            } else {
-                mirror.replaceRange(
-                    `$${tex}$`, beg, end
-                );
-                mirror.setSelection({
-                    line: beg.line, ch: beg.ch + 7
-                }, {
-                    line: beg.line, ch: beg.ch + 10
-                });
-            }
-        }
-    }
-    private onSumClickSimple(flag: boolean) {
-        let inp = this.ed.$input[0] as HTMLInputElement;
-        let val = this.ed.$input.val() as string;
-        let beg = inp.selectionStart as number;
-        let end = inp.selectionEnd as number;
-        let tex = '\\sum_{i=a}^{b}{i}';
-        inp.setSelectionRange(beg, end);
-        if (flag) {
-            if (!document.execCommand(
-                'insertText', false, `\n$$${tex}$$\n`
-            )) {
-                let px = val.substring(0, beg);
-                let sx = val.substring(end, val.length);
-                this.ed.$input.val(`${px}\n$$${tex}$$\n${sx}`);
-            }
-            inp.setSelectionRange(beg + 9, beg + 12);
-        } else {
-            if (!document.execCommand(
-                'insertText', false, `$${tex}$`
-            )) {
-                let px = val.substring(0, beg);
-                let sx = val.substring(end, val.length);
-                this.ed.$input.val(`${px}$${tex}$${sx}`);
-            }
-            inp.setSelectionRange(beg + 7, beg + 10);
-        }
-        this.ed.$input.trigger('change');
     }
     private onProductClick(ev: JQuery.Event) {
-        if (this.ed.mirror) {
-            this.onProductClickMirror(
-                this.ed.mirror, Boolean(ev.ctrlKey)
+        let mode = this.ed.getMode();
+        if (mode.lhs !== undefined && mode.lhs.name !== 'markdown' &&
+            mode.rhs !== undefined && mode.rhs.name !== 'markdown'
+        ) {
+            return;
+        }
+        let { lhs, rhs } = this.ed.getSelection();
+        if (ev.ctrlKey) {
+            this.ed.replaceSelection(
+                `\n$$\\prod_{i=a}^{b}{i}$$\n`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 10),
+                new Index(rhs.number, 13)
             );
         } else {
-            this.onProductClickSimple(
-                Boolean(ev.ctrlKey)
+            this.ed.replaceSelection(
+                `$\\prod_{i=a}^{b}{i}$`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 8),
+                new Index(rhs.number, 11)
             );
         }
         this.ed.focus();
-    }
-    private onProductClickMirror(
-        mirror: CodeMirror.Editor, flag: boolean
-    ) {
-        let beg = mirror.getCursor('from');
-        let beg_mod = mirror.getModeAt(beg);
-        let end = mirror.getCursor('to');
-        let end_mod = mirror.getModeAt(end);
-        let tex = '\\prod_{i=a}^{b}{i}';
-        if (beg_mod && beg_mod.name === 'markdown' &&
-            end_mod && end_mod.name === 'markdown'
-        ) {
-            if (flag) {
-                mirror.replaceRange(
-                    `\n$$${tex}$$\n`, beg, end
-                );
-                mirror.setSelection({
-                    line: beg.line + 1, ch: 9
-                }, {
-                    line: beg.line + 1, ch: 12
-                });
-            } else {
-                mirror.replaceRange(
-                    `$${tex}$`, beg, end
-                );
-                mirror.setSelection({
-                    line: beg.line, ch: beg.ch + 8
-                }, {
-                    line: beg.line, ch: beg.ch + 11
-                });
-            }
-        }
-    }
-    private onProductClickSimple(flag: boolean) {
-        let inp = this.ed.$input[0] as HTMLInputElement;
-        let val = this.ed.$input.val() as string;
-        let beg = inp.selectionStart as number;
-        let end = inp.selectionEnd as number;
-        let tex = '\\prod_{i=a}^{b}{i}';
-        inp.setSelectionRange(beg, end);
-        if (flag) {
-            if (!document.execCommand(
-                'insertText', false, `\n$$${tex}$$\n`
-            )) {
-                let px = val.substring(0, beg);
-                let sx = val.substring(end, val.length);
-                this.ed.$input.val(`${px}\n$$${tex}$$\n${sx}`);
-            }
-            inp.setSelectionRange(beg + 10, beg + 13);
-        } else {
-            if (!document.execCommand(
-                'insertText', false, `$${tex}$`
-            )) {
-                let px = val.substring(0, beg);
-                let sx = val.substring(end, val.length);
-                this.ed.$input.val(`${px}$${tex}$${sx}`);
-            }
-            inp.setSelectionRange(beg + 8, beg + 11);
-        }
-        this.ed.$input.trigger('change');
     }
     private onSupscriptClick() {
         if (this.ed.mirror) {
