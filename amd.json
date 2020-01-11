@@ -3,8 +3,36 @@
   "out": "./static/build/app.js",
   "name": "app",
   "paths": {
+    "@npm/ipfs":
+      "../../../node_modules/ipfs/dist/index.min",
+    "@npm/markdown-it":
+      "../../../node_modules/markdown-it/dist/markdown-it.min",
+    "@npm/markdown-it-abbr":
+      "../../../node_modules/markdown-it-abbr/dist/markdown-it-abbr.min",
+    "@npm/markdown-it-anchor":
+      "../../../node_modules/markdown-it-anchor/dist/markdownItAnchor.umd",
+    "@npm/markdown-it-decorate":
+      "../../../node_modules/markdown-it-decorate/dist/markdown-it-decorate.min",
+    "@npm/markdown-it-emoji":
+      "../../../node_modules/markdown-it-emoji/dist/markdown-it-emoji.min",
+    "@npm/markdown-it-figure":
+      "../../../static/js/lib/markdown-it/markdown-it-figure-0.3.2.min",
+    "@npm/markdown-it-footnote":
+      "../../../node_modules/markdown-it-footnote/dist/markdown-it-footnote.min",
+    "@npm/markdown-it-mark":
+      "../../../node_modules/markdown-it-mark/dist/markdown-it-mark.min",
+    "@npm/markdown-it-math":
+      "../../../node_modules/markdown-it-math/dist/markdown-it-math.min",
+    "@npm/markdown-it-sub":
+      "../../../static/js/lib/markdown-it/markdown-it-sub-2.0.0.min",
+    "@npm/markdown-it-sup":
+      "../../../static/js/lib/markdown-it/markdown-it-sup-2.0.0.min",
+    "@npm/markdown-it-video":
+      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min",
     "@npm/snabbdom/modules/attributes":
       "../../../node_modules/snabbdom/dist/snabbdom-attributes.min",
+    "@npm/snabbdom":
+      "../../../node_modules/snabbdom/dist/snabbdom.min",
     "@npm/snabbdom/modules/class":
       "../../../node_modules/snabbdom/dist/snabbdom-class.min",
     "@npm/snabbdom/modules/eventlisteners":
@@ -14,11 +42,7 @@
     "@npm/snabbdom/modules/style":
       "../../../node_modules/snabbdom/dist/snabbdom-style.min",
     "@npm/snabbdom/tovnode":
-      "../../../node_modules/snabbdom/dist/tovnode.min",
-    "@npm/snabbdom":
-      "../../../node_modules/snabbdom/dist/snabbdom.min",
-    "@npm/ipfs":
-      "../../../node_modules/ipfs/dist/index.min"
+      "../../../node_modules/snabbdom/dist/tovnode.min"
   },
   "optimize": "none"
 }

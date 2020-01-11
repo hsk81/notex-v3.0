@@ -1,16 +1,15 @@
-declare let markdownit: any;
-declare let markdownitAbbr: () => void;
-declare let markdownitAnchor: () => void;
-declare let markdownitCentertext: () => void;
-declare let markdownitDecorate: () => void;
-declare let markdownitEmoji: () => void;
-declare let markdownitFigure: () => void;
-declare let markdownitFootnote: () => void;
-declare let markdownitMark: () => void;
-declare let markdownitMath: () => void;
-declare let markdownitSub: () => void;
-declare let markdownitSup: () => void;
-declare let markdownitVideo: () => void;
+import * as markdownit from '@npm/markdown-it';
+import * as markdownitAbbr from '@npm/markdown-it-abbr';
+import * as markdownitAnchor from '@npm/markdown-it-anchor';
+import * as markdownitDecorate from '@npm/markdown-it-decorate';
+import * as markdownitEmoji from '@npm/markdown-it-emoji';
+import * as markdownitFigure from '@npm/markdown-it-figure';
+import * as markdownitFootnote from '@npm/markdown-it-footnote';
+import * as markdownitMark from '@npm/markdown-it-mark';
+import * as markdownitMath from '@npm/markdown-it-math';
+import * as markdownitSub from '@npm/markdown-it-sub';
+import * as markdownitSup from '@npm/markdown-it-sup';
+import * as markdownitVideo from '@npm/markdown-it-video';
 
 declare let hljs: any;
 
