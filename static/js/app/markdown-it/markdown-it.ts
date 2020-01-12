@@ -44,34 +44,54 @@ export class MarkdownIt {
             },
             html: true, linkify: true, typographer: true
         });
-        this._mdi.use(markdownitAbbr);
-        this._mdi.use(markdownitAnchor, {
-            level: 2,
-            permalink: true
-        });
-        this._mdi.use(markdownitDecorate);
-        this._mdi.use(markdownitEmoji);
-        this._mdi.use(markdownitFigure, {
-            dataType: true,
-            figcaption: true
-        });
-        this._mdi.use(markdownitFootnote);
-        this._mdi.use(markdownitMark);
-        this._mdi.use(markdownitMath, {
-            inlineOpen: '$',
-            inlineClose: '$',
-            inlineRenderer: function (string: string) {
-                return '$' + string + '$';
-            },
-            blockOpen: '$$',
-            blockClose: '$$',
-            blockRenderer: function (string: string) {
-                return '$$' + string + '$$';
-            }
-        });
-        this._mdi.use(markdownitSub);
-        this._mdi.use(markdownitSup);
-        this._mdi.use(markdownitVideo);
+        if (markdownitAbbr) {
+            this._mdi.use(markdownitAbbr);
+        }
+        if (markdownitAnchor) {
+            this._mdi.use(markdownitAnchor, {
+                level: 2, permalink: true
+            });
+        }
+        if (markdownitDecorate) {
+            this._mdi.use(markdownitDecorate);
+        }
+        if (markdownitEmoji) {
+            this._mdi.use(markdownitEmoji);
+        }
+        if (markdownitFigure) {
+            this._mdi.use(markdownitFigure, {
+                dataType: true, figcaption: true
+            });
+        }
+        if (markdownitFootnote) {
+            this._mdi.use(markdownitFootnote);
+        }
+        if (markdownitMark) {
+            this._mdi.use(markdownitMark);
+        }
+        if (markdownitMath) {
+            this._mdi.use(markdownitMath, {
+                inlineOpen: '$',
+                inlineClose: '$',
+                inlineRenderer: function (string: string) {
+                    return '$' + string + '$';
+                },
+                blockOpen: '$$',
+                blockClose: '$$',
+                blockRenderer: function (string: string) {
+                    return '$$' + string + '$$';
+                }
+            });
+        }
+        if (markdownitSub) {
+            this._mdi.use(markdownitSub);
+        }
+        if (markdownitSup) {
+            this._mdi.use(markdownitSup);
+        }
+        if (markdownitVideo) {
+            this._mdi.use(markdownitVideo);
+        }
     }
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
