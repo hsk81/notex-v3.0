@@ -39,5 +39,8 @@
         "start": "source ./bin/activate && DEBUG=0 gunicorn -c config.py wsgi:app --preload",
         "watch": "npx tsc -w & npx sass ./static/css --no-source-map --watch"
     },
+    "engines": {
+        "node": "^13.5.0"
+    },
     "version": "3.2.1"
 }
