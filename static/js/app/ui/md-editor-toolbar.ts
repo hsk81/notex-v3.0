@@ -24,6 +24,8 @@ export class MdEditorToolbar {
             .on('click', this.onCommentClick.bind(this));
         this.$header
             .on('click', this.onHeaderClick.bind(this));
+        this.$image
+            .on('click', this.onImageClick.bind(this));
         this.$indent
             .on('click', this.onIndentClick.bind(this));
         this.$italic
@@ -702,7 +704,7 @@ export class MdEditorToolbar {
         }
         this.ed.$input.trigger('change');
     }
-    private onLinkClick(ev: JQuery.Event) {
+    private onImageClick(ev: JQuery.Event) {
         if (this.ed.isMode('markdown') === false) {
             return;
         }
@@ -719,49 +721,58 @@ export class MdEditorToolbar {
                 return new Index(i);
             }
         };
-        let { value: text, lhs } = this.ed.getSelection();
-        let { ctrlKey, shiftKey } = ev;
-        if (ctrlKey && shiftKey) {
-            this.ed.replaceSelection(`[${text||'TEXT'}]`);
+        let { value: caption, lhs } = this.ed.getSelection();
+        if (ev.ctrlKey && ev.shiftKey) {
+            this.ed.replaceSelection(
+                `![${caption||'CAPTION'}]`
+            );
             let at = at_next('\n', lhs);
-            this.ed.insertValue(`\n\n[${text||'TEXT'}]: URL\n`, at);
-            if (text.length) {
+            this.ed.insertValue(
+                `\n\n[${caption||'CAPTION'}]: URL\n`, at
+            );
+            if (caption.length) {
                 this.ed.setSelection(
                     new Index(at.number, 3),
-                    new Index(at.number, 3 + text.length)
+                    new Index(at.number, 3 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Index(lhs.number, 2),
+                    new Index(lhs.number, 9)
                 );
             }
-        } else if (ctrlKey) {
-            this.ed.replaceSelection(`[${text||'TEXT'}][REF]`);
+        } else if (ev.ctrlKey) {
+            this.ed.replaceSelection(
+                `![${caption||'CAPTION'}][REF]`
+            );
             let at = at_next('\n', lhs);
-            this.ed.insertValue(`\n\n[REF]: URL\n`, at);
-            if (text.length) {
+            this.ed.insertValue(
+                `\n\n[REF]: URL\n`, at
+            );
+            if (caption.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 3 + text.length),
-                    new Index(lhs.number, 6 + text.length)
+                    new Index(lhs.number, 4 + caption.length),
+                    new Index(lhs.number, 7 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Index(lhs.number, 2),
+                    new Index(lhs.number, 9)
                 );
             }
         } else {
-            this.ed.replaceSelection(`[${text||'TEXT'}](URL)`);
-            if (text.length) {
+            this.ed.replaceSelection(
+                `![${caption||'CAPTION'}](URL)`
+            );
+            if (caption.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 3 + text.length),
-                    new Index(lhs.number, 6 + text.length)
+                    new Index(lhs.number, 4 + caption.length),
+                    new Index(lhs.number, 7 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Index(lhs.number, 2),
+                    new Index(lhs.number, 9)
                 );
             }
         }
@@ -797,6 +808,80 @@ export class MdEditorToolbar {
         }
         inp.setSelectionRange(beg + 2, end + 2);
         this.ed.$input.trigger('change');
+    }
+    private onLinkClick(ev: JQuery.Event) {
+        if (this.ed.isMode('markdown') === false) {
+            return;
+        }
+        let at_next = (
+            sep: string, index?: Index
+        ) => {
+            let v = this.ed.getValue(index);
+            for (var i=0; i<v.length; i++) {
+                if (v[i] === sep) break;
+            }
+            if (index) {
+                return new Index(i + index.number);
+            } else {
+                return new Index(i);
+            }
+        };
+        let { value: text, lhs } = this.ed.getSelection();
+        if (ev.ctrlKey && ev.shiftKey) {
+            this.ed.replaceSelection(
+                `[${text||'TEXT'}]`
+            );
+            let at = at_next('\n', lhs);
+            this.ed.insertValue(
+                `\n\n[${text||'TEXT'}]: URL\n`, at
+            );
+            if (text.length) {
+                this.ed.setSelection(
+                    new Index(at.number, 3),
+                    new Index(at.number, 3 + text.length)
+                );
+            } else {
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
+            }
+        } else if (ev.ctrlKey) {
+            this.ed.replaceSelection(
+                `[${text||'TEXT'}][REF]`
+            );
+            let at = at_next('\n', lhs);
+            this.ed.insertValue(
+                `\n\n[REF]: URL\n`, at
+            );
+            if (text.length) {
+                this.ed.setSelection(
+                    new Index(lhs.number, 3 + text.length),
+                    new Index(lhs.number, 6 + text.length)
+                );
+            } else {
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
+            }
+        } else {
+            this.ed.replaceSelection(
+                `[${text||'TEXT'}](URL)`
+            );
+            if (text.length) {
+                this.ed.setSelection(
+                    new Index(lhs.number, 3 + text.length),
+                    new Index(lhs.number, 6 + text.length)
+                );
+            } else {
+                this.ed.setSelection(
+                    new Index(lhs.number, 1),
+                    new Index(lhs.number, 5)
+                );
+            }
+        }
+        this.ed.focus();
     }
     private onOutdentClick() {
         if (this.ed.mirror) {
@@ -918,7 +1003,7 @@ export class MdEditorToolbar {
             return;
         }
         let { lhs } = this.ed.getSelection();
-        if (ev.shiftKey) {
+        if (ev.ctrlKey && ev.shiftKey) {
             this.ed.replaceSelection(
                 `@[prezi](URL)`
             );
