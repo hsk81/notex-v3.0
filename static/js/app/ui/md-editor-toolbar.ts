@@ -12,46 +12,49 @@ export class MdEditorToolbar {
         return this['_me'];
     }
     public constructor() {
-        this.$publish
-            .on('click', this.onPublishClick.bind(this));
-        this.$print
-            .on('click', this.onPrintClick.bind(this));
-        this.$undo
-            .on('click', this.onUndoClick.bind(this));
-        this.$redo
-            .on('click', this.onRedoClick.bind(this));
-        this.$cut
-            .on('click', this.onCutClick.bind(this));
-        this.$copy
-            .on('click', this.onCopyClick.bind(this));
-        this.$paste
-            .on('click', this.onPasteClick.bind(this));
-        this.$erase
-            .on('click', this.onEraseClick.bind(this));
-        this.$header
-            .on('click', this.onHeaderClick.bind(this));
         this.$bold
             .on('click', this.onBoldClick.bind(this));
-        this.$italic
-            .on('click', this.onItalicClick.bind(this));
+        this.$copy
+            .on('click', this.onCopyClick.bind(this));
+        this.$cut
+            .on('click', this.onCutClick.bind(this));
+        this.$erase
+            .on('click', this.onEraseClick.bind(this));
         this.$font
             .on('click', this.onCommentClick.bind(this));
-        this.$link
-            .on('click', this.onLinkClick.bind(this));
+        this.$header
+            .on('click', this.onHeaderClick.bind(this));
         this.$indent
             .on('click', this.onIndentClick.bind(this));
+        this.$italic
+            .on('click', this.onItalicClick.bind(this));
+        this.$link
+            .on('click', this.onLinkClick.bind(this));
         this.$outdent
             .on('click', this.onOutdentClick.bind(this));
-        this.$sum
-            .on('click', this.onSumClick.bind(this));
+        this.$paste
+            .on('click', this.onPasteClick.bind(this));
+        this.$print
+            .on('click', this.onPrintClick.bind(this));
         this.$product
             .on('click', this.onProductClick.bind(this));
-        this.$supscript
-            .on('click', this.onSupscriptClick.bind(this));
-        this.$subscript
-            .on('click', this.onSubscriptClick.bind(this));
+        this.$publish
+            .on('click', this.onPublishClick.bind(this));
+        this.$redo
+            .on('click', this.onRedoClick.bind(this));
         this.$refresh
             .on('click', this.onRefreshClick.bind(this));
+        this.$sum
+            .on('click', this.onSumClick.bind(this));
+        this.$subscript
+            .on('click', this.onSubscriptClick.bind(this));
+        this.$supscript
+            .on('click', this.onSupscriptClick.bind(this));
+        this.$undo
+            .on('click', this.onUndoClick.bind(this));
+        this.$video
+            .on('click', this.onVideoClick.bind(this));
+
         if (!this.ed.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -908,6 +911,38 @@ export class MdEditorToolbar {
             new Index(rhs.number, 2),
             new Index(rhs.number, 3)
         );
+        this.ed.focus();
+    }
+    private onVideoClick(ev: JQuery.Event) {
+        if (this.ed.isMode('markdown') === false) {
+            return;
+        }
+        let { lhs } = this.ed.getSelection();
+        if (ev.shiftKey) {
+            this.ed.replaceSelection(
+                `@[prezi](URL)`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 9),
+                new Index(lhs.number, 12)
+            );
+        } else if (ev.ctrlKey) {
+            this.ed.replaceSelection(
+                `@[vimeo](URL)`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 9),
+                new Index(lhs.number, 12)
+            );
+        } else {
+            this.ed.replaceSelection(
+                `@[youtube](URL)`
+            );
+            this.ed.setSelection(
+                new Index(lhs.number, 11),
+                new Index(lhs.number, 14)
+            );
+        }
         this.ed.focus();
     }
     private lhs(
