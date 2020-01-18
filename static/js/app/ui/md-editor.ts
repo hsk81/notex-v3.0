@@ -146,6 +146,11 @@ export class MdEditor {
             mirror.on(
                 'change', this.onEditorChange.bind(this)
             );
+            mirror.on(
+                'scroll', (cm: CodeMirror.Editor) => {
+                    this.onScroll(cm.getScrollerElement());
+                }
+            )
             this.setMirror(mirror);
         }
         if (this.spellCheckerOverlay) {
@@ -170,6 +175,10 @@ export class MdEditor {
         this.$input
             .off('keyup change paste')
             .on('keyup change paste', this.onEditorChange.bind(this))
+            .off('scroll')
+            .on('scroll', (ev: JQueryEventObject) => {
+                this.onScroll(ev.target as HTMLElement)
+            })
             .show();
         if (options.toolbar) {
             this.$input.css('width', 'calc(100% - 48px)');
@@ -185,6 +194,12 @@ export class MdEditor {
         }
         this.simple = true;
         return this.$input;
+    }
+    public onScroll(e: HTMLElement) {
+        const q = e.scrollTop / e.scrollHeight;
+        const h = this.$output[0].scrollHeight;
+        const c = this.$output[0].clientHeight;
+        this.$output.scrollTop(q*h+q*c);
     }
     @buffered(600)
     public render(force = false) {
@@ -386,7 +401,7 @@ export class MdEditor {
         this.dnd();
     }
     public dnd() {
-        this.$doc.on('dragenter dragover dragleave drop', (ev) => {
+        this.$document.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
         });
@@ -463,12 +478,6 @@ export class MdEditor {
     private get mathjaxUrl(): string {
         return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js'
              + '?config=TeX-MML-AM_CHTML';
-    }
-    public get $input() {
-        return $('#input');
-    }
-    public get $footer() {
-        return this.$input.siblings('.footer');
     }
     public get mirror(): CodeMirror.Editor | undefined {
         return window['CODE_MIRROR'];
@@ -601,8 +610,17 @@ export class MdEditor {
     private set vnode(value: VNode | undefined) {
         window['VDOM_VNODE'] = value;
     }
-    private get $doc() {
+    private get $document() {
         return $(document);
+    }
+    public get $footer() {
+        return this.$input.siblings('.footer');
+    }
+    public get $input() {
+        return this.$lhs.find('#input');
+    }
+    public get $output() {
+        return this.$rhs.find('#output');
     }
     private get $lhs() {
         return $('.lhs');
