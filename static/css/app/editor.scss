@@ -334,12 +334,26 @@ span.spin {
 }
 
 @media print {
-  #cached > pre {
-    border: none !important;
+  #cached > pre, #cached > pre code {
+    white-space: pre-wrap !important;
   }
   #cached > pre {
-    margin: 0 auto;
-    width: 72ch;
+    border: none !important;
+    border-top: 1mm solid black !important;
+    border-bottom: 1mm solid black !important;
+  }
+  #cached > pre {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+}
+
+@media print {
+  #cached > blockquote {
+    border: none !important;
+  }
+  #cached > blockquote {
+    border-left: 1mm solid black !important;
   }
 }
 
