@@ -10,7 +10,7 @@ import { ILingua } from "../spell-checker/spell-checker";
 import { IOverlay } from "../spell-checker/spell-checker";
 import { SpellChecker } from "../spell-checker/spell-checker";
 
-import { Ipfs, Buffer } from "../ipfs/index";
+import { IPFS, Buffer } from "../ipfs/index";
 
 import * as snabbdom from '@npm/snabbdom';
 import * as snabbdom_attrs from '@npm/snabbdom/modules/attributes';
@@ -442,7 +442,7 @@ export class MdEditor {
                     `![${name||''}](${gateway}/ipfs/${hash})\n`
                 );
             };
-            Ipfs.me.then((ipfs: any) => {
+            IPFS.me((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {
                     const reader = new FileReader();
                     reader.onload = function () {

@@ -1,23 +1,18 @@
-import * as IPFS from '@npm/ipfs';
-export const Buffer = IPFS.Buffer;
+import * as Ipfs from '@npm/ipfs';
+export const Buffer = Ipfs.Buffer;
 
-export class Ipfs {
-    public static get me(this: any) {
+export class IPFS {
+    public static async me(this: any, callback?: Function) {
         if (this['_me'] === undefined) {
-            this['_me'] = window['IPFS'] = new IPFS({
-                silent: true
+            this['_me'] = await Ipfs.create({
+                silent: false
             });
-            return new Promise((resolve, reject) => {
-                this['_me'].once('ready', () => {
-                    resolve(this['_me']);
-                });
-                this['_me'].once('error', (e: any) => {
-                    reject(e);
-                });
-            })
         }
-        return Promise.resolve(this['_me']);
+        if (callback !== undefined) {
+            callback(this['_me']);
+        }
+        return this['_me'];
     }
 }
-window['Ipfs'] = Ipfs;
-export default Ipfs;
+window['IPFS'] = IPFS;
+export default IPFS;
