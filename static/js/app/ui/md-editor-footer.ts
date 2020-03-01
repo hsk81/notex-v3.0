@@ -23,10 +23,14 @@ export class MdEditorFooter {
         });
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
-        this.$cli
-            .on('change', this.onConsoleChange.bind(this) as any);
-        this.$cli
-            .on('keydown', this.onConsoleKeyDown.bind(this) as any);
+        this.$find
+            .on('change', this.onFindChange.bind(this) as any);
+        this.$find
+            .on('keydown', this.onFindKeyDown.bind(this) as any);
+        this.$replace
+            .on('change', this.onReplaceChange.bind(this) as any);
+        this.$replace
+            .on('keydown', this.onReplaceKeyDown.bind(this) as any);
         this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
@@ -97,7 +101,7 @@ export class MdEditorFooter {
                 Math.min(start, end), Math.max(start, end)
             );
             this.$mirror.tooltip('hide');
-            this.$cli.val('');
+            this.$find.val('');
             this.minimize();
         } else {
             let scroll = {
@@ -115,19 +119,27 @@ export class MdEditorFooter {
                 mirror.posFromIndex(sel.end)
             );
             this.$mirror.tooltip('hide');
-            this.$cli.val('');
+            this.$find.val('');
             this.maximize();
         }
     }
-    private onConsoleKeyDown(ev: KeyboardEvent) {
+    private onFindKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
-            this.$cli.val('');
-            this.$cli.trigger('change');
+            this.$find.val('');
+            this.$find.trigger('change');
         }
     }
-    private onConsoleChange(ev: KeyboardEvent) {
-        let $input = $(ev.target as any);
-        let value = $input.val() as string;
+    private onReplaceKeyDown(ev: KeyboardEvent) {
+        if (ev.key === 'Escape') {
+            this.$replace.val('');
+        }
+        if (ev.key === 'Enter') {
+            this.$replace.trigger('change');
+        }
+    }
+    private onFindChange(ev: KeyboardEvent) {
+        let $find = $(ev.target as any);
+        let value = $find.val() as string;
         let rx_px = /^\//;
         let mm_px = value.match(rx_px);
         let rx_sx = /\/[gimy]{0,4}$/;
@@ -140,6 +152,26 @@ export class MdEditorFooter {
             this.ed.search(new RegExp(rx_value, rx_flags));
         } else {
             this.ed.search(value);
+        }
+    }
+    @buffered(10)
+    private onReplaceChange(ev: KeyboardEvent) {
+        let $find = this.$find;
+        let old_value = $find.val() as string;
+        let $replace = $(ev.target as any);
+        let new_value = $replace.val() as string;
+        let rx_px = /^\//;
+        let mm_px = old_value.match(rx_px);
+        let rx_sx = /\/[gimy]{0,4}$/;
+        let mm_sx = old_value.match(rx_sx);
+        if (mm_px && mm_px.length > 0 && mm_sx && mm_sx.length > 0) {
+            let rx_beg = mm_px[0].length;
+            let rx_end = old_value.length - mm_sx[0].length;
+            let rx_flags = mm_sx[0].substring(1);
+            let rx_value = old_value.substring(rx_beg, rx_end);
+            this.ed.replace(new RegExp(rx_value, rx_flags), new_value);
+        } else {
+            this.ed.replace(old_value, new_value);
         }
     }
     private onSpellCheckToggle(ev: MouseEvent) {
@@ -321,7 +353,13 @@ export class MdEditorFooter {
         return this.$footer.find('.glyphicon-console').closest('button');
     }
     private get $cli() {
-        return this.$footer.find('#cli').find('input') as JQuery<HTMLElement>;
+        return this.$footer.find('#cli') as JQuery<HTMLElement>;
+    }
+    private get $find() {
+        return this.$cli.find('input.find') as JQuery<HTMLElement>;
+    }
+    private get $replace() {
+        return this.$cli.find('input.replace') as JQuery<HTMLElement>;
     }
     private get $spellCheckerButton() {
         return this.$footer.find('#spell-checker-button');

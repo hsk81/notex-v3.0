@@ -19,13 +19,13 @@
         "@types/bootstrap": "^4.3.1",
         "@types/codemirror": "^0.0.82",
         "@types/iscroll": "^5.2.3",
-        "@types/jquery": "^3.3.31",
+        "@types/jquery": "^3.3.33",
         "@types/mathjax": "^0.0.36",
-        "@types/node": "^13.1.2",
+        "@types/node": "^13.7.7",
         "browserify": "^16.5.0",
-        "sass": "^1.24.0",
-        "terser": "^4.5.0",
-        "typescript": "^3.7.4"
+        "sass": "^1.26.2",
+        "terser": "^4.6.4",
+        "typescript": "^3.8.3"
     },
     "repository": {
         "url": "git@bitbucket.org:hsk81/notex.git"

@@ -585,17 +585,41 @@ export class MdEditor {
     private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
-    public search(query: any) {
+    public search(query: string | RegExp) {
         if (this.mirror) {
             if (this.searchOverlay) {
                 this.mirror.removeOverlay('search')
             }
-            if (query.length > 1 || query.source && query.source.length > 1) {
+            if (typeof query === 'string' && query.length > 1 ||
+                typeof query !== 'string' && query.source && query.source.length > 1
+            ) {
                 this.searchOverlay = $.extend(this.getSearchOverlay(query), {
                     name: 'search'
                 });
                 this.mirror.addOverlay(this.searchOverlay);
             }
+        }
+    }
+    public replace(query: string | RegExp, new_value: string) {
+        let { lhs, rhs, value } = this.getSelection()
+        if (value) {
+            let lhs_value = this.getValue(new Index(0), lhs);
+            let mid_value = value.replace(query, new_value);
+            let rhs_value = this.getValue(rhs);
+            this.setValue(
+                `${lhs_value}${mid_value}${rhs_value}`
+            );
+            let delta = typeof query === 'string'
+                ? new_value.length - query.length
+                : new_value.length - query.source.length;
+            this.setSelection(
+                lhs, new Index(rhs.number + delta)
+            );
+        } else {
+            let old_value = this.getValue();
+            this.setValue(
+                old_value.replace(query, new_value)
+            );
         }
     }
     private get patch(): any {

@@ -115,6 +115,9 @@ body {
           float: right;
           margin: 6px 4px 6px 0;
           width: calc(100% - 53px);
+          input.form-control {
+            width: 50%;
+          }
           button#spell-checker-button {
             height: 34px;
             width: 42px;
