@@ -224,7 +224,9 @@ export class MdEditor {
         ) {
             const render = () => {
                 const new_vnode = snabbdom.h(
-                    'div#output', toVNode($cached[0]).children
+                    'div#output', {
+                        class: { viewer: true }
+                    }, toVNode($cached[0]).children
                 );
                 const old_vnode = (
                     this.vnode ? this.vnode : $output[0]
