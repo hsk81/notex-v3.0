@@ -587,7 +587,7 @@ export class MdEditor {
     private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
-    public search(query: string | RegExp) {
+    public search(query: string | RegExp, select = true) {
         if (this.mirror) {
             if (this.searchOverlay) {
                 this.mirror.removeOverlay('search')
@@ -600,6 +600,41 @@ export class MdEditor {
                 });
                 this.mirror.addOverlay(this.searchOverlay);
             }
+        }
+        if (select) {
+            this.select(query);
+        }
+    }
+    private select(query: string | RegExp) {
+        let length = (query: string | RegExp) => {
+            return typeof query !== 'string'
+                ? query.source.length : query.length;
+        };
+        let next = (index: number | undefined) => {
+            if (index !== undefined) {
+                let i = this.value.substring(index + 1).search(query);
+                return i >= 0 ? i + (index + 1) : undefined;
+            } else {
+                let i = this.value.search(query);
+                return i >= 0 ? i : undefined;
+            }
+        };
+        let lhs = (index: number) => {
+            return new Index(index);
+        };
+        let rhs = (index: number) => {
+            let m = this.value.substring(index).match(query);
+            return m ? new Index(index + m[0].length) : new Index(index);
+        }
+        if (length(query) > 0) {
+            this.index = next(
+                this.index
+            );
+            if (this.index !== undefined) {
+                this.setSelection(lhs(this.index), rhs(this.index));
+            }
+        } else {
+            this.index = undefined;
         }
     }
     public replace(query: string | RegExp, new_value: string) {
@@ -623,6 +658,12 @@ export class MdEditor {
                 old_value.replace(query, new_value)
             );
         }
+    }
+    private get index(): number | undefined {
+        return window['INDEX'];
+    }
+    private set index(value: number | undefined) {
+        window['INDEX'] = value;
     }
     private get patch(): any {
         return window['VDOM_PATCH'];

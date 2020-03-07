@@ -128,6 +128,9 @@ export class MdEditorFooter {
             this.$find.val('');
             this.$find.trigger('change');
         }
+        if (ev.key === 'Enter') {
+            this.$find.trigger('change');
+        }
     }
     private onReplaceKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
@@ -137,6 +140,7 @@ export class MdEditorFooter {
             this.$replace.trigger('change');
         }
     }
+    @buffered(16.67)
     private onFindChange(ev: KeyboardEvent) {
         let $find = $(ev.target as any);
         let value = $find.val() as string;
@@ -154,7 +158,7 @@ export class MdEditorFooter {
             this.ed.search(value);
         }
     }
-    @buffered(10)
+    @buffered(16.67)
     private onReplaceChange(ev: KeyboardEvent) {
         let $find = this.$find;
         let old_value = $find.val() as string;
