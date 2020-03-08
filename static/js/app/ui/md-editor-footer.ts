@@ -123,25 +123,35 @@ export class MdEditorFooter {
             this.maximize();
         }
     }
+    @buffered(16.67)
     private onFindKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$find.val('');
-            this.$find.trigger('change');
+            this.$find.trigger('change', {
+                shiftKey: ev.shiftKey
+            });
         }
         if (ev.key === 'Enter') {
-            this.$find.trigger('change');
+            this.$find.trigger('change', {
+                shiftKey: ev.shiftKey
+            });
         }
     }
+    @buffered(16.67)
     private onReplaceKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$replace.val('');
         }
         if (ev.key === 'Enter') {
-            this.$replace.trigger('change');
+            this.$replace.trigger('change', {
+                shiftKey: ev.shiftKey
+            });
         }
     }
     @buffered(16.67)
-    private onFindChange(ev: KeyboardEvent) {
+    private onFindChange(ev: KeyboardEvent, extra?: {
+        shiftKey: boolean
+    }) {
         let $find = $(ev.target as any);
         let value = $find.val() as string;
         let rx_px = /^\//;
@@ -153,13 +163,15 @@ export class MdEditorFooter {
             let rx_end = value.length - mm_sx[0].length;
             let rx_flags = mm_sx[0].substring(1);
             let rx_value = value.substring(rx_beg, rx_end);
-            this.ed.search(new RegExp(rx_value, rx_flags));
+            this.ed.search(new RegExp(rx_value, rx_flags), extra);
         } else {
-            this.ed.search(value);
+            this.ed.search(value, extra);
         }
     }
     @buffered(16.67)
-    private onReplaceChange(ev: KeyboardEvent) {
+    private onReplaceChange(ev: KeyboardEvent, extra?: {
+        shiftKey: boolean
+    }) {
         let $find = this.$find;
         let old_value = $find.val() as string;
         let $replace = $(ev.target as any);
@@ -173,9 +185,9 @@ export class MdEditorFooter {
             let rx_end = old_value.length - mm_sx[0].length;
             let rx_flags = mm_sx[0].substring(1);
             let rx_value = old_value.substring(rx_beg, rx_end);
-            this.ed.replace(new RegExp(rx_value, rx_flags), new_value);
+            this.ed.replace(new RegExp(rx_value, rx_flags), new_value, extra);
         } else {
-            this.ed.replace(old_value, new_value);
+            this.ed.replace(old_value, new_value, extra);
         }
     }
     private onSpellCheckToggle(ev: MouseEvent) {

@@ -587,7 +587,12 @@ export class MdEditor {
     private set searchOverlay(value: IOverlay | undefined) {
         this._searchOverlay = value;
     }
-    public search(query: string | RegExp, select = true) {
+    public search(query: string | RegExp, options?: {
+        shiftKey: boolean
+    }) {
+        if (!options || !options.shiftKey) {
+            this.select(query);
+        }
         if (this.mirror) {
             if (this.searchOverlay) {
                 this.mirror.removeOverlay('search')
@@ -601,8 +606,30 @@ export class MdEditor {
                 this.mirror.addOverlay(this.searchOverlay);
             }
         }
-        if (select) {
+    }
+    public replace(query: string | RegExp, new_value: string, options?: {
+        shiftKey: boolean
+    }) {
+        if (!options || !options.shiftKey) {
+            let value = this.getValue();
+            this.setValue(value.replace(query, new_value));
             this.select(query);
+        } else {
+            let { lhs, rhs, value } = this.getSelection();
+            if (value) {
+                let lhs_value = this.getValue(new Index(0), lhs);
+                let mid_value = value.replace(query, new_value);
+                let rhs_value = this.getValue(rhs);
+                this.setValue(
+                    `${lhs_value}${mid_value}${rhs_value}`
+                );
+                let delta = typeof query === 'string'
+                    ? new_value.length - query.length
+                    : new_value.length - query.source.length;
+                this.setSelection(
+                    lhs, new Index(rhs.number + delta)
+                );
+            }
         }
     }
     private select(query: string | RegExp) {
@@ -635,28 +662,6 @@ export class MdEditor {
             }
         } else {
             this.index = undefined;
-        }
-    }
-    public replace(query: string | RegExp, new_value: string) {
-        let { lhs, rhs, value } = this.getSelection()
-        if (value) {
-            let lhs_value = this.getValue(new Index(0), lhs);
-            let mid_value = value.replace(query, new_value);
-            let rhs_value = this.getValue(rhs);
-            this.setValue(
-                `${lhs_value}${mid_value}${rhs_value}`
-            );
-            let delta = typeof query === 'string'
-                ? new_value.length - query.length
-                : new_value.length - query.source.length;
-            this.setSelection(
-                lhs, new Index(rhs.number + delta)
-            );
-        } else {
-            let old_value = this.getValue();
-            this.setValue(
-                old_value.replace(query, new_value)
-            );
         }
     }
     private get index(): number | undefined {
