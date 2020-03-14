@@ -588,10 +588,10 @@ export class MdEditor {
         this._searchOverlay = value;
     }
     public search(query: string | RegExp, options?: {
-        shiftKey: boolean
+        ctrlKey: boolean, shiftKey: boolean
     }) {
-        if (!options || !options.shiftKey) {
-            this.select(query);
+        if (!options || !options.ctrlKey) {
+            this.select(query, !options?.shiftKey ? '+' : '-');
         }
         if (this.mirror) {
             if (this.searchOverlay) {
@@ -608,12 +608,12 @@ export class MdEditor {
         }
     }
     public replace(query: string | RegExp, new_value: string, options?: {
-        shiftKey: boolean
+        ctrlKey: boolean, shiftKey: boolean
     }) {
-        if (!options || !options.shiftKey) {
+        if (!options || !options.ctrlKey) {
             let value = this.getValue();
             this.setValue(value.replace(query, new_value));
-            this.select(query);
+            this.select(query, !options?.shiftKey ? '+' : '-');
         } else {
             let { lhs, rhs, value } = this.getSelection();
             if (value) {
@@ -632,19 +632,32 @@ export class MdEditor {
             }
         }
     }
-    private select(query: string | RegExp) {
+    private select(query: string | RegExp, direction: '+' | '-') {
         let length = (query: string | RegExp) => {
             return typeof query !== 'string'
                 ? query.source.length : query.length;
         };
         let next = (index: number | undefined) => {
             if (index !== undefined) {
-                let i = this.value.substring(index + 1).search(query);
-                return i >= 0 ? i + (index + 1) : undefined;
+                let n = this.value.substring(index + 1).search(query);
+                return n >= 0 ? n + (index + 1) : undefined;
             } else {
-                let i = this.value.search(query);
-                return i >= 0 ? i : undefined;
+                let n = this.value.search(query);
+                return n >= 0 ? n : undefined;
             }
+        };
+        let prev = (index: number | undefined) => {
+            let p: number | undefined;
+            while (true) {
+                let n = next(p);
+                if (n !== undefined) {
+                    if (index === undefined || n < index) {
+                        p = n; continue;
+                    }
+                }
+                break;
+            }
+            return p;
         };
         let lhs = (index: number) => {
             return new Index(index);
@@ -654,9 +667,8 @@ export class MdEditor {
             return m ? new Index(index + m[0].length) : new Index(index);
         }
         if (length(query) > 0) {
-            this.index = next(
-                this.index
-            );
+            this.index = direction === '+'
+                ? next(this.index) : prev(this.index);
             if (this.index !== undefined) {
                 this.setSelection(lhs(this.index), rhs(this.index));
             }

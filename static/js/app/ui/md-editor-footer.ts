@@ -128,12 +128,12 @@ export class MdEditorFooter {
         if (ev.key === 'Escape') {
             this.$find.val('');
             this.$find.trigger('change', {
-                shiftKey: ev.shiftKey
+                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
             });
         }
         if (ev.key === 'Enter') {
             this.$find.trigger('change', {
-                shiftKey: ev.shiftKey
+                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
             });
         }
     }
@@ -144,13 +144,13 @@ export class MdEditorFooter {
         }
         if (ev.key === 'Enter') {
             this.$replace.trigger('change', {
-                shiftKey: ev.shiftKey
+                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
             });
         }
     }
     @buffered(16.67)
     private onFindChange(ev: KeyboardEvent, extra?: {
-        shiftKey: boolean
+        ctrlKey: boolean, shiftKey: boolean
     }) {
         let $find = $(ev.target as any);
         let value = $find.val() as string;
@@ -170,7 +170,7 @@ export class MdEditorFooter {
     }
     @buffered(16.67)
     private onReplaceChange(ev: KeyboardEvent, extra?: {
-        shiftKey: boolean
+        ctrlKey: boolean, shiftKey: boolean
     }) {
         let $find = this.$find;
         let old_value = $find.val() as string;
