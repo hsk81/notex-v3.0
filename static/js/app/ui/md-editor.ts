@@ -597,8 +597,8 @@ export class MdEditor {
             if (this.searchOverlay) {
                 this.mirror.removeOverlay('search')
             }
-            if (typeof query === 'string' && query.length > 1 ||
-                typeof query !== 'string' && query.source && query.source.length > 1
+            if (typeof query === 'string' && query.length > 0 ||
+                typeof query !== 'string' && query.source && query.source.length > 0
             ) {
                 this.searchOverlay = $.extend(this.getSearchOverlay(query), {
                     name: 'search'
