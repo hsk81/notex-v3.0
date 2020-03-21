@@ -126,14 +126,20 @@ export class MdEditorFooter {
     @buffered(16.67)
     private onFindKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
-            this.$find.val('');
             this.$find.trigger('change', {
-                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
+                key: ev.key,
+                altKey: ev.altKey,
+                ctrlKey: ev.ctrlKey,
+                shiftKey: ev.shiftKey
             });
+            this.$find.val('');
         }
         if (ev.key === 'Enter') {
             this.$find.trigger('change', {
-                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
+                key: ev.key,
+                altKey: ev.altKey,
+                ctrlKey: ev.ctrlKey,
+                shiftKey: ev.shiftKey
             });
         }
     }
@@ -144,14 +150,25 @@ export class MdEditorFooter {
         }
         if (ev.key === 'Enter') {
             this.$replace.trigger('change', {
-                ctrlKey: ev.ctrlKey, shiftKey: ev.shiftKey
+                key: ev.key,
+                altKey: ev.altKey,
+                ctrlKey: ev.ctrlKey,
+                shiftKey: ev.shiftKey
             });
         }
     }
     @buffered(16.67)
     private onFindChange(ev: KeyboardEvent, extra?: {
-        ctrlKey: boolean, shiftKey: boolean
+        key: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
+        if (extra === undefined) {
+            return;
+        }
+        switch (extra.key) {
+            case 'Escape': break;
+            case 'Enter': break;
+            default: return;
+        }
         let $find = $(ev.target as any);
         let value = $find.val() as string;
         let rx_px = /^\//;
@@ -170,8 +187,16 @@ export class MdEditorFooter {
     }
     @buffered(16.67)
     private onReplaceChange(ev: KeyboardEvent, extra?: {
-        ctrlKey: boolean, shiftKey: boolean
+        key: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
+        if (extra === undefined) {
+            return;
+        }
+        switch (extra.key) {
+            case 'Escape': break;
+            case 'Enter': break;
+            default: return;
+        }
         let $find = this.$find;
         let old_value = $find.val() as string;
         let $replace = $(ev.target as any);

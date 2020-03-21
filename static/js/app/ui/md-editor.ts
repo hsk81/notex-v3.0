@@ -588,7 +588,7 @@ export class MdEditor {
         this._searchOverlay = value;
     }
     public search(query: string | RegExp, options?: {
-        ctrlKey: boolean, shiftKey: boolean
+        altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
             this.select(query, !options?.shiftKey ? '+' : '-');
@@ -608,7 +608,7 @@ export class MdEditor {
         }
     }
     public replace(query: string | RegExp, new_value: string, options?: {
-        ctrlKey: boolean, shiftKey: boolean
+        altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
             let beg_value = this.getValue(new Index(0), new Index(this.index||0));
