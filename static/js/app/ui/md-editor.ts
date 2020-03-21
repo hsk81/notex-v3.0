@@ -611,9 +611,11 @@ export class MdEditor {
         altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
-            let beg_value = this.getValue(new Index(0), new Index(this.index||0));
-            let end_value = this.getValue(new Index(this.index||0));
-            this.setValue(beg_value + end_value.replace(query, new_value));
+            if (!options || !options.altKey) {
+                let beg_value = this.getValue(new Index(0), new Index(this.index||0));
+                let end_value = this.getValue(new Index(this.index||0));
+                this.setValue(beg_value + end_value.replace(query, new_value));
+            }
             this.select(query, !options?.shiftKey ? '+' : '-');
         } else {
             let { lhs, rhs, value } = this.getSelection();
