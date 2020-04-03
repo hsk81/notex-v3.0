@@ -16,6 +16,16 @@ export class MdEditorFooter {
         return this['_me'];
     }
     public constructor() {
+        this.$footer.find('[data-toggle="dropdown"]').tooltip({
+            trigger: 'hover'
+        });
+        this.$footer.find('[data-toggle="popover"]').popover({
+            trigger: 'manual'
+        })
+        .on('blur', (ev) => $(ev.target).popover('hide'))
+        .on('click', (ev) => $(ev.target).popover('toggle'))
+        .on('keydown', (ev) => $(ev.target).popover('hide'))
+        .on('keypress', (ev) => $(ev.target).popover('hide'));
         this.$mirror.tooltip({
             container: 'body', title: (function (this: any) {
                 return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;

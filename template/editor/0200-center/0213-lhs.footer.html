@@ -6,12 +6,21 @@
         </button>
     </div>
     <div id="cli" class="input-group">
-        <input type="text" class="form-control find" placeholder="Find...">
-        <input type="text" class="form-control replace" placeholder="Replace...">
+        <input type="text" class="form-control find" placeholder="Find..."
+               data-container="body" data-toggle="popover" data-placement="top"
+               data-content="Allows to search for a text (or regular expression like /text/, /text/i or /text/g); use ENTER to find the next match."
+               title="Search text (or regular expression)"
+               >
+        <input type="text" class="form-control replace" placeholder="Replace..."
+               data-container="body" data-toggle="popover" data-placement="top"
+               data-content="Allows to replace with a text (or regular expression); use ENTER to replace the next match."
+               title="Replace text (or regular expression)"
+               >
         <div class="input-group-btn dropup">
             <button id="spell-checker-button" type="button"
                     class="btn btn-default dropdown-toggle"
-                    data-toggle="dropdown">
+                    data-container="body" data-toggle="dropdown"
+                    data-placement="left" title="Spellcheck">
                 <img src=""><span class="img-placeholder">&nbsp;</span>
             </button>
             <ul id="spell-checker-menu"
