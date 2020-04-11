@@ -2,31 +2,54 @@
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-default"
                 data-container="body" data-placement="right">
-            <span class="glyphicon glyphicon-console"></span>
+            <span class="glyphicon glyphicon-option-horizontal glyphicon-console"></span>
         </button>
     </div>
-    <div id="cli" class="input-group">
-        <input type="text" class="form-control find" placeholder="Find..."
-               data-container="body" data-toggle="popover" data-placement="top"
-               data-content="Allows to search for a text (or regular expression like /text/, /text/i or /text/g); use ENTER to find the next match."
-               title="Search text (or regular expression)"
-               >
-        <input type="text" class="form-control replace" placeholder="Replace..."
-               data-container="body" data-toggle="popover" data-placement="top"
-               data-content="Allows to replace with a text (or regular expression); use ENTER to replace the next match."
-               title="Replace text (or regular expression)"
-               >
-        <div class="input-group-btn dropup">
-            <button id="spell-checker-button" type="button"
+    <div id="cli">
+        <div class="input-group">
+            <div class="input-group-btn dropup">
+                <button id="spell-checker-button" type="button"
                     class="btn btn-default dropdown-toggle"
                     data-container="body" data-toggle="dropdown"
-                    data-placement="left" title="Spellcheck">
-                <img src=""><span class="img-placeholder">&nbsp;</span>
-            </button>
-            <ul id="spell-checker-menu"
-                class="dropdown-menu dropdown-menu-right">
-                <span class="glyphicon glyphicon-cd spin"></span>
-            </ul>
+                    data-placement="top" title="Spellchecking"
+                >
+                    <img src=""><span class="img-placeholder">&nbsp;</span>
+                </button>
+                <ul id="spell-checker-menu"
+                    class="dropdown-menu dropdown-menu-left">
+                    <span class="glyphicon glyphicon-cd spin"></span>
+                </ul>
+                <button type="button" class="btn btn-default find-previous"
+                        data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="Previous Match"
+                    >
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </button>
+            </div>
+            <input type="text" class="form-control find" placeholder="Find..."
+                data-container="body" data-toggle="popover" data-placement="top"
+                data-content="Allows to search for a text (or regular expression like /text/, /text/i or /text/g). Use ENTER to find the next match, and SHIFT + ENTER to find the previous match; use ESCAPE to clear."
+                title="Search text (or regular expression)"
+                >
+            <input type="text" class="form-control replace" placeholder="Replace..."
+                data-container="body" data-toggle="popover" data-placement="top"
+                data-content="Allows to replace with a text (or regular expression). Use ENTER to replace the current match, CTRL + ENTER to only replace in a selection and ALT + ENTER to skip; use ESCAPE to clear."
+                title="Replace text (or regular expression)"
+                >
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default replace-confirm"
+                        data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="Replace Match"
+                    >
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button type="button" class="btn btn-default find-next"
+                        data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="Next Match"
+                    >
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

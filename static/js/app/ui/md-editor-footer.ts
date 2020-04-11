@@ -16,6 +16,9 @@ export class MdEditorFooter {
         return this['_me'];
     }
     public constructor() {
+        this.$footer.find('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
         this.$footer.find('[data-toggle="dropdown"]').tooltip({
             trigger: 'hover'
         });
@@ -33,14 +36,21 @@ export class MdEditorFooter {
         });
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
+
         this.$find
             .on('change', this.onFindChange.bind(this) as any);
         this.$find
             .on('keydown', this.onFindKeyDown.bind(this) as any);
+        this.$find_next
+            .on('click', this.onFindNext.bind(this) as any);
+        this.$find_previous
+            .on('click', this.onFindPrevious.bind(this) as any);
         this.$replace
             .on('change', this.onReplaceChange.bind(this) as any);
         this.$replace
             .on('keydown', this.onReplaceKeyDown.bind(this) as any);
+        this.$replace_confirm
+            .on('click', this.onReplaceConfirm.bind(this) as any);
         this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
@@ -154,6 +164,24 @@ export class MdEditorFooter {
         }
     }
     @buffered(16.67)
+    private onFindNext(ev: KeyboardEvent) {
+        this.$find.trigger('change', {
+            key: 'Enter',
+            altKey: ev.altKey,
+            ctrlKey: ev.ctrlKey,
+            shiftKey: false
+        });
+    }
+    @buffered(16.67)
+    private onFindPrevious(ev: KeyboardEvent) {
+        this.$find.trigger('change', {
+            key: 'Enter',
+            altKey: ev.altKey,
+            ctrlKey: ev.ctrlKey,
+            shiftKey: true
+        });
+    }
+    @buffered(16.67)
     private onReplaceKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$replace.val('');
@@ -166,6 +194,15 @@ export class MdEditorFooter {
                 shiftKey: ev.shiftKey
             });
         }
+    }
+    @buffered(16.67)
+    private onReplaceConfirm(ev: KeyboardEvent) {
+        this.$replace.trigger('change', {
+            key: 'Enter',
+            altKey: ev.altKey,
+            ctrlKey: ev.ctrlKey,
+            shiftKey: ev.shiftKey
+    });
     }
     @buffered(16.67)
     private onFindChange(ev: KeyboardEvent, extra?: {
@@ -221,7 +258,7 @@ export class MdEditorFooter {
             let rx_flags = mm_sx[0].substring(1);
             let rx_value = old_value.substring(rx_beg, rx_end);
             this.ed.replace(new RegExp(rx_value, rx_flags), new_value, extra);
-        } else {
+        } else if (old_value) {
             this.ed.replace(old_value, new_value, extra);
         }
     }
@@ -409,8 +446,17 @@ export class MdEditorFooter {
     private get $find() {
         return this.$cli.find('input.find') as JQuery<HTMLElement>;
     }
+    private get $find_next() {
+        return this.$cli.find('.find-next') as JQuery<HTMLElement>;
+    }
+    private get $find_previous() {
+        return this.$cli.find('.find-previous') as JQuery<HTMLElement>;
+    }
     private get $replace() {
         return this.$cli.find('input.replace') as JQuery<HTMLElement>;
+    }
+    private get $replace_confirm() {
+        return this.$cli.find('.replace-confirm') as JQuery<HTMLElement>;
     }
     private get $spellCheckerButton() {
         return this.$footer.find('#spell-checker-button');
