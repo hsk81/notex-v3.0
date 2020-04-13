@@ -207,7 +207,7 @@ export class MdEditor {
     }
     @buffered(0)
     public render(force = false) {
-        if (!this._mdOld || this._mdOld.length === 0) {
+        if (!this._mdOld || this._mdOld.length === 0 || force) {
             this.$output.html('');
         }
         const value = this.getValue();
@@ -223,9 +223,10 @@ export class MdEditor {
             value.length > 0 && force
         ) {
             this.$cached.html(MarkdownIt.me.render(value));
-            const tmp_vnode = toVNode(this.$cached[0]);
-            const new_vnode = snabbdom.h('body', tmp_vnode.children);
-            const old_vnode = (this.vnode ? this.vnode : this.$output[0]);
+            const new_vnode = snabbdom.h(
+                'body', toVNode(this.$cached[0]).children);
+            const old_vnode = !this.vnode || force
+                ? this.$output[0] : this.vnode;
             this.vnode = this.patch(old_vnode, new_vnode);
         }
         if (value.length > 0 && value.length !== this._mdOld.length ||
