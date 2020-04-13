@@ -102,6 +102,9 @@ export class MdEditor {
         return this['_me'];
     }
     public constructor() {
+        $.get(this.placeholder).done((html) => {
+            this.$output.html(html).find('>*').hide().fadeIn('fast');
+        });
         this.patch = snabbdom.init([
             snabbdom_attrs.default,
             snabbdom_class.default,
@@ -196,25 +199,22 @@ export class MdEditor {
         return this.$input;
     }
     public onScroll(e: HTMLElement) {
+        const $output = this.$output as JQuery<HTMLElement>;
         const q = e.scrollTop / e.scrollHeight;
-        const h = this.$output[0].scrollHeight;
-        const c = this.$output[0].clientHeight;
-        this.$output.scrollTop(q*h+q*c);
+        const h = $output[0].scrollHeight;
+        const c = $output[0].clientHeight;
+        $output.scrollTop(q*h+q*c);
     }
-    @buffered(600)
+    @buffered(0)
     public render(force = false) {
-        const $output = $('#output');
-        const $cached = $('#cached');
         if (!this._mdOld || this._mdOld.length === 0) {
-            $output.empty();
+            this.$output.html('');
         }
         const value = this.getValue();
         if (value.length === 0) {
-            $.get(
-                '/editor/0200-center/0222-rhs.output-placeholder.html'
-            ).done((html) => {
-                $output.html(html);
-                $output.find('>*').hide().fadeIn('fast');
+            $.get(this.placeholder).done((html) => {
+                setTimeout(() => this.$output.fadeIn('fast'), 200);
+                this.$output.html(html).hide();
                 this.vnode = undefined;
             });
         }
@@ -222,35 +222,16 @@ export class MdEditor {
             value.length > 0 && value !== this._mdOld ||
             value.length > 0 && force
         ) {
-            const render = () => {
-                const new_vnode = snabbdom.h(
-                    'div#output', {
-                        class: { viewer: true }
-                    }, toVNode($cached[0]).children
-                );
-                const old_vnode = (
-                    this.vnode ? this.vnode : $output[0]
-                );
-                this.vnode = this.patch(old_vnode, new_vnode);
-            };
-            $cached.html(MarkdownIt.me.render(value));
-            if (typeof MathJax !== 'undefined') try {
-                const math_jax = MathJax as any;
-                math_jax.Hub.Queue([
-                    'resetEquationNumbers', math_jax.InputJax.TeX
-                ], [
-                    'Typeset', math_jax.Hub, 'cached', render
-                ]);
-            } catch (ex) {
-                render();
-            } else {
-                render();
-            }
+            this.$cached.html(MarkdownIt.me.render(value));
+            const tmp_vnode = toVNode(this.$cached[0]);
+            const new_vnode = snabbdom.h('body', tmp_vnode.children);
+            const old_vnode = (this.vnode ? this.vnode : this.$output[0]);
+            this.vnode = this.patch(old_vnode, new_vnode);
         }
         if (value.length > 0 && value.length !== this._mdOld.length ||
             value.length > 0 && value !== this._mdOld
         ) {
-            const $header = $cached.find(':header');
+            const $header = this.$cached.find(':header');
             DownloadManager.me.title = $header.length === 0
                 ? `${new Date().toISOString()}.md`
                 : `${$($header[0]).text()}.md`;
@@ -679,6 +660,9 @@ export class MdEditor {
             this.index = undefined;
         }
     }
+    private get placeholder(): string {
+        return '/editor/0200-center/0222-rhs.output-placeholder.html';
+    }
     private get index(): number | undefined {
         return window['INDEX'];
     }
@@ -706,8 +690,11 @@ export class MdEditor {
     public get $input() {
         return this.$lhs.find('#input');
     }
+    public get $cached() {
+        return this.$rhs.find('#cached').contents().find('body');
+    }
     public get $output() {
-        return this.$rhs.find('#output');
+        return this.$rhs.find('#output').contents().find('body');
     }
     private get $lhs() {
         return $('.lhs');

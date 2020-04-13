@@ -76,7 +76,9 @@ export class MdEditorToolbar {
         $('#publish-dlg').modal();
     }
     private onPrintClick() {
-        window.print();
+        const output = $('#output')[0] as HTMLFrameElement;
+        const window = output.contentWindow;
+        if (window) window.print();
     }
     private onUndoClick() {
         let mirror = this.ed.mirror;
