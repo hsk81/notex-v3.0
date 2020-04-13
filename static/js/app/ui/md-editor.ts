@@ -444,24 +444,8 @@ export class MdEditor {
         });
     }
     private onEditorChange() {
-        setTimeout(() => {
-            $(this).trigger('change');
-        }, 0);
-        if (typeof MathJax === 'undefined') try {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = this.mathjaxUrl;
-            script.async = true;
-            const head = document.getElementsByTagName('head');
-            head[0].appendChild(script);
-        } catch (ex) {
-            console.error(ex);
-        }
+        $(this).trigger('change');
         this.render();
-    }
-    private get mathjaxUrl(): string {
-        return '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js'
-             + '?config=TeX-MML-AM_CHTML';
     }
     public get mirror(): CodeMirror.Editor | undefined {
         return window['CODE_MIRROR'];
