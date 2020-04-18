@@ -8,6 +8,9 @@ import { assert } from "../function/assert";
 import { before } from "../function/before";
 import { trace } from "../decorator/trace";
 
+type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
+    button: (action: string) => JQueryEx<T>;
+};
 declare const $: JQueryStatic;
 
 @trace
@@ -87,7 +90,7 @@ export class PublishDialog {
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
-        let $headers = this.$output.find(':header');
+        let $headers = this.$viewer.find(':header');
         let title = $headers.first().text();
         if (title && typeof title === 'string') {
             $post_title.val(title.replace('¶', '').trim());
@@ -99,7 +102,7 @@ export class PublishDialog {
         if (this.styles) $post_styles_ta.val(this.styles);
         this.$dialog.find('[data-toggle="tooltip"]').tooltip();
         this.$dialog.find('[data-toggle="popover"]').popover();
-        this.$primary.attr('disabled', false);
+        this.$primary.prop('disabled', false);
         this.$primary.removeClass('btn-success');
         this.$primary.removeClass('btn-warning');
         this.$primary.removeClass('btn-danger');
@@ -161,7 +164,7 @@ export class PublishDialog {
         this.$post_scripts.show();
         this.$post_scripts_textarea.focus();
     }
-    private onScriptsCheckboxClick(ev: MouseEvent) {
+    private onScriptsCheckboxClick(ev: Event) {
         this.scriptsFlag = $(ev.target as any).prop('checked');
     }
     private onStylesNavClick() {
@@ -171,7 +174,7 @@ export class PublishDialog {
         this.$post_styles.show();
         this.$post_styles_textarea.focus();
     }
-    private onStylesCheckboxClick(ev: MouseEvent) {
+    private onStylesCheckboxClick(ev: Event) {
         this.stylesFlag = $(ev.target as any).prop('checked');
     }
     private onPrimaryClick() {
@@ -180,7 +183,7 @@ export class PublishDialog {
         let $post_title = this.$post_title;
         let $post_title_ig = $post_title.parent('.input-group');
         let $post_title_cb = $post_title_ig.find('[type=checkbox]');
-        let url = $blog_url.val();
+        let url = $blog_url.val() as string;
         if (!url) {
             $blog_url_ig.addClass('has-error');
             $blog_url.focus().off('blur').on('blur', () => {
@@ -243,10 +246,10 @@ export class PublishDialog {
                     });
                     url_request.then(
                         after(on_done, () => {
-                            this.scripts = this.$post_scripts_textarea.val();
-                            this.styles = this.$post_styles_textarea.val();
+                            this.scripts = this.$post_scripts_textarea.val() as string;
+                            this.styles = this.$post_styles_textarea.val() as string;
                             this.blogUrl = url;
-                            this.$primary.attr('disabled', false);
+                            this.$primary.prop('disabled', false);
                             this.$primary.addClass('btn-success');
                             this.$primary.button('published');
                             setTimeout(() => {
@@ -257,18 +260,18 @@ export class PublishDialog {
                             }, 600);
                         }),
                         before(on_fail, () => {
-                            this.$primary.attr('disabled', false);
+                            this.$primary.prop('disabled', false);
                             this.$primary.addClass('btn-danger');
                             this.$primary.button('reset');
                         })
                     );
                 } else {
-                    this.$primary.attr('disabled', false);
+                    this.$primary.prop('disabled', false);
                     this.$primary.addClass('btn-danger');
                     this.$primary.button('reset');
                 }
             });
-            this.$primary.attr('disabled', true);
+            this.$primary.prop('disabled', true);
             this.$primary.removeClass('btn-success');
             this.$primary.removeClass('btn-warning');
             this.$primary.removeClass('btn-danger');
@@ -342,53 +345,53 @@ export class PublishDialog {
         }
         return $content.html();
     }
-    private get $output(): any {
-        return $('#output');
+    private get $viewer() {
+        return this.editor.$viewer;
     }
-    private get $dialog(): any {
+    private get $dialog() {
         return $('#publish-dlg');
     }
-    private get $blog_url(): any {
+    private get $blog_url() {
         return this.$dialog.find('#blog-url');
     }
-    private get $post_title(): any {
+    private get $post_title() {
         return this.$dialog.find('#post-title');
     }
-    private get $post_settings(): any {
+    private get $post_settings() {
         return this.$dialog.find('.post-settings');
     }
-    private get $post_settings_nav(): any {
+    private get $post_settings_nav() {
         return this.$dialog.find('.post-settings.nav');
     }
-    private get $post_scripts(): any {
+    private get $post_scripts() {
         return this.$dialog.find('.post-settings.scripts');
     }
-    private get $post_scripts_nav(): any {
+    private get $post_scripts_nav() {
         return this.$post_settings_nav.find('.scripts');
     }
-    private get $post_scripts_checkbox(): any {
+    private get $post_scripts_checkbox() {
         return this.$post_scripts.find('[type=checkbox]');
     }
-    private get $post_scripts_textarea(): any {
-        return this.$post_scripts.find('textarea');
+    private get $post_scripts_textarea() {
+        return this.$post_scripts.find('textarea') as JQuery<HTMLTextAreaElement>;
     }
-    private get $post_styles(): any {
+    private get $post_styles() {
         return this.$dialog.find('.post-settings.styles');
     }
-    private get $post_styles_nav(): any {
+    private get $post_styles_nav() {
         return this.$post_settings_nav.find('.styles');
     }
-    private get $post_styles_checkbox(): any {
+    private get $post_styles_checkbox() {
         return this.$post_styles.find('[type=checkbox]');
     }
-    private get $post_styles_textarea(): any {
+    private get $post_styles_textarea() {
         return this.$post_styles.find('textarea');
     }
-    private get $expand(): any {
+    private get $expand() {
         return this.$dialog.find('#expand');
     }
-    private get $primary(): any {
-        return this.$dialog.find('.btn-primary');
+    private get $primary() {
+        return this.$dialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
     }
     private get editor(): MdEditor {
         return MdEditor.me;

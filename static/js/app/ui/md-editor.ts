@@ -89,8 +89,8 @@ export class MdEditor {
     }
     public constructor() {
         $.get(this.placeholder).done((html) => {
-            this.$cachedBody.html(html).find('>*').hide().fadeIn('fast');
-            this.$outputBody.html(html).find('>*').hide().fadeIn('fast');
+            this.$cached_body.html(html).find('>*').hide().fadeIn('fast');
+            this.$output_body.html(html).find('>*').hide().fadeIn('fast');
         });
         if (this.mobile) {
             this.toInput({
@@ -179,12 +179,12 @@ export class MdEditor {
         return this.$input;
     }
     public onScroll(e: HTMLElement) {
-        const $output = this.$outputBody as JQuery<HTMLElement>;
+        const $output = this.$output_body as JQuery<HTMLElement>;
         const q1 = e.scrollTop / e.scrollHeight;
         const h1 = $output[0].scrollHeight;
         const c1 = $output[0].clientHeight;
         $output.scrollTop(q1*h1+q1*c1);
-        const $cached = this.$cachedBody as JQuery<HTMLElement>;
+        const $cached = this.$cached_body as JQuery<HTMLElement>;
         const q2 = e.scrollTop / e.scrollHeight;
         const h2 = $cached[0].scrollHeight;
         const c2 = $cached[0].clientHeight;
@@ -197,23 +197,23 @@ export class MdEditor {
             $.get(this.placeholder).done((html) => {
                 this.$cached.prop('hidden', true);
                 this.$output.prop('hidden', false);
-                this.$cachedBody.hide().html(html);
-                this.$cachedBody.delay(200).fadeIn('fast');
-                this.$outputBody.hide().html(html);
-                this.$outputBody.delay(200).fadeIn('fast');
+                this.$cached_body.hide().html(html);
+                this.$cached_body.delay(200).fadeIn('fast');
+                this.$output_body.hide().html(html);
+                this.$output_body.delay(200).fadeIn('fast');
         });
         }
         if (this.$cached.prop('hidden') === true) {
-            this.$cachedBody.html(MarkdownIt.me.render(value));
+            this.$cached_body.html(MarkdownIt.me.render(value));
             this.$output.prop('hidden', true);
             this.$cached.prop('hidden', false);
         } else {
-            this.$outputBody.html(MarkdownIt.me.render(value));
+            this.$output_body.html(MarkdownIt.me.render(value));
             this.$cached.prop('hidden', true);
             this.$output.prop('hidden', false);
         }
         if (value.length > 0) {
-            const $header = this.$cachedBody.find(':header');
+            const $header = this.$cached_body.find(':header');
             DownloadManager.me.title = $header.length === 0
                 ? `${new Date().toISOString()}.md`
                 : `${$($header[0]).text()}.md`;
@@ -643,16 +643,23 @@ export class MdEditor {
     public get $input() {
         return this.$lhs.find('#input');
     }
+    public get $viewer() {
+        if (!this.$cached.prop('hidden')) {
+            return this.$cached;
+        } else {
+            return this.$output;
+        }
+    }
     private get $cached() {
-        return this.$rhs.find('#cached');
+        return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
     }
     private get $output() {
-        return this.$rhs.find('#output');
+        return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
     }
-    private get $cachedBody() {
+    private get $cached_body() {
         return this.$cached.contents().find('body');
     }
-    private get $outputBody() {
+    private get $output_body() {
         return this.$output.contents().find('body');
     }
     private get $lhs() {
