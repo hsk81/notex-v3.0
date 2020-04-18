@@ -28,21 +28,7 @@
     "@npm/markdown-it-sup":
       "../../../static/js/lib/markdown-it/markdown-it-sup-2.0.0.min",
     "@npm/markdown-it-video":
-      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min",
-    "@npm/snabbdom/modules/attributes":
-      "../../../node_modules/snabbdom/dist/snabbdom-attributes.min",
-    "@npm/snabbdom":
-      "../../../node_modules/snabbdom/dist/snabbdom.min",
-    "@npm/snabbdom/modules/class":
-      "../../../node_modules/snabbdom/dist/snabbdom-class.min",
-    "@npm/snabbdom/modules/eventlisteners":
-      "../../../node_modules/snabbdom/dist/snabbdom-eventlisteners.min",
-    "@npm/snabbdom/modules/props":
-      "../../../node_modules/snabbdom/dist/snabbdom-props.min",
-    "@npm/snabbdom/modules/style":
-      "../../../node_modules/snabbdom/dist/snabbdom-style.min",
-    "@npm/snabbdom/tovnode":
-      "../../../node_modules/snabbdom/dist/tovnode.min"
+      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min"
   },
   "optimize": "none"
 }

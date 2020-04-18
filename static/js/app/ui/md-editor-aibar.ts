@@ -1,3 +1,4 @@
+import { buffered } from "../decorator/buffered";
 import { trace } from "../decorator/trace";
 
 import { MdEditor } from "./md-editor";
@@ -23,7 +24,7 @@ export class MdEditorAibar {
                 this.$aibar.find('[data-toggle="tooltip"]').tooltip();
                 this.$aibar.find('[data-toggle="popover"]').popover();
             });
-            this.$output.css({
+            this.$viewer.css({
                 height: 'calc(100% - 47px)'
             });
         }
@@ -57,13 +58,15 @@ export class MdEditorAibar {
             this.$aibar.fadeIn('slow');
         }
     }
+    @buffered(0)
+    @buffered(40)
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {
-            this.$aibar.fadeIn('fast', () => this.$output.css({
+            this.$aibar.fadeIn('fast', () => this.$viewer.css({
                 height: 'calc(100% - 47px)'
             }));
         } else {
-            this.$output.css({
+            this.$viewer.css({
                 height: 'calc(100%)'
             });
             this.$aibar.hide();
@@ -153,8 +156,8 @@ export class MdEditorAibar {
     private get $rhsButton() {
         return this.$aibar.find('button.ai-rhs');
     }
-    private get $output() {
-        return $('#output');
+    private get $viewer() {
+        return $('iframe.viewer');
     }
     private get ed() {
         return MdEditor.me;

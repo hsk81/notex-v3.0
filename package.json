@@ -12,8 +12,7 @@
         "markdown-it-footnote": "^3.0.2",
         "markdown-it-mark": "^3.0.0",
         "markdown-it-math": "^4.1.1",
-        "markdown-it-video": "^0.6.3",
-        "snabbdom": "^0.7.4"
+        "markdown-it-video": "^0.6.3"
     },
     "devDependencies": {
         "@types/bootstrap": "^4.3.1",

@@ -11,20 +11,6 @@ import { IOverlay } from "../spell-checker/spell-checker";
 import { SpellChecker } from "../spell-checker/spell-checker";
 
 import { IPFS, Buffer } from "../ipfs/index";
-
-import * as snabbdom from '@npm/snabbdom';
-import * as snabbdom_attrs from '@npm/snabbdom/modules/attributes';
-import * as snabbdom_class from '@npm/snabbdom/modules/class';
-import * as snabbdom_event from '@npm/snabbdom/modules/eventlisteners';
-import * as snabbdom_props from '@npm/snabbdom/modules/props';
-import * as snabbdom_style from '@npm/snabbdom/modules/style';
-
-import { toVNode } from '@npm/snabbdom/tovnode';
-import { VNode } from "@npm/snabbdom/vnode";
-
-window['VDOM'] = snabbdom;
-window['VDOM_TO_VNODE'] = toVNode;
-
 import "./md-editor-mode";
 
 declare const $: JQueryStatic;
@@ -103,15 +89,9 @@ export class MdEditor {
     }
     public constructor() {
         $.get(this.placeholder).done((html) => {
-            this.$output.html(html).find('>*').hide().fadeIn('fast');
+            this.$cachedBody.html(html).find('>*').hide().fadeIn('fast');
+            this.$outputBody.html(html).find('>*').hide().fadeIn('fast');
         });
-        this.patch = snabbdom.init([
-            snabbdom_attrs.default,
-            snabbdom_class.default,
-            snabbdom_props.default,
-            snabbdom_style.default,
-            snabbdom_event.default
-        ]);
         if (this.mobile) {
             this.toInput({
                 footer: false, toolbar: false
@@ -199,46 +179,46 @@ export class MdEditor {
         return this.$input;
     }
     public onScroll(e: HTMLElement) {
-        const $output = this.$output as JQuery<HTMLElement>;
-        const q = e.scrollTop / e.scrollHeight;
-        const h = $output[0].scrollHeight;
-        const c = $output[0].clientHeight;
-        $output.scrollTop(q*h+q*c);
+        const $output = this.$outputBody as JQuery<HTMLElement>;
+        const q1 = e.scrollTop / e.scrollHeight;
+        const h1 = $output[0].scrollHeight;
+        const c1 = $output[0].clientHeight;
+        $output.scrollTop(q1*h1+q1*c1);
+        const $cached = this.$cachedBody as JQuery<HTMLElement>;
+        const q2 = e.scrollTop / e.scrollHeight;
+        const h2 = $cached[0].scrollHeight;
+        const c2 = $cached[0].clientHeight;
+        $cached.scrollTop(q2*h2+q2*c2);
     }
-    @buffered(0)
-    public render(force = false) {
-        if (!this._mdOld || this._mdOld.length === 0 || force) {
-            this.$output.html('');
-        }
+    @buffered(40)
+    public render() {
         const value = this.getValue();
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => {
-                setTimeout(() => this.$output.fadeIn('fast'), 200);
-                this.$output.html(html).hide();
-                this.vnode = undefined;
-            });
+                this.$cached.prop('hidden', true);
+                this.$output.prop('hidden', false);
+                this.$cachedBody.hide().html(html);
+                this.$cachedBody.delay(200).fadeIn('fast');
+                this.$outputBody.hide().html(html);
+                this.$outputBody.delay(200).fadeIn('fast');
+        });
         }
-        if (value.length > 0 && value.length !== this._mdOld.length ||
-            value.length > 0 && value !== this._mdOld ||
-            value.length > 0 && force
-        ) {
-            this.$cached.html(MarkdownIt.me.render(value));
-            const new_vnode = snabbdom.h(
-                'body', toVNode(this.$cached[0]).children);
-            const old_vnode = !this.vnode || force
-                ? this.$output[0] : this.vnode;
-            this.vnode = this.patch(old_vnode, new_vnode);
+        if (this.$cached.prop('hidden') === true) {
+            this.$cachedBody.html(MarkdownIt.me.render(value));
+            this.$output.prop('hidden', true);
+            this.$cached.prop('hidden', false);
+        } else {
+            this.$outputBody.html(MarkdownIt.me.render(value));
+            this.$cached.prop('hidden', true);
+            this.$output.prop('hidden', false);
         }
-        if (value.length > 0 && value.length !== this._mdOld.length ||
-            value.length > 0 && value !== this._mdOld
-        ) {
-            const $header = this.$cached.find(':header');
+        if (value.length > 0) {
+            const $header = this.$cachedBody.find(':header');
             DownloadManager.me.title = $header.length === 0
                 ? `${new Date().toISOString()}.md`
                 : `${$($header[0]).text()}.md`;
             DownloadManager.me.content = value;
         }
-        this._mdOld = value;
     }
     public refresh() {
         if (this.mirror) {
@@ -654,32 +634,26 @@ export class MdEditor {
     private set index(value: number | undefined) {
         window['INDEX'] = value;
     }
-    private get patch(): any {
-        return window['VDOM_PATCH'];
-    }
-    private set patch(value: any) {
-        window['VDOM_PATCH'] = value;
-    }
-    private get vnode(): VNode | undefined {
-        return window['VDOM_VNODE'] as VNode;
-    }
-    private set vnode(value: VNode | undefined) {
-        window['VDOM_VNODE'] = value;
-    }
     private get $document() {
         return $(document);
     }
-    public get $footer() {
+    private get $footer() {
         return this.$input.siblings('.footer');
     }
     public get $input() {
         return this.$lhs.find('#input');
     }
-    public get $cached() {
-        return this.$rhs.find('#cached').contents().find('body');
+    private get $cached() {
+        return this.$rhs.find('#cached');
     }
-    public get $output() {
-        return this.$rhs.find('#output').contents().find('body');
+    private get $output() {
+        return this.$rhs.find('#output');
+    }
+    private get $cachedBody() {
+        return this.$cached.contents().find('body');
+    }
+    private get $outputBody() {
+        return this.$output.contents().find('body');
     }
     private get $lhs() {
         return $('.lhs');

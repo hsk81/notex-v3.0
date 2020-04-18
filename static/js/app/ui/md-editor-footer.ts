@@ -42,15 +42,15 @@ export class MdEditorFooter {
         this.$find
             .on('keydown', this.onFindKeyDown.bind(this) as any);
         this.$find_next
-            .on('click', this.onFindNext.bind(this) as any);
+            .on('click', this.onFindNextClick.bind(this) as any);
         this.$find_previous
-            .on('click', this.onFindPrevious.bind(this) as any);
+            .on('click', this.onFindPreviousClick.bind(this) as any);
         this.$replace
             .on('change', this.onReplaceChange.bind(this) as any);
         this.$replace
             .on('keydown', this.onReplaceKeyDown.bind(this) as any);
         this.$replace_confirm
-            .on('click', this.onReplaceConfirm.bind(this) as any);
+            .on('click', this.onReplaceConfirmClick.bind(this) as any);
         this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
@@ -143,7 +143,7 @@ export class MdEditorFooter {
             this.maximize();
         }
     }
-    @buffered(16.67)
+    @buffered(40)
     private onFindKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$find.trigger('change', {
@@ -163,8 +163,7 @@ export class MdEditorFooter {
             });
         }
     }
-    @buffered(16.67)
-    private onFindNext(ev: KeyboardEvent) {
+    private onFindNextClick(ev: KeyboardEvent) {
         this.$find.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
@@ -172,8 +171,7 @@ export class MdEditorFooter {
             shiftKey: false
         });
     }
-    @buffered(16.67)
-    private onFindPrevious(ev: KeyboardEvent) {
+    private onFindPreviousClick(ev: KeyboardEvent) {
         this.$find.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
@@ -181,7 +179,7 @@ export class MdEditorFooter {
             shiftKey: true
         });
     }
-    @buffered(16.67)
+    @buffered(40)
     private onReplaceKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
             this.$replace.val('');
@@ -195,16 +193,14 @@ export class MdEditorFooter {
             });
         }
     }
-    @buffered(16.67)
-    private onReplaceConfirm(ev: KeyboardEvent) {
+    private onReplaceConfirmClick(ev: KeyboardEvent) {
         this.$replace.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
             shiftKey: ev.shiftKey
-    });
+        });
     }
-    @buffered(16.67)
     private onFindChange(ev: KeyboardEvent, extra?: {
         key: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
@@ -232,7 +228,6 @@ export class MdEditorFooter {
             this.ed.search(value, extra);
         }
     }
-    @buffered(16.67)
     private onReplaceChange(ev: KeyboardEvent, extra?: {
         key: string, altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {

@@ -70,15 +70,22 @@ export class MdEditorToolbar {
         this.scroll.refresh();
     }
     private onRefreshClick() {
-        this.ed.render(true);
+        this.ed.render();
     }
     private onPublishClick() {
         $('#publish-dlg').modal();
     }
     private onPrintClick() {
-        const output = $('#output')[0] as HTMLFrameElement;
-        const window = output.contentWindow;
-        if (window) window.print();
+        const cached = document.getElementById('cached') as HTMLFrameElement;
+        if (!cached.hidden && cached.contentWindow) {
+            cached.contentWindow.print();
+            return;
+        }
+        const output = document.getElementById('output') as HTMLFrameElement;
+        if (!output.hidden && output.contentWindow) {
+            output.contentWindow.print();
+            return;
+        }
     }
     private onUndoClick() {
         let mirror = this.ed.mirror;
