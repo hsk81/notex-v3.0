@@ -179,48 +179,42 @@ export class MdEditor {
         return this.$input;
     }
     public onScroll(e: HTMLElement) {
-        const $output = this.$output_body as JQuery<HTMLElement>;
-        const q1 = e.scrollTop / e.scrollHeight;
-        const h1 = $output[0].scrollHeight;
-        const c1 = $output[0].clientHeight;
-        $output.scrollTop(q1*h1+q1*c1);
-        const $cached = this.$cached_body as JQuery<HTMLElement>;
-        const q2 = e.scrollTop / e.scrollHeight;
-        const h2 = $cached[0].scrollHeight;
-        const c2 = $cached[0].clientHeight;
-        $cached.scrollTop(q2*h2+q2*c2);
+        const synchronize = ($body: JQuery<HTMLElement>) => {
+            const q = e.scrollTop / e.scrollHeight;
+            const h = $body[0].scrollHeight;
+            const c = $body[0].clientHeight;
+            $body.scrollTop(q*h+q*c);
+        };
+        synchronize(this.$cached_body);
+        synchronize(this.$output_body);
     }
     @buffered(40)
     public render() {
         const value = this.getValue();
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => {
-                this.$cached.prop('hidden', true);
-                this.$output.prop('hidden', false);
+                this.$cached.css('visbility', 'hidden');
+                this.$output.css('visbility', 'visible');
                 this.$cached_body.hide().html(html);
                 this.$cached_body.delay(200).fadeIn('fast');
                 this.$output_body.hide().html(html);
                 this.$output_body.delay(200).fadeIn('fast');
             });
         }
-        if (this.$cached.prop('hidden') === true) try {
+        if (this.$cached.css('visbility') === 'hidden') try {
             this.$cached_body.html(MarkdownIt.me.render(value, {
                 document: this.$cached.contents()[0] as Document
             }));
-        } catch (ex) {
-            console.error(ex);
         } finally {
-            this.$output.prop('hidden', true);
-            this.$cached.prop('hidden', false);
+            this.$output.css('visbility', 'hidden');
+            this.$cached.css('visbility', 'visible');
         } else try {
             this.$output_body.html(MarkdownIt.me.render(value, {
                 document: this.$output.contents()[0] as Document
             }));
-        } catch (ex) {
-            console.error(ex);
         } finally {
-            this.$cached.prop('hidden', true);
-            this.$output.prop('hidden', false);
+             this.$cached.css('visbility', 'hidden');
+             this.$output.css('visbility', 'visible');
         }
         if (value.length > 0) {
             const $header = this.$cached_body.find(':header');
@@ -654,7 +648,7 @@ export class MdEditor {
         return this.$lhs.find('#input');
     }
     public get $viewer() {
-        if (!this.$cached.prop('hidden')) {
+        if (this.$cached.css('visibility') !== 'hidden') {
             return this.$cached;
         } else {
             return this.$output;
@@ -667,10 +661,10 @@ export class MdEditor {
         return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
     }
     private get $cached_body() {
-        return this.$cached.contents().find('body');
+        return this.$cached.contents().find('body') as JQuery<HTMLElement>;
     }
     private get $output_body() {
-        return this.$output.contents().find('body');
+        return this.$output.contents().find('body') as JQuery<HTMLElement>;
     }
     private get $lhs() {
         return $('.lhs');
