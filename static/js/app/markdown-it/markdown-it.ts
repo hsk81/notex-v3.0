@@ -10,6 +10,7 @@ import * as markdownitMath from '@npm/markdown-it-math';
 import * as markdownitSub from '@npm/markdown-it-sub';
 import * as markdownitSup from '@npm/markdown-it-sup';
 import * as markdownitVideo from '@npm/markdown-it-video';
+import * as markdownitScript from './markdown-it-script';
 
 declare let hljs: any;
 
@@ -92,22 +93,9 @@ export class MarkdownIt {
         if (markdownitVideo) {
             this._mdi.use(markdownitVideo);
         }
-        this._mdi.renderer.rules['html_block'] = function (
-            tokens: Array<{ content: string }>, idx: number,
-            options: any, env: { document: Document }
-        ) {
-            let script = tokens[idx].content.trim();
-            if (script.match(/^<script>/i) &&
-                script.match(/<\/script>$/i)
-            ) {
-                script = script.replace(/^<script>/ig, '');
-                script = script.replace(/<\/script>$/ig, '');
-                if (env.document) {
-                    return run(script, env.document);
-                }
-            }
-            return tokens[idx].content;
-        };
+        if (markdownitScript) {
+            this._mdi.use(markdownitScript.default);
+        }
     }
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
@@ -115,19 +103,6 @@ export class MarkdownIt {
     public render(src: string, env?: any): string {
         return this._mdi.render(src, env);
     }
-
     private _mdi: any;
-}
-function run(
-    script: string, document: Document
-) {
-    const el = document.createElement('script');
-    el.type = 'text/javascript';
-    el.textContent = script;
-    document.head.appendChild(el);
-    if (el.parentNode) {
-        el.parentNode.removeChild(el);
-    }
-    return '';
 }
 export default MarkdownIt;
