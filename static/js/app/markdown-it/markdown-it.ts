@@ -92,6 +92,22 @@ export class MarkdownIt {
         if (markdownitVideo) {
             this._mdi.use(markdownitVideo);
         }
+        this._mdi.renderer.rules['html_block'] = function (
+            tokens: Array<{ content: string }>, idx: number,
+            options: any, env: { document: Document }
+        ) {
+            let script = tokens[idx].content.trim();
+            if (script.match(/^<script>/i) &&
+                script.match(/<\/script>$/i)
+            ) {
+                script = script.replace(/^<script>/ig, '');
+                script = script.replace(/<\/script>$/ig, '');
+                if (env.document) {
+                    return run(script, env.document);
+                }
+            }
+            return tokens[idx].content;
+        };
     }
     /**
      * @see: See: https://markdown-it.github.io/markdown-it/#MarkdownIt.render
@@ -102,5 +118,16 @@ export class MarkdownIt {
 
     private _mdi: any;
 }
-
+function run(
+    script: string, document: Document
+) {
+    const el = document.createElement('script');
+    el.type = 'text/javascript';
+    el.textContent = script;
+    document.head.appendChild(el);
+    if (el.parentNode) {
+        el.parentNode.removeChild(el);
+    }
+    return '';
+}
 export default MarkdownIt;

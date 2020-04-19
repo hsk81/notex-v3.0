@@ -201,14 +201,24 @@ export class MdEditor {
                 this.$cached_body.delay(200).fadeIn('fast');
                 this.$output_body.hide().html(html);
                 this.$output_body.delay(200).fadeIn('fast');
-        });
+            });
         }
-        if (this.$cached.prop('hidden') === true) {
-            this.$cached_body.html(MarkdownIt.me.render(value));
+        if (this.$cached.prop('hidden') === true) try {
+            this.$cached_body.html(MarkdownIt.me.render(value, {
+                document: this.$cached.contents()[0] as Document
+            }));
+        } catch (ex) {
+            console.error(ex);
+        } finally {
             this.$output.prop('hidden', true);
             this.$cached.prop('hidden', false);
-        } else {
-            this.$output_body.html(MarkdownIt.me.render(value));
+        } else try {
+            this.$output_body.html(MarkdownIt.me.render(value, {
+                document: this.$output.contents()[0] as Document
+            }));
+        } catch (ex) {
+            console.error(ex);
+        } finally {
             this.$cached.prop('hidden', true);
             this.$output.prop('hidden', false);
         }
