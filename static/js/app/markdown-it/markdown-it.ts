@@ -27,7 +27,7 @@ export class MarkdownIt {
 
     public constructor() {
         this._mdi = new markdownit({
-            highlight: function (text: any, language: any) {
+            highlight: function (text: string, language: string) {
                 if (language && hljs.getLanguage(language)) {
                     try {
                         return hljs.highlight(language, text).value;
