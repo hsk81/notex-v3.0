@@ -13,6 +13,7 @@ import { SpellChecker } from "../spell-checker/spell-checker";
 import { IPFS, Buffer } from "../ipfs/index";
 import "./md-editor-mode";
 
+declare const morphdom: any;
 declare const $: JQueryStatic;
 declare const CodeMirror: {
     fromTextArea: (
@@ -92,6 +93,9 @@ export class MdEditor {
             this.$cached_body.html(html).find('>*').hide().fadeIn('fast');
             this.$output_body.html(html).find('>*').hide().fadeIn('fast');
         });
+        if (this.$cached[0].contentWindow) {
+            this.$cached[0].contentWindow.PATCH = () => this.patch();
+        }
         if (this.mobile) {
             this.toInput({
                 footer: false, toolbar: false
@@ -189,33 +193,22 @@ export class MdEditor {
         synchronize(this.$output_body);
     }
     @buffered(40)
-    public render() {
+    public render(force = false) {
         const value = this.getValue();
+        if (force) {
+            this.$output_body.html('');
+        }
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => {
-                this.$cached.css('visbility', 'hidden');
-                this.$output.css('visbility', 'visible');
                 this.$cached_body.hide().html(html);
                 this.$cached_body.delay(200).fadeIn('fast');
                 this.$output_body.hide().html(html);
                 this.$output_body.delay(200).fadeIn('fast');
             });
         }
-        if (this.$cached.css('visbility') === 'hidden') try {
-            this.$cached_body.html(MarkdownIt.me.render(value, {
-                document: this.$cached.contents()[0] as Document
-            }));
-        } finally {
-            this.$output.css('visbility', 'hidden');
-            this.$cached.css('visbility', 'visible');
-        } else try {
-            this.$output_body.html(MarkdownIt.me.render(value, {
-                document: this.$output.contents()[0] as Document
-            }));
-        } finally {
-             this.$cached.css('visbility', 'hidden');
-             this.$output.css('visbility', 'visible');
-        }
+        this.$cached_body.html(MarkdownIt.me.render(value, {
+            document: this.$cached.contents()[0] as Document
+        }));
         if (value.length > 0) {
             const $header = this.$cached_body.find(':header');
             DownloadManager.me.title = $header.length === 0
@@ -223,6 +216,19 @@ export class MdEditor {
                 : `${$($header[0]).text()}.md`;
             DownloadManager.me.content = value;
         }
+    }
+    @buffered(0)
+    public patch() {
+        morphdom(this.$output_head[0], this.$cached_head[0], {
+            onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
+                return !source.isEqualNode(target);
+            }
+        });
+        morphdom(this.$output_body[0], this.$cached_body[0], {
+            onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
+                return !source.isEqualNode(target);
+            }
+        });
     }
     public refresh() {
         if (this.mirror) {
@@ -659,6 +665,12 @@ export class MdEditor {
     }
     private get $output() {
         return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
+    }
+    private get $cached_head() {
+        return this.$cached.contents().find('head') as JQuery<HTMLElement>;
+    }
+    private get $output_head() {
+        return this.$output.contents().find('head') as JQuery<HTMLElement>;
     }
     private get $cached_body() {
         return this.$cached.contents().find('body') as JQuery<HTMLElement>;

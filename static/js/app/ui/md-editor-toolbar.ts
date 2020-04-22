@@ -70,7 +70,7 @@ export class MdEditorToolbar {
         this.scroll.refresh();
     }
     private onRefreshClick() {
-        this.editor.render();
+        this.editor.render(true);
     }
     private onPublishClick() {
         $('#publish-dlg').modal();

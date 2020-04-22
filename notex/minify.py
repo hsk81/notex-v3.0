@@ -69,6 +69,8 @@ def js_minify(tgt_path):
     concat(tmp_path,
         'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     concat(tmp_path,
+        'static/js/lib/morphdom/morphdom-2.5.12.min.js')
+    concat(tmp_path,
         'static/js/lib/typo/typo-1.1.0.min.js')
     concat(tmp_path,
         'static/js/lib/codemirror.lib/codemirror.js')

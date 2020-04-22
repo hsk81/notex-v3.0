@@ -50,13 +50,6 @@ def npm_ipfs(any, name='ipfs', ext='js'):
     root = os.path.normpath('node_modules/{0}'.format(name))
     return static_file(path, root=root)
 
-@app.get('/<any:path>/@npm/snabbdom/modules/<path:path>.<ext:re:[^/\.]+>')
-def npm_snabbdom_modules(any, name='snabbdom', path=None, ext='js'):
-
-    path = 'dist/snabbdom-{0}.{1}'.format(path, ext)
-    root = os.path.normpath('node_modules/{0}'.format(name))
-    return static_file(path, root=root)
-
 ###############################################################################
 
 @app.get('/<any:path>/@npm/<name:re:[^/]+>/<path:path>.<ext:re:[^/\.]+>')
