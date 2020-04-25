@@ -37,9 +37,9 @@ def css_minify(tgt_path):
     minify(tgt_path,
         'static/css/app/font.css', 'w')
     minify(tgt_path,
-        'static/css/lib/bootstrap/bootstrap-3.3.6.min.css')
+        'static/css/lib/bootstrap/bootstrap-3.4.1.min.css')
     minify(tgt_path,
-        'static/css/lib/bootstrap/bootstrap-theme-3.3.6.min.css')
+        'static/css/lib/bootstrap/bootstrap-theme-3.4.1.min.css')
     minify(tgt_path,
         'static/css/lib/highlight/default-9.13.1.min.css')
     minify(tgt_path,
@@ -63,7 +63,7 @@ def js_minify(tgt_path):
     concat(tmp_path,
         'static/js/lib/jquery/jquery.set-cursor-position-2.2.4.min.js')
     concat(tmp_path,
-        'static/js/lib/bootstrap/bootstrap-3.3.6.min.js')
+        'static/js/lib/bootstrap/bootstrap-3.4.1.min.js')
     concat(tmp_path,
         'static/js/lib/highlight/highlight-9.13.1.min.js')
     concat(tmp_path,
