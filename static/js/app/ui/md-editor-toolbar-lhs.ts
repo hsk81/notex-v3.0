@@ -4,10 +4,10 @@ import { MdEditor, Index } from "./md-editor";
 declare const $: JQueryStatic;
 
 @trace
-export class MdEditorToolbar {
-    public static get me(this: any): MdEditorToolbar {
+export class MdEditorToolbarLhs {
+    public static get me(this: any): MdEditorToolbarLhs {
         if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR_TOOLBAR'] = new MdEditorToolbar();
+            this['_me'] = window['MD_EDITOR_TOOLBAR_LHS'] = new MdEditorToolbarLhs();
         }
         return this['_me'];
     }
@@ -36,16 +36,10 @@ export class MdEditorToolbar {
             .on('click', this.onOutdentClick.bind(this));
         this.$paste
             .on('click', this.onPasteClick.bind(this));
-        this.$print
-            .on('click', this.onPrintClick.bind(this));
         this.$product
             .on('click', this.onProductClick.bind(this));
-        this.$publish
-            .on('click', this.onPublishClick.bind(this));
         this.$redo
             .on('click', this.onRedoClick.bind(this));
-        this.$refresh
-            .on('click', this.onRefreshClick.bind(this));
         this.$sum
             .on('click', this.onSumClick.bind(this));
         this.$subscript
@@ -56,7 +50,6 @@ export class MdEditorToolbar {
             .on('click', this.onUndoClick.bind(this));
         this.$video
             .on('click', this.onVideoClick.bind(this));
-
         if (!this.editor.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -68,17 +61,6 @@ export class MdEditorToolbar {
     public refresh() {
         this.editor.refresh();
         this.scroll.refresh();
-    }
-    private onRefreshClick() {
-        this.editor.render(true);
-    }
-    private onPublishClick() {
-        $('#publish-dlg').modal();
-    }
-    private onPrintClick() {
-        if (this.editor.$viewer[0].contentWindow) {
-            this.editor.$viewer[0].contentWindow.print();
-        }
     }
     private onUndoClick() {
         let mirror = this.editor.mirror;
@@ -319,7 +301,6 @@ export class MdEditorToolbar {
         }
         this.editor.focus();
     }
-
     private onBoldClickMirror(
         mirror: CodeMirror.Editor
     ) {
@@ -1092,6 +1073,15 @@ export class MdEditorToolbar {
             }
         }
     }
+    private get $outer() {
+        return $('.lhs>.toolbar-outer');
+    }
+    private get $inner() {
+        return this.$outer.find('>.toolbar-inner');
+    }
+    private get $toolbar() {
+        return this.$inner.find('>.md-toolbar');
+    }
     private get $bold() {
         return $('.glyphicon-bold').closest('button');
     }
@@ -1113,9 +1103,6 @@ export class MdEditorToolbar {
     private get $indent() {
         return $('.glyphicon-indent-left').closest('button');
     }
-    private get $inner() {
-        return this.$outer.find('>.toolbar-inner');
-    }
     private get $italic() {
         return $('.glyphicon-italic').closest('button');
     }
@@ -1131,26 +1118,14 @@ export class MdEditorToolbar {
     private get $outdent() {
         return $('.glyphicon-indent-right').closest('button');
     }
-    private get $outer() {
-        return $('.lhs>.toolbar-outer');
-    }
     private get $paste() {
         return $('.glyphicon-paste').closest('button');
-    }
-    private get $print() {
-        return $('.glyphicon.print').closest('button');
     }
     private get $product() {
         return $('.glyphicon.product').closest('button');
     }
-    private get $publish() {
-        return $('.glyphicon.publish').closest('button');
-    }
     private get $redo() {
         return $('.glyphicon.redo').closest('button');
-    }
-    private get $refresh() {
-        return $('.glyphicon.refresh').closest('button');
     }
     private get $subscript() {
         return $('.glyphicon-subscript').closest('button');
@@ -1161,15 +1136,12 @@ export class MdEditorToolbar {
     private get $sum() {
         return $('.glyphicon.sum').closest('button');
     }
-    private get $toolbar() {
-        return this.$inner.find('>.md-toolbar');
-    }
     private get $undo() {
         return $('.glyphicon.undo').closest('button');
     }
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll('.toolbar-inner', {
+            this._scroll = new IScroll(this.$inner[0], {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true
@@ -1192,4 +1164,4 @@ export class MdEditorToolbar {
     private _clipboard: string | undefined; //@TODO: [I]Clipboard?
     private _scroll: any;
 }
-export default MdEditorToolbar;
+export default MdEditorToolbarLhs;

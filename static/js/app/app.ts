@@ -3,7 +3,8 @@ import { HeaderMenu } from "./ui/header-menu";
 import { MdEditor } from "./ui/md-editor";
 import { MdEditorFooter } from "./ui/md-editor-footer";
 import { MdEditorAibar } from "./ui/md-editor-aibar";
-import { MdEditorToolbar } from "./ui/md-editor-toolbar";
+import { MdEditorToolbarLhs } from "./ui/md-editor-toolbar-lhs";
+import { MdEditorToolbarRhs } from "./ui/md-editor-toolbar-rhs";
 import { PublishDialog } from "./ui/publish-dialog";
 
 import { trace } from "./decorator/trace";
@@ -18,21 +19,23 @@ export class App {
         return this['_me'];
     }
     public constructor() {
-        this._headerMenu = HeaderMenu.me;
-        this._markdownEditor = MdEditor.me;
-        this._editorToolbar = MdEditorToolbar.me;
-        this._editorAibar = MdEditorAibar.me;
-        this._editorFooter = MdEditorFooter.me;
-        this._publishDialog = PublishDialog.me;
-        this._downloadManager = DownloadManager.me;
+        this._header_menu = HeaderMenu.me;
+        this._markdown_editor = MdEditor.me;
+        this._editor_toolbar_lhs = MdEditorToolbarLhs.me;
+        this._editor_toolbar_rhs = MdEditorToolbarRhs.me;
+        this._editor_aibar = MdEditorAibar.me;
+        this._editor_footer = MdEditorFooter.me;
+        this._publish_dialog = PublishDialog.me;
+        this._download_manager = DownloadManager.me;
     }
-    private readonly _headerMenu: HeaderMenu;
-    private readonly _markdownEditor: MdEditor;
-    private readonly _editorFooter: MdEditorFooter;
-    private readonly _editorAibar: MdEditorAibar;
-    private readonly _editorToolbar: MdEditorToolbar;
-    private readonly _publishDialog: PublishDialog;
-    private readonly _downloadManager: DownloadManager;
+    private readonly _header_menu: HeaderMenu;
+    private readonly _markdown_editor: MdEditor;
+    private readonly _editor_footer: MdEditorFooter;
+    private readonly _editor_aibar: MdEditorAibar;
+    private readonly _editor_toolbar_lhs: MdEditorToolbarLhs;
+    private readonly _editor_toolbar_rhs: MdEditorToolbarRhs;
+    private readonly _publish_dialog: PublishDialog;
+    private readonly _download_manager: DownloadManager;
 }
 
 window['APP'] = App.me;

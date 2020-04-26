@@ -636,7 +636,7 @@ export class MdEditor {
         }
     }
     private get placeholder(): string {
-        return '/editor/0200-center/0222-rhs.output-placeholder.html';
+        return '/editor/0200-center/0221-rhs.output-placeholder.html';
     }
     private get index(): number | undefined {
         return window['INDEX'];

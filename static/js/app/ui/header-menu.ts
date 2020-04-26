@@ -2,7 +2,8 @@ import { mine } from "../decorator/mine";
 import { trace } from "../decorator/trace";
 
 import { MdEditor } from "./md-editor";
-import { MdEditorToolbar } from "./md-editor-toolbar";
+import { MdEditorToolbarLhs } from "./md-editor-toolbar-lhs";
+import { MdEditorToolbarRhs } from "./md-editor-toolbar-rhs";
 
 declare const $: JQueryStatic;
 
@@ -43,7 +44,8 @@ export class HeaderMenu {
             .toggleClass('col-xs-12 col-sm-12');
         $('div.rhs').toggleClass('hidden-xs hidden-sm')
             .toggleClass('col-xs-12 col-sm-12');
-        this.toolbar.refresh();
+        this.toolbarLhs.refresh();
+        this.toolbarRhs.refresh();
         this.editor.focus();
     }
     public get $openItem(): any {
@@ -55,8 +57,11 @@ export class HeaderMenu {
     public get $swapItem(): any {
         return $('[name=swap]');
     }
-    private get toolbar(): any {
-        return MdEditorToolbar.me;
+    private get toolbarLhs(): any {
+        return MdEditorToolbarLhs.me;
+    }
+    private get toolbarRhs(): any {
+        return MdEditorToolbarRhs.me;
     }
     private get editor(): MdEditor {
         return MdEditor.me;
