@@ -18,6 +18,8 @@ export class MdEditorToolbarRhs {
             .on('click', this.onPublishClick.bind(this));
         this.$refresh
             .on('click', this.onRefreshClick.bind(this));
+        this.$template
+            .on('click', this.onTemplateClick.bind(this));
         if (!this.editor.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -35,6 +37,9 @@ export class MdEditorToolbarRhs {
     }
     private onPublishClick() {
         $('#publish-dlg').modal();
+    }
+    private onTemplateClick() {
+        $('#template-dlg').modal();
     }
     private onPrintClick() {
         if (this.editor.$viewer[0].contentWindow) {
@@ -58,6 +63,9 @@ export class MdEditorToolbarRhs {
     }
     private get $refresh() {
         return $('.glyphicon.refresh').closest('button');
+    }
+    private get $template() {
+        return $('.glyphicon.template').closest('button');
     }
     private get scroll(): any {
         if (this._scroll === undefined) {

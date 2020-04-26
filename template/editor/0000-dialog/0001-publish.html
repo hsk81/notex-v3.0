@@ -1,85 +1,83 @@
 <div class="modal fade" id="publish-dlg" role="dialog" tabindex="-1">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-            <span>&times;</span>
-        </button>
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAACr1BMVEUhfwD/ghv/hB7/hhX/hR//hiL/iB7/iCD/iCX/iCf/iSH/iiD/iiH/iij/iyD/iyr/jCr/jCv/jCz/jiH/jSz/jS7/jiX/jS//jTP/jir/jiz/ji3/ji7/jyX/jjP/jyr/jyz/jy//jzD/jzL/jzP/kCr/kDD/kDP/kiD/kDT/kSv/kiL/kS3/kTD/kTP/kir/kTT/kyL/kjP/kjT/kyv/kjX/lCL/ky7/ky//kzD/kzP/kzT/lCv/lC//lDH/lDL/lDT/lDX/liT/lS7/lS//lTL/lTP/lTT/lTX/ljD/lTr/lTv/lTz/ljT/ljX/ly7/ly//ljz/lzT/lzX/lzf/mC7/mC//lzn/mDX/mS3/mDj/mTD/mTb/mEL/mjH/mjL/mjX/mjb/mjf/mzP/mzb/mzf/mkH/mkP/nDb/nDf/nD3/nTb/nTf/nEP/nTv/nEf/nT7/njb/njf/njj/nUb/nj7/nUj/nj//nzb/nkD/nzf/oDf/oDn/oDr/oTf/oTz/ojj/ozj/oz3/oVX/o0f/o0j/olX/o1L/p1X/p1j/p1n/qFn/qVn/qVr/q1n/q1r/rWL/rWf/rmP/rmb/r2P/sGf/tGj/tWn/tXX/vIH/vIP/vIT/vIX/vYH/vYX/vYb/voX/v4X/v4b/v4j/wYP/wYf/wYj/xIr/xJL/xpX/x5b/yZf/ypr/y5r/zJz/zJ//zZ7/zZ//z6f/0af/0qr/1Kn/1a//1rP/17T/2LH/27n/27z/3Lr/3b//3cH/3r//3sD/3sH/3sL/3sP/38L/38P/4MX/4cX/48v/5Mv/5dH/5tD/5tH/59D/6NL/6NT/6df/6tj/69r/69v/7uD/7+L/8ub/8+n/9Or/9Ov/9ez/9u//9/D/+vf//fv//fz//f3//v3//v7///7///8n95ryAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfgAxAINiKfRh1EAAACJElEQVQoz2NgaGqoq6uqKizMzshISUhIiIiICPL1dXd3d7C2NtJjYKhvrMMpb6VnzFALlK6uxiVvwFADk86Ojw7w9/f3DEKW1wPKV4PkiyI1okvLKysrI4RlXf2A8g5g+/UYiquqq6qqKsxal+88evz4sWO7NkwSM/dDlq8qrKpwmn7+CQzcWmNnCTbeWg8on1MIBIbT7jxBAhvd7JHlsyNbziFLP7k/1Q1kvDFIPjM7O1t7yWMU+Se7Q0DawfKpGRnJoVtBgjdXL122bO6qa0DmnXCo8WD5uLw9IPl1zjYmJvrMG4HMByWSCrqmQGl1hqSUlLDSQyD5s1P6+vs7ek8CmY/Wd3WmyUDkExL8Sw8+wQRbBNRA8okJCQEFB7DIX80X0FNXZ4jBJX+5DCwfHBHhkrUfi/ylfAF1dRX88ipgedusvSCB0xN6ukGgq337Q7A8v4qKHIOfr69F1C6Q/FodVVVVeXlJSa4Zd4HcC7GCUHk7rc0g+RsrFy5asGDevFnzL4KC+4SouIocWN6Xb+YjTPs3MQKl5Rg8gElJK/cUhvT1Nl6wvANQ3oN78m006XtzWDTh8g4OPBPPoEhfmc2hApKWYwDGozUwMbCnL96278ghEDh8aMeKZlZlsLQEWB4IHBXYpLwCwcDHW4mJUxksKwGTNwICRWkRIJASERIRh2gGyxsDZfSQADDMITaDpSUYDPRQZVGlJRgYTJElQdJyyNIAygzFuhksnCgAAAAASUVORK5CYII="
-             class="img-thumbnail pull-left" alt="Blogger.com">
-        <h4 class="modal-title">Publish to <a href="https://www.blogger.com/">
-            Blogger.com</a></h4>
-      </div>
-      <div class="modal-body">
-        <label class="post-basics" for="blog-url">Blog URL</label>
-        <div class="post-basics input-group">
-          <span class="input-group-addon">
-              <span class="glyphicon glyphicon-link"></span>
-          </span>
-          <input type="text" class="form-control" id="blog-url"
-                 placeholder="a blog URL like https://my.blogspot.com">
-          <div class="input-group-btn hidden-xs hidden-sm">
-              <button class="btn btn-default" type="button" tabindex="-1" title="Blog URL"
-                      data-container="body" data-toggle="popover" data-placement="left"
-                      data-trigger="focus" data-content="Ensure to provide an existing blog URL with read and write access.">
-                  <span class="glyphicon glyphicon-question-sign"></span>
-              </button>
-          </div>
-        </div>
-        <br class="post-basics"/>
-        <label class="post-basics" for="post-title">Post Title</label>
-        <div class="post-basics input-group">
-          <span class="input-group-addon">
-              <input type="checkbox" data-toggle="tooltip" data-placement="top"
-                     title="Update the most recent post with the same title, if any such exists."
-                     style="margin-top: 3px" tabindex="-1" checked>
-          </span>
-          <input type="text" class="form-control" id="post-title"
-                 placeholder="a new or an existing post title">
-          <div class="input-group-btn hidden-xs hidden-sm">
-              <button class="btn btn-default" type="button" tabindex="-1" title="Post Title"
-                      data-container="body" data-toggle="popover" data-placement="left"
-                      data-trigger="focus" data-content="Updates most recent post with same title, unless checkbox is unchecked.">
-                  <span class="glyphicon glyphicon-question-sign"></span>
-              </button>
-          </div>
-        </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAACr1BMVEUhfwD/ghv/hB7/hhX/hR//hiL/iB7/iCD/iCX/iCf/iSH/iiD/iiH/iij/iyD/iyr/jCr/jCv/jCz/jiH/jSz/jS7/jiX/jS//jTP/jir/jiz/ji3/ji7/jyX/jjP/jyr/jyz/jy//jzD/jzL/jzP/kCr/kDD/kDP/kiD/kDT/kSv/kiL/kS3/kTD/kTP/kir/kTT/kyL/kjP/kjT/kyv/kjX/lCL/ky7/ky//kzD/kzP/kzT/lCv/lC//lDH/lDL/lDT/lDX/liT/lS7/lS//lTL/lTP/lTT/lTX/ljD/lTr/lTv/lTz/ljT/ljX/ly7/ly//ljz/lzT/lzX/lzf/mC7/mC//lzn/mDX/mS3/mDj/mTD/mTb/mEL/mjH/mjL/mjX/mjb/mjf/mzP/mzb/mzf/mkH/mkP/nDb/nDf/nD3/nTb/nTf/nEP/nTv/nEf/nT7/njb/njf/njj/nUb/nj7/nUj/nj//nzb/nkD/nzf/oDf/oDn/oDr/oTf/oTz/ojj/ozj/oz3/oVX/o0f/o0j/olX/o1L/p1X/p1j/p1n/qFn/qVn/qVr/q1n/q1r/rWL/rWf/rmP/rmb/r2P/sGf/tGj/tWn/tXX/vIH/vIP/vIT/vIX/vYH/vYX/vYb/voX/v4X/v4b/v4j/wYP/wYf/wYj/xIr/xJL/xpX/x5b/yZf/ypr/y5r/zJz/zJ//zZ7/zZ//z6f/0af/0qr/1Kn/1a//1rP/17T/2LH/27n/27z/3Lr/3b//3cH/3r//3sD/3sH/3sL/3sP/38L/38P/4MX/4cX/48v/5Mv/5dH/5tD/5tH/59D/6NL/6NT/6df/6tj/69r/69v/7uD/7+L/8ub/8+n/9Or/9Ov/9ez/9u//9/D/+vf//fv//fz//f3//v3//v7///7///8n95ryAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfgAxAINiKfRh1EAAACJElEQVQoz2NgaGqoq6uqKizMzshISUhIiIiICPL1dXd3d7C2NtJjYKhvrMMpb6VnzFALlK6uxiVvwFADk86Ojw7w9/f3DEKW1wPKV4PkiyI1okvLKysrI4RlXf2A8g5g+/UYiquqq6qqKsxal+88evz4sWO7NkwSM/dDlq8qrKpwmn7+CQzcWmNnCTbeWg8on1MIBIbT7jxBAhvd7JHlsyNbziFLP7k/1Q1kvDFIPjM7O1t7yWMU+Se7Q0DawfKpGRnJoVtBgjdXL122bO6qa0DmnXCo8WD5uLw9IPl1zjYmJvrMG4HMByWSCrqmQGl1hqSUlLDSQyD5s1P6+vs7ek8CmY/Wd3WmyUDkExL8Sw8+wQRbBNRA8okJCQEFB7DIX80X0FNXZ4jBJX+5DCwfHBHhkrUfi/ylfAF1dRX88ipgedusvSCB0xN6ukGgq337Q7A8v4qKHIOfr69F1C6Q/FodVVVVeXlJSa4Zd4HcC7GCUHk7rc0g+RsrFy5asGDevFnzL4KC+4SouIocWN6Xb+YjTPs3MQKl5Rg8gElJK/cUhvT1Nl6wvANQ3oN78m006XtzWDTh8g4OPBPPoEhfmc2hApKWYwDGozUwMbCnL96278ghEDh8aMeKZlZlsLQEWB4IHBXYpLwCwcDHW4mJUxksKwGTNwICRWkRIJASERIRh2gGyxsDZfSQADDMITaDpSUYDPRQZVGlJRgYTJElQdJyyNIAygzFuhksnCgAAAAASUVORK5CYII="
+                    class="img-thumbnail pull-left" alt="Blogger.com">
+                <h4 class="modal-title">Publish to <a href="https://www.blogger.com/">
+                        Blogger.com</a></h4>
+            </div>
+            <div class="modal-body">
+                <label class="post-basics" for="blog-url">Blog URL</label>
+                <div class="post-basics input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-link"></span>
+                    </span>
+                    <input type="text" class="form-control" id="blog-url"
+                        placeholder="a blog URL like https://my.blogspot.com">
+                    <div class="input-group-btn hidden-xs hidden-sm">
+                        <button class="btn btn-default" type="button" tabindex="-1" title="Blog URL"
+                            data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                            data-content="Ensure to provide an existing blog URL with read and write access.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+                </div>
+                <br class="post-basics" />
+                <label class="post-basics" for="post-title">Post Title</label>
+                <div class="post-basics input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" data-toggle="tooltip" data-placement="top"
+                            title="Update the most recent post with the same title, if any such exists."
+                            style="margin-top: 3px" tabindex="-1" checked>
+                    </span>
+                    <input type="text" class="form-control" id="post-title"
+                        placeholder="a new or an existing post title">
+                    <div class="input-group-btn hidden-xs hidden-sm">
+                        <button class="btn btn-default" type="button" tabindex="-1" title="Post Title"
+                            data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                            data-content="Updates most recent post with same title, unless checkbox is unchecked.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+                </div>
 
-        <br class="post-settings"/>
+                <br class="post-settings" />
 
-        <ul class="post-settings nav nav-tabs nav-justified nav-stacked">
-          <li role="presentation" class="active scripts">
-              <a href="#">Scripts</a>
-          </li>
-          <li role="presentation" class="styles">
-              <a href="#">Styles</a>
-          </li>
-        </ul>
+                <ul class="post-settings nav nav-tabs nav-justified nav-stacked">
+                    <li role="presentation" class="active scripts">
+                        <a href="#">Scripts</a>
+                    </li>
+                    <li role="presentation" class="styles">
+                        <a href="#">Styles</a>
+                    </li>
+                </ul>
 
-        <div class="post-settings scripts input-group">
-          <span class="input-group-addon">
-              <input style="margin-top: 3px" tabindex="-1"
-                     type="checkbox" data-toggle="tooltip" data-placement="top"
-                     title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!">
-          </span>
-          <textarea type="textarea" class="form-control" id="post-scripts"
-                    placeholder="<script>..</script>"><!--
+                <div class="post-settings scripts input-group">
+                    <span class="input-group-addon">
+                        <input style="margin-top: 3px" tabindex="-1" type="checkbox" data-toggle="tooltip"
+                            data-placement="top"
+                            title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!">
+                    </span>
+                    <textarea type="textarea" class="form-control" id="post-scripts" placeholder="<script>..</script>"><!--
   -- Highlight.js: 9.13.1
   -->
 
 <link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css' rel='stylesheet'></link>
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js'></script></textarea>
-        </div>
+                </div>
 
-        <div class="post-settings styles input-group" style="display: none;">
-          <span class="input-group-addon">
-              <input style="margin-top: 3px" tabindex="-1"
-                     type="checkbox" data-toggle="tooltip" data-placement="top"
-                     title="Append styles to this post: If possible try to modify a blog's template directly instead of including the styles separately for each post!">
-          </span>
-          <textarea type="textarea" class="form-control" id="post-styles"
-                    placeholder="<style>..</style>"><style>
+                <div class="post-settings styles input-group" style="display: none;">
+                    <span class="input-group-addon">
+                        <input style="margin-top: 3px" tabindex="-1" type="checkbox" data-toggle="tooltip"
+                            data-placement="top"
+                            title="Append styles to this post: If possible try to modify a blog's template directly instead of including the styles separately for each post!">
+                    </span>
+                    <textarea type="textarea" class="form-control" id="post-styles" placeholder="<style>..</style>"><style>
 .post-title {
     color: inherit;
 }
@@ -159,23 +157,22 @@
     padding: 0.5em;
 }
 </style></textarea>
-        </div>
+                </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" id="expand">
-            <span class="glyphicon glyphicon-chevron-down"
-                  style="top: 2px;"></span>
-        </button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-            Close
-        </button>
-        <button type="button" class="btn btn-primary"
-                data-publishing-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Publishing.."
-                data-published-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Published">
-            <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Publish
-        </button>
-      </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" id="expand">
+                    <span class="glyphicon glyphicon-chevron-down" style="top: 2px;"></span>
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary"
+                    data-publishing-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Publishing.."
+                    data-published-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Published">
+                    <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Publish
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

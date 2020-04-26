@@ -3,7 +3,8 @@ import { traceable } from "../decorator/trace";
 import { trace } from "../decorator/trace";
 import { cookie } from "../cookie/cookie";
 
-import { DownloadManager } from "./download-manager";
+import { TemplateManager } from "./manager-template";
+import { DownloadManager } from "./manager-download";
 import { MarkdownIt } from "../markdown-it/markdown-it";
 
 import { ILingua } from "../spell-checker/spell-checker";
@@ -206,9 +207,11 @@ export class MdEditor {
                 this.$output_body.delay(200).fadeIn('fast');
             });
         }
-        this.$cached_body.html(MarkdownIt.me.render(value, {
+        const md = TemplateManager.me.apply(value);
+        const html = MarkdownIt.me.render(md, {
             document: this.$cached.contents()[0] as Document
-        }));
+        });
+        this.$cached_body.html(html);
         if (value.length > 0) {
             const $header = this.$cached_body.find(':header');
             DownloadManager.me.title = $header.length === 0

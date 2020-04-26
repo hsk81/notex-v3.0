@@ -14,10 +14,10 @@ type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
 declare const $: JQueryStatic;
 
 @trace
-export class PublishDialog {
-    public static get me(this: any): PublishDialog {
+export class PublishManager {
+    public static get me(this: any): PublishManager {
         if (this['_me'] === undefined) {
-            this['_me'] = window['PUBLISH_DIALOG'] = new PublishDialog();
+            this['_me'] = window['PUBLISH_DIALOG'] = new PublishManager();
         }
         return this['_me'];
     }
@@ -393,8 +393,8 @@ export class PublishDialog {
     private get $primary() {
         return this.$dialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
     }
-    private get editor(): MdEditor {
+    private get editor() {
         return MdEditor.me;
     }
 }
-export default PublishDialog;
+export default PublishManager;
