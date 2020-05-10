@@ -1,19 +1,5 @@
 <!-- ------------------------------------------------------------------
-  -- CSS Styles: videos
-  -- ----------------------------------------------------------------->
-
-<style>
-  .youtube-player {
-    border: none;
-    border-radius: 1mm;
-    padding: 0;
-    margin: 0 calc(0.5em + 0.5px);
-    width: calc(100% - 1em - 1px);
-  }
-</style>
-
-<!-- ------------------------------------------------------------------
-  -- CSS Styles: fonts
+  -- CSS Styles: body
   -- ----------------------------------------------------------------->
 
 <link href="https://fonts.googleapis.com/css2?family=Habibi&display=swap"
@@ -25,40 +11,26 @@
   }
 </style>
 
-<!-- ------------------------------------------------------------------
-  -- CSS Styles: layout
-  -- ----------------------------------------------------------------->
-
 <style>
   body {
     column-count: 2;
-  }
-  h1 {
-    column-span: all;
-    text-align: center;
-  }
-  p {
-    text-align: justify;
-  }
-</style>
-
-<!-- ------------------------------------------------------------------
-  -- CSS Styles: links
-  -- ----------------------------------------------------------------->
-
-<style>
-  a.header-anchor {
-    color: black;
-    opacity: 3%;
-  }
-  a.header-anchor:hover {
-    opacity: 100%;
   }
 </style>
 
 <!-- ------------------------------------------------------------------
   -- CSS Styles: headers
   -- ----------------------------------------------------------------->
+
+<style>
+  h1 {
+    column-span: all;
+    text-align: center;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0.5em 0;
+  }
+</style>
+
 
 <style>
   h1 {
@@ -78,29 +50,99 @@
 }
 </style>
 
+<style>
+  a.header-anchor {
+    color: black;
+    opacity: 2%;
+  }
+  a.header-anchor:hover {
+    opacity: 100%;
+  }
+</style>
+
 <!-- ------------------------------------------------------------------
-  -- CSS Styles: figures & videos
+  -- CSS Styles: paragraphs
   -- ----------------------------------------------------------------->
+
+<style>
+  p {
+    margin: 0.5em 0;
+    text-align: justify;
+  }
+</style>
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: tables
+  -- ----------------------------------------------------------------->
+
+<style>
+  table {
+    border-collapse: collapse;
+    margin: 0 0.5em;
+    width: calc(100% - 1em);
+  }
+  table>thead>tr {
+    border-bottom: 2px solid black;
+  }
+  table>thead>tr>th {
+    padding: 0.5em;
+    text-align: left;
+  }
+  table>tbody>tr {
+    border-bottom: 1px solid black;
+  }
+  table>tbody>tr>td {
+    padding: 0.5em;
+  }
+</style>
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: figures
+  -- ----------------------------------------------------------------->
+
+<style>
+  figure {
+    margin: 1em;
+  }
+  figure>img {
+    border: none;
+    border-radius: 1mm;
+  }
+  figure>img {
+    width: 100%;
+  }
+  figure>figcaption {
+    font-size: smaller;
+    text-align: center;
+    margin-top: 1em;
+  }
+</style>
 
 <style>
   body {
     counter-reset: figures;
   }
-  figure {
-    margin: 1em;
-  }
-  figure img {
-    border: none;
-    width: 100%;
-  }
-  figure figcaption {
+  figure>figcaption {
     counter-increment: figures;
-    font-size: smaller;
-    text-align: center;
-    margin-top: 1em;
   }
-  figure figcaption:before {
+  figure>figcaption:before {
     content: 'Fig. ' counter(figures) ' – ';
+  }
+</style>
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: videos
+  -- ----------------------------------------------------------------->
+
+<style>
+  .embed-responsive>iframe {
+    border: none;
+    border-radius: 1mm;
+  }
+  .embed-responsive>iframe {
+    padding: 0;
+    margin: 0 calc(1em + 0.5px);
+    width: calc(100% - 2em - 1px);
   }
 </style>
 
@@ -114,37 +156,49 @@
 
 <style>
   pre {
-    background-color: #f5f5f5;
-  }
-  pre {
-    padding: 1em;
-    margin: 0.5em 1em;
-    width: calc(100% - 4em);
-  }
-  pre {
+    border: none;
     border-radius: 1mm;
   }
   pre {
-    white-space: nowrap;
+    background-color: #f5f5f5;
+    margin: 1em;
     overflow-x: auto;
+    padding: 1em;
+    white-space: nowrap;
+    width: calc(100% - 4em);
   }
-  pre code {
+  pre>code {
     white-space: pre;
   }
 </style>
 
 <style>
   @media print {
-    pre {
-      border-bottom: 1px solid black;
-      border-left: none;
-      border-right: none;
-      border-top: 1px solid black;
-      border-radius: 0;
-    }
-    pre code {
+    pre>code {
       white-space: pre-wrap;
     }
+  }
+</style>
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: blockquotes
+  -- ----------------------------------------------------------------->
+
+<style>
+  blockquote {
+    margin: 1em;
+    width: calc(100% - 2em);
+  }
+</style>
+
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: horizantal rules
+  -- ----------------------------------------------------------------->
+
+<style>
+  hr {
+    border: 1px solid black;
   }
 </style>
 
@@ -171,7 +225,9 @@ ${MD_CONTENT}
       startup: {
         ready: () => {
           MathJax.startup.defaultReady();
-          MathJax.startup.promise.then(PATCH);
+          if (typeof PATCH === 'function') {
+            MathJax.startup.promise.then(PATCH);
+          }
         }
       },
       tex: {
@@ -192,7 +248,9 @@ ${MD_CONTENT}
     typeof window.MathJax.typesetPromise === 'function'
   ) {
     MathJax.startup.promise = MathJax.startup.promise.then(() => {
-      MathJax.texReset(); return MathJax.typesetPromise().then(PATCH);
+      MathJax.texReset(); return typeof PATCH === 'function'
+        ? MathJax.typesetPromise().then(PATCH)
+        : MathJax.typesetPromise();
     });
   };
 </script>
