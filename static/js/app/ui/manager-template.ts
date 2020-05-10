@@ -75,9 +75,14 @@ export class TemplateManager {
             return null;
         });
     }
-    public apply(md: string) {
-        return this.value.replace(/\${MD_CONTENT}/g, md);
+    public apply(md: string, pattern = '${MD_CONTENT}') {
+        const lhs_index = this.value.indexOf(pattern);
+        const lhs = this.value.slice(0, lhs_index);
+        const rhs_index = lhs_index + pattern.length;
+        const rhs = this.value.slice(rhs_index);
+        return lhs + md + rhs;
     }
-    private value = '${MD_CONTENT}\n<script>PATCH()</script>';
+    private value = '${MD_CONTENT}\n'
+        + '<script>if (typeof PATCH == "function") PATCH();</script>';
 }
 export default TemplateManager;
