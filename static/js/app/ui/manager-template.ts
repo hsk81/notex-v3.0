@@ -75,11 +75,8 @@ export class TemplateManager {
             return null;
         });
     }
-    /**
-     * @todo: double $$-signs get reduced to single $-sign; fix!
-     */
     public apply(md: string) {
-        return this.value.replace(/\${MD_CONTENT}/, md);
+        return this.value.replace(/\${MD_CONTENT}/g, md);
     }
     private value = '${MD_CONTENT}\n<script>PATCH()</script>';
 }

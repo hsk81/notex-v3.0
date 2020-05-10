@@ -50,7 +50,9 @@ export class MarkdownIt {
         }
         if (markdownitAnchor) {
             this._mdi.use(markdownitAnchor, {
-                level: 2, permalink: true
+                permalinkSymbol: '&nbsp;¶',
+                permalinkSpace: false,
+                permalink: true
             });
         }
         if (markdownitDecorate) {

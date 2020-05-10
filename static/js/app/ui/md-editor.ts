@@ -207,11 +207,13 @@ export class MdEditor {
                 this.$output_body.delay(200).fadeIn('fast');
             });
         }
-        const md = TemplateManager.me.apply(value);
-        const html = MarkdownIt.me.render(md, {
-            document: this.$cached.contents()[0] as Document
-        });
-        this.$cached_body.html(html);
+        this.$cached_body.html(
+            MarkdownIt.me.render(
+                TemplateManager.me.apply(value), {
+                    document: this.$cached.contents()[0] as Document
+                }
+            )
+        );
         if (value.length > 0) {
             const $header = this.$cached_body.find(':header');
             DownloadManager.me.title = $header.length === 0

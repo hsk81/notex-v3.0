@@ -30,11 +30,22 @@
   -- ----------------------------------------------------------------->
 
 <style>
+  body {
+    column-count: 1;
+  }
   h1 {
     text-align: center;
   }
   p {
     text-align: justify;
+  }
+</style>
+
+<style>
+  @media print {
+    body {
+      column-count: initial;
+    }
   }
 </style>
 

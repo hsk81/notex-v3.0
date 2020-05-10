@@ -22,7 +22,6 @@
 <style>
   body {
     font-family: Habibi, serif;
-    font-size: x-small; /* TODO: adjust via toolbar */
   }
 </style>
 
