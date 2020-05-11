@@ -218,7 +218,7 @@ export class MdEditor {
             const $header = this.$cached_body.find(':header');
             DownloadManager.me.title = $header.length === 0
                 ? `${new Date().toISOString()}.md`
-                : `${$($header[0]).text()}.md`;
+                : `${$($header[0]).text().slice(0,-2)}.md`;
             DownloadManager.me.content = value;
         }
     }
