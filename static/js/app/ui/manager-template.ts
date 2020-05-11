@@ -3,11 +3,22 @@ import MdEditor from "./md-editor";
 import { cookie } from "../cookie/cookie";
 import { trace } from "../decorator/trace";
 
+declare const $: JQueryStatic;
 type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
     button: (action: string) => JQueryEx<T>;
 };
-declare const $: JQueryStatic;
-
+export enum Template {
+    Empty = '/static/md/tpl-0-empty.md',
+    SingleColumn = '/static/md/tpl-1-column.md',
+    DoubleColumn = '/static/md/tpl-2-column.md',
+    TripleColumn = '/static/md/tpl-3-column.md'
+}
+const TemplateClasses = {
+    [Template.Empty]: 'empty',
+    [Template.SingleColumn]: '1-column',
+    [Template.DoubleColumn]: '2-column',
+    [Template.TripleColumn]: '3-column'
+};
 @trace
 export class TemplateManager {
     public static get me(this: any): TemplateManager {
@@ -17,6 +28,8 @@ export class TemplateManager {
         return this['_me'];
     }
     public constructor() {
+        this.select(
+            this.$active.data('url'));
         this.$dialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.$dialog.on(
@@ -30,6 +43,19 @@ export class TemplateManager {
         this.$primary.on(
             'click', this.onPrimaryClick.bind(this));
     }
+    public apply(md: string, pattern = '${MD_CONTENT}') {
+        // avoid `String.prototype.replace` due to $$-sign!
+        const lhs_index = this.value.indexOf(pattern);
+        const lhs = this.value.slice(0, lhs_index);
+        const rhs_index = lhs_index + pattern.length;
+        const rhs = this.value.slice(rhs_index);
+        return lhs + md + rhs;
+    }
+    public async select(template: Template) {
+        this.value = await this.fetch(template);
+        this.activateBy(template);
+        this.editor.render(true);
+    }
     private onBsModalShow() {
     }
     private onBsModalShown() {
@@ -39,18 +65,21 @@ export class TemplateManager {
     private onBsModalHidden() {
         this.editor.render(true);
     }
-    private async onPrimaryClick() {
+    private onPrimaryClick() {
         const url = this.$active.data('url');
-        const tpl = await this.fetch(url);
-        if (typeof tpl === 'string') {
-            this.value = tpl;
-        }
-        this.$dialog.modal('hide');
+        this.select(url as Template);
+        this.$dialog.modal('hide')
     }
     private onItemClick(ev: Event) {
-        this.$active.removeClass('active');
         const $target = $(ev.target as EventTarget);
+        this.activate($target);
+    }
+    private activate($target: JQuery<EventTarget>) {
+        this.$active.removeClass('active');
         $target.closest('a').addClass('active');
+    }
+    private activateBy(template: Template) {
+        this.activate(this.$item.filter(`.${TemplateClasses[template]}`));
     }
     private get $dialog() {
         return $('#template-dlg');
@@ -67,22 +96,31 @@ export class TemplateManager {
     private get editor() {
         return MdEditor.me;
     }
-    private async fetch(path: string) {
+    private async fetch(
+        path: string
+    ) {
         return await fetch(path).then((res) => {
-            return res.ok ? res.text() : Promise.resolve(null);
+            return res.ok ? res.text() : Promise.resolve(
+                FALLBACK
+            );
         }).catch((reason) => {
             console.error(reason);
-            return null;
+            return FALLBACK;
         });
     }
-    public apply(md: string, pattern = '${MD_CONTENT}') {
-        const lhs_index = this.value.indexOf(pattern);
-        const lhs = this.value.slice(0, lhs_index);
-        const rhs_index = lhs_index + pattern.length;
-        const rhs = this.value.slice(rhs_index);
-        return lhs + md + rhs;
+    private get value(): string {
+        if (this._value === undefined) {
+            this._value = FALLBACK;
+        }
+        return this._value;
     }
-    private value = '${MD_CONTENT}\n'
-        + '<script>if (typeof PATCH == "function") PATCH();</script>';
+    private set value(text: string) {
+        this._value = text;
+    }
+    private _value?: string;
 }
+const FALLBACK = '${MD_CONTENT}\n'
+    + '<script>'
+    + 'if (typeof PATCH !== "undefined") PATCH();'
+    + '</script>';
 export default TemplateManager;

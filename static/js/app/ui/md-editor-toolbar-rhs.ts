@@ -1,6 +1,9 @@
 import { trace } from "../decorator/trace";
 import { MdEditor } from "./md-editor";
 
+import { TemplateManager } from "./manager-template";
+import { Template } from "./manager-template";
+
 declare const $: JQueryStatic;
 
 @trace
@@ -20,6 +23,12 @@ export class MdEditorToolbarRhs {
             .on('click', this.onRefreshClick.bind(this));
         this.$template
             .on('click', this.onTemplateClick.bind(this));
+        this.$1_column
+            .on('click', this.onSingleColumnClick.bind(this));
+        this.$2_column
+            .on('click', this.onDoubleColumnClick.bind(this));
+        this.$3_column
+            .on('click', this.onTripleColumnClick.bind(this));
         if (!this.editor.mobile) {
             this.$outer.fadeIn('slow', () => {
                 this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
@@ -40,6 +49,15 @@ export class MdEditorToolbarRhs {
     }
     private onTemplateClick() {
         $('#template-dlg').modal();
+    }
+    private onSingleColumnClick() {
+        TemplateManager.me.select(Template.SingleColumn);
+    }
+    private onDoubleColumnClick() {
+        TemplateManager.me.select(Template.DoubleColumn);
+    }
+    private onTripleColumnClick() {
+        TemplateManager.me.select(Template.TripleColumn);
     }
     private onPrintClick() {
         if (this.editor.$viewer[0].contentWindow) {
@@ -66,6 +84,15 @@ export class MdEditorToolbarRhs {
     }
     private get $template() {
         return $('.glyphicon.template').closest('button');
+    }
+    private get $1_column() {
+        return $('.glyphicon.1-column').closest('button');
+    }
+    private get $2_column() {
+        return $('.glyphicon.2-column').closest('button');
+    }
+    private get $3_column() {
+        return $('.glyphicon.3-column').closest('button');
     }
     private get scroll(): any {
         if (this._scroll === undefined) {
