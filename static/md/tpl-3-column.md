@@ -151,7 +151,7 @@
   -- ----------------------------------------------------------------->
 
 <style>
-  @import url('/static/css/lib/highlight/default-9.13.1.min.css')
+  @import url('/static/css/lib/highlight/default-10.0.2.min.css')
 </style>
 
 <style>
