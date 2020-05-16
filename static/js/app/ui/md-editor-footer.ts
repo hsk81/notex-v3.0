@@ -16,27 +16,32 @@ export class MdEditorFooter {
         return this['_me'];
     }
     public constructor() {
-        this.$footer.find('[data-toggle="tooltip"]').tooltip({
-            trigger: 'hover'
-        });
-        this.$footer.find('[data-toggle="dropdown"]').tooltip({
-            trigger: 'hover'
-        });
-        this.$footer.find('[data-toggle="popover"]').popover({
-            trigger: 'manual'
-        })
-        .on('blur', (ev) => $(ev.target).popover('hide'))
-        .on('click', (ev) => $(ev.target).popover('toggle'))
-        .on('keydown', (ev) => $(ev.target).popover('hide'))
-        .on('keypress', (ev) => $(ev.target).popover('hide'));
-        this.$mirror.tooltip({
-            container: 'body', title: (function (this: any) {
-                return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
-            }).bind(this)
-        });
+        if (!this.ed.mobile) {
+            if (this.ed.uiMode !== UiMode.simple) {
+                this.show();
+            } else {
+                this.hide();
+            }
+        } else {
+            this.hide();
+        }
+        this.events();
+        this.ui();
+    }
+    private show() {
+        this.$lhs.addClass('with-footer');
+    }
+    private hide() {
+        this.$lhs.removeClass('with-footer');
+    }
+    private events() {
+        this.$footer
+            .on('blur', (ev) => $(ev.target).popover('hide'))
+            .on('click', (ev) => $(ev.target).popover('toggle'))
+            .on('keydown', (ev) => $(ev.target).popover('hide'))
+            .on('keypress', (ev) => $(ev.target).popover('hide'));
         this.$mirror
             .on('click', this.onMirrorClick.bind(this));
-
         this.$find
             .on('change', this.onFindChange.bind(this) as any);
         this.$find
@@ -53,22 +58,22 @@ export class MdEditorFooter {
             .on('click', this.onReplaceConfirmClick.bind(this) as any);
         this.$spellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
-
-        if (!this.ed.mobile) {
-            if (this.ed.uiMode !== UiMode.simple) {
-                this.show();
-            } else {
-                this.hide();
-            }
-        } else {
-            this.hide();
-        }
     }
-    private hide() {
-        this.$lhs.removeClass('with-footer');
-    }
-    private show() {
-        this.$lhs.addClass('with-footer');
+    private ui() {
+        this.$footer.find('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
+        this.$footer.find('[data-toggle="dropdown"]').tooltip({
+            trigger: 'hover'
+        });
+        this.$footer.find('[data-toggle="popover"]').popover({
+            trigger: 'manual'
+        })
+        this.$mirror.tooltip({
+            container: 'body', title: (function (this: any) {
+                return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
+            }).bind(this)
+        });
     }
     private onMirrorClick() {
         if (this.ed.mirror) {
@@ -88,7 +93,7 @@ export class MdEditorFooter {
             );
             this.$mirror.tooltip('hide');
             this.$find.val('');
-            this.hide(); //.minimize();
+            this.hide();
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -106,7 +111,7 @@ export class MdEditorFooter {
             );
             this.$mirror.tooltip('hide');
             this.$find.val('');
-            this.show(); //.maximize();
+            this.show();
         }
     }
     @buffered(40)

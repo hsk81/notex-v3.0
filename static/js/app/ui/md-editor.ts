@@ -637,9 +637,6 @@ export class MdEditor {
     private get $document() {
         return $(document);
     }
-    private get $footer() {
-        return this.$input.siblings('.footer');
-    }
     public get $input() {
         return this.$lhs.find('#input');
     }

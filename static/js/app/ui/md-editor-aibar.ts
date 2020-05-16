@@ -20,34 +20,38 @@ export class MdEditorAibar {
     }
     public constructor() {
         if (this.ed.empty) {
-            this.$aibar.find('[data-toggle="tooltip"]').tooltip();
-            this.$aibar.find('[data-toggle="popover"]').popover();
-            this.$rhs.addClass('with-aibar');
+            this.show();
+        } else {
+            this.hide();
         }
         this.events();
+        this.ui();
+    }
+    private show() {
+        this.$rhs.addClass('with-aibar');
+    }
+    private hide() {
+        this.$rhs.removeClass('with-aibar');
     }
     private events() {
-        $(this.ed).on('ui-mode', (ev, { value }) => {
-            this.onUiModeChange(value);
-        });
-        $(this.ed).on('change', (ev) => {
-            this.onEditorChange(this.ed.empty);
-        });
-        $(this.ed).on('ai-mode', (ev, { value }) => {
-            this.onAiMode(value);
-        });
-        $(this.ed).on('ai-page', (ev, { value }) => {
-            this.onAiPage(value);
-        });
+        $(this.ed).on(
+            'ui-mode', (ev, { value }) => this.onUiModeChange(value));
+        $(this.ed).on(
+            'change', (ev) => this.onEditorChange(this.ed.empty));
+        $(this.ed).on(
+            'ai-mode', (ev, { value }) => this.onAiMode(value));
+        $(this.ed).on(
+            'ai-page', (ev, { value }) => this.onAiPage(value));
         this.$lhsButton.on(
-            'click', this.onLhsButtonClick.bind(this)
-        );
+            'click', this.onLhsButtonClick.bind(this));
         this.$midButton.on(
-            'click', this.onMidButtonClick.bind(this)
-        );
+            'click', this.onMidButtonClick.bind(this));
         this.$rhsButton.on(
-            'click', this.onRhsButtonClick.bind(this)
-        );
+            'click', this.onRhsButtonClick.bind(this));
+    }
+    private ui() {
+        this.$aibar.find('[data-toggle="tooltip"]').tooltip();
+        this.$aibar.find('[data-toggle="popover"]').popover();
     }
     private onUiModeChange(mode: UiMode) {
         if (this.ed.empty) {
