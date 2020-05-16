@@ -74,24 +74,24 @@ export class PublishManager {
             'click', this.onPrimaryClick.bind(this));
     }
     private onBsModalShow() {
-        let $blog_url = this.$blog_url;
-        let $blog_url_ig = $blog_url.parent('.input-group');
-        let $post_title = this.$post_title;
-        let $post_title_ig = $post_title.parent('.input-group');
-        let $post_settings = this.$post_settings;
-        let $post_scripts_chk = this.$post_scripts_checkbox;
-        let $post_scripts_ta = this.$post_scripts_textarea;
-        let $post_styles_chk = this.$post_styles_checkbox;
-        let $post_styles_ta = this.$post_styles_textarea;
+        const $blog_url = this.$blog_url;
+        const $blog_url_ig = $blog_url.parent('.input-group');
+        const $post_title = this.$post_title;
+        const $post_title_ig = $post_title.parent('.input-group');
+        const $post_settings = this.$post_settings;
+        const $post_scripts_chk = this.$post_scripts_checkbox;
+        const $post_scripts_ta = this.$post_scripts_textarea;
+        const $post_styles_chk = this.$post_styles_checkbox;
+        const $post_styles_ta = this.$post_styles_textarea;
         $blog_url_ig.removeClass('has-error');
         $post_title_ig.removeClass('has-error');
         $post_title_ig.find('[type=checkbox]').prop('checked', true);
-        let blog_url = this.blogUrl;
+        const blog_url = this.blogUrl;
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
-        let $headers = this.$viewer.find(':header');
-        let title = $headers.first().text();
+        const $headers = this.$viewer.find(':header');
+        const title = $headers.first().text();
         if (title && typeof title === 'string') {
             $post_title.val(title.replace('¶', '').trim());
         }
@@ -116,9 +116,9 @@ export class PublishManager {
         }
     }
     private onBsModalHide() {
-        let $expand = this.$expand;
-        let $glyphicon = this.$expand.find('.glyphicon');
-        let $post_settings = this.$post_settings;
+        const $expand = this.$expand;
+        const $glyphicon = this.$expand.find('.glyphicon');
+        const $post_settings = this.$post_settings;
         $expand.data('state', 'collapsed');
         $glyphicon.removeClass('glyphicon-chevron-up');
         $glyphicon.addClass('glyphicon-chevron-down');
@@ -128,10 +128,10 @@ export class PublishManager {
         setTimeout(() => this.editor.focus(), 1);
     }
     private onExpandClick() {
-        let $glyphicon = this.$expand.find('.glyphicon');
-        let $textarea = this.$post_scripts_textarea;
-        let $settings = this.$post_settings;
-        let $title = this.$post_title;
+        const $glyphicon = this.$expand.find('.glyphicon');
+        const $textarea = this.$post_scripts_textarea;
+        const $settings = this.$post_settings;
+        const $title = this.$post_title;
         if (this.$expand.data('state') === 'expanded') {
             this.$expand.data('state', 'collapsed');
         } else {
@@ -178,24 +178,24 @@ export class PublishManager {
         this.stylesFlag = $(ev.target as any).prop('checked');
     }
     private onPrimaryClick() {
-        let $blog_url = this.$blog_url;
-        let $blog_url_ig = $blog_url.parent('.input-group');
-        let $post_title = this.$post_title;
-        let $post_title_ig = $post_title.parent('.input-group');
-        let $post_title_cb = $post_title_ig.find('[type=checkbox]');
-        let url = $blog_url.val() as string;
+        const $blog_url = this.$blog_url;
+        const $blog_url_ig = $blog_url.parent('.input-group');
+        const $post_title = this.$post_title;
+        const $post_title_ig = $post_title.parent('.input-group');
+        const $post_title_cb = $post_title_ig.find('[type=checkbox]');
+        const url = $blog_url.val() as string;
         if (!url) {
             $blog_url_ig.addClass('has-error');
             $blog_url.focus().off('blur').on('blur', () => {
-                let url = $blog_url.val();
+                const url = $blog_url.val();
                 if (url) $blog_url_ig.removeClass('has-error');
             });
         }
-        let title = $post_title.val();
+        const title = $post_title.val();
         if (!title) {
             $post_title_ig.addClass('has-error');
             $post_title.focus().off('blur').on('blur', () => {
-                let title = $post_title.val();
+                const title = $post_title.val();
                 if (title) $post_title_ig.removeClass('has-error');
             });
         }
@@ -205,12 +205,12 @@ export class PublishManager {
             $post_title.focus();
         } else {
             BloggerApi.me.get((blogger: any) => {
-                let on_done = (res: any) => {
-                    let blog = assert(res && res.result),
+                const on_done = (res: any) => {
+                    const blog = assert(res && res.result),
                         update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
-                        let on_done = (res: any) => {
-                            let posts = res.result && res.result.items || [],
+                        const on_done = (res: any) => {
+                            const posts = res.result && res.result.items || [],
                                 post = posts.find((p: any) => {
                                     return p.title === title;
                                 });
@@ -220,10 +220,10 @@ export class PublishManager {
                                 this.doInsert(blogger, blog, title);
                             }
                         };
-                        let on_fail = (res: any) => {
+                        const on_fail = (res: any) => {
                             console.error('[on:blogger.posts.list]', res);
                         };
-                        let all_request = blogger.posts.list({
+                        const all_request = blogger.posts.list({
                             blogId: blog.id, fields: 'items(id,title)',
                             orderBy: 'published'
                         });
@@ -232,16 +232,16 @@ export class PublishManager {
                         this.doInsert(blogger, blog, title);
                     }
                 };
-                let on_fail = (res: any) => {
+                const on_fail = (res: any) => {
                     $blog_url_ig.addClass('has-error');
                     $blog_url.focus().off('blur').on('blur', () => {
-                        let url = $blog_url.val();
+                        const url = $blog_url.val();
                         if (url) $blog_url_ig.removeClass('has-error');
                     });
                     console.error('[on:blogger.blogs.get-by-url]', res);
                 };
                 if (blogger) {
-                    let url_request = blogger.blogs.getByUrl({
+                    const url_request = blogger.blogs.getByUrl({
                         url: url, fields: 'id,posts(totalItems)'
                     });
                     url_request.then(
@@ -279,16 +279,16 @@ export class PublishManager {
         }
     }
     private doInsert(blogger: any, blog: any, title: any) {
-        let on_done = (res: any) => {
-            let url = assert(res.result.url);
-            let id = assert(res.result.id);
-            let tab = open(url, 'post:' + id);
+        const on_done = (res: any) => {
+            const url = assert(res.result.url);
+            const id = assert(res.result.id);
+            const tab = open(url, 'post:' + id);
             if (tab) tab.focus();
         };
-        let on_fail = (res: any) => {
+        const on_fail = (res: any) => {
             console.error('[on:blogger.posts.insert]', res);
         };
-        let insert_req = blogger.posts.insert({
+        const insert_req = blogger.posts.insert({
             blogId: assert(blog.id),
             content: this.content(),
             fields: 'id,url,title',
@@ -297,16 +297,16 @@ export class PublishManager {
         insert_req.then(on_done, on_fail);
     }
     private doUpdate(blogger: any, blog: any, post: any) {
-        let on_done = (res: any) => {
-            let url = assert(res.result.url);
-            let id = assert(res.result.id);
-            let tab = open(url, 'post:' + id);
+        const on_done = (res: any) => {
+            const url = assert(res.result.url);
+            const id = assert(res.result.id);
+            const tab = open(url, 'post:' + id);
             if (tab) tab.focus();
         };
-        let on_fail = (res: any) => {
+        const on_fail = (res: any) => {
             console.error('[on:blogger.posts.update]', res);
         };
-        let update_req = blogger.posts.update({
+        const update_req = blogger.posts.update({
             blogId: assert(blog.id),
             content: this.content(),
             fields: 'id,url,title',
@@ -321,7 +321,7 @@ export class PublishManager {
             + this.withStyles();
     }
     private withScripts() {
-        let $checkbox = this.$post_scripts_checkbox;
+        const $checkbox = this.$post_scripts_checkbox;
         if ($checkbox.prop('checked')) {
             return this.$post_scripts_textarea.val();
         } else {
@@ -329,7 +329,7 @@ export class PublishManager {
         }
     }
     private withStyles() {
-        let $checkbox = this.$post_styles_checkbox;
+        const $checkbox = this.$post_styles_checkbox;
         if ($checkbox.prop('checked')) {
             return this.$post_styles_textarea.val();
         } else {
@@ -337,7 +337,7 @@ export class PublishManager {
         }
     }
     private toHtml(md_content: any, with_header?: any) {
-        let $content = $('<div>', {
+        const $content = $('<div>', {
             html: MarkdownIt.me.render(md_content)
         });
         if (!with_header) {

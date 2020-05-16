@@ -6,13 +6,13 @@ export interface IOverlay {
     token: (stream: any, state?: any) => void;
 }
 
-declare let Typo: any;
+declare const Typo: any;
 
 export class SpellChecker {
     public constructor(
         lingua: ILingua, callback: (overlay: IOverlay | null) => void
     ) {
-        let worker = new Worker(
+        const worker = new Worker(
             '/static/js/app/spell-checker/spell-checker.worker.js'
         );
         worker.onmessage = (ev: any) => {
@@ -40,11 +40,11 @@ export class SpellChecker {
     }
     private get separator(): RegExp {
         if (!this._separator) {
-            let rx_bas = "!\"#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~";
-            let rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿";
-            let rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾";
-            let rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎";
-            let rx_xxx = "≈≡×";
+            const rx_bas = "!\"#$%&()*+,-./:;<=>?@[\\\\\\]^_`{|}~";
+            const rx_ext = "€‚ƒ„…†‡ˆ‰‹•—™›¡¢£¤¥¦§¨©ª«¬®¯°±´µ¶·¸º»¼½¾¿";
+            const rx_sup = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾";
+            const rx_sub = "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎";
+            const rx_xxx = "≈≡×";
             this._separator = new RegExp(
                 `^[^${rx_bas}${rx_ext}${rx_sup}${rx_sub}${rx_xxx}\\d\\s]{2,}`
             );

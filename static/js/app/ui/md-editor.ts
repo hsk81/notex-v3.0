@@ -43,11 +43,11 @@ export class Index {
         return this._position;
     }
     public static asPosition(index: number): CodeMirror.Position {
-        let mirror = MdEditor.me.mirror;
+        const mirror = MdEditor.me.mirror;
         if (mirror) {
             return mirror.posFromIndex(index);
         }
-        let values = this.values(index);
+        const values = this.values(index);
         return {
             ch: values[values.length - 1].length - 1,
             line: values.length
@@ -57,7 +57,7 @@ export class Index {
         return this._index;
     }
     public static asNumber(position: CodeMirror.Position): number {
-        let mirror = MdEditor.me.mirror;
+        const mirror = MdEditor.me.mirror;
         if (mirror) {
             return mirror.indexFromPos(position);
         }
@@ -68,7 +68,7 @@ export class Index {
         return text.length;
     }
     private static values(index?: number): string[] {
-        let value = MdEditor.me.getValue();
+        const value = MdEditor.me.getValue();
         if (index !== undefined) {
             return value.substring(0, index).split('\n');
         }
@@ -103,7 +103,7 @@ export class MdEditor {
         this.events();
     }
     public toMirror(): any {
-        let ta = document.getElementById('input') as HTMLTextAreaElement;
+        const ta = document.getElementById('input') as HTMLTextAreaElement;
         let mirror = this.mirror;
         if (mirror === undefined) {
             mirror = CodeMirror.fromTextArea(ta, {
@@ -144,7 +144,7 @@ export class MdEditor {
     public toInput(options: {
         footer: boolean
     }): any {
-        let mirror = this.mirror as CodeMirror.EditorFromTextArea;
+        const mirror = this.mirror as CodeMirror.EditorFromTextArea;
         if (mirror) {
             if (this.spellCheckerOverlay) {
                 mirror.removeOverlay(this.spellCheckerOverlay);
@@ -251,7 +251,7 @@ export class MdEditor {
     public getValue(
         lhs?: Index, rhs?: Index
     ): string {
-        let value = this.mirror
+        const value = this.mirror
             ? this.mirror.getValue()
             : this.$input.val() as string;
         if (lhs && rhs) {
@@ -264,7 +264,7 @@ export class MdEditor {
     }
     @traceable(false)
     public setValue(value: string) {
-        let inp = this.$input[0] as HTMLInputElement;
+        const inp = this.$input[0] as HTMLInputElement;
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
@@ -278,7 +278,7 @@ export class MdEditor {
     }
     public insertValue(value: string, at?: Index) {
         if (at === undefined) {
-            let { rhs: at } = this.getSelection();
+            const { rhs: at } = this.getSelection();
             this.setSelection(at, at);
         } else {
             this.setSelection(at, at);
@@ -292,18 +292,18 @@ export class MdEditor {
         lhs: Index, rhs: Index, value: string
     } {
         if (this.mirror) {
-            let lhs = new Index(this.mirror.getCursor('from'));
-            let rhs = new Index(this.mirror.getCursor('to'));
+            const lhs = new Index(this.mirror.getCursor('from'));
+            const rhs = new Index(this.mirror.getCursor('to'));
             return {
                 lhs, rhs, value: this.mirror.getSelection()
             };
         } else {
-            let inp = this.$input[0] as HTMLInputElement;
-            let lhs = new Index(Math.min(
+            const inp = this.$input[0] as HTMLInputElement;
+            const lhs = new Index(Math.min(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
             ));
-            let rhs = new Index(Math.max(
+            const rhs = new Index(Math.max(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
             ));
@@ -322,7 +322,7 @@ export class MdEditor {
                 lhs.position, rhs.position
             );
         } else {
-            let inp = this.$input[0] as HTMLInputElement;
+            const inp = this.$input[0] as HTMLInputElement;
             inp.setSelectionRange(lhs.number, rhs.number);
         }
     }
@@ -341,10 +341,10 @@ export class MdEditor {
     }
     public get mode() {
         if (this.mirror) {
-            let lhs_cur = this.mirror.getCursor('from');
-            let lhs = this.mirror.getModeAt(lhs_cur);
-            let rhs_cur = this.mirror.getCursor('to');
-            let rhs = this.mirror.getModeAt(rhs_cur);
+            const lhs_cur = this.mirror.getCursor('from');
+            const lhs = this.mirror.getModeAt(lhs_cur);
+            const rhs_cur = this.mirror.getCursor('to');
+            const rhs = this.mirror.getModeAt(rhs_cur);
             return { lhs, rhs };
         }
         return {
@@ -352,7 +352,7 @@ export class MdEditor {
         };
     }
     public isMode(mode: string) {
-        let my_mode = this.mode;
+        const my_mode = this.mode;
         if (my_mode.lhs === undefined ||
             my_mode.rhs === undefined
         ) {
@@ -515,7 +515,7 @@ export class MdEditor {
         return {
             token: function (stream: any) {
                 query.lastIndex = stream.pos;
-                let match = query.exec(stream.string);
+                const match = query.exec(stream.string);
                 if (match && match.index == stream.pos) {
                     stream.pos += match[0].length || 1;
                     return 'searching';
@@ -558,21 +558,21 @@ export class MdEditor {
     }) {
         if (!options || !options.ctrlKey) {
             if (!options || !options.altKey) {
-                let beg_value = this.getValue(new Index(0), new Index(this.index||0));
-                let end_value = this.getValue(new Index(this.index||0));
+                const beg_value = this.getValue(new Index(0), new Index(this.index||0));
+                const end_value = this.getValue(new Index(this.index||0));
                 this.setValue(beg_value + end_value.replace(query, new_value));
             }
             this.select(query, !options?.shiftKey ? '+' : '-');
         } else {
-            let { lhs, rhs, value } = this.getSelection();
+            const { lhs, rhs, value } = this.getSelection();
             if (value) {
-                let lhs_value = this.getValue(new Index(0), lhs);
-                let mid_value = value.replace(query, new_value);
-                let rhs_value = this.getValue(rhs);
+                const lhs_value = this.getValue(new Index(0), lhs);
+                const mid_value = value.replace(query, new_value);
+                const rhs_value = this.getValue(rhs);
                 this.setValue(
                     `${lhs_value}${mid_value}${rhs_value}`
                 );
-                let delta = typeof query === 'string'
+                const delta = typeof query === 'string'
                     ? new_value.length - query.length
                     : new_value.length - query.source.length;
                 this.setSelection(
@@ -582,23 +582,23 @@ export class MdEditor {
         }
     }
     private select(query: string | RegExp, direction: '+' | '-') {
-        let length = (query: string | RegExp) => {
+        const length = (query: string | RegExp) => {
             return typeof query !== 'string'
                 ? query.source.length : query.length;
         };
-        let next = (index: number | undefined) => {
+        const next = (index: number | undefined) => {
             if (index !== undefined) {
-                let n = this.value.substring(index + 1).search(query);
+                const n = this.value.substring(index + 1).search(query);
                 return n >= 0 ? n + (index + 1) : undefined;
             } else {
-                let n = this.value.search(query);
+                const n = this.value.search(query);
                 return n >= 0 ? n : undefined;
             }
         };
-        let prev = (index: number | undefined) => {
+        const prev = (index: number | undefined) => {
             let p: number | undefined;
             while (true) {
-                let n = next(p);
+                const n = next(p);
                 if (n !== undefined) {
                     if (index === undefined || n < index) {
                         p = n; continue;
@@ -608,11 +608,11 @@ export class MdEditor {
             }
             return p;
         };
-        let lhs = (index: number) => {
+        const lhs = (index: number) => {
             return new Index(index);
         };
-        let rhs = (index: number) => {
-            let m = this.value.substring(index).match(query);
+        const rhs = (index: number) => {
+            const m = this.value.substring(index).match(query);
             return m ? new Index(index + m[0].length) : new Index(index);
         }
         if (length(query) > 0) {

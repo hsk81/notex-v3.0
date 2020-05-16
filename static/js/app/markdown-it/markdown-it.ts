@@ -12,7 +12,7 @@ import * as markdownitSup from '@npm/markdown-it-sup';
 import * as markdownitVideo from '@npm/markdown-it-video';
 import * as markdownitScript from './markdown-it-script';
 
-declare let hljs: any;
+declare const hljs: any;
 
 /**
  * @see: https://markdown-it.github.io/markdown-it/

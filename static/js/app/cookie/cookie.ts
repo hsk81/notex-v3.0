@@ -2,30 +2,26 @@ export interface ICookie {
     set: <T>(name: string, value: T, expiry_ms?: number) => T;
     get: <T>(name: string, value?: T) => T | undefined;
 }
-
 class Cookie implements ICookie {
     public static set<T>(name: string, value: T, expiry_ms?: number): T {
-        let json = JSON.stringify(value);
+        const json = JSON.stringify(value);
         if (expiry_ms === undefined) {
             document.cookie = name + '=' + json;
         } else {
-            let date = new Date();
+            const date = new Date();
             date.setTime(date.getTime() + expiry_ms);
-            let expires = 'expires=' + date.toUTCString();
+            const expires = 'expires=' + date.toUTCString();
             document.cookie = name + '=' + json + '; ' + expires;
         }
         return value;
     }
-
     public set<T>(name: string, value: T, expiry_ms?: number): T {
         return Cookie.set(name, value, expiry_ms);
     }
-
     public static get<T>(name: string, value?: T): T | undefined {
-        let cookies = document.cookie.split(';');
-        let cookie_name = name + '=';
+        const cookies = document.cookie.split(';');
+        const cookie_name = name + '=';
         let string;
-
         for (let i = 0; i < cookies.length; i++) {
             let cookie = cookies[i];
             while (cookie.charAt(0) === ' ') {
@@ -36,7 +32,6 @@ class Cookie implements ICookie {
                 break;
             }
         }
-
         if (string !== undefined) try {
             return JSON.parse(string);
         } catch (ex) {
@@ -45,11 +40,9 @@ class Cookie implements ICookie {
             return value;
         }
     }
-
     public get<T>(name: string, value?: T): T | undefined {
         return Cookie.get(name, value);
     }
 }
-
 export const cookie: ICookie = new Cookie();
 export default cookie;

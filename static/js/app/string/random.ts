@@ -6,8 +6,8 @@ String.random = function (
 ): string {
     length = Math.floor(length);
     range = Math.floor(range);
-    let p_0 = Math.pow(range, length);
-    let p_1 = range * p_0;
+    const p_0 = Math.pow(range, length);
+    const p_1 = range * p_0;
     return (length > 0)
         ? Math.floor(p_1 - p_0 * Math.random()).toString(range).slice(1)
         : '';

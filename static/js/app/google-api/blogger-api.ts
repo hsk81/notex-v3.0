@@ -18,25 +18,25 @@ export class BloggerApi {
     public get(callback: Function, ms: number = 2048, n: number = 2) {
         GoogleApi.me.get((gapi: any) => {
             if (gapi) {
-                let timeout_id1 = setTimeout(() => {
+                const timeout_id1 = setTimeout(() => {
                     if (n - 1 > 0) {
                         this.get(callback, ms, n - 1);
                     } else {
                         callback(false);
                     }
                 }, ms);
-                let on_fail = (res: any) => {
+                const on_fail = (res: any) => {
                     if (timeout_id1) clearTimeout(timeout_id1);
                     console.error('[with:google-api/fail]', res);
                     callback(false);
                 };
-                let on_done = (res: any) => {
+                const on_done = (res: any) => {
                     if (timeout_id1) {
                         clearTimeout(timeout_id1);
                     }
                     if (res.error) switch (res.error) {
                         case 'immediate_failed':
-                            let opts = $.extend(
+                            const opts = $.extend(
                                 {}, this._options, { immediate: false });
                             gapi.auth.authorize(
                                 opts, on_done, on_fail);
@@ -47,7 +47,7 @@ export class BloggerApi {
                             callback(false);
                             return;
                     } else if (gapi.client.blogger === undefined) {
-                        let timeout_id2 = setTimeout(() => {
+                        const timeout_id2 = setTimeout(() => {
                             if (n - 1 > 0) {
                                 this.get(callback, ms, n - 1);
                             } else {
@@ -62,7 +62,7 @@ export class BloggerApi {
                         callback(gapi.client.blogger, this._options);
                     }
                 };
-                let opts = $.extend(
+                const opts = $.extend(
                     {}, this._options, { immediate: true }
                 );
                 gapi.auth.authorize(

@@ -77,11 +77,11 @@ export class MdEditorFooter {
     }
     private onMirrorClick() {
         if (this.ed.mirror) {
-            let scroll = this.ed.mirror.getScrollInfo();
-            let range = this.ed.mirror.listSelections()[0];
-            let start = this.ed.mirror.indexFromPos(range.anchor);
-            let end = this.ed.mirror.indexFromPos(range.head);
-            let $input = this.ed.toInput({
+            const scroll = this.ed.mirror.getScrollInfo();
+            const range = this.ed.mirror.listSelections()[0];
+            const start = this.ed.mirror.indexFromPos(range.anchor);
+            const end = this.ed.mirror.indexFromPos(range.head);
+            const $input = this.ed.toInput({
                 footer: true
             });
             $input.show();
@@ -95,14 +95,14 @@ export class MdEditorFooter {
             this.$find.val('');
             this.hide();
         } else {
-            let scroll = {
+            const scroll = {
                 left: this.ed.$input.scrollLeft(),
                 top: this.ed.$input.scrollTop()
             }, sel = {
                 start: (this.ed.$input[0] as HTMLInputElement).selectionStart,
                 end: (this.ed.$input[0] as HTMLInputElement).selectionEnd
             };
-            let mirror = this.ed.toMirror();
+            const mirror = this.ed.toMirror();
             mirror.focus();
             mirror.scrollTo(scroll.left, scroll.top);
             mirror.setSelection(
@@ -183,17 +183,17 @@ export class MdEditorFooter {
             case 'Enter': break;
             default: return;
         }
-        let $find = $(ev.target as any);
-        let value = $find.val() as string;
-        let rx_px = /^\//;
-        let mm_px = value.match(rx_px);
-        let rx_sx = /\/[gimy]{0,4}$/;
-        let mm_sx = value.match(rx_sx);
+        const $find = $(ev.target as any);
+        const value = $find.val() as string;
+        const rx_px = /^\//;
+        const mm_px = value.match(rx_px);
+        const rx_sx = /\/[gimy]{0,4}$/;
+        const mm_sx = value.match(rx_sx);
         if (mm_px && mm_px.length > 0 && mm_sx && mm_sx.length > 0) {
-            let rx_beg = mm_px[0].length;
-            let rx_end = value.length - mm_sx[0].length;
-            let rx_flags = mm_sx[0].substring(1);
-            let rx_value = value.substring(rx_beg, rx_end);
+            const rx_beg = mm_px[0].length;
+            const rx_end = value.length - mm_sx[0].length;
+            const rx_flags = mm_sx[0].substring(1);
+            const rx_value = value.substring(rx_beg, rx_end);
             this.ed.search(new RegExp(rx_value, rx_flags), extra);
         } else {
             this.ed.search(value, extra);
@@ -210,38 +210,38 @@ export class MdEditorFooter {
             case 'Enter': break;
             default: return;
         }
-        let $find = this.$find;
-        let old_value = $find.val() as string;
-        let $replace = $(ev.target as any);
-        let new_value = $replace.val() as string;
-        let rx_px = /^\//;
-        let mm_px = old_value.match(rx_px);
-        let rx_sx = /\/[gimy]{0,4}$/;
-        let mm_sx = old_value.match(rx_sx);
+        const $find = this.$find;
+        const old_value = $find.val() as string;
+        const $replace = $(ev.target as any);
+        const new_value = $replace.val() as string;
+        const rx_px = /^\//;
+        const mm_px = old_value.match(rx_px);
+        const rx_sx = /\/[gimy]{0,4}$/;
+        const mm_sx = old_value.match(rx_sx);
         if (mm_px && mm_px.length > 0 && mm_sx && mm_sx.length > 0) {
-            let rx_beg = mm_px[0].length;
-            let rx_end = old_value.length - mm_sx[0].length;
-            let rx_flags = mm_sx[0].substring(1);
-            let rx_value = old_value.substring(rx_beg, rx_end);
+            const rx_beg = mm_px[0].length;
+            const rx_end = old_value.length - mm_sx[0].length;
+            const rx_flags = mm_sx[0].substring(1);
+            const rx_value = old_value.substring(rx_beg, rx_end);
             this.ed.replace(new RegExp(rx_value, rx_flags), new_value, extra);
         } else if (old_value) {
             this.ed.replace(old_value, new_value, extra);
         }
     }
     private onSpellCheckToggle(ev: MouseEvent) {
-        let $li1 = this.$spellCheckerToggle;
-        let $li1_a = $li1.find('a');
-        let $li1_img = $li1.find('img');
-        let $li1_line2 = $li1.find('.line2');
-        let $button_span = this.$spellCheckerButton.find('span.img-placeholder');
+        const $li1 = this.$spellCheckerToggle;
+        const $li1_a = $li1.find('a');
+        const $li1_img = $li1.find('img');
+        const $li1_line2 = $li1.find('.line2');
+        const $button_span = this.$spellCheckerButton.find('span.img-placeholder');
         $button_span.remove();
-        let $button_img = this.$spellCheckerButton.find('img');
+        const $button_img = this.$spellCheckerButton.find('img');
         $button_img.show();
-        let lingua = {
+        const lingua = {
             code: $li1_a.data('lingua'),
             charset: null
         };
-        let state = $li1_a.data('state');
+        const state = $li1_a.data('state');
         if (state === 'off') {
             $button_img.prop('src', this.urls['16x16'].on);
         } else {
@@ -279,23 +279,23 @@ export class MdEditorFooter {
         });
     }
     private onSpellCheckItemClick(ev: MouseEvent) {
-        let $li1 = this.$spellCheckerToggle;
-        let $li1_a = $li1.find('a');
-        let $li1_img = $li1.find('img');
-        let $li1_line2 = $li1.find('.line2');
-        let $lii = $(ev.target as any).closest('li');
-        let $lii_a = $lii.find('a');
-        let $lii_img = $lii.find('img');
-        let url = $lii_img.prop('src');
-        let code = cookie.get<string>('language') ||
+        const $li1 = this.$spellCheckerToggle;
+        const $li1_a = $li1.find('a');
+        const $li1_img = $li1.find('img');
+        const $li1_line2 = $li1.find('.line2');
+        const $lii = $(ev.target as any).closest('li');
+        const $lii_a = $lii.find('a');
+        const $lii_img = $lii.find('img');
+        const url = $lii_img.prop('src');
+        const code = cookie.get<string>('language') ||
             (navigator.language || 'en-US').replace('-', '_');
-        let lingua = {
+        const lingua = {
             code: $lii_a.data('lingua'),
             charset: $lii_a.data('charset')
         };
-        let $button = this.$spellCheckerButton;
-        let $button_img = $button.find('img');
-        let $button_span = $button.find('span.img-placeholder');
+        const $button = this.$spellCheckerButton;
+        const $button_img = $button.find('img');
+        const $button_span = $button.find('span.img-placeholder');
         $button_span.remove();
         $button_img.prop('src', url.replace('32x32', '16x16'));
         $button_img.show();
@@ -324,8 +324,8 @@ export class MdEditorFooter {
         });
     }
     private onSpellCheckButtonClick(ev: MouseEvent) {
-        let $menu = this.$spellCheckerMenu;
-        let $spin = $menu.find('>.spin');
+        const $menu = this.$spellCheckerMenu;
+        const $spin = $menu.find('>.spin');
         let $item = $menu.find('>li');
         if ($item.length === 0) {
             $.get('/static/html/spell-checker-menu.html').done((html) => {
@@ -339,7 +339,7 @@ export class MdEditorFooter {
                 this.$spellCheckerItem
                     .on('click', this.onSpellCheckItemClick.bind(this) as any);
 
-                let code = this.normalize(cookie.get<string>('language') ||
+                const code = this.normalize(cookie.get<string>('language') ||
                     (navigator.language || 'en-US').replace('-', '_'));
                 this.$spellCheckerToggle.find('a')
                     .data('lingua', code);

@@ -23,12 +23,12 @@ export class HeaderMenu {
     }
     @mine
     private onOpenItemChange(self: any, ev: any) {
-        let files = ev.target.files;
+        const files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (!files[i].type || files[i].type.match(/text/)) {
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = function (progress_ev) {
-                    let target = <any>progress_ev.target;
+                    const target = <any>progress_ev.target;
                     if (target && target.readyState === 2 &&
                         typeof target.result === 'string') {
                         self.editor.setValue(target.result);

@@ -3,7 +3,7 @@ interface Window {
     gapi: any;
 }
 
-declare let window: Window;
+declare const window: Window;
 
 export class GoogleApi {
     public static get me(this: any): GoogleApi {
@@ -21,7 +21,7 @@ export class GoogleApi {
         if (typeof window.gapi !== 'undefined') {
             callback(window.gapi);
         } else {
-            let timeout_id = setTimeout(() => {
+            const timeout_id = setTimeout(() => {
                 if (n - 1 > 0) {
                     this.get(callback, ms, n - 1);
                 } else {
