@@ -28,7 +28,10 @@ export class MdEditorAibar {
         this.ui();
     }
     private show() {
-        this.$rhs.addClass('with-aibar');
+        this.$aibar.fadeIn('slow', () => {
+            this.$rhs.addClass('with-aibar');
+            this.$aibar.removeAttr('style');
+        });
     }
     private hide() {
         this.$rhs.removeClass('with-aibar');

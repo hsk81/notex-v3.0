@@ -15,6 +15,13 @@ export class MdEditorToolbarRhs {
         return this['_me'];
     }
     public constructor() {
+        if (!this.editor.mobile) {
+            this.$outer.fadeIn('slow', () => {
+                this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
+                this.$toolbar.find('[data-toggle="popover"]').popover();
+                this.refresh();
+            });
+        }
         this.$print
             .on('click', this.onPrintClick.bind(this));
         this.$publish
@@ -29,13 +36,6 @@ export class MdEditorToolbarRhs {
             .on('click', this.onDoubleColumnClick.bind(this));
         this.$3_column
             .on('click', this.onTripleColumnClick.bind(this));
-        if (!this.editor.mobile) {
-            this.$outer.fadeIn('slow', () => {
-                this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
-                this.$toolbar.find('[data-toggle="popover"]').popover();
-                this.refresh();
-            });
-        }
     }
     public refresh() {
         this.editor.refresh();

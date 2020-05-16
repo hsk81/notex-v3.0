@@ -66,19 +66,21 @@ body {
   .row {
     .lhs {
       textarea#input {
-        height: calc(100%);
+        height: calc(100% - 47px);
       }
-      div.footer {
+      .footer {
         display: none;
+        width: 100%;
       }
       height: 100%;
     }
-    .lhs.with-footer {
+    .lhs.without-footer {
       textarea#input {
-        height: calc(100% - 47px);
+        height: calc(100%);
       }
-      div.footer {
+      .footer {
         display: block;
+        width: 48px;
       }
       height: 100%;
     }
@@ -214,7 +216,6 @@ body {
         border-top: 1px solid #e7e7e7;
         height: 47px;
         position: absolute;
-        width: 100%;
       }
       padding: 0;
     }
@@ -248,7 +249,7 @@ body {
       iframe#cached {
         border-left: 4px double #e7e7e7;
         box-shadow: inset 0 0 8px #e7e7e7;
-        height: 100%;
+        // height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0;

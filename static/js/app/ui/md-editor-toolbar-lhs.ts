@@ -12,6 +12,13 @@ export class MdEditorToolbarLhs {
         return this['_me'];
     }
     public constructor() {
+        if (!this.editor.mobile) {
+            this.$outer.fadeIn('slow', () => {
+                this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
+                this.$toolbar.find('[data-toggle="popover"]').popover();
+                this.refresh();
+            });
+        }
         this.$bold
             .on('click', this.onBoldClick.bind(this));
         this.$copy
@@ -50,13 +57,6 @@ export class MdEditorToolbarLhs {
             .on('click', this.onUndoClick.bind(this));
         this.$video
             .on('click', this.onVideoClick.bind(this));
-        if (!this.editor.mobile) {
-            this.$outer.fadeIn('slow', () => {
-                this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
-                this.$toolbar.find('[data-toggle="popover"]').popover();
-                this.refresh();
-            });
-        }
     }
     public refresh() {
         this.editor.refresh();

@@ -23,16 +23,18 @@ export class MdEditorFooter {
                 this.hide();
             }
         } else {
-            this.hide();
+            this.hide(true);
         }
         this.events();
         this.ui();
     }
     private show() {
-        this.$lhs.addClass('with-footer');
+        this.$lhs.removeClass('without-footer');
+        this.$footer.fadeIn('slow');
     }
-    private hide() {
-        this.$lhs.removeClass('with-footer');
+    private hide(force = false) {
+        this.$lhs.addClass('without-footer');
+        if (force) this.$footer.hide();
     }
     private events() {
         this.$footer
