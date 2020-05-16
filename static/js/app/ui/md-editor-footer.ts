@@ -111,7 +111,7 @@ export class MdEditorFooter {
             let start = this.ed.mirror.indexFromPos(range.anchor);
             let end = this.ed.mirror.indexFromPos(range.head);
             let $input = this.ed.toInput({
-                footer: true, toolbar: true
+                footer: true
             });
             $input.show();
             $input.focus();

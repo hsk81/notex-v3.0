@@ -42,6 +42,32 @@ body {
 .center {
   .row {
     .lhs {
+      textarea#input,
+      div.CodeMirror {
+        @media (min-width: 992px) {
+          width: calc(100% - 48px);
+        }
+        @media (max-width: 992px) {
+          width: calc(100%);
+        }
+      }
+    }
+    .rhs {
+      iframe#output,
+      iframe#cached {
+        @media (min-width: 992px) {
+          width: calc(100% - 48px);
+        }
+        @media (max-width: 992px) {
+          width: calc(100%);
+        }
+      }
+    }
+  }
+}
+.center {
+  .row {
+    .lhs {
       div.toolbar-outer {
         display: none;
         float: left;
@@ -87,7 +113,6 @@ body {
         font-family: monospace;
         font-size: 12px;
         height: calc(100% - 47px);
-        width: calc(100% - 48px);
       }
       textarea#input {
         border: none;
@@ -100,7 +125,6 @@ body {
         overflow-y: auto;
         padding: 1em 1em 0;
         resize: none;
-        width: 100%;
       }
       div.footer {
         .btn-group {
@@ -194,7 +218,6 @@ body {
         overflow-y: auto;
         padding: 0;
         position: absolute;
-        width: calc(100% - 48px);
       }
       height: 100%;
       padding: 0;

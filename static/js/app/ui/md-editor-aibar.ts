@@ -58,7 +58,6 @@ export class MdEditorAibar {
             this.$aibar.fadeIn('slow');
         }
     }
-    @buffered(0)
     @buffered(40)
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {

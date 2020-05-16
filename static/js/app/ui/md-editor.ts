@@ -90,21 +90,13 @@ export class MdEditor {
         return this['_me'];
     }
     public constructor() {
-        $.get(this.placeholder).done((html) => {
-            this.$cached_body.html(html).find('>*').hide().fadeIn('fast');
-            this.$output_body.html(html).find('>*').hide().fadeIn('fast');
-        });
         if (this.$cached[0].contentWindow) {
             this.$cached[0].contentWindow.PATCH = () => this.patch();
         }
         if (this.mobile) {
-            this.toInput({
-                footer: false, toolbar: false
-            });
+            this.toInput({ footer: false });
         } else if (this.simple) {
-            this.toInput({
-                footer: true, toolbar: true
-            });
+            this.toInput({ footer: true });
         } else {
             this.toMirror();
         }
@@ -150,7 +142,7 @@ export class MdEditor {
         return this.mirror;
     }
     public toInput(options: {
-        footer: boolean, toolbar: boolean
+        footer: boolean
     }): any {
         let mirror = this.mirror as CodeMirror.EditorFromTextArea;
         if (mirror) {
@@ -168,11 +160,6 @@ export class MdEditor {
                 this.onScroll(ev.target as HTMLElement)
             })
             .show();
-        if (options.toolbar) {
-            this.$input.css('width', 'calc(100% - 48px)');
-        } else {
-            this.$input.css('width', '100% ');
-        }
         if (options.footer) {
             this.$footer.show();
             this.$input.css('height', 'calc(100% - 47px)');
@@ -202,9 +189,9 @@ export class MdEditor {
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => {
                 this.$cached_body.hide().html(html);
-                this.$cached_body.delay(200).fadeIn('fast');
+                this.$cached_body.fadeIn('fast');
                 this.$output_body.hide().html(html);
-                this.$output_body.delay(200).fadeIn('fast');
+                this.$output_body.fadeIn('fast');
             });
         }
         this.$cached_body.html(
