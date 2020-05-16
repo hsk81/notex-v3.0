@@ -55,54 +55,20 @@ export class MdEditorFooter {
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
 
         if (!this.ed.mobile) {
-            if (this.ed.uiMode === UiMode.simple) {
-                this.minimize(600, true);
+            if (this.ed.uiMode !== UiMode.simple) {
+                this.show();
             } else {
-                this.maximize(600, true);
+                this.hide();
             }
         } else {
             this.hide();
         }
     }
     private hide() {
-        if (!this.ed.mirror) {
-            this.$input.css({ 'height': '100%' });
-        }
-        this.$footer.hide();
-        this.$footer.css({ 'width': '48px' });
+        this.$lhs.removeClass('with-footer');
     }
     private show() {
-        if (!this.ed.mirror) {
-            this.$input.css({ 'height': 'calc(100% - 48px)' });
-        }
-        this.$footer.show();
-        this.$footer.css({ 'width': '100%' });
-    }
-    private minimize(ms: number = 200, fade: boolean = false) {
-        if (!this.ed.mirror) {
-            this.$input.css({ 'height': '100%' });
-        }
-        if (fade) {
-            this.$footer.hide();
-            this.$footer.css({ 'width': '48px' });
-            this.$footer.fadeIn(ms);
-        } else {
-            this.$footer.show();
-            this.$footer.animate({ 'width': '48px' }, ms);
-        }
-    }
-    private maximize(ms: number = 200, fade: boolean = false) {
-        if (!this.ed.mirror) {
-            this.$input.css({ 'height': 'calc(100% - 48px)' });
-        }
-        if (fade) {
-            this.$footer.hide();
-            this.$footer.css({ 'width': '100%' });
-            this.$footer.fadeIn(ms);
-        } else {
-            this.$footer.show();
-            this.$footer.animate({ 'width': '100%' }, ms);
-        }
+        this.$lhs.addClass('with-footer');
     }
     private onMirrorClick() {
         if (this.ed.mirror) {
@@ -122,7 +88,7 @@ export class MdEditorFooter {
             );
             this.$mirror.tooltip('hide');
             this.$find.val('');
-            this.minimize();
+            this.hide(); //.minimize();
         } else {
             let scroll = {
                 left: this.ed.$input.scrollLeft(),
@@ -140,7 +106,7 @@ export class MdEditorFooter {
             );
             this.$mirror.tooltip('hide');
             this.$find.val('');
-            this.maximize();
+            this.show(); //.maximize();
         }
     }
     @buffered(40)
@@ -426,8 +392,11 @@ export class MdEditorFooter {
             on: '/static/png/fatcow/16x16/spellcheck.png'
         }
     };
+    private get $lhs() {
+        return $('.lhs');
+    }
     public get $input() {
-        return $('#input');
+        return this.$lhs.find('#input');
     }
     private get $footer() {
         return this.$input.siblings('.footer');

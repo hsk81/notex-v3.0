@@ -161,11 +161,9 @@ export class MdEditor {
             })
             .show();
         if (options.footer) {
-            this.$footer.show();
-            this.$input.css('height', 'calc(100% - 47px)');
+            this.$lhs.addClass('with-footer');
         } else {
-            this.$footer.hide();
-            this.$input.css('height', '100%');
+            this.$lhs.removeClass('with-footer');
         }
         this.simple = true;
         return this.$input;

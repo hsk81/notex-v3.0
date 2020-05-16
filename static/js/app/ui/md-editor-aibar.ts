@@ -20,13 +20,9 @@ export class MdEditorAibar {
     }
     public constructor() {
         if (this.ed.empty) {
-            this.$aibar.fadeIn('slow', () => {
-                this.$aibar.find('[data-toggle="tooltip"]').tooltip();
-                this.$aibar.find('[data-toggle="popover"]').popover();
-            });
-            this.$viewer.css({
-                height: 'calc(100% - 47px)'
-            });
+            this.$aibar.find('[data-toggle="tooltip"]').tooltip();
+            this.$aibar.find('[data-toggle="popover"]').popover();
+            this.$rhs.addClass('with-aibar');
         }
         this.events();
     }
@@ -61,14 +57,9 @@ export class MdEditorAibar {
     @buffered(40)
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {
-            this.$aibar.fadeIn('fast', () => this.$viewer.css({
-                height: 'calc(100% - 47px)'
-            }));
+            this.$rhs.addClass('with-aibar');
         } else {
-            this.$viewer.css({
-                height: 'calc(100%)'
-            });
-            this.$aibar.hide();
+            this.$rhs.removeClass('with-aibar');
         }
     }
     private async onRhsButtonClick() {
@@ -143,8 +134,11 @@ export class MdEditorAibar {
             value: window['ai-page'] = value
         });
     }
+    private get $rhs() {
+        return $('.rhs');
+    }
     private get $aibar() {
-        return $('.aibar');
+        return this.$rhs.find('.aibar');
     }
     private get $lhsButton() {
         return this.$aibar.find('button.ai-lhs');
@@ -156,7 +150,7 @@ export class MdEditorAibar {
         return this.$aibar.find('button.ai-rhs');
     }
     private get $viewer() {
-        return $('iframe.viewer');
+        return this.$rhs.find('iframe.viewer');
     }
     private get ed() {
         return MdEditor.me;
