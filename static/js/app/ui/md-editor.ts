@@ -185,12 +185,12 @@ export class MdEditor {
             this.$output_body.html('');
         }
         if (value.length === 0) {
-            $.get(this.placeholder).done((html) => {
+            $.get(this.placeholder).done((html) => setTimeout(() => {
                 this.$cached_body.hide().html(html);
-                this.$cached_body.fadeIn('fast');
+                this.$cached_body.fadeIn('slow');
                 this.$output_body.hide().html(html);
-                this.$output_body.fadeIn('fast');
-            });
+                this.$output_body.fadeIn('slow');
+            }, 600));
         }
         this.$cached_body.html(
             MarkdownIt.me.render(

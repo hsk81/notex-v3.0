@@ -156,9 +156,6 @@ export class MdEditorAibar {
     private get $rhsButton() {
         return this.$aibar.find('button.ai-rhs');
     }
-    private get $viewer() {
-        return this.$rhs.find('iframe.viewer');
-    }
     private get ed() {
         return MdEditor.me;
     }
