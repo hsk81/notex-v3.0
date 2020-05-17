@@ -63,12 +63,59 @@
                             title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!">
                     </span>
                     <textarea type="textarea" class="form-control" id="post-scripts" placeholder="<script>..</script>"><!--
-  -- Highlight.js: 9.13.1
+  -- Highlight.js v10.0.2
   -->
 
-<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css' rel='stylesheet'></link>
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/default.min.css' rel='stylesheet'></link>
 
-<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js'></script></textarea>
+<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js'></script>
+
+<!--
+  -- MathJax v3.y.z
+  -->
+
+<script>
+function script(url) {
+    var element = document.createElement('script');
+    element.src = url; element.async = true;
+    document.head.appendChild(element);
+};
+if (
+    typeof window.MathJax === 'undefined'
+) {
+    window.MathJax = {
+        startup: {
+            ready: () => {
+                MathJax.startup.defaultReady();
+                if (typeof PATCH === 'function') {
+                    MathJax.startup.promise.then(PATCH);
+                }
+            }
+        },
+        tex: {
+            inlineMath: [['$', '$'], ['$$', '$$']],
+            tags: 'ams',
+        },
+        svg: {
+            fontCache: 'global'
+        },
+        addMenu: [
+            0, '', ''
+        ]
+    };
+    script(
+        'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+    );
+} else if (
+    typeof window.MathJax.typesetPromise === 'function'
+) {
+    MathJax.startup.promise = MathJax.startup.promise.then(() => {
+    MathJax.texReset(); return typeof PATCH === 'function'
+        ? MathJax.typesetPromise().then(PATCH)
+        : MathJax.typesetPromise();
+    });
+};
+</script></textarea>
                 </div>
 
                 <div class="post-settings styles input-group" style="display: none;">
@@ -107,9 +154,11 @@
 }
 .post-body figure > img {
     box-shadow: none;
+    border-radius: 2mm;
     max-width: calc(100% - 1em);
 }
 .post-body figure > figcaption {
+    text-align: center;
 }
 .post-body .footnotes {
     font-size: small;

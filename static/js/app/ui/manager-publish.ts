@@ -346,7 +346,7 @@ export class PublishManager {
         return $content.html();
     }
     private get $viewer() {
-        return this.editor.$viewer;
+        return this.editor.$viewer.contents();
     }
     private get $dialog() {
         return $('#publish-dlg');
