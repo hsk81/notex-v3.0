@@ -4,7 +4,26 @@ import { MdEditor } from "./md-editor";
 import { TemplateManager } from "./manager-template";
 import { Template } from "./manager-template";
 
+import { IPFS, Buffer } from "../ipfs/index";
 declare const $: JQueryStatic;
+
+function html(head: string, body: string) {
+    return `<!DOCTYPE html>`
+        + `<html>`
+        + `<head>`
+            + `<meta charset="utf-8"/>`
+            + `<style>`
+            + `body {`
+                + `margin: 0 auto;`
+                + `padding: 1em;`
+                + `width: 768px;`
+            + `}`
+            +`<style>`
+            + `${head}`
+        + `</head>`
+        + `<body>${body}</body>`
+        + `</html>`;
+}
 
 @trace
 export class MdEditorToolbarRhs {
@@ -44,8 +63,25 @@ export class MdEditorToolbarRhs {
     private onRefreshClick() {
         this.editor.render(true);
     }
-    private onPublishClick() {
-        $('#publish-dlg').modal();
+    private onPublishClick(ev: JQuery.Event) {
+        if (ev.ctrlKey) {
+            const $content = this.editor.$viewer.contents();
+            const head = $content.find('head').html();
+            const body = $content.find('body').html();
+            const buffer = Buffer.from(html(head, body));
+            IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
+                hash: string, path: string, size: number
+            }>) => {
+                console.debug('[on:add]', e, files);
+                for (const file of files) {
+                    const url = `https://ipfs.io/ipfs/${file.hash}`;
+                    const tab = window.open(url, '_black');
+                    if (tab) tab.focus();
+                }
+            }))
+        } else {
+            $('#publish-dlg').modal();
+        }
     }
     private onTemplateClick() {
         $('#template-dlg').modal();

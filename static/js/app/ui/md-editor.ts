@@ -400,10 +400,10 @@ export class MdEditor {
             }
             const insert_image = (
                 name: string, hash: string,
-                gateway = 'https://cloudflare-ipfs.com'
+                gateway = 'https://ipfs.io/ipfs'
             ) => {
                 this.replaceSelection(
-                    `![${name||''}](${gateway}/ipfs/${hash})\n`
+                    `![${name||''}](${gateway}/${hash})\n`
                 );
             };
             IPFS.me((ipfs: any) => {

@@ -11,7 +11,7 @@ export default function (md: any, options: any) {
                 .replace(/^<script>/ig, '')
                 .replace(/<\/script>$/ig, '');
             if (env.document) {
-                return run(script, env.document);
+                run(script, env.document);
             }
         }
         return tokens[idx].content;
@@ -26,6 +26,5 @@ export default function (md: any, options: any) {
         if (element.parentNode) {
             element.parentNode.removeChild(element);
         }
-        return '';
     }
 };
