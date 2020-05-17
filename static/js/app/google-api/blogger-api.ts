@@ -10,7 +10,7 @@ export class BloggerApi {
 
     public constructor() {
         this._options = {
-            client_id: '284730785285-47g372rrd92mbv201ppb8spmj6kff18m',
+            client_id: '451381712046-9tihtvejim1r84uld3i3igu3983p0qvi.apps.googleusercontent.com',
             scope: 'https://www.googleapis.com/auth/blogger'
         };
     }
