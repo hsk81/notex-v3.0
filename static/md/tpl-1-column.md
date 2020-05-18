@@ -2,7 +2,7 @@
   -- CSS Styles: body
   -- ----------------------------------------------------------------->
 
-<link href="https://fonts.googleapis.com/css2?family=Habibi&display=swap"
+<link href="//fonts.googleapis.com/css2?family=Habibi&display=swap"
       rel="stylesheet">
 
 <style>
@@ -150,7 +150,7 @@
   -- ----------------------------------------------------------------->
 
 <style>
-  @import url('/static/css/lib/highlight/default-10.0.2.min.css')
+  @import url('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/styles/default.min.css')
 </style>
 
 <style>
@@ -241,7 +241,7 @@ ${MD_CONTENT}
       ]
     };
     script(
-      'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+      '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
     );
   } else if (
     typeof window.MathJax.typesetPromise === 'function'
