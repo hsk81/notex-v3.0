@@ -1,3 +1,4 @@
+import { buffered } from "../decorator/buffered";
 import { trace } from "../decorator/trace";
 import { MdEditor } from "./md-editor";
 
@@ -60,10 +61,19 @@ export class MdEditorToolbarRhs {
         this.editor.refresh();
         this.scroll.refresh();
     }
-    private onRefreshClick() {
-        this.editor.render(true);
+    @buffered
+    private onRefreshClick(ev: JQueryEventObject) {
+        const $span = $(ev.target).closest('button').find('span');
+        setTimeout(() => $span.removeClass('spin'), 600);
+        setTimeout(() => $span.addClass('spin'), 0);
+        if (ev.ctrlKey) {
+            this.editor.render('hard');
+        } else {
+            this.editor.render('soft');
+        }
     }
-    private onPublishClick(ev: JQuery.Event) {
+    @buffered
+    private onPublishClick(ev: JQueryEventObject) {
         if (ev.ctrlKey) {
             const $content = this.editor.$viewer.contents();
             const head = $content.find('head').html();
@@ -72,7 +82,6 @@ export class MdEditorToolbarRhs {
             IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
                 hash: string, path: string, size: number
             }>) => {
-                console.debug('[on:add]', e, files);
                 for (const file of files) {
                     const url = `https://ipfs.io/ipfs/${file.hash}`;
                     const tab = window.open(url, '_black');
@@ -81,6 +90,11 @@ export class MdEditorToolbarRhs {
             }))
         } else {
             $('#publish-dlg').modal();
+        }
+    }
+    private onPrintClick() {
+        if (this.editor.$viewer[0].contentWindow) {
+            this.editor.$viewer[0].contentWindow.print();
         }
     }
     private onTemplateClick() {
@@ -94,11 +108,6 @@ export class MdEditorToolbarRhs {
     }
     private onTripleColumnClick() {
         TemplateManager.me.select(Template.TripleColumn);
-    }
-    private onPrintClick() {
-        if (this.editor.$viewer[0].contentWindow) {
-            this.editor.$viewer[0].contentWindow.print();
-        }
     }
     private get $outer() {
         return $('.rhs>.toolbar-outer');

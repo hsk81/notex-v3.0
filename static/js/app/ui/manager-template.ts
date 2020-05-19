@@ -54,7 +54,7 @@ export class TemplateManager {
     public async select(template: Template) {
         this.value = await this.fetch(template);
         this.activateBy(template);
-        this.editor.render(true);
+        this.editor.render('soft');
     }
     private onBsModalShow() {
     }
@@ -63,7 +63,7 @@ export class TemplateManager {
     private onBsModalHide() {
     }
     private onBsModalHidden() {
-        this.editor.render(true);
+        this.editor.render('soft');
     }
     private onPrimaryClick() {
         const url = this.$active.data('url');

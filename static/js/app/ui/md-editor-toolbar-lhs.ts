@@ -687,7 +687,7 @@ export class MdEditorToolbarLhs {
         }
         this.editor.$input.trigger('change');
     }
-    private onImageClick(ev: JQuery.Event) {
+    private onImageClick(ev: JQueryEventObject) {
         if (this.editor.isMode('markdown') === false) {
             return;
         }
@@ -792,7 +792,7 @@ export class MdEditorToolbarLhs {
         inp.setSelectionRange(beg + 2, end + 2);
         this.editor.$input.trigger('change');
     }
-    private onLinkClick(ev: JQuery.Event) {
+    private onLinkClick(ev: JQueryEventObject) {
         if (this.editor.isMode('markdown') === false) {
             return;
         }
@@ -905,7 +905,7 @@ export class MdEditorToolbarLhs {
             this.editor.$input.trigger('change');
         }
     }
-    private onSumClick(ev: JQuery.Event) {
+    private onSumClick(ev: JQueryEventObject) {
         if (this.editor.isMode('markdown') === false) {
             return;
         }
@@ -929,7 +929,7 @@ export class MdEditorToolbarLhs {
         }
         this.editor.focus();
     }
-    private onProductClick(ev: JQuery.Event) {
+    private onProductClick(ev: JQueryEventObject) {
         if (this.editor.isMode('markdown') === false) {
             return;
         }
@@ -981,7 +981,7 @@ export class MdEditorToolbarLhs {
         );
         this.editor.focus();
     }
-    private onVideoClick(ev: JQuery.Event) {
+    private onVideoClick(ev: JQueryEventObject) {
         if (this.editor.isMode('markdown') === false) {
             return;
         }

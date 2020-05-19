@@ -37,7 +37,7 @@ export class MdEditorFooter {
         if (force) this.$footer.hide();
     }
     private events() {
-        this.$footer
+        this.$footer.find('[data-toggle="popover"]')
             .on('blur', (ev) => $(ev.target).popover('hide'))
             .on('click', (ev) => $(ev.target).popover('toggle'))
             .on('keydown', (ev) => $(ev.target).popover('hide'))

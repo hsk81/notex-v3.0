@@ -32,7 +32,7 @@ export class HeaderMenu {
                     if (target && target.readyState === 2 &&
                         typeof target.result === 'string') {
                         self.editor.setValue(target.result);
-                        self.editor.render(true);
+                        self.editor.render('hard');
                         self.editor.focus();
                     }
                 };

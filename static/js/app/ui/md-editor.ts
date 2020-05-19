@@ -98,7 +98,6 @@ export class MdEditor {
             this.toMirror();
         }
         this.events();
-        this.reinit();
     }
     public toMirror(): any {
         const ta = document.getElementById('input') as HTMLTextAreaElement;
@@ -177,14 +176,18 @@ export class MdEditor {
         synchronize(this.$output_body);
     }
     @buffered(40)
-    public render(force = false) {
+    public render(force: 'hard'|'soft'|'none' = 'none') {
         const value = this.getValue();
-        if (force) {
-            this.$cached.remove();
-            this.$output.remove();
-            this.$rhs.prepend(this.output);
-            this.$rhs.prepend(this.cached)
-            this.reinit();
+        switch (force) {
+            case 'hard':
+                this.$output = $('<iframe>', {
+                    id: 'output', class: 'viewer', frameborder: '0'
+                });
+            case 'soft':
+                this.$cached = $('<iframe>', {
+                    id: 'cached', class: 'viewer', frameborder: '0',
+                    style: 'visibility:hidden'
+                });
         }
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => setTimeout(() => {
@@ -427,14 +430,9 @@ export class MdEditor {
             });
         });
     }
-    private reinit() {
-        if (this.$cached[0].contentWindow) {
-            this.$cached[0].contentWindow.PATCH = () => this.patch();
-        }
-    }
     private onEditorChange() {
         $(this).trigger('change');
-        this.render();
+        this.render('none');
     }
     public get mirror(): CodeMirror.Editor | undefined {
         return window['CODE_MIRROR'];
@@ -656,21 +654,21 @@ export class MdEditor {
             return this.$output;
         }
     }
+    private set $cached($element: JQuery<HTMLFrameElement>) {
+        this.$cached.remove();
+        this.$rhs.prepend($element);
+        const window = $element[0].contentWindow;
+        if (window) window.PATCH = () => this.patch();
+    }
     private get $cached() {
         return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
     }
-    private get cached() {
-        return `<iframe `
-            + `id="cached" class="viewer" frameborder="0" `
-            + `style="visibility:hidden"></iframe>`;
+    private set $output($element: JQuery<HTMLFrameElement>) {
+        this.$output.remove();
+        this.$rhs.prepend($element);
     }
     private get $output() {
         return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
-    }
-    private get output() {
-        return `<iframe `
-            + `id="output" class="viewer" frameborder="0" `
-            + `style="visibility:visible"></iframe>`;
     }
     private get $cached_head() {
         return this.$cached.contents().find('head') as JQuery<HTMLElement>;
