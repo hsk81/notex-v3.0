@@ -90,9 +90,6 @@ export class MdEditor {
         return this['_me'];
     }
     public constructor() {
-        if (this.$cached[0].contentWindow) {
-            this.$cached[0].contentWindow.PATCH = () => this.patch();
-        }
         if (this.mobile) {
             this.toInput({ footer: false });
         } else if (this.simple) {
@@ -101,6 +98,7 @@ export class MdEditor {
             this.toMirror();
         }
         this.events();
+        this.reinit();
     }
     public toMirror(): any {
         const ta = document.getElementById('input') as HTMLTextAreaElement;
@@ -182,7 +180,11 @@ export class MdEditor {
     public render(force = false) {
         const value = this.getValue();
         if (force) {
-            this.$output_body.html('');
+            this.$cached.remove();
+            this.$output.remove();
+            this.$rhs.prepend(this.output);
+            this.$rhs.prepend(this.cached)
+            this.reinit();
         }
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => setTimeout(() => {
@@ -425,6 +427,11 @@ export class MdEditor {
             });
         });
     }
+    private reinit() {
+        if (this.$cached[0].contentWindow) {
+            this.$cached[0].contentWindow.PATCH = () => this.patch();
+        }
+    }
     private onEditorChange() {
         $(this).trigger('change');
         this.render();
@@ -652,8 +659,18 @@ export class MdEditor {
     private get $cached() {
         return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
     }
+    private get cached() {
+        return `<iframe `
+            + `id="cached" class="viewer" frameborder="0" `
+            + `style="visibility:hidden"></iframe>`;
+    }
     private get $output() {
         return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
+    }
+    private get output() {
+        return `<iframe `
+            + `id="output" class="viewer" frameborder="0" `
+            + `style="visibility:visible"></iframe>`;
     }
     private get $cached_head() {
         return this.$cached.contents().find('head') as JQuery<HTMLElement>;

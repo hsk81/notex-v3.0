@@ -22,7 +22,7 @@ export class HeaderMenu {
             .on('click', this.onSwapItemClick.bind(this));
     }
     @mine
-    private onOpenItemChange(self: any, ev: any) {
+    private onOpenItemChange(self: HeaderMenu, ev: any) {
         const files = ev.target.files;
         for (let i = 0; i < files.length; i++) {
             if (!files[i].type || files[i].type.match(/text/)) {
@@ -32,6 +32,7 @@ export class HeaderMenu {
                     if (target && target.readyState === 2 &&
                         typeof target.result === 'string') {
                         self.editor.setValue(target.result);
+                        self.editor.render(true);
                         self.editor.focus();
                     }
                 };
