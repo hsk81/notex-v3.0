@@ -221,6 +221,11 @@ ${MD_CONTENT}
     typeof window.MathJax === 'undefined'
   ) {
     window.MathJax = {
+      options: {
+        renderActions: {
+          addMenu: [], checkLoading: []
+        }
+      },
       startup: {
         ready: () => {
           MathJax.startup.defaultReady();
@@ -236,12 +241,9 @@ ${MD_CONTENT}
       svg: {
         fontCache: 'global'
       },
-      addMenu: [
-        0, '', ''
-      ]
     };
     script(
-      '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+      '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
     );
   } else if (
     typeof window.MathJax.typesetPromise === 'function'
