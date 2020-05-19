@@ -212,12 +212,14 @@ export class MdEditor {
         morphdom(this.$output_head[0], this.$cached_head[0], {
             onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
                 return !source.isEqualNode(target);
-            }
+            },
+            childrenOnly: true
         });
         morphdom(this.$output_body[0], this.$cached_body[0], {
             onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
                 return !source.isEqualNode(target);
-            }
+            },
+            childrenOnly: true
         });
     }
     public refresh() {
