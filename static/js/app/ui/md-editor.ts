@@ -655,9 +655,17 @@ export class MdEditor {
         }
     }
     private set $cached($element: JQuery<HTMLFrameElement>) {
-        this.$cached.remove();
-        this.$rhs.prepend($element);
-        const window = $element[0].contentWindow;
+        if (navigator.userAgent.match(/chrome/i)) {
+            this.$cached.remove();
+            this.$rhs.prepend($element);
+        } else {
+            console.debug(
+                '[md-editor.$cached]', '[TODO] fix refresh!'
+            );
+            this.$cached_head.html('');
+            this.$cached_body.html('');
+        }
+        const window = this.$cached.get(0).contentWindow;
         if (window) window.PATCH = () => this.patch();
     }
     private get $cached() {
