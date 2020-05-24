@@ -12,6 +12,7 @@ import { IOverlay } from "../spell-checker/spell-checker";
 import { SpellChecker } from "../spell-checker/spell-checker";
 
 import { IPFS, Buffer } from "../ipfs/index";
+import { gateway } from "../ipfs/index";
 import "./md-editor-mode";
 
 declare const morphdom: any;
@@ -406,11 +407,10 @@ export class MdEditor {
                 return;
             }
             const insert_image = (
-                name: string, hash: string,
-                gateway = 'https://ipfs.io/ipfs'
+                name: string, hash: string
             ) => {
                 this.replaceSelection(
-                    `![${name||''}](${gateway}/${hash})\n`
+                    `![${name||''}](${gateway.get()}/${hash})\n`
                 );
             };
             IPFS.me((ipfs: any) => {
@@ -419,8 +419,11 @@ export class MdEditor {
                     reader.onload = function () {
                         const buffer = Buffer.from(reader.result);
                         ipfs.add(buffer, (e: any, files: any) => {
-                            if (e) return console.error(e);
-                            insert_image(ev_files[i].name, files[0].hash);
+                            if (!e) {
+                                insert_image(ev_files[i].name, files[0].hash);
+                            } else {
+                                console.error(e)
+                            };
                         });
                     };
                     reader.readAsArrayBuffer(ev_files[i]);

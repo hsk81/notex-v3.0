@@ -1,30 +1,13 @@
-import { buffered } from "../decorator/buffered";
-import { trace } from "../decorator/trace";
-import { MdEditor } from "./md-editor";
-
 import { TemplateManager } from "./manager-template";
 import { Template } from "./manager-template";
+import { MdEditor } from "./md-editor";
+
+import { buffered } from "../decorator/buffered";
+import { trace } from "../decorator/trace";
 
 import { IPFS, Buffer } from "../ipfs/index";
+import { gateway, html } from "../ipfs/index";
 declare const $: JQueryStatic;
-
-function html(head: string, body: string) {
-    return `<!DOCTYPE html>`
-        + `<html>`
-        + `<head>`
-            + `<meta charset="utf-8"/>`
-            + `<style>`
-            + `body {`
-                + `margin: 0 auto;`
-                + `padding: 1em;`
-                + `width: 768px;`
-            + `}`
-            +`<style>`
-            + `${head}`
-        + `</head>`
-        + `<body>${body}</body>`
-        + `</html>`;
-}
 
 @trace
 export class MdEditorToolbarRhs {
@@ -82,10 +65,14 @@ export class MdEditorToolbarRhs {
             IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
                 hash: string, path: string, size: number
             }>) => {
-                for (const file of files) {
-                    const url = `https://ipfs.io/ipfs/${file.hash}`;
-                    const tab = window.open(url, '_black');
-                    if (tab) tab.focus();
+                if (!e) {
+                    for (const file of files) {
+                        const url = `${gateway.get()}/${file.hash}`;
+                        const tab = window.open(url, '_black');
+                        if (tab) tab.focus();
+                    }
+                } else {
+                    console.error(e);
                 }
             }))
         } else {

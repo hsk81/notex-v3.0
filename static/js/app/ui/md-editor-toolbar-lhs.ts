@@ -1,5 +1,5 @@
-import { trace } from "../decorator/trace";
 import { MdEditor, Index } from "./md-editor";
+import { trace } from "../decorator/trace";
 
 declare const $: JQueryStatic;
 
