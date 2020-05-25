@@ -409,9 +409,10 @@ export class MdEditor {
             const insert_image = (
                 name: string, hash: string
             ) => {
-                this.replaceSelection(
-                    `![${name||''}](${gateway.get()}/${hash})\n`
-                );
+                const url = `${gateway.get()}/${hash}`;
+                const query = name
+                    ? `?filename=${encodeURIComponent(name)}` : '';
+                this.replaceSelection(`![${name||''}](${url}${query})\n`);
             };
             IPFS.me((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {

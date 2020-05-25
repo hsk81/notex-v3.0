@@ -1,20 +1,22 @@
+type Token = {
+    content: string; tag: string; type: string;
+};
 export default function (md: any, options: any) {
-    md.renderer.rules['html_block'] = function (
-        tokens: Array<{ content: string }>, idx: number,
-        options: any, env: { document: Document }
+    md.core.ruler.push('script', ({ env, tokens }: {
+        env: { document: Document }, tokens: Token[]
+    }) => {
+        if (env.document) tokens
+            .filter((t) => t.type === 'html_block' && t.content)
+            .filter((t) => t.content.trimLeft().match(/^<script>/i))
+            .filter((t) => t.content.trimRight().match(/<\/script>$/i))
+            .map((t) => script(t)).forEach((s) => run(s, env.document));
+    });
+    function script(
+        token: Token
     ) {
-        let script = tokens[idx].content.trim();
-        if (script.match(/^<script>/i) &&
-            script.match(/<\/script>$/i)
-        ) {
-            script = script
-                .replace(/^<script>/ig, '')
-                .replace(/<\/script>$/ig, '');
-            if (env.document) {
-                run(script, env.document);
-            }
-        }
-        return tokens[idx].content;
+        return token.content
+            .trimLeft().replace(/^<script>/ig, '')
+            .trimRight().replace(/<\/script>$/ig, '');
     };
     function run(
         script: string, document: Document
@@ -23,8 +25,6 @@ export default function (md: any, options: any) {
         element.type = 'text/javascript';
         element.textContent = script;
         document.head.appendChild(element);
-        if (element.parentNode) {
-            element.parentNode.removeChild(element);
-        }
+        document.head.removeChild(element);
     }
 };

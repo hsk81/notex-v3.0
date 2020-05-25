@@ -58,9 +58,9 @@ export class MdEditorToolbarRhs {
     @buffered
     private onPublishClick(ev: JQueryEventObject) {
         if (ev.ctrlKey) {
-            const $content = this.editor.$viewer.contents();
-            const head = $content.find('head').html();
-            const body = $content.find('body').html();
+            const $contents = this.editor.$viewer.contents();
+            const head = $contents.find('head').html();
+            const body = $contents.find('body').html();
             const buffer = Buffer.from(html(head, body));
             IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
                 hash: string, path: string, size: number

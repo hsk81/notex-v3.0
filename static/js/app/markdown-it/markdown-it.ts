@@ -10,6 +10,8 @@ import * as markdownitMath from '@npm/markdown-it-math';
 import * as markdownitSub from '@npm/markdown-it-sub';
 import * as markdownitSup from '@npm/markdown-it-sup';
 import * as markdownitVideo from '@npm/markdown-it-video';
+
+import * as markdownitTitle from './markdown-it-title';
 import * as markdownitScript from './markdown-it-script';
 
 declare const hljs: any;
@@ -94,6 +96,9 @@ export class MarkdownIt {
         }
         if (markdownitVideo) {
             this._mdi.use(markdownitVideo);
+        }
+        if (markdownitTitle) {
+            this._mdi.use(markdownitTitle.default);
         }
         if (markdownitScript) {
             this._mdi.use(markdownitScript.default);

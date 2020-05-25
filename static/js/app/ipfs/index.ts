@@ -2,21 +2,21 @@ import { cookie } from "../cookie/cookie";
 import * as Ipfs from '@npm/ipfs';
 export const Buffer = Ipfs.Buffer;
 
-export function html(
+export const html = (
     head: string, body: string
-) {
+) => {
     return `<!DOCTYPE html>`
         + `<html>`
         + `<head>`
             + `<meta charset="utf-8"/>`
+            + `${head}`
             + `<style>`
             + `body {`
                 + `margin: 0 auto;`
                 + `padding: 1em;`
                 + `width: 768px;`
             + `}`
-            +`<style>`
-            + `${head}`
+            + `<style>`
         + `</head>`
         + `<body>${body}</body>`
         + `</html>`;
