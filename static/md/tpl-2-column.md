@@ -1,9 +1,15 @@
 <!-- ------------------------------------------------------------------
-  -- CSS Styles: body
+  -- Meta: head // @todo: <head>...</head>
+  -- ----------------------------------------------------------------->
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<!-- ------------------------------------------------------------------
+  -- CSS Styles: body // @todo: <body>...</body>
   -- ----------------------------------------------------------------->
 
 <link href="//fonts.googleapis.com/css2?family=Habibi&display=swap"
-      rel="stylesheet">
+      rel="stylesheet"/>
 
 <style>
   body {
@@ -13,7 +19,7 @@
 
 <style>
   body {
-    column-count: 2;
+    columns: 360px 2;
   }
 </style>
 

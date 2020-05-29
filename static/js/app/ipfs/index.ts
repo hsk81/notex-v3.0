@@ -9,12 +9,13 @@ export const html = (
         + `<html>`
         + `<head>`
             + `<meta charset="utf-8"/>`
+            + `<meta name="viewport" content="width=device-width,initial-scale=1"/>`
             + `${head}`
             + `<style>`
             + `body {`
                 + `margin: 0 auto;`
                 + `padding: 1em;`
-                + `width: 768px;`
+                + `max-width: 768px;`
             + `}`
             + `<style>`
         + `</head>`
