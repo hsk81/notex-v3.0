@@ -179,6 +179,9 @@ export class MdEditor {
     @buffered(40)
     public render(force: 'hard'|'soft'|'none' = 'none') {
         const value = this.getValue();
+        if (value.length === 0) {
+            force = 'hard';
+        }
         switch (force) {
             case 'hard':
                 this.$output = $('<iframe>', {
