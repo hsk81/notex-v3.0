@@ -19,7 +19,7 @@
 
 <style>
   body {
-    columns: 360px 2;
+    columns: 240px 2;
   }
   @media print {
     body { columns: auto 2; }

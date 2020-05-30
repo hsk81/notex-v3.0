@@ -18,12 +18,7 @@
 </style>
 
 <style>
-  body {
-    columns: auto 1;
-  }
-  @media print {
-    body { columns: auto 1; }
-  }
+  body { columns: auto 1; }
 </style>
 
 <!-- ------------------------------------------------------------------
