@@ -14,6 +14,7 @@ import { SpellChecker } from "../spell-checker/spell-checker";
 import { IPFS, Buffer } from "../ipfs/index";
 import { gateway } from "../ipfs/index";
 import "./md-editor-mode";
+import { resolve } from "dns";
 
 declare const morphdom: any;
 declare const $: JQueryStatic;
@@ -177,12 +178,12 @@ export class MdEditor {
         synchronize(this.$output_body);
     }
     @buffered(40)
-    public render(force: 'hard'|'soft'|'none' = 'none') {
+    public async render(force: 'hard'|'soft'|'none' = 'none') {
         const value = this.getValue();
         if (value.length === 0) {
             force = 'hard';
         }
-        switch (force) {
+        if (force !== 'none') switch (force) {
             case 'hard':
                 this.$output = $('<iframe>', {
                     id: 'output', class: 'viewer', frameborder: '0'
@@ -191,6 +192,14 @@ export class MdEditor {
                 this.$cached = $('<iframe>', {
                     id: 'cached', class: 'viewer', frameborder: '0',
                     style: 'visibility:hidden'
+                });
+            default:
+                await new Promise((resolve) => {
+                    if (!navigator.userAgent.match(/chrome/i)) {
+                        setTimeout(resolve, 100);
+                    } else {
+                        setTimeout(resolve, 0);
+                    }
                 });
         }
         if (value.length === 0) {
@@ -663,16 +672,8 @@ export class MdEditor {
         }
     }
     private set $cached($element: JQuery<HTMLFrameElement>) {
-        if (navigator.userAgent.match(/chrome/i)) {
-            this.$cached.remove();
-            this.$rhs.prepend($element);
-        } else {
-            console.debug(
-                '[md-editor.$cached]', '[TODO] fix hard refresh!'
-            );
-            this.$cached_head.html('');
-            this.$cached_body.html('');
-        }
+        this.$cached.remove();
+        this.$rhs.prepend($element);
         const window = this.$cached.get(0).contentWindow;
         if (window) window.PATCH = () => this.patch();
     }
