@@ -192,6 +192,7 @@ export class MdEditor {
         }
         if (value.length === 0) {
             $.get(this.placeholder).done((html) => setTimeout(() => {
+                if (this.getValue().length > 0) return;
                 this.$cached_body.hide().html(html);
                 this.$cached_body.fadeIn('slow');
                 this.$output_body.hide().html(html);
@@ -664,7 +665,7 @@ export class MdEditor {
             this.$rhs.prepend($element);
         } else {
             console.debug(
-                '[md-editor.$cached]', '[TODO] fix refresh!'
+                '[md-editor.$cached]', '[TODO] fix hard refresh!'
             );
             this.$cached_head.html('');
             this.$cached_body.html('');
