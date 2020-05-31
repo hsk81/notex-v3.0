@@ -219,10 +219,9 @@ export class MdEditor {
         }
         {
             if (md_value.length > 0) {
-                const $header = this.$cached_body.find(':header');
-                DownloadManager.me.title = $header.length !== 0
-                    ? `${$($header[0]).text().slice(0,-2)}.md`
-                    : `${new Date().toISOString()}.md`;
+                DownloadManager.me.title = `${
+                    this.title || new Date().toISOString()
+                }.md`;
                 DownloadManager.me.content = md_value;
             }
         }
@@ -653,6 +652,10 @@ export class MdEditor {
         } else {
             this.index = undefined;
         }
+    }
+    public get title() {
+        const $header = this.$cached_body.find(':header').first();
+        return $header ? $header.text().slice(0,-2) : undefined;
     }
     private get placeholder(): string {
         return '/editor/0200-center/0221-rhs.output-placeholder.html';

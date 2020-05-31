@@ -1,4 +1,6 @@
-import MdEditor from "./md-editor";
+import { TemplateManager } from "./manager-template";
+import { MdEditor } from "./md-editor";
+
 import { trace } from "../decorator/trace";
 import { IPFS, Buffer } from "../ipfs/index";
 import { gateway, html } from "../ipfs/index";
@@ -53,7 +55,7 @@ export class PublishIpfsManager {
     }
     private onBsModalHidden() {
     }
-    private onPrimaryClick() {
+    private async onPrimaryClick() {
         const $ipfs_nav = this.$dialog.find('.nav-ipfs');
         if (!$ipfs_nav.hasClass('active')) {
             return;
@@ -68,9 +70,9 @@ export class PublishIpfsManager {
             });
         }
         if (!this.$ipfs_gateway_ig.hasClass('has-error')) {
-            const head = this.$contents.find('head').html();
+            const head = TemplateManager.me.head({ title: this.editor.title });
             const body = this.$contents.find('body').html();
-            const buffer = Buffer.from(html(head, body));
+            const buffer = Buffer.from(await html(head, body));
             IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
                 hash: string, path: string, size: number
             }>) => {

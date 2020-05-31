@@ -2,23 +2,33 @@ import { cookie } from "../cookie/cookie";
 import * as Ipfs from '@npm/ipfs';
 export const Buffer = Ipfs.Buffer;
 
-export const html = (
-    head: string, body: string
-) => {
+export const html = async (head: string, body: string) => {
+    const link_1 = /<link\s+rel="icon"\s+href(="")?\s*\/?>/gi;
+    const link_2 = /<link\s+href(="")?\s+rel="icon"\s*\/?>/gi;
+    {
+        const icon = async function (
+            path = '/static/ico/favicon.ico'
+        ) {
+            return await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    resolve(reader.result as string);
+                };
+                fetch(path)
+                    .then((res) => res.blob())
+                    .then((blob) => reader.readAsDataURL(blob));
+            })
+        };
+        if (head.match(link_1)) head = head.replace(
+            link_1, `<link rel="icon" href="${await icon()}"/>`
+        );
+        if (head.match(link_2)) head = head.replace(
+            link_2, `<link href="${await icon()}" rel="icon"/>`
+        );
+    }
     return `<!DOCTYPE html>`
         + `<html>`
-        + `<head>`
-            + `<meta charset="utf-8"/>`
-            + `<meta name="viewport" content="width=device-width,initial-scale=1"/>`
-            + `${head}`
-            + `<style>`
-            + `body {`
-                + `margin: 0 auto;`
-                + `padding: 1em;`
-                + `max-width: 768px;`
-            + `}`
-            + `<style>`
-        + `</head>`
+        + `<head>${head}</head>`
         + `<body>${body}</body>`
         + `</html>`;
 }

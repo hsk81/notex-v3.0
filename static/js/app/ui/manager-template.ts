@@ -43,7 +43,10 @@ export class TemplateManager {
         this.$primary.on(
             'click', this.onPrimaryClick.bind(this));
     }
-    public head() {
+    public head({ title }: { title?: string } = {}) {
+        if (title) {
+            return `<title>${title}</title>\n${this.my_head}`;
+        }
         return this.my_head;
     }
     public body(md: string, pattern = '${MD_CONTENT}') {
