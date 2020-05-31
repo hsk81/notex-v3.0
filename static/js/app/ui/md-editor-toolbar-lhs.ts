@@ -5,11 +5,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class MdEditorToolbarLhs {
-    public static get me(this: any): MdEditorToolbarLhs {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR_TOOLBAR_LHS'] = new MdEditorToolbarLhs();
+    public static get me(): MdEditorToolbarLhs {
+        if (window.MD_EDITOR_TOOLBAR_LHS === undefined) {
+            window.MD_EDITOR_TOOLBAR_LHS = new MdEditorToolbarLhs();
         }
-        return this['_me'];
+        return window.MD_EDITOR_TOOLBAR_LHS;
     }
     public constructor() {
         if (!this.editor.mobile) {

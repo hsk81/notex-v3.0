@@ -14,11 +14,11 @@ import "./string/random";
 
 @trace
 export class App {
-    public static get me(this: any): App {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['APP'] = new App();
+    public static get me(): App {
+        if (window.APP === undefined) {
+            window.APP = new App();
         }
-        return this['_me'];
+        return window.APP;
     }
     public constructor() {
         this._header_menu = HeaderMenu.me;
@@ -41,5 +41,4 @@ export class App {
     private readonly _manager_template: TemplateManager;
     private readonly _manager_download: DownloadManager;
 }
-
-window['APP'] = App.me;
+export default App.me;

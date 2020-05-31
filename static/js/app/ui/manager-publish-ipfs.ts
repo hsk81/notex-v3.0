@@ -12,11 +12,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class PublishIpfsManager {
-    public static get me(this: any): PublishIpfsManager {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['PUBLISH_IPFS_DIALOG'] = new PublishIpfsManager();
+    public static get me(): PublishIpfsManager {
+        if (window.PUBLISH_IPFS_MANAGER === undefined) {
+            window.PUBLISH_IPFS_MANAGER = new PublishIpfsManager();
         }
-        return this['_me'];
+        return window.PUBLISH_IPFS_MANAGER;
     }
     private get ipfs_gateway(): string {
         return gateway.get() as string;
@@ -73,15 +73,11 @@ export class PublishIpfsManager {
             const head = TemplateManager.me.head({ title: this.editor.title });
             const body = this.$contents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
-            IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
-                hash: string, path: string, size: number
-            }>) => {
-                if (!e) {
-                    for (const file of files) {
-                        const url = `${gateway}/${file.hash}`;
-                        const tab = window.open(url, '_black');
-                        if (tab) tab.focus();
-                    }
+            IPFS.me(async (ipfs: any) => {
+                for await (const item of ipfs.add(buffer)) {
+                    const url = `${gateway}/${item.cid}`;
+                    const tab = window.open(url, '_black');
+                    if (tab) tab.focus();
                     this.ipfs_gateway = gateway;
                     this.$primary.prop('disabled', false);
                     this.$primary.addClass('btn-success');
@@ -90,13 +86,8 @@ export class PublishIpfsManager {
                         $('#publish-dlg').modal('hide');
                         this.$primary.button('reset');
                     }, 600);
-                } else {
-                    this.$primary.prop('disabled', false);
-                    this.$primary.addClass('btn-danger');
-                    this.$primary.button('reset');
-                    console.error(e);
                 }
-            }));
+            });
             this.$primary.prop('disabled', true);
             this.$primary.removeClass('btn-success');
             this.$primary.removeClass('btn-warning');

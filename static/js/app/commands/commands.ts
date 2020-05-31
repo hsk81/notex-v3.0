@@ -19,11 +19,11 @@ export class Command implements ICommand {
 
 @trace
 export class Commands {
-    public static get me(this: any): Commands {
-        if (this['_me'] === undefined) {
-            this['_me'] = new Commands();
+    public static get me(): Commands {
+        if (window.COMMANDS === undefined) {
+            window.COMMANDS = new Commands();
         }
-        return this['_me'];
+        return window.COMMANDS;
     }
 
     private _redone: Array<IExCommand>;

@@ -15,11 +15,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class PublishBlogManager {
-    public static get me(this: any): PublishBlogManager {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['PUBLISH_BLOG_DIALOG'] = new PublishBlogManager();
+    public static get me(): PublishBlogManager {
+        if (window.PUBLISH_BLOG_MANAGER === undefined) {
+            window.PUBLISH_BLOG_MANAGER = new PublishBlogManager();
         }
-        return this['_me'];
+        return window.PUBLISH_BLOG_MANAGER;
     }
     private get blog_url(): string {
         return cookie.get<string>('blog-url') as string;

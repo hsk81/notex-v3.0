@@ -9,11 +9,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class HeaderMenu {
-    public static get me(this: any): HeaderMenu {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['HEADER_MENU'] = new HeaderMenu();
+    public static get me(): HeaderMenu {
+        if (window.HEADER_MENU === undefined) {
+            window.HEADER_MENU = new HeaderMenu();
         }
-        return this['_me'];
+        return window.HEADER_MENU;
     }
     public constructor() {
         this.$openItem

@@ -1,22 +1,13 @@
-interface Window {
-    onGoogleApiClientLoad: Function;
-    gapi: any;
-}
-
-declare const window: Window;
-
 export class GoogleApi {
-    public static get me(this: any): GoogleApi {
-        if (this['_me'] === undefined) {
-            this['_me'] = new GoogleApi();
+    public static get me(): GoogleApi {
+        if (window.GOOGLE_API === undefined) {
+            window.GOOGLE_API = new GoogleApi();
         }
-        return this['_me'];
+        return window.GOOGLE_API;
     }
-
     public constructor() {
         this._loadUrlTpl = 'https://apis.google.com/js/client.js?onload={0}';
     }
-
     public get(callback: Function, ms: number = 2048, n: number = 2) {
         if (typeof window.gapi !== 'undefined') {
             callback(window.gapi);
@@ -47,5 +38,4 @@ export class GoogleApi {
     }
     private _loadUrlTpl: string;
 }
-
 export default GoogleApi;

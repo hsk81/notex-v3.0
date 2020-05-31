@@ -9,11 +9,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class MdEditorFooter {
-    public static get me(this: any): MdEditorFooter {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR_FOOTER'] = new MdEditorFooter();
+    public static get me(): MdEditorFooter {
+        if (window.MD_EDITOR_FOOTER === undefined) {
+            window.MD_EDITOR_FOOTER = new MdEditorFooter();
         }
-        return this['_me'];
+        return window.MD_EDITOR_FOOTER;
     }
     public constructor() {
         if (!this.ed.mobile) {

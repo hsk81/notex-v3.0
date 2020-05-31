@@ -21,11 +21,11 @@ const TemplatePath = {
 };
 @trace
 export class TemplateManager {
-    public static get me(this: any): TemplateManager {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['TEMPLATE_DIALOG'] = new TemplateManager();
+    public static get me(): TemplateManager {
+        if (window.TEMPLATE_MANAGER === undefined) {
+            window.TEMPLATE_MANAGER = new TemplateManager();
         }
-        return this['_me'];
+        return window.TEMPLATE_MANAGER;
     }
     public constructor() {
         this.select(

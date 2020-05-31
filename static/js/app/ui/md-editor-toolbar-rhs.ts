@@ -11,11 +11,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class MdEditorToolbarRhs {
-    public static get me(this: any): MdEditorToolbarRhs {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR_TOOLBAR_RHS'] = new MdEditorToolbarRhs();
+    public static get me(): MdEditorToolbarRhs {
+        if (window.MD_EDITOR_TOOLBAR_RHS === undefined) {
+            window.MD_EDITOR_TOOLBAR_RHS = new MdEditorToolbarRhs();
         }
-        return this['_me'];
+        return window.MD_EDITOR_TOOLBAR_RHS;
     }
     public constructor() {
         if (!this.editor.mobile) {
@@ -62,19 +62,13 @@ export class MdEditorToolbarRhs {
             const head = TemplateManager.me.head({ title: this.editor.title });
             const body = $contents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
-            IPFS.me((ipfs: any) => ipfs.add(buffer, (e: any, files: Array<{
-                hash: string, path: string, size: number
-            }>) => {
-                if (!e) {
-                    for (const file of files) {
-                        const url = `${gateway.get()}/${file.hash}`;
-                        const tab = window.open(url, '_black');
-                        if (tab) tab.focus();
-                    }
-                } else {
-                    console.error(e);
+            IPFS.me(async (ipfs: any) => {
+                for await (const item of ipfs.add(buffer)) {
+                    const url = `${gateway.get()}/${item.cid}`;
+                    const tab = window.open(url, '_black');
+                    if (tab) tab.focus();
                 }
-            }))
+            });
         } else {
             $('#publish-dlg').modal();
         }

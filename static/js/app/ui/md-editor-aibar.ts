@@ -12,11 +12,11 @@ export enum AiMode {
 }
 @trace
 export class MdEditorAibar {
-    public static get me(this: any): MdEditorAibar {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR_OVERLAY'] = new MdEditorAibar();
+    public static get me(): MdEditorAibar {
+        if (window.MD_EDITOR_AIBAR === undefined) {
+            window.MD_EDITOR_AIBAR = new MdEditorAibar();
         }
-        return this['_me'];
+        return window.MD_EDITOR_AIBAR;
     }
     public constructor() {
         if (this.ed.empty) {

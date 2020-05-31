@@ -20,11 +20,11 @@ declare const hljs: any;
  * @see: https://markdown-it.github.io/markdown-it/
  */
 export class MarkdownIt {
-    public static get me(this: any): MarkdownIt {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MARKDOWN_IT'] = new MarkdownIt();
+    public static get me(): MarkdownIt {
+        if (window.MARKDOWN_IT === undefined) {
+            window.MARKDOWN_IT = new MarkdownIt();
         }
-        return this['_me'];
+        return window.MARKDOWN_IT;
     }
 
     public constructor() {

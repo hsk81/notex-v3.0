@@ -84,11 +84,11 @@ export enum UiMode {
 }
 @trace
 export class MdEditor {
-    public static get me(this: any): MdEditor {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['MD_EDITOR'] = new MdEditor();
+    public static get me(): MdEditor {
+        if (window.MD_EDITOR === undefined) {
+            window.MD_EDITOR = new MdEditor();
         }
-        return this['_me'];
+        return window.MD_EDITOR;
     }
     public constructor() {
         if (this.mobile) {
@@ -434,20 +434,14 @@ export class MdEditor {
             IPFS.me((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {
                     const reader = new FileReader();
-                    reader.onload = function () {
+                    reader.onload = async function () {
                         const buffer = Buffer.from(reader.result);
-                        ipfs.add(buffer, (e: any, files: any) => {
-                            if (!e) {
-                                insert_image(ev_files[i].name, files[0].hash);
-                            } else {
-                                console.error(e)
-                            };
-                        });
+                        for await (const item of ipfs.add(buffer)) {
+                            insert_image(ev_files[i].name, item.cid);
+                        }
                     };
                     reader.readAsArrayBuffer(ev_files[i]);
                 }
-            }).catch((e) => {
-                console.error(e);
             });
         });
     }

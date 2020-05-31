@@ -55,7 +55,7 @@ def npm_mdi_sup(any, name='markdown-it-sup-2.0.0', ext='js'):
 @app.get('/<any:path>/@npm/ipfs.<ext:re:[^/]+>')
 def npm_ipfs(any, name='ipfs', ext='js'):
 
-    path = 'dist/{0}.{1}'.format('index', ext)
+    path = 'dist/{0}.min.{1}'.format('index', ext)
     root = os.path.normpath('node_modules/{0}'.format(name))
     return static_file(path, root=root)
 

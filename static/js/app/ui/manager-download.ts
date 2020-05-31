@@ -3,11 +3,11 @@ import { HeaderMenu } from "./header-menu";
 
 @trace
 export class DownloadManager {
-    public static get me(this: any): DownloadManager {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['DOWNLOAD_MANAGER'] = new DownloadManager();
+    public static get me(): DownloadManager {
+        if (window.DOWNLOAD_MANAGER === undefined) {
+            window.DOWNLOAD_MANAGER = new DownloadManager();
         }
-        return this['_me'];
+        return window.DOWNLOAD_MANAGER;
     }
     public set title(title: string) {
         this.$downloadLink.attr("download", title);
@@ -21,5 +21,4 @@ export class DownloadManager {
         return HeaderMenu.me.$saveItem;
     }
 }
-
 export default DownloadManager;

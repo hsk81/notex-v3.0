@@ -1,11 +1,11 @@
 import GoogleApi from "./google-api";
 
 export class BloggerApi {
-    public static get me(this: any): BloggerApi {
-        if (this['_me'] === undefined) {
-            this['_me'] = new BloggerApi();
+    public static get me(): BloggerApi {
+        if (window.BLOGGER_API === undefined) {
+            window.BLOGGER_API = new BloggerApi();
         }
-        return this['_me'];
+        return window.BLOGGER_API;
     }
 
     public constructor() {

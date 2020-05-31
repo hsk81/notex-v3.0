@@ -12,11 +12,11 @@ declare const $: JQueryStatic;
 
 @trace
 export class PublishManager {
-    public static get me(this: any): PublishManager {
-        if (this['_me'] === undefined) {
-            this['_me'] = window['PUBLISH_DIALOG'] = new PublishManager();
+    public static get me(): PublishManager {
+        if (window.PUBLISH_MANAGER === undefined) {
+            window.PUBLISH_MANAGER = new PublishManager();
         }
-        return this['_me'];
+        return window.PUBLISH_MANAGER;
     }
     public constructor() {
         this.$dialog.on(
