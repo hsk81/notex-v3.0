@@ -14,10 +14,10 @@ export enum Template {
     TripleColumn = '3-column'
 }
 const TemplatePath = {
-    [Template.Empty]: '/static/html/tpl-0-empty',
-    [Template.SingleColumn]: '/static/html/tpl-1-column',
-    [Template.DoubleColumn]: '/static/html/tpl-2-column',
-    [Template.TripleColumn]: '/static/html/tpl-3-column'
+    [Template.Empty]: '/static/tpl/0-empty',
+    [Template.SingleColumn]: '/static/tpl/1-column',
+    [Template.DoubleColumn]: '/static/tpl/2-column',
+    [Template.TripleColumn]: '/static/tpl/3-column'
 };
 @trace
 export class TemplateManager {
@@ -59,8 +59,8 @@ export class TemplateManager {
     }
     public async select(template: Template) {
         const path = TemplatePath[template];
-        this.my_head = await this.fetch(`${path}.head.html`);
-        this.my_body = await this.fetch(`${path}.body.html`);
+        this.my_head = await this.fetch(`${path}.head.md`);
+        this.my_body = await this.fetch(`${path}.body.md`);
         this.activateBy(template);
         this.editor.render('soft');
     }
