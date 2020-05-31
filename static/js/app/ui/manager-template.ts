@@ -8,16 +8,16 @@ type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
     button: (action: string) => JQueryEx<T>;
 };
 export enum Template {
-    Empty = '/static/md/tpl-0-empty',
-    SingleColumn = '/static/md/tpl-1-column',
-    DoubleColumn = '/static/md/tpl-2-column',
-    TripleColumn = '/static/md/tpl-3-column'
+    Empty = 'empty',
+    SingleColumn = '1-column',
+    DoubleColumn = '2-column',
+    TripleColumn = '3-column'
 }
-const TemplateClasses = {
-    [Template.Empty]: 'empty',
-    [Template.SingleColumn]: '1-column',
-    [Template.DoubleColumn]: '2-column',
-    [Template.TripleColumn]: '3-column'
+const TemplatePath = {
+    [Template.Empty]: '/static/html/tpl-0-empty',
+    [Template.SingleColumn]: '/static/html/tpl-1-column',
+    [Template.DoubleColumn]: '/static/html/tpl-2-column',
+    [Template.TripleColumn]: '/static/html/tpl-3-column'
 };
 @trace
 export class TemplateManager {
@@ -29,7 +29,7 @@ export class TemplateManager {
     }
     public constructor() {
         this.select(
-            this.$active.data('url'));
+            this.$active.data('tpl') as Template);
         this.$dialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.$dialog.on(
@@ -58,8 +58,9 @@ export class TemplateManager {
         return lhs + md + rhs;
     }
     public async select(template: Template) {
-        this.my_head = await this.fetch(`${template}.head.html`);
-        this.my_body = await this.fetch(`${template}.body.md`);
+        const path = TemplatePath[template];
+        this.my_head = await this.fetch(`${path}.head.html`);
+        this.my_body = await this.fetch(`${path}.body.html`);
         this.activateBy(template);
         this.editor.render('soft');
     }
@@ -73,8 +74,7 @@ export class TemplateManager {
         this.editor.render('soft');
     }
     private onPrimaryClick() {
-        const url = this.$active.data('url');
-        this.select(url as Template);
+        this.select(this.$active.data('tpl') as Template);
         this.$dialog.modal('hide')
     }
     private onItemClick(ev: Event) {
@@ -86,7 +86,9 @@ export class TemplateManager {
         $target.closest('a').addClass('active');
     }
     private activateBy(template: Template) {
-        this.activate(this.$item.filter(`.${TemplateClasses[template]}`));
+        this.activate(this.$item.filter(function () {
+            return $(this).data('tpl') === template;
+        }));
     }
     private get $dialog() {
         return $('#template-dlg');
