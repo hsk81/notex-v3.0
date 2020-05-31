@@ -90,10 +90,9 @@ export class PublishBlogManager {
         if (blog_url && typeof blog_url === 'string') {
             $blog_url.val(blog_url);
         }
-        const $headers = this.$viewer.find(':header');
-        const title = $headers.first().text();
+        const title = MdEditor.me.title;;
         if (title && typeof title === 'string') {
-            $post_title.val(title.replace('¶', '').trim());
+            $post_title.val(title);
         }
         $post_settings.hide();
         $post_scripts_chk.prop('checked', this.scripts_flag);
@@ -198,8 +197,8 @@ export class PublishBlogManager {
         } else {
             BloggerApi.me.get((blogger: any) => {
                 const on_done = (res: any) => {
-                    const blog = assert(res && res.result),
-                        update = $post_title_cb.prop('checked');
+                    const blog = assert(res && res.result);
+                    const update = $post_title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
                         const on_done = (res: any) => {
                             const posts = res.result && res.result.items || [],
@@ -334,9 +333,6 @@ export class PublishBlogManager {
             $content.find(':header').first().remove();
         }
         return $content.html();
-    }
-    private get $viewer() {
-        return this.editor.$viewer.contents();
     }
     private get $dialog() {
         return $('#publish-dlg');
