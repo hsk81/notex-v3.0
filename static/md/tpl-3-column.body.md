@@ -1,11 +1,5 @@
 <!-- ------------------------------------------------------------------
-  -- Meta: head // @todo: <head>...</head>
-  -- ----------------------------------------------------------------->
-
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-
-<!-- ------------------------------------------------------------------
-  -- CSS Styles: body // @todo: <body>...</body>
+  -- CSS Styles: body
   -- ----------------------------------------------------------------->
 
 <link href="//fonts.googleapis.com/css2?family=Habibi&display=swap"
@@ -14,15 +8,15 @@
 <style>
   body {
     font-family: Habibi, serif;
+    margin: 0 auto;
+    max-width: 768px;
+    padding: 0.5em;
   }
-</style>
-
-<style>
   body {
-    columns: 240px 2;
+    columns: 160px 3;
   }
   @media print {
-    body { columns: auto 2; }
+    body { columns: auto 3; }
   }
 </style>
 

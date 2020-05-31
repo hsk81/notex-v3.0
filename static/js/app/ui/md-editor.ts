@@ -14,7 +14,6 @@ import { SpellChecker } from "../spell-checker/spell-checker";
 import { IPFS, Buffer } from "../ipfs/index";
 import { gateway } from "../ipfs/index";
 import "./md-editor-mode";
-import { resolve } from "dns";
 
 declare const morphdom: any;
 declare const $: JQueryStatic;
@@ -179,63 +178,69 @@ export class MdEditor {
     }
     @buffered(40)
     public async render(force: 'hard'|'soft'|'none' = 'none') {
-        const value = this.getValue();
-        if (value.length === 0) {
-            force = 'hard';
+        const md_value = this.getValue();
+        {
+            if (md_value.length === 0) {
+                force = 'hard';
+            }
+            if (force !== 'none') switch (force) {
+                case 'hard':
+                    this.$output = $('<iframe>', {
+                        id: 'output', class: 'viewer', frameborder: '0'
+                    });
+                case 'soft':
+                    this.$cached = $('<iframe>', {
+                        id: 'cached', class: 'viewer', frameborder: '0',
+                        style: 'visibility:hidden'
+                    });
+                default:
+                    const ms = !navigator.userAgent.match(/chrome/i) ? 100 : 0;
+                    await new Promise((resolve) => setTimeout(resolve, ms));
+            }
         }
-        if (force !== 'none') switch (force) {
-            case 'hard':
-                this.$output = $('<iframe>', {
-                    id: 'output', class: 'viewer', frameborder: '0'
-                });
-            case 'soft':
-                this.$cached = $('<iframe>', {
-                    id: 'cached', class: 'viewer', frameborder: '0',
-                    style: 'visibility:hidden'
-                });
-            default:
-                await new Promise((resolve) => {
-                    if (!navigator.userAgent.match(/chrome/i)) {
-                        setTimeout(resolve, 100);
-                    } else {
-                        setTimeout(resolve, 0);
-                    }
-                });
+        {
+            if (md_value.length === 0) {
+                $.get(this.placeholder).done((html) => setTimeout(() => {
+                    if (this.getValue().length > 0) return;
+                    this.$cached_body.hide().html(html);
+                    this.$cached_body.fadeIn('slow');
+                    this.$output_body.hide().html(html);
+                    this.$output_body.fadeIn('slow');
+                }, 600));
+            }
         }
-        if (value.length === 0) {
-            $.get(this.placeholder).done((html) => setTimeout(() => {
-                if (this.getValue().length > 0) return;
-                this.$cached_body.hide().html(html);
-                this.$cached_body.fadeIn('slow');
-                this.$output_body.hide().html(html);
-                this.$output_body.fadeIn('slow');
-            }, 600));
-        }
-        this.$cached_body.html(
-            MarkdownIt.me.render(
-                TemplateManager.me.apply(value), {
+        {
+            this.$cached_head.html(TemplateManager.me.head());
+            this.$cached_body.html(MarkdownIt.me.render(
+                TemplateManager.me.body(md_value), {
                     document: this.$cached.contents()[0] as Document
                 }
-            )
-        );
-        if (value.length > 0) {
-            const $header = this.$cached_body.find(':header');
-            DownloadManager.me.title = $header.length === 0
-                ? `${new Date().toISOString()}.md`
-                : `${$($header[0]).text().slice(0,-2)}.md`;
-            DownloadManager.me.content = value;
+            ));
+        }
+        {
+            if (md_value.length > 0) {
+                const $header = this.$cached_body.find(':header');
+                DownloadManager.me.title = $header.length !== 0
+                    ? `${$($header[0]).text().slice(0,-2)}.md`
+                    : `${new Date().toISOString()}.md`;
+                DownloadManager.me.content = md_value;
+            }
         }
     }
     @buffered(0)
     public patch() {
         morphdom(this.$output_head[0], this.$cached_head[0], {
-            onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
+            onBeforeElUpdated: (
+                source: HTMLElement, target: HTMLElement
+            ) => {
                 return !source.isEqualNode(target);
             },
             childrenOnly: true
         });
         morphdom(this.$output_body[0], this.$cached_body[0], {
-            onBeforeElUpdated: (source: HTMLElement, target: HTMLElement) => {
+            onBeforeElUpdated: (
+                source: HTMLElement, target: HTMLElement
+            ) => {
                 return !source.isEqualNode(target);
             },
             childrenOnly: true

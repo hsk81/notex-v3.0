@@ -8,10 +8,10 @@ type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
     button: (action: string) => JQueryEx<T>;
 };
 export enum Template {
-    Empty = '/static/md/tpl-0-empty.md',
-    SingleColumn = '/static/md/tpl-1-column.md',
-    DoubleColumn = '/static/md/tpl-2-column.md',
-    TripleColumn = '/static/md/tpl-3-column.md'
+    Empty = '/static/md/tpl-0-empty',
+    SingleColumn = '/static/md/tpl-1-column',
+    DoubleColumn = '/static/md/tpl-2-column',
+    TripleColumn = '/static/md/tpl-3-column'
 }
 const TemplateClasses = {
     [Template.Empty]: 'empty',
@@ -43,16 +43,20 @@ export class TemplateManager {
         this.$primary.on(
             'click', this.onPrimaryClick.bind(this));
     }
-    public apply(md: string, pattern = '${MD_CONTENT}') {
+    public head() {
+        return this.my_head;
+    }
+    public body(md: string, pattern = '${MD_CONTENT}') {
         // avoid `String.prototype.replace` due to $$-sign!
-        const lhs_index = this.value.indexOf(pattern);
-        const lhs = this.value.slice(0, lhs_index);
+        const lhs_index = this.my_body.indexOf(pattern);
+        const lhs = this.my_body.slice(0, lhs_index);
         const rhs_index = lhs_index + pattern.length;
-        const rhs = this.value.slice(rhs_index);
+        const rhs = this.my_body.slice(rhs_index);
         return lhs + md + rhs;
     }
     public async select(template: Template) {
-        this.value = await this.fetch(template);
+        this.my_head = await this.fetch(`${template}.head.html`);
+        this.my_body = await this.fetch(`${template}.body.md`);
         this.activateBy(template);
         this.editor.render('soft');
     }
@@ -97,30 +101,33 @@ export class TemplateManager {
         return MdEditor.me;
     }
     private async fetch(
-        path: string
+        url: string
     ) {
-        return await fetch(path).then((res) => {
-            return res.ok ? res.text() : Promise.resolve(
-                FALLBACK
-            );
-        }).catch((reason) => {
-            console.error(reason);
-            return FALLBACK;
-        });
+        return await fetch(url).then((res) => res.text());
     }
-    private get value(): string {
-        if (this._value === undefined) {
-            this._value = FALLBACK;
+    private get my_head(): string {
+        if (this._my_head === undefined) {
+            this._my_head = HEAD_FALLBACK;
         }
-        return this._value;
+        return this._my_head;
     }
-    private set value(text: string) {
-        this._value = text;
+    private set my_head(text: string) {
+        this._my_head = text;
     }
-    private _value?: string;
+    private get my_body(): string {
+        if (this._my_body === undefined) {
+            this._my_body = BODY_FALLBACK;
+        }
+        return this._my_body;
+    }
+    private set my_body(text: string) {
+        this._my_body = text;
+    }
+    private _my_head?: string;
+    private _my_body?: string;
 }
-const FALLBACK = '${MD_CONTENT}\n'
-    + '<script>'
-    + 'if (typeof PATCH !== "undefined") PATCH();'
-    + '</script>';
+const HEAD_FALLBACK =
+    '<meta name="viewport" content="width=device-width,initial-scale=1"/>';
+const BODY_FALLBACK = '${MD_CONTENT}\n'
+    + '<script>if (typeof PATCH !== "undefined") PATCH();</script>';
 export default TemplateManager;
