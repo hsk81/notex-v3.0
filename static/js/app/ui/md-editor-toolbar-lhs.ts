@@ -1,69 +1,70 @@
-import { MdEditor, Index } from "./md-editor";
-import { trace } from "../decorator/trace";
+import { MdEditor } from "./md-editor";
+import { Index } from "./md-index";
+import { Ui } from "./ui";
 
-declare const $: JQueryStatic;
+import { trace } from "../decorator/trace";
 
 @trace
 export class MdEditorToolbarLhs {
-    public static get me(): MdEditorToolbarLhs {
+    public static get me() {
         if (window.MD_EDITOR_TOOLBAR_LHS === undefined) {
             window.MD_EDITOR_TOOLBAR_LHS = new MdEditorToolbarLhs();
         }
         return window.MD_EDITOR_TOOLBAR_LHS;
     }
     public constructor() {
-        if (!this.editor.mobile) {
-            this.$outer.fadeIn('slow', () => {
-                this.$toolbar.find('[data-toggle="tooltip"]').tooltip();
-                this.$toolbar.find('[data-toggle="popover"]').popover();
+        if (!this.ed.mobile) {
+            this.ui.$lhsToolbarOuter.fadeIn('slow', () => {
+                this.ui.$lhsToolbar.find('[data-toggle="tooltip"]').tooltip();
+                this.ui.$lhsToolbar.find('[data-toggle="popover"]').popover();
                 this.refresh();
             });
         }
-        this.$bold
+        this.ui.$toolBold
             .on('click', this.onBoldClick.bind(this));
-        this.$copy
+        this.ui.$toolCopy
             .on('click', this.onCopyClick.bind(this));
-        this.$cut
+        this.ui.$toolCut
             .on('click', this.onCutClick.bind(this));
-        this.$erase
+        this.ui.$toolErase
             .on('click', this.onEraseClick.bind(this));
-        this.$font
+        this.ui.$toolFont
             .on('click', this.onCommentClick.bind(this));
-        this.$header
+        this.ui.$toolHeader
             .on('click', this.onHeaderClick.bind(this));
-        this.$image
+        this.ui.$toolImage
             .on('click', this.onImageClick.bind(this));
-        this.$indent
+        this.ui.$toolIndent
             .on('click', this.onIndentClick.bind(this));
-        this.$italic
+        this.ui.$toolItalic
             .on('click', this.onItalicClick.bind(this));
-        this.$link
+        this.ui.$toolLink
             .on('click', this.onLinkClick.bind(this));
-        this.$outdent
+        this.ui.$toolOutdent
             .on('click', this.onOutdentClick.bind(this));
-        this.$paste
+        this.ui.$toolPaste
             .on('click', this.onPasteClick.bind(this));
-        this.$product
+        this.ui.$toolProduct
             .on('click', this.onProductClick.bind(this));
-        this.$redo
+        this.ui.$toolRedo
             .on('click', this.onRedoClick.bind(this));
-        this.$sum
+        this.ui.$toolSum
             .on('click', this.onSumClick.bind(this));
-        this.$subscript
+        this.ui.$toolSubscript
             .on('click', this.onSubscriptClick.bind(this));
-        this.$supscript
+        this.ui.$toolSupscript
             .on('click', this.onSupscriptClick.bind(this));
-        this.$undo
+        this.ui.$toolUndo
             .on('click', this.onUndoClick.bind(this));
-        this.$video
+        this.ui.$toolVideo
             .on('click', this.onVideoClick.bind(this));
     }
     public refresh() {
-        this.editor.refresh();
+        this.ed.refresh();
         this.scroll.refresh();
     }
     private onUndoClick() {
-        const mirror = this.editor.mirror;
+        const mirror = this.ed.mirror;
         if (mirror) {
             mirror.execCommand('undo');
         } else {
@@ -72,12 +73,12 @@ export class MdEditorToolbarLhs {
             } catch (ex) {
                 console.error(ex);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onRedoClick() {
-        const mirror = this.editor.mirror;
+        const mirror = this.ed.mirror;
         if (mirror) {
             mirror.execCommand('redo');
         } else {
@@ -86,14 +87,14 @@ export class MdEditorToolbarLhs {
             } catch (ex) {
                 console.error(ex);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onCutClick() {
-        const { value } = this.editor.getSelection();
+        const { value } = this.ed.getSelection();
         this.clipboard = value;
-        const mirror = this.editor.mirror;
+        const mirror = this.ed.mirror;
         if (mirror) {
             mirror.replaceSelection('');
         } else {
@@ -102,22 +103,22 @@ export class MdEditorToolbarLhs {
             } catch (ex) {
                 console.error(ex);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onCopyClick() {
-        const { value } = this.editor.getSelection();
+        const { value } = this.ed.getSelection();
         this.clipboard = value;
         try {
             document.execCommand('copy');
         } catch (ex) {
             console.error(ex);
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onPasteClick() {
-        const mirror = this.editor.mirror;
+        const mirror = this.ed.mirror;
         if (mirror) {
             mirror.replaceSelection(this.clipboard);
         } else {
@@ -126,12 +127,12 @@ export class MdEditorToolbarLhs {
             } catch (ex) {
                 console.error(ex);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onEraseClick() {
-        const mirror = this.editor.mirror;
+        const mirror = this.ed.mirror;
         if (mirror) {
             mirror.replaceSelection('');
         } else {
@@ -140,17 +141,17 @@ export class MdEditorToolbarLhs {
             } catch (ex) {
                 console.error(ex);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onHeaderClick() {
-        if (this.editor.mirror) {
-            this.onHeaderClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onHeaderClickMirror(this.ed.mirror);
         } else {
             this.onHeaderClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onHeaderClickMirror(
         mirror: CodeMirror.Editor
@@ -242,8 +243,8 @@ export class MdEditorToolbarLhs {
         }
     }
     private onHeaderClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         let idx = beg as number;
@@ -265,7 +266,7 @@ export class MdEditorToolbarLhs {
                 idx + 1, idx + mm_6[0].length + 1
             );
             if (!document.execCommand('insertText', false, '')) {
-                this.editor.$input.val(`${px}${sx.replace(rx_6, '')}`);
+                this.ui.$input.val(`${px}${sx.replace(rx_6, '')}`);
             }
             inp.setSelectionRange(
                 beg - mm_6[0].length, end - mm_6[0].length
@@ -275,7 +276,7 @@ export class MdEditorToolbarLhs {
                 idx + 1, idx + mm_5[0].length + 1
             );
             if (!document.execCommand('insertText', false, mm_5[0] + '#')) {
-                this.editor.$input.val(`${px}${sx.replace(rx_5, mm_5[0] + '#')}`);
+                this.ui.$input.val(`${px}${sx.replace(rx_5, mm_5[0] + '#')}`);
             }
             inp.setSelectionRange(
                 beg + 1, end + 1
@@ -285,21 +286,21 @@ export class MdEditorToolbarLhs {
                 idx + 1, idx + mm_0[0].length + 1
             );
             if (!document.execCommand('insertText', false, '# ' + mm_0[0])) {
-                this.editor.$input.val(`${px}${sx.replace(rx_0, '# ' + mm_0[0])}`);
+                this.ui.$input.val(`${px}${sx.replace(rx_0, '# ' + mm_0[0])}`);
             }
             inp.setSelectionRange(
                 beg + mm_0[0].length + 2, end + mm_0[0].length + 2
             );
         }
-        this.editor.$input.trigger('change');
+        this.ui.$input.trigger('change');
     }
     private onBoldClick() {
-        if (this.editor.mirror) {
-            this.onBoldClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onBoldClickMirror(this.ed.mirror);
         } else {
             this.onBoldClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onBoldClickMirror(
         mirror: CodeMirror.Editor
@@ -398,8 +399,8 @@ export class MdEditorToolbarLhs {
         }
     }
     private onBoldClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         const px_1 = val.substring(0, beg);
@@ -414,30 +415,30 @@ export class MdEditorToolbarLhs {
         const mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
-                this.editor.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
+                this.ui.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
             inp.setSelectionRange(beg, end - 4);
         } else if (mm_2 && mm_2.length > 1) {
             inp.setSelectionRange(beg - 2, end + 2);
             if (!document.execCommand('insertText', false, mm_2[1])) {
-                this.editor.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
+                this.ui.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
             inp.setSelectionRange(beg - 2, end - 2);
         } else {
             if (!document.execCommand('insertText', false, `**${ix_1}**`)) {
-                this.editor.$input.val(`${px_1}**${ix_1}**${sx_1}`);
+                this.ui.$input.val(`${px_1}**${ix_1}**${sx_1}`);
             }
             inp.setSelectionRange(beg, end + 4);
         }
-        this.editor.$input.trigger('change');
+        this.ui.$input.trigger('change');
     }
     private onItalicClick() {
-        if (this.editor.mirror) {
-            this.onItalicClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onItalicClickMirror(this.ed.mirror);
         } else {
             this.onItalicClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onItalicClickMirror(
         mirror: CodeMirror.Editor
@@ -529,8 +530,8 @@ export class MdEditorToolbarLhs {
         }
     }
     private onItalicClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         const px_1 = val.substring(0, beg);
@@ -545,30 +546,30 @@ export class MdEditorToolbarLhs {
         const mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
-                this.editor.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
+                this.ui.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
             inp.setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
             inp.setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
-                this.editor.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
+                this.ui.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
             inp.setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `*${ix_1}*`)) {
-                this.editor.$input.val(`${px_1}*${ix_1}*${sx_1}`);
+                this.ui.$input.val(`${px_1}*${ix_1}*${sx_1}`);
             }
             inp.setSelectionRange(beg, end + 2);
         }
-        this.editor.$input.trigger('change');
+        this.ui.$input.trigger('change');
     }
     private onCommentClick() {
-        if (this.editor.mirror) {
-            this.onCommentClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onCommentClickMirror(this.ed.mirror);
         } else {
             this.onCommentClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onCommentClickMirror(
         mirror: CodeMirror.Editor
@@ -654,8 +655,8 @@ export class MdEditorToolbarLhs {
         }
     }
     private onCommentClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         const px_1 = val.substring(0, beg);
@@ -670,31 +671,31 @@ export class MdEditorToolbarLhs {
         const mm_2 = ix_2.match(rx_2);
         if (mm_1 && mm_1.length > 1) {
             if (!document.execCommand('insertText', false, mm_1[1])) {
-                this.editor.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
+                this.ui.$input.val(`${px_1}${mm_1[1]}${sx_1}`);
             }
             inp.setSelectionRange(beg, end - 2);
         } else if (mm_2 && mm_2.length > 1) {
             inp.setSelectionRange(beg - 1, end + 1);
             if (!document.execCommand('insertText', false, mm_2[1])) {
-                this.editor.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
+                this.ui.$input.val(`${px_2}${mm_2[1]}${sx_2}`);
             }
             inp.setSelectionRange(beg - 1, end - 1);
         } else {
             if (!document.execCommand('insertText', false, `\`${ix_1}\``)) {
-                this.editor.$input.val(`${px_1}\`${ix_1}\`${sx_1}`);
+                this.ui.$input.val(`${px_1}\`${ix_1}\`${sx_1}`);
             }
             inp.setSelectionRange(beg, end + 2);
         }
-        this.editor.$input.trigger('change');
+        this.ui.$input.trigger('change');
     }
     private onImageClick(ev: JQueryEventObject) {
-        if (this.editor.isMode('markdown') === false) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
         const at_next = (
             sep: string, index?: Index
         ) => {
-            const v = this.editor.getValue(index);
+            const v = this.ed.getValue(index);
             for (var i=0; i<v.length; i++) {
                 if (v[i] === sep) break;
             }
@@ -704,70 +705,70 @@ export class MdEditorToolbarLhs {
                 return new Index(i);
             }
         };
-        const { value: caption, lhs } = this.editor.getSelection();
+        const { value: caption, lhs } = this.ed.getSelection();
         if (ev.ctrlKey && ev.shiftKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `![${caption||'CAPTION'}]`
             );
             const at = at_next('\n', lhs);
-            this.editor.insertValue(
+            this.ed.insertValue(
                 `\n\n[${caption||'CAPTION'}]: URL\n`, at
             );
             if (caption.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(at.number, 3),
                     new Index(at.number, 3 + caption.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 2),
                     new Index(lhs.number, 9)
                 );
             }
         } else if (ev.ctrlKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `![${caption||'CAPTION'}][REF]`
             );
             const at = at_next('\n', lhs);
-            this.editor.insertValue(
+            this.ed.insertValue(
                 `\n\n[REF]: URL\n`, at
             );
             if (caption.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 4 + caption.length),
                     new Index(lhs.number, 7 + caption.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 2),
                     new Index(lhs.number, 9)
                 );
             }
         } else {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `![${caption||'CAPTION'}](URL)`
             );
             if (caption.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 4 + caption.length),
                     new Index(lhs.number, 7 + caption.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 2),
                     new Index(lhs.number, 9)
                 );
             }
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onIndentClick() {
-        if (this.editor.mirror) {
-            this.onIndentClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onIndentClickMirror(this.ed.mirror);
         } else {
             this.onIndentClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onIndentClickMirror(
         mirror: CodeMirror.Editor
@@ -775,8 +776,8 @@ export class MdEditorToolbarLhs {
         mirror.execCommand('indentMore');
     }
     private onIndentClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         let idx = beg - 1;
@@ -787,19 +788,19 @@ export class MdEditorToolbarLhs {
         const sx = val.substring(idx + 1, val.length);
         inp.setSelectionRange(idx + 1, idx + 1);
         if (!document.execCommand('insertText', false, '  ')) {
-            this.editor.$input.val(`${px}  ${sx}`);
+            this.ui.$input.val(`${px}  ${sx}`);
         }
         inp.setSelectionRange(beg + 2, end + 2);
-        this.editor.$input.trigger('change');
+        this.ui.$input.trigger('change');
     }
     private onLinkClick(ev: JQueryEventObject) {
-        if (this.editor.isMode('markdown') === false) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
         const at_next = (
             sep: string, index?: Index
         ) => {
-            const v = this.editor.getValue(index);
+            const v = this.ed.getValue(index);
             for (var i=0; i<v.length; i++) {
                 if (v[i] === sep) break;
             }
@@ -809,70 +810,70 @@ export class MdEditorToolbarLhs {
                 return new Index(i);
             }
         };
-        const { value: text, lhs } = this.editor.getSelection();
+        const { value: text, lhs } = this.ed.getSelection();
         if (ev.ctrlKey && ev.shiftKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `[${text||'TEXT'}]`
             );
             const at = at_next('\n', lhs);
-            this.editor.insertValue(
+            this.ed.insertValue(
                 `\n\n[${text||'TEXT'}]: URL\n`, at
             );
             if (text.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(at.number, 3),
                     new Index(at.number, 3 + text.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 1),
                     new Index(lhs.number, 5)
                 );
             }
         } else if (ev.ctrlKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `[${text||'TEXT'}][REF]`
             );
             const at = at_next('\n', lhs);
-            this.editor.insertValue(
+            this.ed.insertValue(
                 `\n\n[REF]: URL\n`, at
             );
             if (text.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 3 + text.length),
                     new Index(lhs.number, 6 + text.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 1),
                     new Index(lhs.number, 5)
                 );
             }
         } else {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `[${text||'TEXT'}](URL)`
             );
             if (text.length) {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 3 + text.length),
                     new Index(lhs.number, 6 + text.length)
                 );
             } else {
-                this.editor.setSelection(
+                this.ed.setSelection(
                     new Index(lhs.number, 1),
                     new Index(lhs.number, 5)
                 );
             }
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onOutdentClick() {
-        if (this.editor.mirror) {
-            this.onOutdentClickMirror(this.editor.mirror);
+        if (this.ed.mirror) {
+            this.onOutdentClickMirror(this.ed.mirror);
         } else {
             this.onOutdentClickSimple();
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onOutdentClickMirror(
         mirror: CodeMirror.Editor
@@ -880,8 +881,8 @@ export class MdEditorToolbarLhs {
         mirror.execCommand('indentLess');
     }
     private onOutdentClickSimple() {
-        const inp = this.editor.$input[0] as HTMLInputElement;
-        const val = this.editor.$input.val() as string;
+        const inp = this.ui.$input[0] as HTMLInputElement;
+        const val = this.ui.$input.val() as string;
         const beg = inp.selectionStart as number;
         const end = inp.selectionEnd as number;
         let idx = beg - 1;
@@ -895,123 +896,123 @@ export class MdEditorToolbarLhs {
         if (mm && mm.length > 0) {
             inp.setSelectionRange(idx + 1, idx + 3);
             if (!document.execCommand('insertText', false, '')) {
-                this.editor.$input.val(`${px}${sx.substring(2)}`);
+                this.ui.$input.val(`${px}${sx.substring(2)}`);
             }
             if (beg > 0 && val[beg - 1] === '\n') {
                 inp.setSelectionRange(beg, end);
             } else {
                 inp.setSelectionRange(beg - 2, end - 2);
             }
-            this.editor.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
     }
     private onSumClick(ev: JQueryEventObject) {
-        if (this.editor.isMode('markdown') === false) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
-        const { lhs, rhs } = this.editor.getSelection();
+        const { lhs, rhs } = this.ed.getSelection();
         if (ev.ctrlKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `\n$$\\sum_{i=a}^{b}{i}$$\n`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 9),
                 new Index(rhs.number, 12)
             );
         } else {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `$\\sum_{i=a}^{b}{i}$`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 7),
                 new Index(rhs.number, 10)
             );
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onProductClick(ev: JQueryEventObject) {
-        if (this.editor.isMode('markdown') === false) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
-        const { lhs, rhs } = this.editor.getSelection();
+        const { lhs, rhs } = this.ed.getSelection();
         if (ev.ctrlKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `\n$$\\prod_{i=a}^{b}{i}$$\n`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 10),
                 new Index(rhs.number, 13)
             );
         } else {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `$\\prod_{i=a}^{b}{i}$`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 8),
                 new Index(rhs.number, 11)
             );
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private onSupscriptClick() {
-        if (this.editor.isMode('markdown') === false &&
-            this.editor.isMode('stex') === false
+        if (this.ed.isMode('markdown') === false &&
+            this.ed.isMode('stex') === false
         ) {
             return;
         }
-        const { rhs } = this.editor.getSelection();
-        this.editor.insertValue(`^{ }`, rhs);
-        this.editor.setSelection(
+        const { rhs } = this.ed.getSelection();
+        this.ed.insertValue(`^{ }`, rhs);
+        this.ed.setSelection(
             new Index(rhs.number, 2),
             new Index(rhs.number, 3)
         );
-        this.editor.focus();
+        this.ed.focus();
     }
     private onSubscriptClick() {
-        if (this.editor.isMode('markdown') === false &&
-            this.editor.isMode('stex') === false
+        if (this.ed.isMode('markdown') === false &&
+            this.ed.isMode('stex') === false
         ) {
             return;
         }
-        const { rhs } = this.editor.getSelection();
-        this.editor.insertValue(`_{ }`, rhs);
-        this.editor.setSelection(
+        const { rhs } = this.ed.getSelection();
+        this.ed.insertValue(`_{ }`, rhs);
+        this.ed.setSelection(
             new Index(rhs.number, 2),
             new Index(rhs.number, 3)
         );
-        this.editor.focus();
+        this.ed.focus();
     }
     private onVideoClick(ev: JQueryEventObject) {
-        if (this.editor.isMode('markdown') === false) {
+        if (this.ed.isMode('markdown') === false) {
             return;
         }
-        const { lhs } = this.editor.getSelection();
+        const { lhs } = this.ed.getSelection();
         if (ev.ctrlKey && ev.shiftKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `@[prezi](URL)`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 9),
                 new Index(lhs.number, 12)
             );
         } else if (ev.ctrlKey) {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `@[vimeo](URL)`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 9),
                 new Index(lhs.number, 12)
             );
         } else {
-            this.editor.replaceSelection(
+            this.ed.replaceSelection(
                 `@[youtube](URL)`
             );
-            this.editor.setSelection(
+            this.ed.setSelection(
                 new Index(lhs.number, 11),
                 new Index(lhs.number, 14)
             );
         }
-        this.editor.focus();
+        this.ed.focus();
     }
     private lhs(
         mirror: CodeMirror.Editor, cursor: any, token: any
@@ -1073,84 +1074,21 @@ export class MdEditorToolbarLhs {
             }
         }
     }
-    private get $outer() {
-        return $('.lhs>.toolbar-outer');
+    private get ed() {
+        return MdEditor.me;
     }
-    private get $inner() {
-        return this.$outer.find('>.toolbar-inner');
-    }
-    private get $toolbar() {
-        return this.$inner.find('>.md-toolbar');
-    }
-    private get $bold() {
-        return $('.glyphicon-bold').closest('button');
-    }
-    private get $copy() {
-        return $('.glyphicon-copy').closest('button');
-    }
-    private get $cut() {
-        return $('.glyphicon-scissors').closest('button');
-    }
-    private get $header() {
-        return $('.glyphicon-header').closest('button');
-    }
-    private get $erase() {
-        return $('.glyphicon-erase').closest('button');
-    }
-    private get $font() {
-        return $('.glyphicon-font').closest('button');
-    }
-    private get $indent() {
-        return $('.glyphicon-indent-left').closest('button');
-    }
-    private get $italic() {
-        return $('.glyphicon-italic').closest('button');
-    }
-    private get $link() {
-        return $('.glyphicon-link').closest('button');
-    }
-    private get $image() {
-        return $('.glyphicon-picture').closest('button');
-    }
-    private get $video() {
-        return $('.glyphicon-film').closest('button');
-    }
-    private get $outdent() {
-        return $('.glyphicon-indent-right').closest('button');
-    }
-    private get $paste() {
-        return $('.glyphicon-paste').closest('button');
-    }
-    private get $product() {
-        return $('.glyphicon.product').closest('button');
-    }
-    private get $redo() {
-        return $('.glyphicon.redo').closest('button');
-    }
-    private get $subscript() {
-        return $('.glyphicon-subscript').closest('button');
-    }
-    private get $supscript() {
-        return $('.glyphicon-superscript').closest('button');
-    }
-    private get $sum() {
-        return $('.glyphicon.sum').closest('button');
-    }
-    private get $undo() {
-        return $('.glyphicon.undo').closest('button');
+    private get ui() {
+        return Ui.me;
     }
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll(this.$inner[0], {
+            this._scroll = new IScroll(this.ui.$lhsToolbarInner[0], {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true
             });
         }
         return this._scroll;
-    }
-    private get editor() {
-        return MdEditor.me;
     }
     private get clipboard(): string {
         if (this._clipboard === undefined) {
@@ -1161,7 +1099,7 @@ export class MdEditorToolbarLhs {
     private set clipboard(value: string) {
         this._clipboard = value;
     }
-    private _clipboard: string | undefined; //@TODO: [I]Clipboard?
+    private _clipboard: string|undefined; //@TODO: [I]Clipboard?
     private _scroll: any;
 }
 export default MdEditorToolbarLhs;

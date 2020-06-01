@@ -1,24 +1,24 @@
 import { trace } from "../decorator/trace";
-import { HeaderMenu } from "./header-menu";
+import { Ui } from "./ui";
 
 @trace
 export class DownloadManager {
-    public static get me(): DownloadManager {
+    public static get me() {
         if (window.DOWNLOAD_MANAGER === undefined) {
             window.DOWNLOAD_MANAGER = new DownloadManager();
         }
         return window.DOWNLOAD_MANAGER;
     }
     public set title(title: string) {
-        this.$downloadLink.attr("download", title);
+        this.$download_link.attr("download", title);
     }
     public set content(content: string) {
-        this.$downloadLink.attr("href", URL.createObjectURL(
+        this.$download_link.attr("href", URL.createObjectURL(
             new Blob([content], { type: 'text/markdown' })
         ));
     }
-    private get $downloadLink(): any {
-        return HeaderMenu.me.$saveItem;
+    private get $download_link() {
+        return Ui.me.$toolSave;
     }
 }
 export default DownloadManager;

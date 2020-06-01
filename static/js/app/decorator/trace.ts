@@ -1,8 +1,3 @@
-/* tslint:disable:ban-types */
-/* tslint:disable:only-arrow-functions */
-/* tslint:disable:space-before-function-paren */
-/* tslint:disable:trailing-comma */
-
 import { _traceable } from "./traceable";
 export { traceable } from "./traceable";
 
@@ -18,7 +13,6 @@ export function trace(
         _trace(true)(arg as Function);
     }
 }
-
 export function _trace(flag: boolean): Function {
     return function (ctor: Function) {
         Object.getOwnPropertyNames(ctor.prototype).forEach((name: string) => {
@@ -39,5 +33,4 @@ export function _trace(flag: boolean): Function {
         });
     };
 }
-
 export default trace;

@@ -1,22 +1,21 @@
-import { buffered } from "../decorator/buffered";
-import { traceable } from "../decorator/trace";
-import { trace } from "../decorator/trace";
-import { cookie } from "../cookie/cookie";
+import { MdRender } from "./md-render";
+import { Index } from "./md-index";
+import { UiMode } from "./ui-mode";
+import { Ui } from "./ui";
 
-import { TemplateManager } from "./manager-template";
-import { DownloadManager } from "./manager-download";
-import { MarkdownIt } from "../markdown-it/markdown-it";
-
-import { ILingua } from "../spell-checker/spell-checker";
-import { IOverlay } from "../spell-checker/spell-checker";
+import { Lingua } from "../spell-checker/spell-checker";
+import { Overlay } from "../spell-checker/spell-checker";
 import { SpellChecker } from "../spell-checker/spell-checker";
 
 import { IPFS, Buffer } from "../ipfs/index";
 import { gateway } from "../ipfs/index";
-import "./md-editor-mode";
 
-declare const morphdom: any;
+import { traceable } from "../decorator/trace";
+import { trace } from "../decorator/trace";
+import { cookie } from "../cookie/cookie";
 declare const $: JQueryStatic;
+
+import "./md-editor-mode";
 declare const CodeMirror: {
     fromTextArea: (
         host: HTMLTextAreaElement,
@@ -24,64 +23,6 @@ declare const CodeMirror: {
     ) => CodeMirror.EditorFromTextArea
 };
 
-export class Index {
-    public constructor(
-        index: number | CodeMirror.Position, delta = 0
-    ) {
-        if (typeof index === 'number') {
-            this._position = Index.asPosition(index + delta);
-            this._index = index + delta;
-        } else {
-            this._index = Index.asNumber(index) + delta;
-            if (delta !== 0) {
-                this._position = Index.asPosition(this._index);
-            } else {
-                this._position = index;
-            }
-        }
-    }
-    public get position(): CodeMirror.Position {
-        return this._position;
-    }
-    public static asPosition(index: number): CodeMirror.Position {
-        const mirror = MdEditor.me.mirror;
-        if (mirror) {
-            return mirror.posFromIndex(index);
-        }
-        const values = this.values(index);
-        return {
-            ch: values[values.length - 1].length - 1,
-            line: values.length
-        };
-    }
-    public get number(): number {
-        return this._index;
-    }
-    public static asNumber(position: CodeMirror.Position): number {
-        const mirror = MdEditor.me.mirror;
-        if (mirror) {
-            return mirror.indexFromPos(position);
-        }
-        let values = this.values();
-        values = values.slice(0, position.line - 1);
-        let text = values.join('\n');
-        text += values[position.line].slice(0, position.ch);
-        return text.length;
-    }
-    private static values(index?: number): string[] {
-        const value = MdEditor.me.getValue();
-        if (index !== undefined) {
-            return value.substring(0, index).split('\n');
-        }
-        return value.split('\n');
-    }
-    private _position: CodeMirror.Position;
-    private _index: number;
-}
-export enum UiMode {
-    simple = 'ui-simple',
-    mirror = 'ui-mirror'
-}
 @trace
 export class MdEditor {
     public static get me(): MdEditor {
@@ -136,7 +77,7 @@ export class MdEditor {
             mirror.addOverlay(this.spellCheckerOverlay);
         }
         this.simple = false;
-        this.$input.hide();
+        this.ui.$input.hide();
         return this.mirror;
     }
     public toInput(options: {
@@ -150,7 +91,7 @@ export class MdEditor {
             mirror.toTextArea();
             this.setMirror(undefined);
         }
-        this.$input
+        this.ui.$input
             .off('keyup change paste')
             .on('keyup change paste', this.onEditorChange.bind(this))
             .off('scroll')
@@ -159,12 +100,12 @@ export class MdEditor {
             })
             .show();
         if (options.footer) {
-            this.$lhs.addClass('with-footer');
+            this.ui.$lhs.addClass('with-footer');
         } else {
-            this.$lhs.removeClass('with-footer');
+            this.ui.$lhs.removeClass('with-footer');
         }
         this.simple = true;
-        return this.$input;
+        return this.ui.$input;
     }
     public onScroll(e: HTMLElement) {
         const synchronize = ($body: JQuery<HTMLElement>) => {
@@ -173,77 +114,14 @@ export class MdEditor {
             const c = $body[0].clientHeight;
             $body.scrollTop(q*h+q*c);
         };
-        synchronize(this.$cached_body);
-        synchronize(this.$output_body);
+        synchronize(this.ui.$cachedBody);
+        synchronize(this.ui.$outputBody);
     }
-    @buffered(40)
-    public async render(force: 'hard'|'soft'|'none' = 'none') {
-        const md_value = this.getValue();
-        {
-            if (md_value.length === 0) {
-                force = 'hard';
-            }
-            if (force !== 'none') switch (force) {
-                case 'hard':
-                    this.$output = $('<iframe>', {
-                        id: 'output', class: 'viewer', frameborder: '0'
-                    });
-                case 'soft':
-                    this.$cached = $('<iframe>', {
-                        id: 'cached', class: 'viewer', frameborder: '0',
-                        style: 'visibility:hidden'
-                    });
-                default:
-                    const ms = !navigator.userAgent.match(/chrome/i) ? 100 : 0;
-                    await new Promise((resolve) => setTimeout(resolve, ms));
-            }
-        }
-        {
-            if (md_value.length === 0) {
-                $.get(this.placeholder).done((html) => setTimeout(() => {
-                    if (this.getValue().length > 0) return;
-                    this.$cached_body.hide().html(html);
-                    this.$cached_body.fadeIn('slow');
-                    this.$output_body.hide().html(html);
-                    this.$output_body.fadeIn('slow');
-                }, 600));
-            }
-        }
-        {
-            this.$cached_head.html(TemplateManager.me.head());
-            this.$cached_body.html(MarkdownIt.me.render(
-                TemplateManager.me.body(md_value), {
-                    document: this.$cached.contents()[0] as Document
-                }
-            ));
-        }
-        {
-            if (md_value.length > 0) {
-                DownloadManager.me.title = `${
-                    this.title || new Date().toISOString()
-                }.md`;
-                DownloadManager.me.content = md_value;
-            }
-        }
+    public render(force: 'hard'|'soft'|'none' = 'none') {
+        this.renderer.do(force);
     }
-    @buffered(0)
-    public patch() {
-        morphdom(this.$output_head[0], this.$cached_head[0], {
-            onBeforeElUpdated: (
-                source: HTMLElement, target: HTMLElement
-            ) => {
-                return !source.isEqualNode(target);
-            },
-            childrenOnly: true
-        });
-        morphdom(this.$output_body[0], this.$cached_body[0], {
-            onBeforeElUpdated: (
-                source: HTMLElement, target: HTMLElement
-            ) => {
-                return !source.isEqualNode(target);
-            },
-            childrenOnly: true
-        });
+    public get title() {
+        return this.renderer.title;
     }
     public refresh() {
         if (this.mirror) {
@@ -254,15 +132,15 @@ export class MdEditor {
         if (this.mirror) {
             this.mirror.focus();
         } else {
-            this.$input.focus();
+            this.ui.$input.focus();
         }
     }
     public clear() {
         if (this.mirror) {
             return this.mirror.setValue('');
         } else {
-            this.$input.val('');
-            this.$input.trigger('change');
+            this.ui.$input.val('');
+            this.ui.$input.trigger('change');
         }
     }
     public get empty() {
@@ -278,7 +156,7 @@ export class MdEditor {
     ): string {
         const value = this.mirror
             ? this.mirror.getValue()
-            : this.$input.val() as string;
+            : this.ui.$input.val() as string;
         if (lhs && rhs) {
             return value.substring(lhs.number, rhs.number);
         } else if (lhs && !rhs) {
@@ -289,16 +167,16 @@ export class MdEditor {
     }
     @traceable(false)
     public setValue(value: string) {
-        const inp = this.$input[0] as HTMLInputElement;
+        const inp = this.ui.$input[0] as HTMLInputElement;
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
             inp.select();
             if (!document.execCommand('insertText', false, value)) {
-                this.$input.val(value);
+                this.ui.$input.val(value);
             }
             inp.setSelectionRange(0, 0);
-            this.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
     }
     public insertValue(value: string, at?: Index) {
@@ -323,7 +201,7 @@ export class MdEditor {
                 lhs, rhs, value: this.mirror.getSelection()
             };
         } else {
-            const inp = this.$input[0] as HTMLInputElement;
+            const inp = this.ui.$input[0] as HTMLInputElement;
             const lhs = new Index(Math.min(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
@@ -347,7 +225,7 @@ export class MdEditor {
                 lhs.position, rhs.position
             );
         } else {
-            const inp = this.$input[0] as HTMLInputElement;
+            const inp = this.ui.$input[0] as HTMLInputElement;
             inp.setSelectionRange(lhs.number, rhs.number);
         }
     }
@@ -360,7 +238,7 @@ export class MdEditor {
             } catch (ex) {
                 console.error(ex);
             }
-            this.$input.trigger('change');
+            this.ui.$input.trigger('change');
         }
         this.focus();
     }
@@ -390,15 +268,15 @@ export class MdEditor {
         this.dnd();
     }
     public dnd() {
-        this.$document.on('dragenter dragover dragleave drop', (ev) => {
+        this.ui.$document.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
         });
-        this.$lhs.on('dragenter dragleave', (ev) => {
+        this.ui.$lhs.on('dragenter dragleave', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
         });
-        this.$lhs.on('dragover', (ev) => {
+        this.ui.$lhs.on('dragover', (ev) => {
             const event = ev.originalEvent as DragEvent;
             if (event.dataTransfer) {
                 event.dataTransfer.dropEffect = 'copy';
@@ -406,11 +284,11 @@ export class MdEditor {
             ev.preventDefault();
             ev.stopPropagation();
         });
-        this.$lhs.on('drop', (ev) => {
+        this.ui.$lhs.on('drop', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
         });
-        this.$lhs.on('drop', (event) => {
+        this.ui.$lhs.on('drop', (event) => {
             const ev = event.originalEvent as DragEvent;
             if (!ev) {
                 return;
@@ -449,13 +327,16 @@ export class MdEditor {
         $(this).trigger('change');
         this.render('none');
     }
+    private get renderer() {
+        return MdRender.me;
+    }
     public get mirror(): CodeMirror.Editor | undefined {
-        return window['CODE_MIRROR'];
+        return window.CODE_MIRROR;
     }
     private setMirror(
         value: CodeMirror.Editor | undefined
     ) {
-        window['CODE_MIRROR'] = value;
+        window.CODE_MIRROR = value;
     }
     public get mobile(): boolean {
         return $('.lhs').is(':hidden') && !window.debug;
@@ -481,14 +362,14 @@ export class MdEditor {
     private set spellChecker(value: SpellChecker | undefined) {
         this._spellChecker = value;
     }
-    private get spellCheckerOverlay(): IOverlay | undefined {
+    private get spellCheckerOverlay(): Overlay | undefined {
         return this._spellCheckerOverlay;
     }
-    private set spellCheckerOverlay(value: IOverlay | undefined) {
+    private set spellCheckerOverlay(value: Overlay | undefined) {
         this._spellCheckerOverlay = value;
     }
     public spellCheck(
-        lingua: ILingua, callback: (error: boolean) => void
+        lingua: Lingua, callback: (error: boolean) => void
     ) {
         if (lingua.code) {
             this.spellChecker = new SpellChecker(lingua, (overlay) => {
@@ -549,10 +430,10 @@ export class MdEditor {
             }
         };
     };
-    private get searchOverlay(): IOverlay | undefined {
+    private get searchOverlay(): Overlay | undefined {
         return this._searchOverlay;
     }
-    private set searchOverlay(value: IOverlay | undefined) {
+    private set searchOverlay(value: Overlay | undefined) {
         this._searchOverlay = value;
     }
     public search(query: string | RegExp, options?: {
@@ -647,69 +528,18 @@ export class MdEditor {
             this.index = undefined;
         }
     }
-    public get title() {
-        const $header = this.$cached_body.find(':header').first();
-        return $header ? $header.text().slice(0,-2) : undefined;
-    }
-    private get placeholder(): string {
-        return '/editor/0200-center/0221-rhs.output-placeholder.html';
-    }
     private get index(): number | undefined {
         return window['INDEX'];
     }
     private set index(value: number | undefined) {
         window['INDEX'] = value;
     }
-    private get $document() {
-        return $(document);
+    private get ui() {
+        return Ui.me;
     }
-    public get $input() {
-        return this.$lhs.find('#input');
-    }
-    public get $viewer() {
-        if (this.$cached.css('visibility') !== 'hidden') {
-            return this.$cached;
-        } else {
-            return this.$output;
-        }
-    }
-    private set $cached($element: JQuery<HTMLFrameElement>) {
-        this.$cached.remove();
-        this.$rhs.prepend($element);
-        const window = this.$cached.get(0).contentWindow;
-        if (window) window.PATCH = () => this.patch();
-    }
-    private get $cached() {
-        return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
-    }
-    private set $output($element: JQuery<HTMLFrameElement>) {
-        this.$output.remove();
-        this.$rhs.prepend($element);
-    }
-    private get $output() {
-        return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
-    }
-    private get $cached_head() {
-        return this.$cached.contents().find('head') as JQuery<HTMLElement>;
-    }
-    private get $output_head() {
-        return this.$output.contents().find('head') as JQuery<HTMLElement>;
-    }
-    private get $cached_body() {
-        return this.$cached.contents().find('body') as JQuery<HTMLElement>;
-    }
-    private get $output_body() {
-        return this.$output.contents().find('body') as JQuery<HTMLElement>;
-    }
-    private get $lhs() {
-        return $('.lhs');
-    }
-    private get $rhs() {
-        return $('.rhs');
-    }
-    private _spellCheckerOverlay: IOverlay | undefined;
+    private _spellCheckerOverlay: Overlay | undefined;
     private _spellChecker: SpellChecker | undefined;
-    private _searchOverlay: IOverlay | undefined;
+    private _searchOverlay: Overlay | undefined;
     private _mdOld: string = '';
 }
 export default MdEditor;

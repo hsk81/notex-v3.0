@@ -1,16 +1,15 @@
-export interface ILingua {
-    charset: string | null;
-    code: string | null;
-}
-export interface IOverlay {
-    token: (stream: any, state?: any) => void;
-}
-
 declare const Typo: any;
 
+export interface Lingua {
+    charset: string|null;
+    code: string|null;
+}
+export interface Overlay {
+    token: (stream: any, state?: any) => void;
+}
 export class SpellChecker {
     public constructor(
-        lingua: ILingua, callback: (overlay: IOverlay | null) => void
+        lingua: Lingua, callback: (overlay: Overlay|null) => void
     ) {
         const worker = new Worker(
             '/static/js/app/spell-checker/spell-checker.worker.js'
@@ -57,7 +56,7 @@ export class SpellChecker {
     private set typo(value: any) {
         this._typo = value;
     }
-    private _separator: RegExp | undefined;
+    private _separator: RegExp|undefined;
     private _typo: any;
 }
 export default SpellChecker;

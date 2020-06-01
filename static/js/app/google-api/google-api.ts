@@ -1,5 +1,5 @@
 export class GoogleApi {
-    public static get me(): GoogleApi {
+    public static get me() {
         if (window.GOOGLE_API === undefined) {
             window.GOOGLE_API = new GoogleApi();
         }

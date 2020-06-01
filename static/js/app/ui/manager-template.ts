@@ -1,12 +1,9 @@
-import MdEditor from "./md-editor";
+import { MdEditor } from "./md-editor";
+import { Ui } from "./ui";
 
-import { cookie } from "../cookie/cookie";
 import { trace } from "../decorator/trace";
-
 declare const $: JQueryStatic;
-type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
-    button: (action: string) => JQueryEx<T>;
-};
+
 export enum Template {
     Empty = 'empty',
     SingleColumn = '1-column',
@@ -21,7 +18,7 @@ const TemplatePath = {
 };
 @trace
 export class TemplateManager {
-    public static get me(): TemplateManager {
+    public static get me() {
         if (window.TEMPLATE_MANAGER === undefined) {
             window.TEMPLATE_MANAGER = new TemplateManager();
         }
@@ -29,18 +26,18 @@ export class TemplateManager {
     }
     public constructor() {
         this.select(
-            this.$active.data('tpl') as Template);
-        this.$dialog.on(
+            this.ui.$templateDialogItemActive.data('tpl') as Template);
+        this.ui.$templateDialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
-        this.$dialog.on(
+        this.ui.$templateDialog.on(
             'shown.bs.modal', this.onBsModalShown.bind(this));
-        this.$dialog.on(
+        this.ui.$templateDialog.on(
             'hide.bs.modal', this.onBsModalHide.bind(this));
-        this.$dialog.on(
+        this.ui.$templateDialog.on(
             'hidden.bs.modal', this.onBsModalHidden.bind(this));
-        this.$item.on(
+        this.ui.$templateDialogItem.on(
             'click', this.onItemClick.bind(this));
-        this.$primary.on(
+        this.ui.$templateDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
     }
     public head({ title }: { title?: string } = {}) {
@@ -62,7 +59,7 @@ export class TemplateManager {
         this.my_head = await this.fetch(`${path}.head.md`);
         this.my_body = await this.fetch(`${path}.body.md`);
         this.activateBy(template);
-        this.editor.render('soft');
+        this.ed.render('soft');
     }
     private onBsModalShow() {
     }
@@ -71,39 +68,24 @@ export class TemplateManager {
     private onBsModalHide() {
     }
     private onBsModalHidden() {
-        this.editor.render('soft');
+        this.ed.render('soft');
     }
     private onPrimaryClick() {
-        this.select(this.$active.data('tpl') as Template);
-        this.$dialog.modal('hide')
+        this.select(this.ui.$templateDialogItemActive.data('tpl') as Template);
+        this.ui.$templateDialog.modal('hide')
     }
     private onItemClick(ev: Event) {
         const $target = $(ev.target as EventTarget);
         this.activate($target);
     }
     private activate($target: JQuery<EventTarget>) {
-        this.$active.removeClass('active');
+        this.ui.$templateDialogItemActive.removeClass('active');
         $target.closest('a').addClass('active');
     }
     private activateBy(template: Template) {
-        this.activate(this.$item.filter(function () {
+        this.activate(this.ui.$templateDialogItem.filter(function () {
             return $(this).data('tpl') === template;
         }));
-    }
-    private get $dialog() {
-        return $('#template-dlg');
-    }
-    private get $item() {
-        return this.$dialog.find('a.list-group-item');
-    }
-    private get $active() {
-        return this.$dialog.find('a.list-group-item.active');
-    }
-    private get $primary() {
-        return this.$dialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
-    }
-    private get editor() {
-        return MdEditor.me;
     }
     private async fetch(
         url: string
@@ -127,6 +109,12 @@ export class TemplateManager {
     }
     private set my_body(text: string) {
         this._my_body = text;
+    }
+    private get ed() {
+        return MdEditor.me;
+    }
+    private get ui() {
+        return Ui.me;
     }
     private _my_head?: string;
     private _my_body?: string;

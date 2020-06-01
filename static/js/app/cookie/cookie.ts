@@ -1,4 +1,4 @@
-export interface ICookie {
+interface ICookie {
     set: <T>(name: string, value: T, expiry_ms?: number) => T;
     get: <T>(name: string, value?: T) => T | undefined;
 }
@@ -44,5 +44,5 @@ class Cookie implements ICookie {
         return Cookie.get(name, value);
     }
 }
-export const cookie: ICookie = new Cookie();
+export const cookie = new Cookie() as ICookie;
 export default cookie;

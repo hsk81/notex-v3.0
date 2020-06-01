@@ -29,16 +29,15 @@ function _buffered(ms?: number): MethodDecorator {
         }
     };
 }
-
-export interface ICancelableFunction {
+export interface BufferedFunction {
     (this: any, ...args: any[]): Promise<any>;
 }
-export interface ICancelableFunction {
+export interface BufferedFunction {
     cancel: () => void;
 }
 export function buffer(
     fn: Function, ms: number = 200
-): ICancelableFunction {
+): BufferedFunction {
     let id: any;
     const bn = function(
         this: any, ...args: any[]
@@ -49,10 +48,9 @@ export function buffer(
             );
         });
     };
-    (bn as ICancelableFunction).cancel = () => {
+    (bn as BufferedFunction).cancel = () => {
         clearTimeout(id);
     };
-    return bn as ICancelableFunction;
+    return bn as BufferedFunction;
 }
-
 export default buffered;

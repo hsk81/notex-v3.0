@@ -66,5 +66,5 @@ export class IPFS {
         return this['_me'];
     }
 }
-window['IPFS'] = IPFS;
+window.IPFS = IPFS;
 export default IPFS;

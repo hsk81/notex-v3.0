@@ -1,18 +1,16 @@
+import { MdEditor } from "./md-editor";
+import { AiMode } from "./ai-mode";
+import { UiMode } from "./ui-mode";
+import { Ui } from "./ui";
+
 import { buffered } from "../decorator/buffered";
 import { trace } from "../decorator/trace";
 
-import { MdEditor } from "./md-editor";
-import { UiMode } from "./md-editor";
-
 declare const $: JQueryStatic;
 
-export enum AiMode {
-    help = 'ai-help',
-    none = 'ai-none'
-}
 @trace
 export class MdEditorAibar {
-    public static get me(): MdEditorAibar {
+    public static get me() {
         if (window.MD_EDITOR_AIBAR === undefined) {
             window.MD_EDITOR_AIBAR = new MdEditorAibar();
         }
@@ -25,16 +23,20 @@ export class MdEditorAibar {
             this.hide();
         }
         this.events();
-        this.ui();
+        this.tips();
     }
     private show() {
-        this.$aibar.fadeIn('slow', () => {
-            this.$rhs.addClass('with-aibar');
-            this.$aibar.removeAttr('style');
+        this.ui.$aibar.fadeIn('slow', () => {
+            this.ui.$rhs.addClass('with-aibar');
+            this.ui.$aibar.removeAttr('style');
         });
     }
     private hide() {
-        this.$rhs.removeClass('with-aibar');
+        this.ui.$rhs.removeClass('with-aibar');
+    }
+    private tips() {
+        this.ui.$aibar.find('[data-toggle="tooltip"]').tooltip();
+        this.ui.$aibar.find('[data-toggle="popover"]').popover();
     }
     private events() {
         $(this.ed).on(
@@ -45,45 +47,41 @@ export class MdEditorAibar {
             'ai-mode', (ev, { value }) => this.onAiMode(value));
         $(this.ed).on(
             'ai-page', (ev, { value }) => this.onAiPage(value));
-        this.$lhsButton.on(
+        this.ui.$aibarLhsButton.on(
             'click', this.onLhsButtonClick.bind(this));
-        this.$midButton.on(
+        this.ui.$aibarMidButton.on(
             'click', this.onMidButtonClick.bind(this));
-        this.$rhsButton.on(
+        this.ui.$aibarRhsButton.on(
             'click', this.onRhsButtonClick.bind(this));
-    }
-    private ui() {
-        this.$aibar.find('[data-toggle="tooltip"]').tooltip();
-        this.$aibar.find('[data-toggle="popover"]').popover();
     }
     private onUiModeChange(mode: UiMode) {
         if (this.ed.empty) {
-            this.$aibar.fadeIn('slow');
+            this.ui.$aibar.fadeIn('slow');
         }
     }
     @buffered(40)
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {
-            this.$rhs.addClass('with-aibar');
+            this.ui.$rhs.addClass('with-aibar');
         } else {
-            this.$rhs.removeClass('with-aibar');
+            this.ui.$rhs.removeClass('with-aibar');
         }
     }
-    private async onRhsButtonClick() {
+    private onRhsButtonClick() {
         if (this.aiPage !== undefined && this.aiPage < Infinity) {
             this.aiPage += 1;
         } else {
             this.aiMode = AiMode.help;
         }
     }
-    private async onLhsButtonClick() {
+    private onLhsButtonClick() {
         if (this.aiPage !== undefined && this.aiPage > 0) {
             this.aiPage -= 1;
         } else {
             this.aiMode = AiMode.help;
         }
     }
-    private async onMidButtonClick() {
+    private onMidButtonClick() {
         if (this.aiMode !== AiMode.help) {
             this.aiMode = AiMode.help;
         } else {
@@ -92,9 +90,9 @@ export class MdEditorAibar {
     }
     private onAiMode(mode: AiMode) {
         if (mode !== AiMode.help) {
-            this.$midButton.text('Help');
+            this.ui.$aibarMidButton.text('Help');
         } else {
-            this.$midButton.text('Exit');
+            this.ui.$aibarMidButton.text('Exit');
         }
         if (mode !== AiMode.help) {
             this.aiPage = undefined;
@@ -126,38 +124,26 @@ export class MdEditorAibar {
             });
     }
     private get aiMode() {
-        return window['ai-mode'] as AiMode;
+        return window.AI_MODE as AiMode;
     }
     private set aiMode(value: AiMode) {
         $(this.ed).trigger('ai-mode', {
-            value: window['ai-mode'] = value
+            value: window.AI_MODE = value
         });
     }
     private get aiPage() {
-        return window['ai-page'] as number | undefined;
+        return window.AI_PAGE as number|undefined;
     }
-    private set aiPage(value: number | undefined) {
+    private set aiPage(value: number|undefined) {
         $(this.ed).trigger('ai-page', {
-            value: window['ai-page'] = value
+            value: window.AI_PAGE = value
         });
-    }
-    private get $rhs() {
-        return $('.rhs');
-    }
-    private get $aibar() {
-        return this.$rhs.find('.aibar');
-    }
-    private get $lhsButton() {
-        return this.$aibar.find('button.ai-lhs');
-    }
-    private get $midButton() {
-        return this.$aibar.find('button.ai-mid');
-    }
-    private get $rhsButton() {
-        return this.$aibar.find('button.ai-rhs');
     }
     private get ed() {
         return MdEditor.me;
+    }
+    private get ui() {
+        return Ui.me;
     }
 }
 export default MdEditorAibar;

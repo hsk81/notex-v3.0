@@ -1,18 +1,16 @@
 import { TemplateManager } from "./manager-template";
 import { MdEditor } from "./md-editor";
+import { Ui } from "./ui";
 
-import { trace } from "../decorator/trace";
-import { IPFS, Buffer } from "../ipfs/index";
 import { gateway, html } from "../ipfs/index";
+import { IPFS, Buffer } from "../ipfs/index";
+import { trace } from "../decorator/trace";
 
-type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
-    button: (action: string) => JQueryEx<T>;
-};
 declare const $: JQueryStatic;
 
 @trace
 export class PublishIpfsManager {
-    public static get me(): PublishIpfsManager {
+    public static get me() {
         if (window.PUBLISH_IPFS_MANAGER === undefined) {
             window.PUBLISH_IPFS_MANAGER = new PublishIpfsManager();
         }
@@ -25,30 +23,30 @@ export class PublishIpfsManager {
         gateway.set(value);
     }
     public constructor() {
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'shown.bs.modal', this.onBsModalShown.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'hide.bs.modal', this.onBsModalHide.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'hidden.bs.modal', this.onBsModalHidden.bind(this));
-        this.$primary.on(
+        this.ui.$publishDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
     }
     private onBsModalShow() {
         if (this.ipfs_gateway) {
-            this.$ipfs_gateway.val(this.ipfs_gateway);
+            this.ui.$publishDialogIpfsGateway.val(this.ipfs_gateway);
         } else {
-            this.$ipfs_gateway.val('');
+            this.ui.$publishDialogIpfsGateway.val('');
         }
-        this.$ipfs_gateway_ig.removeClass('has-error');
+        this.ui.$publishDialogIpfsGatewayIg.removeClass('has-error');
     }
     private onBsModalShown() {
         if (!this.ipfs_gateway) {
-            this.$ipfs_gateway.focus();
+            this.ui.$publishDialogIpfsGateway.focus();
         } else {
-            this.$primary.focus();
+            this.ui.$publishDialogPrimary.focus();
         }
     }
     private onBsModalHide() {
@@ -56,22 +54,22 @@ export class PublishIpfsManager {
     private onBsModalHidden() {
     }
     private async onPrimaryClick() {
-        const $ipfs_nav = this.$dialog.find('.nav-ipfs');
-        if (!$ipfs_nav.hasClass('active')) {
+        const $nav = this.ui.$publishDialog.find('.nav-ipfs');
+        if (!$nav.hasClass('active')) {
             return;
         }
-        const gateway = this.$ipfs_gateway.val() as string;
+        const gateway = this.ui.$publishDialogIpfsGateway.val() as string;
         if (!gateway) {
-            this.$ipfs_gateway_ig.addClass('has-error');
-            this.$ipfs_gateway.focus().off('blur').on('blur', () => {
-                if (this.$ipfs_gateway.val()) {
-                    this.$ipfs_gateway_ig.removeClass('has-error');
+            this.ui.$publishDialogIpfsGatewayIg.addClass('has-error');
+            this.ui.$publishDialogIpfsGateway.focus().off('blur').on('blur', () => {
+                if (this.ui.$publishDialogIpfsGateway.val()) {
+                    this.ui.$publishDialogIpfsGatewayIg.removeClass('has-error');
                 }
             });
         }
-        if (!this.$ipfs_gateway_ig.hasClass('has-error')) {
-            const head = TemplateManager.me.head({ title: this.editor.title });
-            const body = this.$contents.find('body').html();
+        if (!this.ui.$publishDialogIpfsGatewayIg.hasClass('has-error')) {
+            const head = TemplateManager.me.head({ title: this.ed.title });
+            const body = this.ui.$viewerContents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {
                 for await (const item of ipfs.add(buffer)) {
@@ -79,39 +77,27 @@ export class PublishIpfsManager {
                     const tab = window.open(url, '_black');
                     if (tab) tab.focus();
                     this.ipfs_gateway = gateway;
-                    this.$primary.prop('disabled', false);
-                    this.$primary.addClass('btn-success');
-                    this.$primary.button('published');
+                    this.ui.$publishDialogPrimary.prop('disabled', false);
+                    this.ui.$publishDialogPrimary.addClass('btn-success');
+                    this.ui.$publishDialogPrimary.button('published');
                     setTimeout(() => {
                         $('#publish-dlg').modal('hide');
-                        this.$primary.button('reset');
+                        this.ui.$publishDialogPrimary.button('reset');
                     }, 600);
                 }
             });
-            this.$primary.prop('disabled', true);
-            this.$primary.removeClass('btn-success');
-            this.$primary.removeClass('btn-warning');
-            this.$primary.removeClass('btn-danger');
-            this.$primary.button('publishing');
+            this.ui.$publishDialogPrimary.prop('disabled', true);
+            this.ui.$publishDialogPrimary.removeClass('btn-success');
+            this.ui.$publishDialogPrimary.removeClass('btn-warning');
+            this.ui.$publishDialogPrimary.removeClass('btn-danger');
+            this.ui.$publishDialogPrimary.button('publishing');
         }
     }
-    private get $contents() {
-        return this.editor.$viewer.contents();
-    }
-    private get $dialog() {
-        return $('#publish-dlg');
-    }
-    private get $ipfs_gateway() {
-        return this.$dialog.find('#ipfs-gateway');
-    }
-    private get $ipfs_gateway_ig() {
-        return this.$ipfs_gateway.parent('.input-group');
-    }
-    private get $primary() {
-        return this.$dialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
-    }
-    private get editor() {
+    private get ed() {
         return MdEditor.me;
+    }
+    private get ui() {
+        return Ui.me;
     }
 }
 export default PublishIpfsManager;

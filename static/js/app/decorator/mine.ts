@@ -13,5 +13,4 @@ export function mine(
         target[key] = mn;
     }
 }
-
 export default mine;

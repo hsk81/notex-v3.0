@@ -1,20 +1,18 @@
 import GoogleApi from "./google-api";
 
 export class BloggerApi {
-    public static get me(): BloggerApi {
+    public static get me() {
         if (window.BLOGGER_API === undefined) {
             window.BLOGGER_API = new BloggerApi();
         }
         return window.BLOGGER_API;
     }
-
     public constructor() {
         this._options = {
             client_id: '451381712046-9tihtvejim1r84uld3i3igu3983p0qvi.apps.googleusercontent.com',
             scope: 'https://www.googleapis.com/auth/blogger'
         };
     }
-
     public get(callback: Function, ms: number = 2048, n: number = 2) {
         GoogleApi.me.get((gapi: any) => {
             if (gapi) {
@@ -75,5 +73,4 @@ export class BloggerApi {
     }
     private _options: any;
 }
-
 export default BloggerApi;

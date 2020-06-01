@@ -4,5 +4,4 @@ export function after(fn: Function, callback: Function) {
         callback.apply(this, [fn.apply(this, args)].concat(args));
     };
 }
-
 export default after;

@@ -1,9 +1,3 @@
-/* tslint:disable:ban-types */
-/* tslint:disable:no-string-literal */
-/* tslint:disable:only-arrow-functions */
-/* tslint:disable:trailing-comma */
-/* tslint:disable:variable-name */
-
 export function traceable(
     flag: boolean): Function;
 export function traceable(
@@ -17,14 +11,12 @@ export function traceable(
         _traceable(true)(arg as any, key, dtor);
     }
 }
-
-interface ITracedFunction extends Function {
+interface TracedFunction extends Function {
     __traced__?: string | null;
 }
 const trace = window.TRACE || JSON.parse(
     localStorage.getItem('TRACE') as string
 );
-
 export function _traceable(
     flag: boolean, name?: string
 ): Function {
@@ -34,7 +26,7 @@ export function _traceable(
         const wrap = (
             fn: Function, callback: Function,
         ) => {
-            const gn = fn as ITracedFunction;
+            const gn = fn as TracedFunction;
             if (!flag) {
                 gn.__traced__ = null;
             } else {
@@ -107,5 +99,4 @@ export function _traceable(
         }
     };
 }
-
 export default traceable;

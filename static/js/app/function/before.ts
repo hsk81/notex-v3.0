@@ -6,5 +6,4 @@ export function before(fn: Function, callback: Function) {
         }
     };
 }
-
 export default before;

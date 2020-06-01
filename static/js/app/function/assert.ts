@@ -4,5 +4,4 @@ export function assert(expression: any, message?: string) {
     }
     return expression;
 }
-
 export default assert;

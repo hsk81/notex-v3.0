@@ -1,6 +1,7 @@
-import BloggerApi from "../google-api/blogger-api";
-import MarkdownIt from "../markdown-it/markdown-it";
-import MdEditor from "./md-editor";
+import { BloggerApi } from "../google-api/blogger-api";
+import { MarkdownIt } from "../markdown-it/markdown-it";
+import { MdEditor } from "./md-editor";
+import { Ui } from "./ui";
 
 import { after } from "../function/after";
 import { assert } from "../function/assert";
@@ -8,24 +9,21 @@ import { before } from "../function/before";
 import { cookie } from "../cookie/cookie";
 import { trace } from "../decorator/trace";
 
-type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
-    button: (action: string) => JQueryEx<T>;
-};
 declare const $: JQueryStatic;
 
 @trace
 export class PublishBlogManager {
-    public static get me(): PublishBlogManager {
+    public static get me() {
         if (window.PUBLISH_BLOG_MANAGER === undefined) {
             window.PUBLISH_BLOG_MANAGER = new PublishBlogManager();
         }
         return window.PUBLISH_BLOG_MANAGER;
     }
     private get blog_url(): string {
-        return cookie.get<string>('blog-url') as string;
+        return cookie.get('blog-url') as string;
     }
     private set blog_url(value: string) {
-        cookie.set<string>('blog-url', value);
+        cookie.set('blog-url', value);
     }
     private get scripts(): string {
         return localStorage.getItem('post-scripts') as string;
@@ -34,10 +32,10 @@ export class PublishBlogManager {
         localStorage.setItem('post-scripts', value);
     }
     private get scripts_flag(): boolean {
-        return cookie.get<boolean>('post-scripts-flag', true) as boolean;
+        return cookie.get('post-scripts-flag', true) as boolean;
     }
     private set scripts_flag(value: boolean) {
-        cookie.set<boolean>('post-scripts-flag', value);
+        cookie.set('post-scripts-flag', value);
     }
     private get styles(): string {
         return localStorage.getItem('post-styles') as string;
@@ -46,97 +44,97 @@ export class PublishBlogManager {
         localStorage.setItem('post-styles', value);
     }
     private get styles_flag(): boolean {
-        return cookie.get<boolean>('post-styles-flag', true) as boolean;
+        return cookie.get('post-styles-flag', true) as boolean;
     }
     private set styles_flag(value: boolean) {
-        cookie.set<boolean>('post-styles-flag', value);
+        cookie.set('post-styles-flag', value);
     }
     public constructor() {
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'shown.bs.modal', this.onBsModalShown.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'hide.bs.modal', this.onBsModalHide.bind(this));
-        this.$dialog.on(
+        this.ui.$publishDialog.on(
             'hidden.bs.modal', this.onBsModalHidden.bind(this));
-        this.$expand.on(
+        this.ui.$publishDialogExpand.on(
             'click', this.onExpandClick.bind(this));
-        this.$post_scripts_nav.on(
+        this.ui.$publishDialogBlogScriptsNav.on(
             'click', this.onScriptsNavClick.bind(this));
-        this.$post_scripts_checkbox.on(
+        this.ui.$publishDialogBlogScriptsCheckbox.on(
             'click', this.onScriptsCheckboxClick.bind(this));
-        this.$post_styles_nav.on(
+        this.ui.$publishDialogBlogStylesNav.on(
             'click', this.onStylesNavClick.bind(this));
-        this.$post_styles_checkbox.on(
+        this.ui.$publishDialogBlogStylesCheckbox.on(
             'click', this.onStylesCheckboxClick.bind(this));
-        this.$primary.on(
+        this.ui.$publishDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
     }
     private onBsModalShow() {
-        const $blog_url = this.$blog_url;
-        const $blog_url_ig = $blog_url.parent('.input-group');
-        const $post_title = this.$post_title;
-        const $post_title_ig = $post_title.parent('.input-group');
-        const $post_settings = this.$post_settings;
-        const $post_scripts_chk = this.$post_scripts_checkbox;
-        const $post_scripts_ta = this.$post_scripts_textarea;
-        const $post_styles_chk = this.$post_styles_checkbox;
-        const $post_styles_ta = this.$post_styles_textarea;
-        $blog_url_ig.removeClass('has-error');
-        $post_title_ig.removeClass('has-error');
-        $post_title_ig.find('[type=checkbox]').prop('checked', true);
+        const $url = this.ui.$publishDialogBlogUrl;
+        const $url_ig = $url.parent('.input-group');
+        $url_ig.removeClass('has-error');
+        const $title = this.ui.$publishDialogBlogTitle;
+        const $title_ig = $title.parent('.input-group');
+        $title_ig.removeClass('has-error');
+        $title_ig.find('[type=checkbox]').prop('checked', true);
         const blog_url = this.blog_url;
         if (blog_url && typeof blog_url === 'string') {
-            $blog_url.val(blog_url);
+            $url.val(blog_url);
         }
-        const title = MdEditor.me.title;;
+        const title = MdEditor.me.title;
         if (title && typeof title === 'string') {
-            $post_title.val(title);
+            $title.val(title);
         }
-        $post_settings.hide();
-        $post_scripts_chk.prop('checked', this.scripts_flag);
-        if (this.scripts) $post_scripts_ta.val(this.scripts);
-        $post_styles_chk.prop('checked', this.styles_flag);
-        if (this.styles) $post_styles_ta.val(this.styles);
+        const $settings = this.ui.$publishDialogBlogSettings;
+        $settings.hide();
+        const $scripts_cb = this.ui.$publishDialogBlogScriptsCheckbox;
+        $scripts_cb.prop('checked', this.scripts_flag);
+        const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
+        if (this.scripts) $scripts_ta.val(this.scripts);
+        const $styles_cb = this.ui.$publishDialogBlogStylesCheckbox;
+        $styles_cb.prop('checked', this.styles_flag);
+        const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
+        if (this.styles) $styles_ta.val(this.styles);
     }
     private onBsModalShown() {
-        if (!this.$blog_url.val()) {
-            this.$blog_url.focus();
-        } else if (!this.$post_title.val()) {
-            this.$post_title.focus();
+        if (!this.ui.$publishDialogBlogUrl.val()) {
+            this.ui.$publishDialogBlogUrl.focus();
+        } else if (!this.ui.$publishDialogBlogTitle.val()) {
+            this.ui.$publishDialogBlogTitle.focus();
         } else {
-            this.$primary.focus();
+            this.ui.$publishDialogPrimary.focus();
         }
     }
     private onBsModalHide() {
-        this.$post_settings.hide();
+        this.ui.$publishDialogBlogSettings.hide();
     }
     private onBsModalHidden() {
     }
     private onExpandClick() {
-        const $glyphicon = this.$expand.find('.glyphicon');
-        const $textarea = this.$post_scripts_textarea;
-        const $settings = this.$post_settings;
-        const $title = this.$post_title;
-        if (this.$expand.data('state') === 'expanded') {
-            this.$expand.data('state', 'collapsed');
+        const $glyphicon = this.ui.$publishDialogExpand.find('.glyphicon');
+        const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
+        const $settings = this.ui.$publishDialogBlogSettings;
+        const $title = this.ui.$publishDialogBlogTitle;
+        if (this.ui.$publishDialogExpand.data('state') === 'expanded') {
+            this.ui.$publishDialogExpand.data('state', 'collapsed');
         } else {
-            this.$expand.data('state', 'expanded');
+            this.ui.$publishDialogExpand.data('state', 'expanded');
         }
-        if (this.$expand.data('state') === 'expanded') {
-            if (this.$post_scripts_nav.hasClass('active')) {
+        if (this.ui.$publishDialogExpand.data('state') === 'expanded') {
+            if (this.ui.$publishDialogBlogScriptsNav.hasClass('active')) {
                 $settings.filter(':not(.styles)').show();
-            } else if (this.$post_styles_nav.hasClass('active')) {
+            } else if (this.ui.$publishDialogBlogStylesNav.hasClass('active')) {
                 $settings.filter(':not(.scripts)').show();
             } else {
                 $settings.show();
             }
             $glyphicon.removeClass('glyphicon-chevron-down');
             $glyphicon.addClass('glyphicon-chevron-up');
-            $textarea[0].setSelectionRange(0, 0);
-            $textarea.scrollTop(0);
-            $textarea.focus();
+            $scripts_ta[0].setSelectionRange(0, 0);
+            $scripts_ta.scrollTop(0);
+            $scripts_ta.focus();
         } else {
             $glyphicon.removeClass('glyphicon-chevron-up');
             $glyphicon.addClass('glyphicon-chevron-down');
@@ -145,60 +143,62 @@ export class PublishBlogManager {
         }
     }
     private onScriptsNavClick() {
-        this.$post_styles_nav.removeClass('active');
-        this.$post_styles.hide();
-        this.$post_scripts_nav.addClass('active');
-        this.$post_scripts.show();
-        this.$post_scripts_textarea.focus();
+        this.ui.$publishDialogBlogStylesNav.removeClass('active');
+        this.ui.$publishDialogBlogStyles.hide();
+        this.ui.$publishDialogBlogScriptsNav.addClass('active');
+        this.ui.$publishDialogBlogScripts.show();
+        this.ui.$publishDialogBlogScriptsTextarea.focus();
     }
     private onScriptsCheckboxClick(ev: Event) {
         this.scripts_flag = $(ev.target as any).prop('checked');
     }
     private onStylesNavClick() {
-        this.$post_scripts_nav.removeClass('active');
-        this.$post_scripts.hide();
-        this.$post_styles_nav.addClass('active');
-        this.$post_styles.show();
-        this.$post_styles_textarea.focus();
+        this.ui.$publishDialogBlogScriptsNav.removeClass('active');
+        this.ui.$publishDialogBlogScripts.hide();
+        this.ui.$publishDialogBlogStylesNav.addClass('active');
+        this.ui.$publishDialogBlogStyles.show();
+        this.ui.$publishDialogBlogStylesTextarea.focus();
     }
     private onStylesCheckboxClick(ev: Event) {
         this.styles_flag = $(ev.target as any).prop('checked');
     }
     private onPrimaryClick() {
-        const $blog_nav = this.$dialog.find('.nav-blog');
+        const $blog_nav = this.ui.$publishDialog.find('.nav-blog');
         if (!$blog_nav.hasClass('active')) {
             return;
         }
-        const $blog_url = this.$blog_url;
-        const $blog_url_ig = $blog_url.parent('.input-group');
-        const $post_title = this.$post_title;
-        const $post_title_ig = $post_title.parent('.input-group');
-        const $post_title_cb = $post_title_ig.find('[type=checkbox]');
-        const url = $blog_url.val() as string;
+        const $url = this.ui.$publishDialogBlogUrl;
+        const $url_ig = $url.parent('.input-group');
+        const $title = this.ui.$publishDialogBlogTitle;
+        const $title_ig = $title.parent('.input-group');
+        const $title_cb = $title_ig.find('[type=checkbox]');
+        const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
+        const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
+        const url = $url.val() as string;
         if (!url) {
-            $blog_url_ig.addClass('has-error');
-            $blog_url.focus().off('blur').on('blur', () => {
-                const url = $blog_url.val();
-                if (url) $blog_url_ig.removeClass('has-error');
+            $url_ig.addClass('has-error');
+            $url.focus().off('blur').on('blur', () => {
+                const url = $url.val();
+                if (url) $url_ig.removeClass('has-error');
             });
         }
-        const title = $post_title.val();
+        const title = $title.val();
         if (!title) {
-            $post_title_ig.addClass('has-error');
-            $post_title.focus().off('blur').on('blur', () => {
-                const title = $post_title.val();
-                if (title) $post_title_ig.removeClass('has-error');
+            $title_ig.addClass('has-error');
+            $title.focus().off('blur').on('blur', () => {
+                const title = $title.val();
+                if (title) $title_ig.removeClass('has-error');
             });
         }
-        if ($blog_url_ig.hasClass('has-error')) {
-            $blog_url.focus();
-        } else if ($post_title_ig.hasClass('has-error')) {
-            $post_title.focus();
+        if ($url_ig.hasClass('has-error')) {
+            $url.focus();
+        } else if ($title_ig.hasClass('has-error')) {
+            $title.focus();
         } else {
             BloggerApi.me.get((blogger: any) => {
                 const on_done = (res: any) => {
                     const blog = assert(res && res.result);
-                    const update = $post_title_cb.prop('checked');
+                    const update = $title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
                         const on_done = (res: any) => {
                             const posts = res.result && res.result.items || [],
@@ -224,10 +224,10 @@ export class PublishBlogManager {
                     }
                 };
                 const on_fail = (res: any) => {
-                    $blog_url_ig.addClass('has-error');
-                    $blog_url.focus().off('blur').on('blur', () => {
-                        const url = $blog_url.val();
-                        if (url) $blog_url_ig.removeClass('has-error');
+                    $url_ig.addClass('has-error');
+                    $url.focus().off('blur').on('blur', () => {
+                        const url = $url.val();
+                        if (url) $url_ig.removeClass('has-error');
                     });
                     console.error('[on:blogger.blogs.get-by-url]', res);
                 };
@@ -237,34 +237,34 @@ export class PublishBlogManager {
                     });
                     url_request.then(
                         after(on_done, () => {
-                            this.scripts = this.$post_scripts_textarea.val() as string;
-                            this.styles = this.$post_styles_textarea.val() as string;
+                            this.scripts = $scripts_ta.val() as string;
+                            this.styles = $styles_ta.val() as string;
                             this.blog_url = url;
-                            this.$primary.prop('disabled', false);
-                            this.$primary.addClass('btn-success');
-                            this.$primary.button('published');
+                            this.ui.$publishDialogPrimary.prop('disabled', false);
+                            this.ui.$publishDialogPrimary.addClass('btn-success');
+                            this.ui.$publishDialogPrimary.button('published');
                             setTimeout(() => {
                                 $('#publish-dlg').modal('hide');
-                                this.$primary.button('reset');
+                                this.ui.$publishDialogPrimary.button('reset');
                             }, 600);
                         }),
                         before(on_fail, () => {
-                            this.$primary.prop('disabled', false);
-                            this.$primary.addClass('btn-danger');
-                            this.$primary.button('reset');
+                            this.ui.$publishDialogPrimary.prop('disabled', false);
+                            this.ui.$publishDialogPrimary.addClass('btn-danger');
+                            this.ui.$publishDialogPrimary.button('reset');
                         })
                     );
                 } else {
-                    this.$primary.prop('disabled', false);
-                    this.$primary.addClass('btn-danger');
-                    this.$primary.button('reset');
+                    this.ui.$publishDialogPrimary.prop('disabled', false);
+                    this.ui.$publishDialogPrimary.addClass('btn-danger');
+                    this.ui.$publishDialogPrimary.button('reset');
                 }
             });
-            this.$primary.prop('disabled', true);
-            this.$primary.removeClass('btn-success');
-            this.$primary.removeClass('btn-warning');
-            this.$primary.removeClass('btn-danger');
-            this.$primary.button('publishing');
+            this.ui.$publishDialogPrimary.prop('disabled', true);
+            this.ui.$publishDialogPrimary.removeClass('btn-success');
+            this.ui.$publishDialogPrimary.removeClass('btn-warning');
+            this.ui.$publishDialogPrimary.removeClass('btn-danger');
+            this.ui.$publishDialogPrimary.button('publishing');
         }
     }
     private doInsert(blogger: any, blog: any, title: any) {
@@ -305,22 +305,22 @@ export class PublishBlogManager {
         update_req.then(on_done, on_fail);
     }
     private content(): string {
-        return this.toHtml(this.editor.getValue())
+        return this.toHtml(this.ed.getValue())
             + this.withScripts()
             + this.withStyles();
     }
     private withScripts() {
-        const $checkbox = this.$post_scripts_checkbox;
+        const $checkbox = this.ui.$publishDialogBlogScriptsCheckbox;
         if ($checkbox.prop('checked')) {
-            return this.$post_scripts_textarea.val();
+            return this.ui.$publishDialogBlogScriptsTextarea.val();
         } else {
             return '';
         }
     }
     private withStyles() {
-        const $checkbox = this.$post_styles_checkbox;
+        const $checkbox = this.ui.$publishDialogBlogStylesCheckbox;
         if ($checkbox.prop('checked')) {
-            return this.$post_styles_textarea.val();
+            return this.ui.$publishDialogBlogStylesTextarea.val();
         } else {
             return '';
         }
@@ -334,53 +334,11 @@ export class PublishBlogManager {
         }
         return $content.html();
     }
-    private get $dialog() {
-        return $('#publish-dlg');
-    }
-    private get $blog_url() {
-        return this.$dialog.find('#blog-url');
-    }
-    private get $post_title() {
-        return this.$dialog.find('#post-title');
-    }
-    private get $post_settings() {
-        return this.$dialog.find('.post-settings');
-    }
-    private get $post_settings_nav() {
-        return this.$dialog.find('.post-settings.nav');
-    }
-    private get $post_scripts() {
-        return this.$dialog.find('.post-settings.scripts');
-    }
-    private get $post_scripts_nav() {
-        return this.$post_settings_nav.find('.scripts');
-    }
-    private get $post_scripts_checkbox() {
-        return this.$post_scripts.find('[type=checkbox]');
-    }
-    private get $post_scripts_textarea() {
-        return this.$post_scripts.find('textarea') as JQuery<HTMLTextAreaElement>;
-    }
-    private get $post_styles() {
-        return this.$dialog.find('.post-settings.styles');
-    }
-    private get $post_styles_nav() {
-        return this.$post_settings_nav.find('.styles');
-    }
-    private get $post_styles_checkbox() {
-        return this.$post_styles.find('[type=checkbox]');
-    }
-    private get $post_styles_textarea() {
-        return this.$post_styles.find('textarea');
-    }
-    private get $expand() {
-        return this.$dialog.find('#expand');
-    }
-    private get $primary() {
-        return this.$dialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
-    }
-    private get editor() {
+    private get ed() {
         return MdEditor.me;
+    }
+    private get ui() {
+        return Ui.me;
     }
 }
 export default PublishBlogManager;
