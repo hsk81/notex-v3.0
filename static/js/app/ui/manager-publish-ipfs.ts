@@ -40,7 +40,7 @@ export class PublishIpfsManager {
         } else {
             this.ui.$publishDialogIpfsGateway.val('');
         }
-        this.ui.$publishDialogIpfsGatewayIg.removeClass('has-error');
+        this.ui.$publishDialogIpfsGatewayInputGroup.removeClass('has-error');
     }
     private onBsModalShown() {
         if (!this.ipfs_gateway) {
@@ -54,22 +54,22 @@ export class PublishIpfsManager {
     private onBsModalHidden() {
     }
     private async onPrimaryClick() {
-        const $nav = this.ui.$publishDialog.find('.nav-ipfs');
+        const $nav = this.ui.$publishDialogIpfsNav;
         if (!$nav.hasClass('active')) {
             return;
         }
         const gateway = this.ui.$publishDialogIpfsGateway.val() as string;
         if (!gateway) {
-            this.ui.$publishDialogIpfsGatewayIg.addClass('has-error');
+            this.ui.$publishDialogIpfsGatewayInputGroup.addClass('has-error');
             this.ui.$publishDialogIpfsGateway.focus().off('blur').on('blur', () => {
                 if (this.ui.$publishDialogIpfsGateway.val()) {
-                    this.ui.$publishDialogIpfsGatewayIg.removeClass('has-error');
+                    this.ui.$publishDialogIpfsGatewayInputGroup.removeClass('has-error');
                 }
             });
         }
-        if (!this.ui.$publishDialogIpfsGatewayIg.hasClass('has-error')) {
+        if (!this.ui.$publishDialogIpfsGatewayInputGroup.hasClass('has-error')) {
             const head = TemplateManager.me.head({ title: this.ed.title });
-            const body = this.ui.$viewerContents.find('body').html();
+            const body = this.ui.$viewer.contents().find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {
                 for await (const item of ipfs.add(buffer)) {
@@ -81,7 +81,7 @@ export class PublishIpfsManager {
                     this.ui.$publishDialogPrimary.addClass('btn-success');
                     this.ui.$publishDialogPrimary.button('published');
                     setTimeout(() => {
-                        $('#publish-dlg').modal('hide');
+                        this.ui.$publishDialog.modal('hide');
                         this.ui.$publishDialogPrimary.button('reset');
                     }, 600);
                 }

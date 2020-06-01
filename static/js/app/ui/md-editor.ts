@@ -108,14 +108,14 @@ export class MdEditor {
         return this.ui.$input;
     }
     public onScroll(e: HTMLElement) {
-        const synchronize = ($body: JQuery<HTMLElement>) => {
-            const q = e.scrollTop / e.scrollHeight;
-            const h = $body[0].scrollHeight;
-            const c = $body[0].clientHeight;
-            $body.scrollTop(q*h+q*c);
-        };
-        synchronize(this.ui.$cachedBody);
-        synchronize(this.ui.$outputBody);
+        const $body = this.ui.$body;
+        const q = e.scrollTop / e.scrollHeight;
+        const h = $body[0].scrollHeight;
+        const c = $body[0].clientHeight;
+        this.doScroll(q*h+q*c);
+    }
+    public doScroll(value: number) {
+        this.ui.$body.scrollTop(value);
     }
     public render(force: 'hard'|'soft'|'none' = 'none') {
         this.renderer.do(force);

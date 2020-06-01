@@ -87,8 +87,14 @@ export class Ui {
             return this.$output;
         }
     }
-    public get $viewerContents() {
+    public get $contents() {
         return this.$viewer.contents();
+    }
+    public get $head() {
+        return this.$contents.find('head');
+    }
+    public get $body() {
+        return this.$contents.find('body');
     }
     public get $cached() {
         return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
@@ -242,8 +248,17 @@ export class Ui {
     public get $publishDialogBlogUrl() {
         return this.$publishDialog.find('#blog-url');
     }
+    public get $publishDialogBlogUrlInputGroup() {
+        return this.$publishDialogBlogUrl.parent('.input-group');
+    }
     public get $publishDialogBlogTitle() {
         return this.$publishDialog.find('#post-title');
+    }
+    public get $publishDialogBlogTitleInputGroup() {
+        return this.$publishDialogBlogTitle.parent('.input-group');
+    }
+    public get $publishDialogBlogTitleCheckbox() {
+        return this.$publishDialogBlogTitleInputGroup.find('[type=checkbox]');
     }
     public get $publishDialogBlogSettings() {
         return this.$publishDialog.find('.post-settings');
@@ -284,7 +299,7 @@ export class Ui {
     public get $publishDialogIpfsGateway() {
         return this.$publishDialog.find('#ipfs-gateway');
     }
-    public get $publishDialogIpfsGatewayIg() {
+    public get $publishDialogIpfsGatewayInputGroup() {
         return this.$publishDialogIpfsGateway.parent('.input-group');
     }
     public get $publishDialogExpand() {

@@ -73,6 +73,7 @@ export class MdEditorAibar {
         } else {
             this.aiMode = AiMode.help;
         }
+        this.ed.doScroll(0);
     }
     private onLhsButtonClick() {
         if (this.aiPage !== undefined && this.aiPage > 0) {
@@ -80,6 +81,7 @@ export class MdEditorAibar {
         } else {
             this.aiMode = AiMode.help;
         }
+        this.ed.doScroll(0);
     }
     private onMidButtonClick() {
         if (this.aiMode !== AiMode.help) {

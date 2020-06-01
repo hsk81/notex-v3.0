@@ -73,12 +73,13 @@ export class PublishBlogManager {
     }
     private onBsModalShow() {
         const $url = this.ui.$publishDialogBlogUrl;
-        const $url_ig = $url.parent('.input-group');
+        const $url_ig = this.ui.$publishDialogBlogUrlInputGroup;
         $url_ig.removeClass('has-error');
         const $title = this.ui.$publishDialogBlogTitle;
-        const $title_ig = $title.parent('.input-group');
+        const $title_ig = this.ui.$publishDialogBlogTitleInputGroup;
+        const $title_cb = this.ui.$publishDialogBlogTitleCheckbox;
         $title_ig.removeClass('has-error');
-        $title_ig.find('[type=checkbox]').prop('checked', true);
+        $title_cb.prop('checked', true);
         const blog_url = this.blog_url;
         if (blog_url && typeof blog_url === 'string') {
             $url.val(blog_url);
@@ -163,31 +164,29 @@ export class PublishBlogManager {
         this.styles_flag = $(ev.target as any).prop('checked');
     }
     private onPrimaryClick() {
-        const $blog_nav = this.ui.$publishDialog.find('.nav-blog');
+        const $blog_nav = this.ui.$publishDialogBlogNav;
         if (!$blog_nav.hasClass('active')) {
             return;
         }
         const $url = this.ui.$publishDialogBlogUrl;
-        const $url_ig = $url.parent('.input-group');
+        const $url_ig = this.ui.$publishDialogBlogUrlInputGroup;
         const $title = this.ui.$publishDialogBlogTitle;
-        const $title_ig = $title.parent('.input-group');
-        const $title_cb = $title_ig.find('[type=checkbox]');
+        const $title_ig = this.ui.$publishDialogBlogTitleInputGroup;
+        const $title_cb = this.ui.$publishDialogBlogTitleCheckbox;
         const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
         const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
         const url = $url.val() as string;
         if (!url) {
             $url_ig.addClass('has-error');
             $url.focus().off('blur').on('blur', () => {
-                const url = $url.val();
-                if (url) $url_ig.removeClass('has-error');
+                if ($url.val()) $url_ig.removeClass('has-error');
             });
         }
         const title = $title.val();
         if (!title) {
             $title_ig.addClass('has-error');
             $title.focus().off('blur').on('blur', () => {
-                const title = $title.val();
-                if (title) $title_ig.removeClass('has-error');
+                if ($title.val()) $title_ig.removeClass('has-error');
             });
         }
         if ($url_ig.hasClass('has-error')) {
@@ -201,10 +200,10 @@ export class PublishBlogManager {
                     const update = $title_cb.prop('checked');
                     if (update && blog.posts.totalItems > 0) {
                         const on_done = (res: any) => {
-                            const posts = res.result && res.result.items || [],
-                                post = posts.find((p: any) => {
-                                    return p.title === title;
-                                });
+                            const posts = res.result && res.result.items || [];
+                            const post = posts.find(
+                                (p: any) => p.title === title
+                            );
                             if (post !== undefined) {
                                 this.doUpdate(blogger, blog, post);
                             } else {
@@ -226,8 +225,7 @@ export class PublishBlogManager {
                 const on_fail = (res: any) => {
                     $url_ig.addClass('has-error');
                     $url.focus().off('blur').on('blur', () => {
-                        const url = $url.val();
-                        if (url) $url_ig.removeClass('has-error');
+                        if ($url.val()) $url_ig.removeClass('has-error');
                     });
                     console.error('[on:blogger.blogs.get-by-url]', res);
                 };
