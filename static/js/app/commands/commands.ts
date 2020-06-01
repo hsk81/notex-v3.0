@@ -55,10 +55,10 @@ export class Commands {
             this._redone.push(un_command.redo());
         }
     }
-    private static top(array: Array<IExCommand>): IExCommand | undefined {
+    private static top(array: Array<IExCommand>): IExCommand|undefined {
         return array[array.length - 1];
     }
-    private static pop(array: Array<IExCommand>): IExCommand | undefined {
+    private static pop(array: Array<IExCommand>): IExCommand|undefined {
         return array.pop();
     }
     private _redone: Array<IExCommand>;

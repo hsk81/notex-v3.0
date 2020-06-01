@@ -6,7 +6,7 @@ export function trace(
 export function trace(
     ctor: Function): void;
 export function trace(
-    arg: boolean | Function): Function | void {
+    arg: boolean|Function): Function|void {
     if (typeof arg === "boolean") {
         return _trace(arg);
     } else {

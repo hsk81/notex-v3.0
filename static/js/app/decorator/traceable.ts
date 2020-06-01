@@ -3,8 +3,8 @@ export function traceable(
 export function traceable(
     target: any, key: string, dtor?: PropertyDescriptor): void;
 export function traceable(
-    arg: boolean | any, key?: string, dtor?: PropertyDescriptor,
-): Function | void {
+    arg: boolean|any, key?: string, dtor?: PropertyDescriptor,
+): Function|void {
     if (typeof arg === "boolean") {
         return _traceable(arg);
     } else {
@@ -12,7 +12,7 @@ export function traceable(
     }
 }
 interface TracedFunction extends Function {
-    __traced__?: string | null;
+    __traced__?: string|null;
 }
 const trace = window.TRACE || JSON.parse(
     localStorage.getItem('TRACE') as string

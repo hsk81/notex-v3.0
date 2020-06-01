@@ -102,7 +102,7 @@ export class MdEditorAibar {
             this.aiPage = 0;
         }
     }
-    private async onAiPage(page: number | undefined) {
+    private async onAiPage(page: number|undefined) {
         if (page !== undefined) {
             const help = await this.fetch(page);
             if (help !== null) {

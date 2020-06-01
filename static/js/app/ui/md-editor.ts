@@ -330,11 +330,11 @@ export class MdEditor {
     private get renderer() {
         return MdRender.me;
     }
-    public get mirror(): CodeMirror.Editor | undefined {
+    public get mirror(): CodeMirror.Editor|undefined {
         return window.CODE_MIRROR;
     }
     private setMirror(
-        value: CodeMirror.Editor | undefined
+        value: CodeMirror.Editor|undefined
     ) {
         window.CODE_MIRROR = value;
     }
@@ -359,13 +359,13 @@ export class MdEditor {
         const value = cookie.get<boolean>('simple-flag');
         return value ? UiMode.simple : UiMode.mirror;
     }
-    private set spellChecker(value: SpellChecker | undefined) {
+    private set spellChecker(value: SpellChecker|undefined) {
         this._spellChecker = value;
     }
-    private get spellCheckerOverlay(): Overlay | undefined {
+    private get spellCheckerOverlay(): Overlay|undefined {
         return this._spellCheckerOverlay;
     }
-    private set spellCheckerOverlay(value: Overlay | undefined) {
+    private set spellCheckerOverlay(value: Overlay|undefined) {
         this._spellCheckerOverlay = value;
     }
     public spellCheck(
@@ -430,13 +430,13 @@ export class MdEditor {
             }
         };
     };
-    private get searchOverlay(): Overlay | undefined {
+    private get searchOverlay(): Overlay|undefined {
         return this._searchOverlay;
     }
-    private set searchOverlay(value: Overlay | undefined) {
+    private set searchOverlay(value: Overlay|undefined) {
         this._searchOverlay = value;
     }
-    public search(query: string | RegExp, options?: {
+    public search(query: string|RegExp, options?: {
         altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
@@ -456,7 +456,7 @@ export class MdEditor {
             }
         }
     }
-    public replace(query: string | RegExp, new_value: string, options?: {
+    public replace(query: string|RegExp, new_value: string, options?: {
         altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
@@ -484,12 +484,12 @@ export class MdEditor {
             }
         }
     }
-    private select(query: string | RegExp, direction: '+' | '-') {
-        const length = (query: string | RegExp) => {
+    private select(query: string|RegExp, direction: '+'|'-') {
+        const length = (query: string|RegExp) => {
             return typeof query !== 'string'
                 ? query.source.length : query.length;
         };
-        const next = (index: number | undefined) => {
+        const next = (index: number|undefined) => {
             if (index !== undefined) {
                 const n = this.value.substring(index + 1).search(query);
                 return n >= 0 ? n + (index + 1) : undefined;
@@ -498,8 +498,8 @@ export class MdEditor {
                 return n >= 0 ? n : undefined;
             }
         };
-        const prev = (index: number | undefined) => {
-            let p: number | undefined;
+        const prev = (index: number|undefined) => {
+            let p: number|undefined;
             while (true) {
                 const n = next(p);
                 if (n !== undefined) {
@@ -528,18 +528,18 @@ export class MdEditor {
             this.index = undefined;
         }
     }
-    private get index(): number | undefined {
-        return window['INDEX'];
+    private get index(): number|undefined {
+        return window.INDEX;
     }
-    private set index(value: number | undefined) {
-        window['INDEX'] = value;
+    private set index(value: number|undefined) {
+        window.INDEX = value;
     }
     private get ui() {
         return Ui.me;
     }
-    private _spellCheckerOverlay: Overlay | undefined;
-    private _spellChecker: SpellChecker | undefined;
-    private _searchOverlay: Overlay | undefined;
+    private _spellCheckerOverlay: Overlay|undefined;
+    private _spellChecker: SpellChecker|undefined;
+    private _searchOverlay: Overlay|undefined;
     private _mdOld: string = '';
 }
 export default MdEditor;
