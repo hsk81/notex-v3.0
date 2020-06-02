@@ -26,19 +26,19 @@ export class MdEditorToolbarRhs {
                 this.refresh();
             });
         }
-        this.ui.$toolPrint
+        this.ui.$toolbarPrint
             .on('click', this.onPrintClick.bind(this));
-        this.ui.$toolPublish
+        this.ui.$toolbarPublish
             .on('click', this.onPublishClick.bind(this));
-        this.ui.$toolRefresh
+        this.ui.$toolbarRefresh
             .on('click', this.onRefreshClick.bind(this));
-        this.ui.$toolTemplate
+        this.ui.$toolbarTemplate
             .on('click', this.onTemplateClick.bind(this));
-        this.ui.$tool1Column
+        this.ui.$toolbar1Column
             .on('click', this.onSingleColumnClick.bind(this));
-        this.ui.$tool2Columns
+        this.ui.$toolbar2Columns
             .on('click', this.onDoubleColumnClick.bind(this));
-        this.ui.$tool3Columns
+        this.ui.$toolbar3Columns
             .on('click', this.onTripleColumnClick.bind(this));
     }
     public refresh() {

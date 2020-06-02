@@ -14,9 +14,13 @@ export class HeaderMenu {
         return window.HEADER_MENU;
     }
     public constructor() {
-        this.ui.$toolOpen.on(
+        this.ui.$headerOpen.on(
             'change', this.onOpenItemChange.bind(this));
-        this.ui.$toolSwap.on(
+        this.ui.$headerSwap.on(
+            'click', this.onSwapItemClick.bind(this));
+        this.ui.$toolbarOpen.on(
+            'change', this.onOpenItemChange.bind(this));
+        this.ui.$toolbarSwap.on(
             'click', this.onSwapItemClick.bind(this));
     }
     private onOpenItemChange(ev: JQuery.ChangeEvent) {

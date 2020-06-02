@@ -31,48 +31,48 @@ export class MdEditorFooter {
     }
     private show() {
         this.ui.$lhs.removeClass('without-footer');
-        this.ui.$footer.fadeIn('slow');
+        this.ui.$lhsFooter.fadeIn('slow');
     }
     private hide(force = false) {
         this.ui.$lhs.addClass('without-footer');
-        if (force) this.ui.$footer.hide();
+        if (force) this.ui.$lhsFooter.hide();
     }
     private events() {
-        this.ui.$footer.find('[data-toggle="popover"]')
+        this.ui.$lhsFooter.find('[data-toggle="popover"]')
             .on('blur', (ev) => $(ev.target).popover('hide'))
             .on('click', (ev) => $(ev.target).popover('toggle'))
             .on('keydown', (ev) => $(ev.target).popover('hide'))
             .on('keypress', (ev) => $(ev.target).popover('hide'));
-        this.ui.$footerMirror
+        this.ui.$lhsFooterMirror
             .on('click', this.onMirrorClick.bind(this));
-        this.ui.$footerCliFind
+        this.ui.$lhsFooterCliFind
             .on('change', this.onFindChange.bind(this) as any);
-        this.ui.$footerCliFind
+        this.ui.$lhsFooterCliFind
             .on('keydown', this.onFindKeyDown.bind(this) as any);
-        this.ui.$footerCliFindNext
+        this.ui.$lhsFooterCliFindNext
             .on('click', this.onFindNextClick.bind(this) as any);
-        this.ui.$footerCliFindPrevious
+        this.ui.$lhsFooterCliFindPrevious
             .on('click', this.onFindPreviousClick.bind(this) as any);
-        this.ui.$footerCliReplace
+        this.ui.$lhsFooterCliReplace
             .on('change', this.onReplaceChange.bind(this) as any);
-        this.ui.$footerCliReplace
+        this.ui.$lhsFooterCliReplace
             .on('keydown', this.onReplaceKeyDown.bind(this) as any);
-        this.ui.$footerCliReplaceConfirm
+        this.ui.$lhsFooterCliReplaceConfirm
             .on('click', this.onReplaceConfirmClick.bind(this) as any);
-        this.ui.$footerSpellCheckerButton
+        this.ui.$lhsFooterSpellCheckerButton
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
     }
     private tips() {
-        this.ui.$footer.find('[data-toggle="tooltip"]').tooltip({
+        this.ui.$lhsFooter.find('[data-toggle="tooltip"]').tooltip({
             trigger: 'hover'
         });
-        this.ui.$footer.find('[data-toggle="dropdown"]').tooltip({
+        this.ui.$lhsFooter.find('[data-toggle="dropdown"]').tooltip({
             trigger: 'hover'
         });
-        this.ui.$footer.find('[data-toggle="popover"]').popover({
+        this.ui.$lhsFooter.find('[data-toggle="popover"]').popover({
             trigger: 'manual'
         })
-        this.ui.$footerMirror.tooltip({
+        this.ui.$lhsFooterMirror.tooltip({
             container: 'body', title: (function (this: any) {
                 return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
             }).bind(this)
@@ -94,17 +94,17 @@ export class MdEditorFooter {
             $input[0].setSelectionRange(
                 Math.min(start, end), Math.max(start, end)
             );
-            this.ui.$footerMirror.tooltip('hide');
-            this.ui.$footerCliFind.val('');
+            this.ui.$lhsFooterMirror.tooltip('hide');
+            this.ui.$lhsFooterCliFind.val('');
             this.hide();
         } else {
             const scroll = {
-                left: this.ui.$input.scrollLeft(),
-                top: this.ui.$input.scrollTop()
+                left: this.ui.$lhsInput.scrollLeft(),
+                top: this.ui.$lhsInput.scrollTop()
             };
             const selection = {
-                start: (this.ui.$input[0] as HTMLInputElement).selectionStart,
-                end: (this.ui.$input[0] as HTMLInputElement).selectionEnd
+                start: (this.ui.$lhsInput[0] as HTMLInputElement).selectionStart,
+                end: (this.ui.$lhsInput[0] as HTMLInputElement).selectionEnd
             };
             const mirror = this.ed.toMirror();
             mirror.focus();
@@ -113,24 +113,24 @@ export class MdEditorFooter {
                 mirror.posFromIndex(selection.start),
                 mirror.posFromIndex(selection.end)
             );
-            this.ui.$footerMirror.tooltip('hide');
-            this.ui.$footerCliFind.val('');
+            this.ui.$lhsFooterMirror.tooltip('hide');
+            this.ui.$lhsFooterCliFind.val('');
             this.show();
         }
     }
     @buffered(40)
     private onFindKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
-            this.ui.$footerCliFind.trigger('change', {
+            this.ui.$lhsFooterCliFind.trigger('change', {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
                 shiftKey: ev.shiftKey
             });
-            this.ui.$footerCliFind.val('');
+            this.ui.$lhsFooterCliFind.val('');
         }
         if (ev.key === 'Enter') {
-            this.ui.$footerCliFind.trigger('change', {
+            this.ui.$lhsFooterCliFind.trigger('change', {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
@@ -139,7 +139,7 @@ export class MdEditorFooter {
         }
     }
     private onFindNextClick(ev: KeyboardEvent) {
-        this.ui.$footerCliFind.trigger('change', {
+        this.ui.$lhsFooterCliFind.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
@@ -147,7 +147,7 @@ export class MdEditorFooter {
         });
     }
     private onFindPreviousClick(ev: KeyboardEvent) {
-        this.ui.$footerCliFind.trigger('change', {
+        this.ui.$lhsFooterCliFind.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
@@ -157,10 +157,10 @@ export class MdEditorFooter {
     @buffered(40)
     private onReplaceKeyDown(ev: KeyboardEvent) {
         if (ev.key === 'Escape') {
-            this.ui.$footerCliReplace.val('');
+            this.ui.$lhsFooterCliReplace.val('');
         }
         if (ev.key === 'Enter') {
-            this.ui.$footerCliReplace.trigger('change', {
+            this.ui.$lhsFooterCliReplace.trigger('change', {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
@@ -169,7 +169,7 @@ export class MdEditorFooter {
         }
     }
     private onReplaceConfirmClick(ev: KeyboardEvent) {
-        this.ui.$footerCliReplace.trigger('change', {
+        this.ui.$lhsFooterCliReplace.trigger('change', {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
@@ -214,7 +214,7 @@ export class MdEditorFooter {
             case 'Enter': break;
             default: return;
         }
-        const $find = this.ui.$footerCliFind;
+        const $find = this.ui.$lhsFooterCliFind;
         const old_value = $find.val() as string;
         const $replace = $(ev.target as any);
         const new_value = $replace.val() as string;
@@ -233,13 +233,13 @@ export class MdEditorFooter {
         }
     }
     private onSpellCheckToggle(ev: MouseEvent) {
-        const $li1 = this.ui.$footerSpellCheckerToggle;
+        const $li1 = this.ui.$lhsFooterSpellCheckerToggle;
         const $li1_a = $li1.find('a');
         const $li1_img = $li1.find('img');
         const $li1_line2 = $li1.find('.line2');
-        const $button_span = this.ui.$footerSpellCheckerButton.find('span.img-placeholder');
+        const $button_span = this.ui.$lhsFooterSpellCheckerButton.find('span.img-placeholder');
         $button_span.remove();
-        const $button_img = this.ui.$footerSpellCheckerButton.find('img');
+        const $button_img = this.ui.$lhsFooterSpellCheckerButton.find('img');
         $button_img.show();
         const lingua = {
             code: $li1_a.data('lingua'),
@@ -265,7 +265,7 @@ export class MdEditorFooter {
         if (state !== 'off') {
             lingua.code = null;
         }
-        this.ui.$footerSpellCheckerButton.addClass('disabled');
+        this.ui.$lhsFooterSpellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src', this.urls['16x16'].off);
@@ -279,11 +279,11 @@ export class MdEditorFooter {
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.ui.$footerSpellCheckerButton.removeClass('disabled');
+            this.ui.$lhsFooterSpellCheckerButton.removeClass('disabled');
         });
     }
     private onSpellCheckItemClick(ev: MouseEvent) {
-        const $li1 = this.ui.$footerSpellCheckerToggle;
+        const $li1 = this.ui.$lhsFooterSpellCheckerToggle;
         const $li1_a = $li1.find('a');
         const $li1_img = $li1.find('img');
         const $li1_line2 = $li1.find('.line2');
@@ -297,13 +297,13 @@ export class MdEditorFooter {
             code: $lii_a.data('lingua'),
             charset: $lii_a.data('charset')
         };
-        const $button = this.ui.$footerSpellCheckerButton;
+        const $button = this.ui.$lhsFooterSpellCheckerButton;
         const $button_img = $button.find('img');
         const $button_span = $button.find('span.img-placeholder');
         $button_span.remove();
         $button_img.prop('src', url.replace('32x32', '16x16'));
         $button_img.show();
-        this.ui.$footerSpellCheckerButton.addClass('disabled');
+        this.ui.$lhsFooterSpellCheckerButton.addClass('disabled');
         this.ed.spellCheck(lingua, (error: boolean) => {
             if (error) {
                 $button_img.prop('src', this.urls['16x16'].err);
@@ -324,11 +324,11 @@ export class MdEditorFooter {
             if (!error) {
                 cookie.set('language', lingua.code)
             }
-            this.ui.$footerSpellCheckerButton.removeClass('disabled');
+            this.ui.$lhsFooterSpellCheckerButton.removeClass('disabled');
         });
     }
     private onSpellCheckButtonClick(ev: JQuery.ClickEvent) {
-        const $menu = this.ui.$footerSpellCheckerMenu;
+        const $menu = this.ui.$lhsFooterSpellCheckerMenu;
         const $spin = $menu.find('>.spin');
         let $item = $menu.find('>li');
         if ($item.length === 0) {
@@ -338,27 +338,27 @@ export class MdEditorFooter {
                 $item = $menu.find('>li').hide();
                 $item.find('img').on('load', this.onMenuItemLoad.bind(this));
 
-                this.ui.$footerSpellCheckerToggle
+                this.ui.$lhsFooterSpellCheckerToggle
                     .on('click', this.onSpellCheckToggle.bind(this) as any);
-                this.ui.$footerSpellCheckerItem
+                this.ui.$lhsFooterSpellCheckerItem
                     .on('click', this.onSpellCheckItemClick.bind(this) as any);
 
                 const code = this.normalize(cookie.get<string>('language') ||
                     (navigator.language || 'en-US').replace('-', '_'));
-                this.ui.$footerSpellCheckerToggle.find('a')
+                this.ui.$lhsFooterSpellCheckerToggle.find('a')
                     .data('lingua', code);
-                this.ui.$footerSpellCheckerToggle.find('a')
+                this.ui.$lhsFooterSpellCheckerToggle.find('a')
                     .data('state', 'off');
-                this.ui.$footerSpellCheckerToggle.find('.line2')
+                this.ui.$lhsFooterSpellCheckerToggle.find('.line2')
                     .text(`Off: Enable [${code.replace('_', '-')}]`);
             });
         }
     }
     private normalize(code: string): string {
-        const linguae_all: string[] = this.ui.$footerSpellCheckerMenu.find('>li>a')
+        const linguae_all: string[] = this.ui.$lhsFooterSpellCheckerMenu.find('>li>a')
             .map((i, li) => $(li).data('lingua'))
             .toArray() as any;
-        const linguae_std: string[] = this.ui.$footerSpellCheckerMenu.find('>li>a')
+        const linguae_std: string[] = this.ui.$lhsFooterSpellCheckerMenu.find('>li>a')
             .map((i, li) => $(li).data('standard') && $(li).data('lingua'))
             .toArray() as any;
         const linguae_eql: string[] = linguae_all.filter((lingua) => {
@@ -381,7 +381,7 @@ export class MdEditorFooter {
     }
     @buffered(600)
     private onMenuItemLoad(ev: Event) {
-        const $menu = this.ui.$footerSpellCheckerMenu;
+        const $menu = this.ui.$lhsFooterSpellCheckerMenu;
         $menu.removeClass('disabled');
         const $item = $menu.find('>li');
         $item.fadeIn('slow');

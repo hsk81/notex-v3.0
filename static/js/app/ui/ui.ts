@@ -8,120 +8,6 @@ export class Ui {
         }
         return window.UI;
     }
-    public get $document() {
-        return $(document);
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    // .lhs
-    ///////////////////////////////////////////////////////////////////////////
-    public get $lhs() {
-        return $('.lhs');
-    }
-    public get $lhsToolbarOuter() {
-        return this.$lhs.find('>.toolbar-outer');
-    }
-    public get $lhsToolbarInner() {
-        return this.$lhsToolbarOuter.find('>.toolbar-inner');
-    }
-    public get $lhsToolbar() {
-        return this.$lhsToolbarInner.find('>.md-toolbar');
-    }
-    public get $input() {
-        return this.$lhs.find('#input');
-    }
-    public get $footer() {
-        return this.$input.siblings('.footer');
-    }
-    public get $footerMirror() {
-        return this.$footer.find('.glyphicon-console').closest('button');
-    }
-    public get $footerCli() {
-        return this.$footer.find('#cli');
-    }
-    public get $footerCliFind() {
-        return this.$footerCli.find('input.find');
-    }
-    public get $footerCliFindNext() {
-        return this.$footerCli.find('.find-next');
-    }
-    public get $footerCliFindPrevious() {
-        return this.$footerCli.find('.find-previous');
-    }
-    public get $footerCliReplace() {
-        return this.$footerCli.find('input.replace');
-    }
-    public get $footerCliReplaceConfirm() {
-        return this.$footerCli.find('.replace-confirm');
-    }
-    public get $footerSpellCheckerButton() {
-        return this.$footer.find('#spell-checker-button');
-    }
-    public get $footerSpellCheckerMenu() {
-        return this.$footer.find('ul#spell-checker-menu');
-    }
-    public get $footerSpellCheckerToggle() {
-        return this.$footerSpellCheckerMenu.find('li:first-of-type');
-    }
-    public get $footerSpellCheckerItem() {
-        return this.$footerSpellCheckerMenu.find('li:not(:first-of-type)');
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    // .rhs
-    ///////////////////////////////////////////////////////////////////////////
-    public get $rhs() {
-        return $('.rhs');
-    }
-    public get $rhsToolbarOuter() {
-        return this.$rhs.find('>.toolbar-outer');
-    }
-    public get $rhsToolbarInner() {
-        return this.$rhsToolbarOuter.find('>.toolbar-inner');
-    }
-    public get $rhsToolbar() {
-        return this.$rhsToolbarInner.find('>.md-toolbar');
-    }
-    public get $viewer() {
-        if (this.$cached.css('visibility') !== 'hidden') {
-            return this.$cached;
-        } else {
-            return this.$output;
-        }
-    }
-    public get $contents() {
-        return this.$viewer.contents();
-    }
-    public get $head() {
-        return this.$contents.find('head');
-    }
-    public get $body() {
-        return this.$contents.find('body');
-    }
-    public get $cached() {
-        return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
-    }
-    public set $cached($element: JQuery<HTMLFrameElement>) {
-        this.$cached.remove();
-        this.$rhs.prepend($element);
-    }
-    public get $cachedHead() {
-        return this.$cached.contents().find('head');
-    }
-    public get $cachedBody() {
-        return this.$cached.contents().find('body');
-    }
-    public get $output() {
-        return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
-    }
-    public set $output($element: JQuery<HTMLFrameElement>) {
-        this.$output.remove();
-        this.$rhs.prepend($element);
-    }
-    public get $outputHead() {
-        return this.$output.contents().find('head');
-    }
-    public get $outputBody() {
-        return this.$output.contents().find('body');
-    }
     public get $aibar() {
         return this.$rhs.find('.aibar');
     }
@@ -134,108 +20,72 @@ export class Ui {
     public get $aibarRhsButton() {
         return this.$aibar.find('button.ai-rhs');
     }
-    ///////////////////////////////////////////////////////////////////////////
-    // .any
-    ///////////////////////////////////////////////////////////////////////////
-    public get $anyToolbarOuter() {
-        return $('.toolbar-outer');
+    public get $document() {
+        return $(document);
     }
-    public get $anyToolbarInner() {
-        return this.$anyToolbarOuter.find('>.toolbar-inner');
+    public get $header() {
+        return $('.header');
     }
-    public get $anyToolbar() {
-        return this.$anyToolbarInner.find('>.md-toolbar');
+    public get $headerOpen() {
+        return this.$header.find('#source-bar,#source-mob');
     }
-    public get $toolOpen() {
-        return this.$anyToolbar.find('#source-bar,#source-mob');
+    public get $headerSave() {
+        return this.$header.find('a[name=save]');
     }
-    public get $toolSave() {
-        return this.$anyToolbar.find('a[name=save]');
+    public get $headerSwap() {
+        return this.$header.find('[name=swap]');
     }
-    public get $toolSwap() {
-        return this.$anyToolbar.find('[name=swap]');
+    public get $lhs() {
+        return $('.lhs');
     }
-    public get $toolBold() {
-        return this.$anyToolbar.find('.glyphicon-bold').closest('button');
+    public get $lhsFooter() {
+        return this.$lhsInput.siblings('.footer');
     }
-    public get $toolCopy() {
-        return this.$anyToolbar.find('.glyphicon-copy').closest('button');
+    public get $lhsFooterMirror() {
+        return this.$lhsFooter.find('.glyphicon-console').closest('button');
     }
-    public get $toolCut() {
-        return this.$anyToolbar.find('.glyphicon-scissors').closest('button');
+    public get $lhsFooterCli() {
+        return this.$lhsFooter.find('#cli');
     }
-    public get $toolHeader() {
-        return this.$anyToolbar.find('.glyphicon-header').closest('button');
+    public get $lhsFooterCliFind() {
+        return this.$lhsFooterCli.find('input.find');
     }
-    public get $toolErase() {
-        return this.$anyToolbar.find('.glyphicon-erase').closest('button');
+    public get $lhsFooterCliFindNext() {
+        return this.$lhsFooterCli.find('.find-next');
     }
-    public get $toolFont() {
-        return this.$anyToolbar.find('.glyphicon-font').closest('button');
+    public get $lhsFooterCliFindPrevious() {
+        return this.$lhsFooterCli.find('.find-previous');
     }
-    public get $toolIndent() {
-        return this.$anyToolbar.find('.glyphicon-indent-left').closest('button');
+    public get $lhsFooterCliReplace() {
+        return this.$lhsFooterCli.find('input.replace');
     }
-    public get $toolItalic() {
-        return this.$anyToolbar.find('.glyphicon-italic').closest('button');
+    public get $lhsFooterCliReplaceConfirm() {
+        return this.$lhsFooterCli.find('.replace-confirm');
     }
-    public get $toolLink() {
-        return this.$anyToolbar.find('.glyphicon-link').closest('button');
+    public get $lhsFooterSpellCheckerButton() {
+        return this.$lhsFooter.find('#spell-checker-button');
     }
-    public get $toolImage() {
-        return this.$anyToolbar.find('.glyphicon-picture').closest('button');
+    public get $lhsFooterSpellCheckerMenu() {
+        return this.$lhsFooter.find('ul#spell-checker-menu');
     }
-    public get $toolVideo() {
-        return this.$anyToolbar.find('.glyphicon-film').closest('button');
+    public get $lhsFooterSpellCheckerItem() {
+        return this.$lhsFooterSpellCheckerMenu.find('li:not(:first-of-type)');
     }
-    public get $toolOutdent() {
-        return this.$anyToolbar.find('.glyphicon-indent-right').closest('button');
+    public get $lhsFooterSpellCheckerToggle() {
+        return this.$lhsFooterSpellCheckerMenu.find('li:first-of-type');
     }
-    public get $toolPaste() {
-        return this.$anyToolbar.find('.glyphicon-paste').closest('button');
+    public get $lhsInput() {
+        return this.$lhs.find('#input');
     }
-    public get $toolProduct() {
-        return this.$anyToolbar.find('.glyphicon.product').closest('button');
+    public get $lhsToolbar() {
+        return this.$lhsToolbarInner.find('>.md-toolbar');
     }
-    public get $toolRedo() {
-        return this.$anyToolbar.find('.glyphicon.redo').closest('button');
+    public get $lhsToolbarInner() {
+        return this.$lhsToolbarOuter.find('>.toolbar-inner');
     }
-    public get $toolSubscript() {
-        return this.$anyToolbar.find('.glyphicon-subscript').closest('button');
+    public get $lhsToolbarOuter() {
+        return this.$lhs.find('>.toolbar-outer');
     }
-    public get $toolSupscript() {
-        return this.$anyToolbar.find('.glyphicon-superscript').closest('button');
-    }
-    public get $toolSum() {
-        return this.$anyToolbar.find('.glyphicon.sum').closest('button');
-    }
-    public get $toolUndo() {
-        return this.$anyToolbar.find('.glyphicon.undo').closest('button');
-    }
-    public get $toolPrint() {
-        return this.$anyToolbar.find('.glyphicon.print').closest('button');
-    }
-    public get $toolPublish() {
-        return this.$anyToolbar.find('.glyphicon.publish').closest('button');
-    }
-    public get $toolRefresh() {
-        return this.$anyToolbar.find('.glyphicon.refresh').closest('button');
-    }
-    public get $toolTemplate() {
-        return this.$anyToolbar.find('.glyphicon.template').closest('button');
-    }
-    public get $tool1Column() {
-        return this.$anyToolbar.find('.glyphicon.1-column').closest('button');
-    }
-    public get $tool2Columns() {
-        return this.$anyToolbar.find('.glyphicon.2-column').closest('button');
-    }
-    public get $tool3Columns() {
-        return this.$anyToolbar.find('.glyphicon.3-column').closest('button');
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    // #publish-dlg
-    ///////////////////////////////////////////////////////////////////////////
     public get $publishDialog() {
         return $('#publish-dlg');
     }
@@ -308,9 +158,44 @@ export class Ui {
     public get $publishDialogPrimary() {
         return this.$publishDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
     }
-    ///////////////////////////////////////////////////////////////////////////
-    // #template-dlg
-    ///////////////////////////////////////////////////////////////////////////
+    public get $rhs() {
+        return $('.rhs');
+    }
+    public get $rhsCached() {
+        return this.$rhs.find('#cached') as JQuery<HTMLFrameElement>;
+    }
+    public set $rhsCached($element: JQuery<HTMLFrameElement>) {
+        this.$rhsCached.remove();
+        this.$rhs.prepend($element);
+    }
+    public get $rhsCachedBody() {
+        return this.$rhsCached.contents().find('body');
+    }
+    public get $rhsCachedHead() {
+        return this.$rhsCached.contents().find('head');
+    }
+    public get $rhsOutput() {
+        return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;
+    }
+    public set $rhsOutput($element: JQuery<HTMLFrameElement>) {
+        this.$rhsOutput.remove();
+        this.$rhs.prepend($element);
+    }
+    public get $rhsOutputBody() {
+        return this.$rhsOutput.contents().find('body');
+    }
+    public get $rhsOutputHead() {
+        return this.$rhsOutput.contents().find('head');
+    }
+    public get $rhsToolbar() {
+        return this.$rhsToolbarInner.find('>.md-toolbar');
+    }
+    public get $rhsToolbarOuter() {
+        return this.$rhs.find('>.toolbar-outer');
+    }
+    public get $rhsToolbarInner() {
+        return this.$rhsToolbarOuter.find('>.toolbar-inner');
+    }
     public get $templateDialog() {
         return $('#template-dlg');
     }
@@ -322,6 +207,118 @@ export class Ui {
     }
     public get $templateDialogPrimary() {
         return this.$templateDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
+    }
+    public get $toolbar() {
+        return this.$toolbarInner.find('>.md-toolbar');
+    }
+    public get $toolbarInner() {
+        return this.$toolbarOuter.find('>.toolbar-inner');
+    }
+    public get $toolbarOuter() {
+        return $('.toolbar-outer');
+    }
+    public get $toolbarOpen() {
+        return this.$toolbar.find('#source-bar,#source-mob');
+    }
+    public get $toolbarSave() {
+        return this.$toolbar.find('a[name=save]');
+    }
+    public get $toolbarSwap() {
+        return this.$toolbar.find('[name=swap]');
+    }
+    public get $toolbar1Column() {
+        return this.$toolbar.find('.glyphicon.1-column').closest('button');
+    }
+    public get $toolbar2Columns() {
+        return this.$toolbar.find('.glyphicon.2-column').closest('button');
+    }
+    public get $toolbar3Columns() {
+        return this.$toolbar.find('.glyphicon.3-column').closest('button');
+    }
+    public get $toolbarBold() {
+        return this.$toolbar.find('.glyphicon-bold').closest('button');
+    }
+    public get $toolbarCopy() {
+        return this.$toolbar.find('.glyphicon-copy').closest('button');
+    }
+    public get $toolbarCut() {
+        return this.$toolbar.find('.glyphicon-scissors').closest('button');
+    }
+    public get $toolbarErase() {
+        return this.$toolbar.find('.glyphicon-erase').closest('button');
+    }
+    public get $toolbarFont() {
+        return this.$toolbar.find('.glyphicon-font').closest('button');
+    }
+    public get $toolbarHeader() {
+        return this.$toolbar.find('.glyphicon-header').closest('button');
+    }
+    public get $toolbarImage() {
+        return this.$toolbar.find('.glyphicon-picture').closest('button');
+    }
+    public get $toolbarIndent() {
+        return this.$toolbar.find('.glyphicon-indent-left').closest('button');
+    }
+    public get $toolbarItalic() {
+        return this.$toolbar.find('.glyphicon-italic').closest('button');
+    }
+    public get $toolbarLink() {
+        return this.$toolbar.find('.glyphicon-link').closest('button');
+    }
+    public get $toolbarOutdent() {
+        return this.$toolbar.find('.glyphicon-indent-right').closest('button');
+    }
+    public get $toolbarPaste() {
+        return this.$toolbar.find('.glyphicon-paste').closest('button');
+    }
+    public get $toolbarProduct() {
+        return this.$toolbar.find('.glyphicon.product').closest('button');
+    }
+    public get $toolbarPrint() {
+        return this.$toolbar.find('.glyphicon.print').closest('button');
+    }
+    public get $toolbarPublish() {
+        return this.$toolbar.find('.glyphicon.publish').closest('button');
+    }
+    public get $toolbarRedo() {
+        return this.$toolbar.find('.glyphicon.redo').closest('button');
+    }
+    public get $toolbarRefresh() {
+        return this.$toolbar.find('.glyphicon.refresh').closest('button');
+    }
+    public get $toolbarSubscript() {
+        return this.$toolbar.find('.glyphicon-subscript').closest('button');
+    }
+    public get $toolbarSum() {
+        return this.$toolbar.find('.glyphicon.sum').closest('button');
+    }
+    public get $toolbarSupscript() {
+        return this.$toolbar.find('.glyphicon-superscript').closest('button');
+    }
+    public get $toolbarTemplate() {
+        return this.$toolbar.find('.glyphicon.template').closest('button');
+    }
+    public get $toolbarUndo() {
+        return this.$toolbar.find('.glyphicon.undo').closest('button');
+    }
+    public get $toolbarVideo() {
+        return this.$toolbar.find('.glyphicon-film').closest('button');
+    }
+    public get $viewer() {
+        if (this.$rhsCached.css('visibility') !== 'hidden') {
+            return this.$rhsCached;
+        } else {
+            return this.$rhsOutput;
+        }
+    }
+    public get $viewerContent() {
+        return this.$viewer.contents();
+    }
+    public get $viewerContentBody() {
+        return this.$viewerContent.find('body');
+    }
+    public get $viewerContentHead() {
+        return this.$viewerContent.find('head');
     }
 }
 export default Ui;

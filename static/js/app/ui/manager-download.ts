@@ -10,15 +10,19 @@ export class DownloadManager {
         return window.DOWNLOAD_MANAGER;
     }
     public set title(title: string) {
-        this.$download_link.attr("download", title);
+        this.ui.$headerSave.attr("download", title);
+        this.ui.$toolbarSave.attr("download", title);
     }
     public set content(content: string) {
-        this.$download_link.attr("href", URL.createObjectURL(
+        this.ui.$headerSave.attr("href", URL.createObjectURL(
+            new Blob([content], { type: 'text/markdown' })
+        ));
+        this.ui.$toolbarSave.attr("href", URL.createObjectURL(
             new Blob([content], { type: 'text/markdown' })
         ));
     }
-    private get $download_link() {
-        return Ui.me.$toolSave;
+    private get ui() {
+        return Ui.me;
     }
 }
 export default DownloadManager;

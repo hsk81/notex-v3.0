@@ -25,15 +25,15 @@ export class MdRender {
             }
             if (force !== 'none') switch (force) {
                 case 'hard':
-                    this.ui.$output = $('<iframe>', {
+                    this.ui.$rhsOutput = $('<iframe>', {
                         id: 'output', class: 'viewer', frameborder: '0'
                     });
                 case 'soft':
-                    this.ui.$cached = $('<iframe>', {
+                    this.ui.$rhsCached = $('<iframe>', {
                         id: 'cached', class: 'viewer', frameborder: '0',
                         style: 'visibility:hidden'
                     });
-                    const window = this.ui.$cached.get(0).contentWindow;
+                    const window = this.ui.$rhsCached.get(0).contentWindow;
                     if (window) window.PATCH = () => this.patch();
                 default:
                     const ms = !navigator.userAgent.match(/chrome/i) ? 100 : 0;
@@ -44,18 +44,18 @@ export class MdRender {
             if (md_value.length === 0) {
                 $.get(this.placeholder).done((html) => setTimeout(() => {
                     if (this.ed.getValue().length > 0) return;
-                    this.ui.$cachedBody.hide().html(html);
-                    this.ui.$cachedBody.fadeIn('slow');
-                    this.ui.$outputBody.hide().html(html);
-                    this.ui.$outputBody.fadeIn('slow');
+                    this.ui.$rhsCachedBody.hide().html(html);
+                    this.ui.$rhsCachedBody.fadeIn('slow');
+                    this.ui.$rhsOutputBody.hide().html(html);
+                    this.ui.$rhsOutputBody.fadeIn('slow');
                 }, 600));
             }
         }
         {
-            this.ui.$cachedHead.html(TemplateManager.me.head());
-            this.ui.$cachedBody.html(MarkdownIt.me.render(
+            this.ui.$rhsCachedHead.html(TemplateManager.me.head());
+            this.ui.$rhsCachedBody.html(MarkdownIt.me.render(
                 TemplateManager.me.body(md_value), {
-                    document: this.ui.$cached.contents()[0] as Document
+                    document: this.ui.$rhsCached.contents()[0] as Document
                 }
             ));
         }
@@ -69,7 +69,7 @@ export class MdRender {
     }
     @buffered(0)
     public patch() {
-        morphdom(this.ui.$outputHead[0], this.ui.$cachedHead[0], {
+        morphdom(this.ui.$rhsOutputHead[0], this.ui.$rhsCachedHead[0], {
             onBeforeElUpdated: (
                 source: HTMLElement, target: HTMLElement
             ) => {
@@ -77,7 +77,7 @@ export class MdRender {
             },
             childrenOnly: true
         });
-        morphdom(this.ui.$outputBody[0], this.ui.$cachedBody[0], {
+        morphdom(this.ui.$rhsOutputBody[0], this.ui.$rhsCachedBody[0], {
             onBeforeElUpdated: (
                 source: HTMLElement, target: HTMLElement
             ) => {
@@ -87,7 +87,7 @@ export class MdRender {
         });
     }
     public get title() {
-        const $header = this.ui.$cachedBody.find(':header').first();
+        const $header = this.ui.$rhsCachedBody.find(':header').first();
         return $header ? $header.text().slice(0,-2) : undefined;
     }
     private get placeholder() {

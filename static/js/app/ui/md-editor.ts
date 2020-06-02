@@ -13,6 +13,7 @@ import { gateway } from "../ipfs/index";
 import { traceable } from "../decorator/trace";
 import { trace } from "../decorator/trace";
 import { cookie } from "../cookie/cookie";
+
 declare const $: JQueryStatic;
 
 import "./md-editor-mode";
@@ -77,7 +78,7 @@ export class MdEditor {
             mirror.addOverlay(this.spellCheckerOverlay);
         }
         this.simple = false;
-        this.ui.$input.hide();
+        this.ui.$lhsInput.hide();
         return this.mirror;
     }
     public toInput(options: {
@@ -91,7 +92,7 @@ export class MdEditor {
             mirror.toTextArea();
             this.setMirror(undefined);
         }
-        this.ui.$input
+        this.ui.$lhsInput
             .off('keyup change paste')
             .on('keyup change paste', this.onEditorChange.bind(this))
             .off('scroll')
@@ -105,17 +106,17 @@ export class MdEditor {
             this.ui.$lhs.removeClass('with-footer');
         }
         this.simple = true;
-        return this.ui.$input;
+        return this.ui.$lhsInput;
     }
     public onScroll(e: HTMLElement) {
-        const $body = this.ui.$body;
+        const $body = this.ui.$viewerContentBody;
         const q = e.scrollTop / e.scrollHeight;
         const h = $body[0].scrollHeight;
         const c = $body[0].clientHeight;
         this.doScroll(q*h+q*c);
     }
     public doScroll(value: number) {
-        this.ui.$body.scrollTop(value);
+        this.ui.$viewerContentBody.scrollTop(value);
     }
     public render(force: 'hard'|'soft'|'none' = 'none') {
         this.renderer.do(force);
@@ -132,15 +133,15 @@ export class MdEditor {
         if (this.mirror) {
             this.mirror.focus();
         } else {
-            this.ui.$input.focus();
+            this.ui.$lhsInput.focus();
         }
     }
     public clear() {
         if (this.mirror) {
             return this.mirror.setValue('');
         } else {
-            this.ui.$input.val('');
-            this.ui.$input.trigger('change');
+            this.ui.$lhsInput.val('');
+            this.ui.$lhsInput.trigger('change');
         }
     }
     public get empty() {
@@ -156,7 +157,7 @@ export class MdEditor {
     ): string {
         const value = this.mirror
             ? this.mirror.getValue()
-            : this.ui.$input.val() as string;
+            : this.ui.$lhsInput.val() as string;
         if (lhs && rhs) {
             return value.substring(lhs.number, rhs.number);
         } else if (lhs && !rhs) {
@@ -167,16 +168,16 @@ export class MdEditor {
     }
     @traceable(false)
     public setValue(value: string) {
-        const inp = this.ui.$input[0] as HTMLInputElement;
+        const inp = this.ui.$lhsInput[0] as HTMLInputElement;
         if (this.mirror) {
             return this.mirror.setValue(value);
         } else {
             inp.select();
             if (!document.execCommand('insertText', false, value)) {
-                this.ui.$input.val(value);
+                this.ui.$lhsInput.val(value);
             }
             inp.setSelectionRange(0, 0);
-            this.ui.$input.trigger('change');
+            this.ui.$lhsInput.trigger('change');
         }
     }
     public insertValue(value: string, at?: Index) {
@@ -201,7 +202,7 @@ export class MdEditor {
                 lhs, rhs, value: this.mirror.getSelection()
             };
         } else {
-            const inp = this.ui.$input[0] as HTMLInputElement;
+            const inp = this.ui.$lhsInput[0] as HTMLInputElement;
             const lhs = new Index(Math.min(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
@@ -225,7 +226,7 @@ export class MdEditor {
                 lhs.position, rhs.position
             );
         } else {
-            const inp = this.ui.$input[0] as HTMLInputElement;
+            const inp = this.ui.$lhsInput[0] as HTMLInputElement;
             inp.setSelectionRange(lhs.number, rhs.number);
         }
     }
@@ -238,7 +239,7 @@ export class MdEditor {
             } catch (ex) {
                 console.error(ex);
             }
-            this.ui.$input.trigger('change');
+            this.ui.$lhsInput.trigger('change');
         }
         this.focus();
     }
@@ -540,6 +541,5 @@ export class MdEditor {
     private _spellCheckerOverlay: Overlay|undefined;
     private _spellChecker: SpellChecker|undefined;
     private _searchOverlay: Overlay|undefined;
-    private _mdOld: string = '';
 }
 export default MdEditor;
