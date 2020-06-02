@@ -269,6 +269,21 @@ export class MdEditor {
         this.dnd();
     }
     public dnd() {
+        const set_text = (
+            value: string
+        ) => {
+            if (!this.mirror) {
+                this.setValue(value);
+                this.setSelection(new Index(0), new Index(-1));
+            }
+        };
+        const ins_image = (
+            name: string, hash: string
+        ) => {
+            const url = `${gateway.get()}/${hash}`;
+            const query = name ? `?filename=${encodeURIComponent(name)}` : '';
+            this.replaceSelection(`![${name||''}](${url}${query})\n`);
+        };
         this.ui.$document.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -302,29 +317,29 @@ export class MdEditor {
             if (!ev_files || !ev_files.length) {
                 return;
             }
-            const insert_image = (
-                name: string, hash: string
-            ) => {
-                const url = `${gateway.get()}/${hash}`;
-                const query = name
-                    ? `?filename=${encodeURIComponent(name)}` : '';
-                this.replaceSelection(`![${name||''}](${url}${query})\n`);
-            };
             IPFS.me((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {
-                    if (typeof ev_files[i].type !== 'string' ||
-                        ev_files[i].type.match(/^image/i) === null
+                    if (typeof ev_files[i].type === 'string' &&
+                        ev_files[i].type.match(/^image/i) !== null
                     ) {
-                        continue;
+                        const reader = new FileReader();
+                        reader.onload = async function () {
+                            const buffer = Buffer.from(reader.result);
+                            for await (const item of ipfs.add(buffer)) {
+                                const name = ev_files[i].name;
+                                const hash = item.cid.toString();
+                                ins_image(name, hash);
+                            }
+                        };
+                        reader.readAsArrayBuffer(ev_files[i]);
                     }
-                    const reader = new FileReader();
-                    reader.onload = async function () {
-                        const buffer = Buffer.from(reader.result);
-                        for await (const item of ipfs.add(buffer)) {
-                            insert_image(ev_files[i].name, item.cid);
-                        }
-                    };
-                    reader.readAsArrayBuffer(ev_files[i]);
+                    if (typeof ev_files[i].type === 'string' &&
+                        ev_files[i].type.match(/^text/i) !== null
+                    ) {
+                        const reader = new FileReader();
+                        reader.onload = () => set_text(reader.result as string);
+                        reader.readAsText(ev_files[i]);
+                    }
                 }
             });
         });
