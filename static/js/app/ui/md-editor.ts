@@ -294,11 +294,11 @@ export class MdEditor {
             if (!ev) {
                 return;
             }
-            const ev_dataTransfer = ev.dataTransfer;
-            if (!ev_dataTransfer) {
+            const ev_dtx = ev.dataTransfer;
+            if (!ev_dtx) {
                 return;
             }
-            const ev_files = ev_dataTransfer.files;
+            const ev_files = ev_dtx.files;
             if (!ev_files || !ev_files.length) {
                 return;
             }
@@ -312,6 +312,11 @@ export class MdEditor {
             };
             IPFS.me((ipfs: any) => {
                 for (let i = 0; i < ev_files.length; i++) {
+                    if (typeof ev_files[i].type !== 'string' ||
+                        ev_files[i].type.match(/^image/i) === null
+                    ) {
+                        continue;
+                    }
                     const reader = new FileReader();
                     reader.onload = async function () {
                         const buffer = Buffer.from(reader.result);
