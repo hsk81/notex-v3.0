@@ -44,5 +44,5 @@ class Cookie implements ICookie {
         return Cookie.get(name, value);
     }
 }
-export const cookie = new Cookie() as ICookie;
+export const cookie = window.COOKIE = new Cookie() as ICookie;
 export default cookie;

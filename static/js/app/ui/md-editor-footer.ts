@@ -63,20 +63,20 @@ export class MdEditorFooter {
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
     }
     private tips() {
-        this.ui.$lhsFooter.find('[data-toggle="tooltip"]').tooltip({
-            trigger: 'hover'
-        });
-        this.ui.$lhsFooter.find('[data-toggle="dropdown"]').tooltip({
-            trigger: 'hover'
-        });
-        this.ui.$lhsFooter.find('[data-toggle="popover"]').popover({
-            trigger: 'manual'
-        })
-        this.ui.$lhsFooterMirror.tooltip({
-            container: 'body', title: (function (this: any) {
-                return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
-            }).bind(this)
-        });
+        // this.ui.$lhsFooter.find('[data-toggle="tooltip"]').tooltip({
+        //     trigger: 'hover'
+        // });
+        // this.ui.$lhsFooter.find('[data-toggle="dropdown"]').tooltip({
+        //     trigger: 'hover'
+        // });
+        // this.ui.$lhsFooter.find('[data-toggle="popover"]').popover({
+        //     trigger: 'manual'
+        // })
+        // this.ui.$lhsFooterMirror.tooltip({
+        //     container: 'body', title: (function (this: any) {
+        //         return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
+        //     }).bind(this)
+        // });
     }
     private onMirrorClick() {
         if (this.ed.mirror) {
@@ -94,7 +94,7 @@ export class MdEditorFooter {
             $input[0].setSelectionRange(
                 Math.min(start, end), Math.max(start, end)
             );
-            this.ui.$lhsFooterMirror.tooltip('hide');
+            // this.ui.$lhsFooterMirror.tooltip('hide');
             this.ui.$lhsFooterCliFind.val('');
             this.hide();
         } else {
@@ -113,7 +113,7 @@ export class MdEditorFooter {
                 mirror.posFromIndex(selection.start),
                 mirror.posFromIndex(selection.end)
             );
-            this.ui.$lhsFooterMirror.tooltip('hide');
+            // this.ui.$lhsFooterMirror.tooltip('hide');
             this.ui.$lhsFooterCliFind.val('');
             this.show();
         }
@@ -232,127 +232,93 @@ export class MdEditorFooter {
             this.ed.replace(old_value, new_value, extra);
         }
     }
-    private onSpellCheckToggle(ev: MouseEvent) {
-        const $li1 = this.ui.$lhsFooterSpellCheckerToggle;
-        const $li1_a = $li1.find('a');
-        const $li1_img = $li1.find('img');
-        const $li1_line2 = $li1.find('.line2');
-        const $button_span = this.ui.$lhsFooterSpellCheckerButton.find('span.img-placeholder');
-        $button_span.remove();
-        const $button_img = this.ui.$lhsFooterSpellCheckerButton.find('img');
-        $button_img.show();
-        const lingua = {
-            code: $li1_a.data('lingua'),
-            charset: null
-        };
-        const state = $li1_a.data('state');
-        if (state === 'off') {
-            $button_img.prop('src', this.urls['16x16'].on);
-        } else {
-            $button_img.prop('src', this.urls['16x16'].off);
-        }
-        if (state === 'off') {
-            $li1_a.data('state', 'on');
-            $li1_img.prop('src', this.urls['32x32'].on);
-            $li1_line2.text(
-                `On: Disable [${lingua.code.replace('_', '-')}]`);
-        } else {
-            $li1_a.data('state', 'off');
-            $li1_img.prop('src', this.urls['32x32'].off);
-            $li1_line2.text(
-                `Off: Enable [${lingua.code.replace('_', '-')}]`);
-        }
-        if (state !== 'off') {
-            lingua.code = null;
-        }
-        this.ui.$lhsFooterSpellCheckerButton.addClass('disabled');
-        this.ed.spellCheck(lingua, (error: boolean) => {
-            if (error) {
-                $button_img.prop('src', this.urls['16x16'].off);
-            }
-            if (error) {
-                $li1_a.data('state', 'off');
-                $li1_img.prop('src', this.urls['32x32'].off);
-                $li1_line2.text(
-                    `Off: Enable [${lingua.code.replace('_', '-')}]`);
-            }
-            if (!error) {
-                cookie.set('language', lingua.code)
-            }
-            this.ui.$lhsFooterSpellCheckerButton.removeClass('disabled');
-        });
-    }
-    private onSpellCheckItemClick(ev: MouseEvent) {
-        const $li1 = this.ui.$lhsFooterSpellCheckerToggle;
-        const $li1_a = $li1.find('a');
-        const $li1_img = $li1.find('img');
-        const $li1_line2 = $li1.find('.line2');
-        const $lii = $(ev.target as any).closest('li');
-        const $lii_a = $lii.find('a');
-        const $lii_img = $lii.find('img');
-        const url = $lii_img.prop('src');
-        const code = cookie.get<string>('language') ||
-            (navigator.language || 'en-US').replace('-', '_');
-        const lingua = {
-            code: $lii_a.data('lingua'),
-            charset: $lii_a.data('charset')
-        };
-        const $button = this.ui.$lhsFooterSpellCheckerButton;
-        const $button_img = $button.find('img');
-        const $button_span = $button.find('span.img-placeholder');
-        $button_span.remove();
-        $button_img.prop('src', url.replace('32x32', '16x16'));
-        $button_img.show();
-        this.ui.$lhsFooterSpellCheckerButton.addClass('disabled');
-        this.ed.spellCheck(lingua, (error: boolean) => {
-            if (error) {
-                $button_img.prop('src', this.urls['16x16'].err);
-            }
-            if (error) {
-                $li1_a.data('state', 'off');
-                $li1_a.data('lingua', code);
-                $li1_img.prop('src', this.urls['32x32'].off);
-                $li1_line2.text(
-                    `Off: Enable [${code.replace('_', '-')}]`);
-            } else {
-                $li1_a.data('state', 'on');
-                $li1_a.data('lingua', lingua.code);
-                $li1_img.prop('src', this.urls['32x32'].on);
-                $li1_line2.text(
-                    `On: Disable [${lingua.code.replace('_', '-')}]`);
-            }
-            if (!error) {
-                cookie.set('language', lingua.code)
-            }
-            this.ui.$lhsFooterSpellCheckerButton.removeClass('disabled');
-        });
-    }
     private onSpellCheckButtonClick(ev: JQuery.ClickEvent) {
         const $menu = this.ui.$lhsFooterSpellCheckerMenu;
         const $spin = $menu.find('>.spin');
         let $item = $menu.find('>li');
         if ($item.length === 0) {
             $.get('/static/html/spell-checker-menu.html').done((html) => {
-                $menu.html(html);
-                $menu.append($spin);
+                $menu.html(html).append($spin);
                 $item = $menu.find('>li').hide();
                 $item.find('img').on('load', this.onMenuItemLoad.bind(this));
-
-                this.ui.$lhsFooterSpellCheckerToggle
-                    .on('click', this.onSpellCheckToggle.bind(this) as any);
-                this.ui.$lhsFooterSpellCheckerItem
-                    .on('click', this.onSpellCheckItemClick.bind(this) as any);
-
-                const code = this.normalize(cookie.get<string>('language') ||
-                    (navigator.language || 'en-US').replace('-', '_'));
-                this.ui.$lhsFooterSpellCheckerToggle.find('a')
-                    .data('lingua', code);
-                this.ui.$lhsFooterSpellCheckerToggle.find('a')
-                    .data('state', 'off');
-                this.ui.$lhsFooterSpellCheckerToggle.find('.line2')
-                    .text(`Off: Enable [${code.replace('_', '-')}]`);
+                const $items = this.ui.$lhsFooterSpellCheckerItem;
+                $items.on('click', this.onSpellCheckItemClick.bind(this));
+                const $toggle = this.ui.$lhsFooterSpellCheckerToggle;
+                $toggle.on('click', this.onSpellCheckToggle.bind(this));
+                const language = (navigator.language || 'en-US').replace('-', '_');
+                const code = this.normalize(cookie.get('language') || language);
+                $toggle.find('a').data('lingua', code);
+                $toggle.find('a').data('state', 'off');
+                $toggle.find('.line2').text(`Off: Enable [${
+                    code.replace('_', '-')
+                }]`);
             });
         }
+    }
+    private onSpellCheckToggle(ev: JQuery.ClickEvent) {
+        const $toggle = this.ui.$lhsFooterSpellCheckerToggle;
+        const $toggle_a = $toggle.find('a');
+        const lingua = {
+            charset: 'utf-8', code: this.normalize(cookie.get(
+                'language', $toggle_a.data('lingua')
+            ))
+        };
+        const state = $toggle_a.data('state');
+        if (state === 'on') {
+            this.doSpellCheck('off', lingua);
+        } else {
+            this.doSpellCheck('on', lingua);
+        }
+    }
+    private onSpellCheckItemClick(ev: JQuery.ClickEvent) {
+        const $lii = $(ev.target).closest('li');
+        const $lii_a = $lii.find('a');
+        this.doSpellCheck('on', {
+            charset: $lii_a.data('charset'),
+            code: $lii_a.data('lingua')
+        });
+    }
+    private doSpellCheck(new_state: 'on'|'off', lingua: {
+        charset: string, code: string
+    }) {
+        const $toggle = this.ui.$lhsFooterSpellCheckerToggle;
+        const $toggle_a = $toggle.find('a');
+        const $toggle_img = $toggle.find('img');
+        const $toggle_line2 = $toggle.find('.line2');
+        const $button = this.ui.$lhsFooterSpellCheckerButton;
+        const $button_span = $button.find('span');
+        $button.addClass('disabled');
+        this.ed.spellCheck({
+            charset: lingua.charset,
+            code: new_state === 'on' ? lingua.code : null
+        }, (
+            error: boolean
+        ) => {
+            if (error || new_state === 'off') {
+                $button_span.addClass('glyphicon-eye-close');
+                $button_span.removeClass('glyphicon-eye-open');
+            } else {
+                $button_span.addClass('glyphicon-eye-open');
+                $button_span.removeClass('glyphicon-eye-close');
+            }
+            if (error || new_state === 'off') {
+                $toggle_a.data('state', 'off');
+                $toggle_img.prop('src', this.urls['32x32'].off);
+                $toggle_line2.text(`Off: Enable [${
+                    lingua.code.replace('_', '-')
+                }]`);
+            } else {
+                $toggle_a.data('state', 'on');
+                $toggle_img.prop('src', this.urls['32x32'].on);
+                $toggle_line2.text(`On: Disable [${
+                    lingua.code.replace('_', '-')
+                }]`);
+            }
+            if (!error) {
+                cookie.set('language', lingua.code)
+            }
+            $button.removeClass('disabled');
+        });
     }
     private normalize(code: string): string {
         const linguae_all: string[] = this.ui.$lhsFooterSpellCheckerMenu.find('>li>a')

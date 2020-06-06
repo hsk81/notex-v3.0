@@ -1,29 +1,40 @@
 <div class="footer">
     <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default"
-                data-container="body" data-placement="right">
+        <button type="button" class="btn btn-outline-dark"
+                data-container="body" data-placement="right" title="Mode">
             <span class="glyphicon glyphicon-option-horizontal glyphicon-console"></span>
         </button>
     </div>
     <div id="cli">
         <div class="input-group">
-            <div class="input-group-btn dropup">
+            <div class="input-group-prepend">
                 <button id="spell-checker-button" type="button"
-                    class="btn btn-default dropdown-toggle"
-                    data-container="body" data-toggle="dropdown"
-                    data-placement="top" title="Spellchecking"
-                >
-                    <img src=""><span class="img-placeholder">&nbsp;</span>
+                        class="btn btn-outline-dark dropdown-toggle"
+                        data-container="body" data-toggle="dropdown"
+                        data-placement="top" title="Spellchecking"
+                    >
+                    <style>
+                        #spell-checker-button.dropdown-toggle::after {
+                            display: none !important;
+                        }
+                        #spell-checker-button {
+                            height: 38px;
+                            width: 42px;
+                        }
+                    </style>
+                    <span class="glyphicon glyphicon-eye-close"></span>
                 </button>
                 <ul id="spell-checker-menu"
                     class="dropdown-menu dropdown-menu-left">
                     <span class="glyphicon glyphicon-cd spin"></span>
                 </ul>
-                <button type="button" class="btn btn-default find-previous"
+            </div>
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-outline-dark find-previous"
                         data-container="body" data-toggle="tooltip"
                         data-placement="top" title="Previous Match"
                     >
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
             </div>
             <input type="text" class="form-control find" placeholder="Find..."
@@ -36,20 +47,35 @@
                 data-content="Allows to replace with a text (or regular expression). Use ENTER to replace the current match, CTRL + ENTER to only replace in a selection and ALT + ENTER to skip; use ESCAPE to clear."
                 title="Replace text (or regular expression)"
                 >
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-default replace-confirm"
+
+            <div class="input-group-append">
+                <button type="button" class="btn btn-outline-dark replace-confirm"
                         data-container="body" data-toggle="tooltip"
                         data-placement="top" title="Replace Match"
                     >
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button type="button" class="btn btn-default find-next"
+                <button type="button" class="btn btn-outline-dark find-next"
+                        data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="Next Match"
+                    >
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            </div>
+            <!-- <div class="input-group-btn">
+                <button type="button" class="btn btn-outline-dark replace-confirm"
+                        data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="Replace Match"
+                    >
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button type="button" class="btn btn-outline-dark find-next"
                         data-container="body" data-toggle="tooltip"
                         data-placement="top" title="Next Match"
                     >
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

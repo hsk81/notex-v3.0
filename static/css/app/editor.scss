@@ -14,6 +14,12 @@ body {
 }
 
 /* ============================================================================
+ * Bootstrap Migration:
+ * ========================================================================= */
+
+@import "./migrate.scss";
+
+/* ============================================================================
  * Header:
  * ========================================================================= */
 
@@ -122,9 +128,12 @@ body {
           .btn-group-vertical {
             margin-bottom: 4px;
           }
-          padding: 4px 4px 0;
+          padding: 3px 3px 0;
         }
         .iScrollVerticalScrollbar {
+          .iScrollIndicator {
+            background-color: #343a40 !important;
+          }
           left: 0 !important;
           width: 4px !important;
           z-index: 999 !important;
@@ -167,28 +176,26 @@ body {
       }
       div.footer {
         .btn-group {
-          margin: 6px 4px;
+          margin: 4px 3px;
         }
         #cli {
           div.input-group {
-            input.form-control {
-              width: 50%;
-            }
-            button#spell-checker-button {
-              span.img-placeholder {
-                background: no-repeat center
-                  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkCCzgSlfo5igAAAiRJREFUOMudkj9LI1EUxX83M6MZsp1rttiUdmFBMGuVYusUAbdPu2AzxTSjOB8gFtHkM+wHEMyKhUUCacQ/OCghjcUWC0JcMQaLIZnkbpMZ4qKw7IEL7x3euedc3hXf9zmI1hVgwzwTILmvvBv1P4XBh5v0av/2eWEZ4Kt1LqqKiKCqpG7Sq/0c9w857h9u0qt3zNCtliu3zwtZgNvnheVutVzpVssVgCiKGI/HRFGE5LcOtVstfwHIbx22N8wziRPktP/7s/Vz+SBa1w3zTESE8XiMqsY+pGJhfuuwzRy61XLll2Tfz3Oq+qIAzPjxrNF3ESE+51KDIcDH1HAYpypNOxJFkQKYpikAa6qK7/sAa9vb2wBrs1qZ8Ssx5ziOPj4+6tPTk7quq+L7Pq/NJiJYlpXwk8mE0WikOzs7nJycoKr9IAiyJpA8mk6nxPEMw5C4YSz2PI9Wq4Vt23Q6nWy9Xi+Y8cwzF3Vdl+l0Sq1WU8uyZGagrutyenqKbdu0223q9XrB87zL1N/Rr6+vubq6wnEcwjDUMAzVcRyCICCdTtNqtdjf3y94nncJYMZiEWFvb68wmUwuSqUSvV6Pzc1NAHq9HrZtc3x8nDjHhkaxWEzci8XiXa1W+7G0tPQtn88zGAwYDocsLi5ydHREo9F4IU4WaR6e5102Go1Cs9kkk8mQyWRoNpuvipNFeq3J7u5uwTCMC+BN8b8gXqg3IfM/8D/4A1nMPcmZBpljAAAAAElFTkSuQmCC);
-                padding: 6px;
-              }
-              img {
-                display: none;
-                margin-bottom: 2px;
-              }
-              height: 34px;
-              width: 42px;
-            }
             ul#spell-checker-menu {
+              li:active {
+                a {
+                  color: white;
+                }
+              }
+              li:hover {
+                cursor: pointer;
+              }
               li {
+                a:active {
+                  color: white;
+                }
+                a:hover {
+                  text-decoration: none;
+                }
                 a {
                   img {
                     float: right;
@@ -198,18 +205,20 @@ body {
                   span.language {
                     font-size: smaller;
                   }
+                  color: black;
                 }
               }
               height: 307px;
               overflow: hidden;
               overflow-y: scroll;
+              user-select: none;
               width: 260px;
             }
             float: left;
             width: 100%;
           }
           float: right;
-          margin: 6px 4px 6px 0;
+          margin: 4px 4px 4px 0;
           width: calc(100% - 53px);
         }
         bottom: 0;
@@ -234,10 +243,12 @@ body {
           .btn-group-vertical {
             margin-bottom: 4px;
           }
-          padding: 4px 4px 0;
+          padding: 3px 3px 0;
         }
         .iScrollVerticalScrollbar {
-          // left: 0 !important;
+          .iScrollIndicator {
+            background-color: #343a40 !important;
+          }
           right: 0 !important;
           width: 4px !important;
           z-index: 999 !important;
@@ -249,7 +260,6 @@ body {
       iframe#cached {
         border-left: 4px double #e7e7e7;
         box-shadow: inset 0 0 8px #e7e7e7;
-        // height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0;
