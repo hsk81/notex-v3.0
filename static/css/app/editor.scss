@@ -24,13 +24,18 @@ body {
  * ========================================================================= */
 
 .header {
-  label.source-mob {
-    cursor: pointer;
-    font-weight: normal;
+  .container-fluid {
+    label.source-mob {
+      cursor: pointer;
+      font-weight: normal;
+      margin: 0;
+    }
     margin: 0;
+    padding: 0;
   }
   border-radius: 0;
-  margin-bottom: 0;
+  margin: 0;
+  padding: 4px;
 }
 
 /* ============================================================================
@@ -62,7 +67,7 @@ body {
     }
   }
   @media (max-width: 992px) {
-    height: calc(100% - 52px);
+    height: calc(100% - 46px);
   }
   @media (min-width: 992px) {
     height: calc(100%);
