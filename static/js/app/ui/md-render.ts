@@ -36,7 +36,8 @@ export class MdRender {
                     const window = this.ui.$rhsCached.get(0).contentWindow;
                     if (window) window.PATCH = () => this.patch();
                 default:
-                    const ms = !navigator.userAgent.match(/chrome/i) ? 100 : 0;
+                    const { userAgent: agent } = navigator;
+                    const ms = !agent || !agent.match(/chrome/i) ? 100 : 0;
                     await new Promise((resolve) => setTimeout(resolve, ms));
             }
         }
