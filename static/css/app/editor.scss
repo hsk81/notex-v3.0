@@ -79,17 +79,13 @@ body {
       textarea#input {
         height: calc(100% - 47px);
       }
-      .footer {
-        display: none;
-        width: 100%;
-      }
       height: 100%;
     }
     .lhs.without-footer {
       textarea#input {
         height: calc(100%);
       }
-      .footer {
+      .lhs-footer {
         display: block;
         width: 48px;
       }
@@ -175,58 +171,6 @@ body {
         overflow-y: auto;
         padding: 1em 1em 0;
         resize: none;
-      }
-      div.footer {
-        .btn-group {
-          margin: 4px 3px;
-        }
-        #cli {
-          div.input-group {
-            ul#spell-checker-menu {
-              li:active {
-                a {
-                  color: white;
-                }
-              }
-              li:hover {
-                cursor: pointer;
-              }
-              li {
-                a:active {
-                  color: white;
-                }
-                a:hover {
-                  text-decoration: none;
-                }
-                a {
-                  img {
-                    float: right;
-                    margin-top: 5px;
-                  }
-                  span.line2,
-                  span.language {
-                    font-size: smaller;
-                  }
-                  color: black;
-                }
-              }
-              height: 307px;
-              overflow: hidden;
-              overflow-y: scroll;
-              user-select: none;
-              width: 260px;
-            }
-            float: left;
-            width: 100%;
-          }
-          float: right;
-          margin: 4px 3px 4px 0;
-          width: calc(100% - 51px);
-        }
-        bottom: 0;
-        border-top: 1px solid #e7e7e7;
-        height: 47px;
-        position: absolute;
       }
       padding: 0;
     }

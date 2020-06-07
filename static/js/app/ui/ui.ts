@@ -27,7 +27,7 @@ export class Ui {
         return $('.lhs');
     }
     public get $lhsFooter() {
-        return this.$lhsInput.siblings('.footer');
+        return this.$lhsInput.siblings('.lhs-footer');
     }
     public get $lhsFooterSwitch() {
         return this.$lhsFooter.find('.glyphicon-transfer').closest('button');

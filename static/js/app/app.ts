@@ -4,7 +4,7 @@ import { TemplateManager } from "./ui/manager-template";
 
 import { HeaderMenu } from "./ui/header-menu";
 import { MdEditor } from "./ui/md-editor";
-import { MdEditorFooter } from "./ui/md-editor-footer";
+import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
 import { MdEditorToolbarLhs } from "./ui/md-editor-toolbar-lhs";
 import { MdEditorToolbarRhs } from "./ui/md-editor-toolbar-rhs";
@@ -26,13 +26,13 @@ export class App {
         this._editor_toolbar_lhs = MdEditorToolbarLhs.me;
         this._editor_toolbar_rhs = MdEditorToolbarRhs.me;
         this._editor_aibar = RhsFooter.me;
-        this._editor_footer = MdEditorFooter.me;
+        this._editor_footer = LhsFooter.me;
         this._manager_download = DownloadManager.me;
         this._manager_publish = PublishManager.me;
         this._manager_template = TemplateManager.me;
     }
     private readonly _editor: MdEditor;
-    private readonly _editor_footer: MdEditorFooter;
+    private readonly _editor_footer: LhsFooter;
     private readonly _editor_aibar: RhsFooter;
     private readonly _editor_toolbar_lhs: MdEditorToolbarLhs;
     private readonly _editor_toolbar_rhs: MdEditorToolbarRhs;

@@ -1,21 +1,21 @@
-import { MdEditor } from "./md-editor";
-import { UiMode } from "./ui-mode";
-import * as uiMode from "./ui-mode";
-import { Ui } from "./ui";
+import { MdEditor } from "../../ui/md-editor";
+import { UiMode } from "../../ui/ui-mode";
+import * as uiMode from "../../ui/ui-mode";
+import { Ui } from "../../ui/ui";
 
-import { buffered } from "../decorator/buffered";
-import { trace } from "../decorator/trace";
-import { cookie } from "../cookie/cookie";
+import { buffered } from "../../decorator/buffered";
+import { trace } from "../../decorator/trace";
+import { cookie } from "../../cookie/cookie";
 
 declare const $: JQueryStatic;
 
 @trace
-export class MdEditorFooter {
+export class LhsFooter {
     public static get me() {
-        if (window.MD_EDITOR_FOOTER === undefined) {
-            window.MD_EDITOR_FOOTER = new MdEditorFooter();
+        if (window.LHS_FOOTER === undefined) {
+            window.LHS_FOOTER = new LhsFooter();
         }
-        return window.MD_EDITOR_FOOTER;
+        return window.LHS_FOOTER;
     }
     public constructor() {
         if (!this.ed.mobile) {
@@ -351,11 +351,6 @@ export class MdEditorFooter {
             err: '/static/png/fatcow/32x32/spellcheck_error.png',
             off: '/static/png/fatcow/32x32/spellcheck_gray.png',
             on: '/static/png/fatcow/32x32/spellcheck.png'
-        },
-        '16x16': {
-            err: '/static/png/fatcow/16x16/spellcheck_error.png',
-            off: '/static/png/fatcow/16x16/spellcheck_gray.png',
-            on: '/static/png/fatcow/16x16/spellcheck.png'
         }
     };
     private get ed() {
@@ -365,4 +360,4 @@ export class MdEditorFooter {
         return Ui.me;
     }
 }
-export default MdEditorFooter;
+export default LhsFooter;
