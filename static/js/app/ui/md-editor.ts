@@ -360,7 +360,7 @@ export class MdEditor {
         window.CODE_MIRROR = value;
     }
     public get mobile(): boolean {
-        return $('.lhs').is(':hidden') && !window.debug;
+        return window.screen.width < 768;
     }
     private get simple(): boolean {
         const value = cookie.get<boolean>('simple-flag');

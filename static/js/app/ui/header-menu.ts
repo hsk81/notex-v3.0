@@ -43,10 +43,10 @@ export class HeaderMenu {
     }
     private onSwapItemClick() {
         this.ui.$lhs
-            .toggleClass('hidden-xs hidden-sm')
+            .toggleClass('d-none d-md-block')
             .toggleClass('col-xs-12 col-sm-12');
         this.ui.$rhs
-            .toggleClass('hidden-xs hidden-sm')
+            .toggleClass('d-none d-md-block')
             .toggleClass('col-xs-12 col-sm-12');
         this.toolbarLhs.refresh();
         this.toolbarRhs.refresh();

@@ -14,10 +14,10 @@ body {
 }
 
 /* ============================================================================
- * Bootstrap Migration:
+ * Glyphicons:
  * ========================================================================= */
 
-@import "./migrate.scss";
+@import "./glyphicons.scss";
 
 /* ============================================================================
  * Header:
@@ -47,29 +47,29 @@ body {
     .lhs {
       textarea#input,
       div.CodeMirror {
-        @media (min-width: 992px) {
-          width: calc(100% - 48px);
-        }
-        @media (max-width: 992px) {
+        @media (max-width: 767px) {
           width: calc(100%);
+        }
+        @media (min-width: 768px) {
+          width: calc(100% - 48px);
         }
       }
     }
     .rhs {
       iframe.viewer {
-        @media (min-width: 992px) {
-          width: calc(100% - 48px);
-        }
-        @media (max-width: 992px) {
+        @media (max-width: 767px) {
           width: calc(100%);
+        }
+        @media (min-width: 768px) {
+          width: calc(100% - 48px);
         }
       }
     }
   }
-  @media (max-width: 992px) {
+  @media (max-width: 767px) {
     height: calc(100% - 46px);
   }
-  @media (min-width: 992px) {
+  @media (min-width: 768px) {
     height: calc(100%);
   }
 }
@@ -335,4 +335,4 @@ body {
   }
 }
 
- /* ========================================================================= */
+/* ========================================================================= */
