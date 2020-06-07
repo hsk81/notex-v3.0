@@ -44,8 +44,8 @@ export class MdEditorFooter {
             .on('click', (ev) => $(ev.target).popover('toggle'))
             .on('keydown', (ev) => $(ev.target).popover('hide'))
             .on('keypress', (ev) => $(ev.target).popover('hide'));
-        this.ui.$lhsFooterMirror
-            .on('click', this.onMirrorClick.bind(this));
+        this.ui.$lhsFooterSwitch
+            .on('click', this.onSwitchClick.bind(this));
         this.ui.$lhsFooterCliFind
             .on('change', this.onFindChange.bind(this) as any);
         this.ui.$lhsFooterCliFind
@@ -65,12 +65,12 @@ export class MdEditorFooter {
     }
     private tips() {
         if (this.ed.uiMode === UiMode.simple) {
-            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.mirror));
+            this.ui.$lhsFooterSwitch.attr('title', uiMode.text(UiMode.mirror));
         } else {
-            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.simple));
+            this.ui.$lhsFooterSwitch.attr('title', uiMode.text(UiMode.simple));
         }
     }
-    private onMirrorClick() {
+    private onSwitchClick() {
         if (this.ed.mirror) {
             const scroll = this.ed.mirror.getScrollInfo();
             const range = this.ed.mirror.listSelections()[0];
@@ -86,7 +86,7 @@ export class MdEditorFooter {
             $input[0].setSelectionRange(
                 Math.min(start, end), Math.max(start, end)
             );
-            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.mirror))
+            this.ui.$lhsFooterSwitch.attr('title', uiMode.text(UiMode.mirror))
             this.ui.$lhsFooterCliFind.val('');
             this.hide();
         } else {
@@ -105,7 +105,7 @@ export class MdEditorFooter {
                 mirror.posFromIndex(selection.start),
                 mirror.posFromIndex(selection.end)
             );
-            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.simple));
+            this.ui.$lhsFooterSwitch.attr('title', uiMode.text(UiMode.simple));
             this.ui.$lhsFooterCliFind.val('');
             this.show();
         }

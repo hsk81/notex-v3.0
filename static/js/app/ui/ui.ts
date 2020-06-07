@@ -41,8 +41,8 @@ export class Ui {
     public get $lhsFooter() {
         return this.$lhsInput.siblings('.footer');
     }
-    public get $lhsFooterMirror() {
-        return this.$lhsFooter.find('.glyphicon-console').closest('button');
+    public get $lhsFooterSwitch() {
+        return this.$lhsFooter.find('.glyphicon-transfer').closest('button');
     }
     public get $lhsFooterCli() {
         return this.$lhsFooter.find('#cli');
