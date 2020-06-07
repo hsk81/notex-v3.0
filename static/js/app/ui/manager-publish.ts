@@ -14,6 +14,11 @@ export class PublishManager {
         return window.PUBLISH_MANAGER;
     }
     public constructor() {
+        this.ui.$publishDialog.find('[data-toggle="popover"]')
+            .on('blur', (ev) => $(ev.target).closest('button').popover('hide'))
+            .on('click', (ev) => $(ev.target).closest('button').popover('toggle'))
+            .on('keydown', (ev) => $(ev.target).closest('button').popover('hide'))
+            .on('keypress', (ev) => $(ev.target).closest('button').popover('hide'));
         this.ui.$publishDialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.ui.$publishDialog.on(
@@ -47,16 +52,16 @@ export class PublishManager {
     }
     private onIpfsNavClick() {
         this.ui.$publishDialogExpand.prop('disabled', true);
-        this.ui.$publishDialogBlogNav.removeClass('active');
+        this.ui.$publishDialogBlogNav.find('a').removeClass('active');
         this.ui.$publishDialogBlogTab.hide();
-        this.ui.$publishDialogIpfsNav.addClass('active');
+        this.ui.$publishDialogIpfsNav.find('a').addClass('active');
         this.ui.$publishDialogIpfsTab.show();
     }
     private onBlogNavClick() {
         this.ui.$publishDialogExpand.prop('disabled', false);
-        this.ui.$publishDialogIpfsNav.removeClass('active');
+        this.ui.$publishDialogIpfsNav.find('a').removeClass('active');
         this.ui.$publishDialogIpfsTab.hide();
-        this.ui.$publishDialogBlogNav.addClass('active');
+        this.ui.$publishDialogBlogNav.find('a').addClass('active');
         this.ui.$publishDialogBlogTab.show();
     }
     private get ed() {

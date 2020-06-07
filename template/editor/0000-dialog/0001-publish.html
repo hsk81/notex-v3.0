@@ -1,292 +1,34 @@
 <div class="modal fade" id="publish-dlg" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <ul class="nav nav-tabs nav-justified nav-stacked">
-                <li role="presentation" class="nav-ipfs active">
-                    <a href="#">IPFS</a>
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                <li class="nav-item ipfs-nav">
+                    <a href="#" class="nav-link active">
+                        <h5>IPFS</h5>
+                    </a>
                 </li>
-                <li role="presentation" class="nav-blog">
-                    <a href="#">Blogger.com</a>
+                <li class="nav-item blog-nav">
+                    <a href="#" class="nav-link">
+                        <h5>Blogger.com</h5>
+                    </a>
                 </li>
             </ul>
-            <div class="tab-ipfs">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TS0UqCmYo4pChOlkQleKoVShChVArtOpgPvoFTRqSFBdHwbXg4Mdi1cHFWVcHV0EQ/ABxcnRSdJES/5cUWsR4cNyPd/ced+8ArllVNKtnAtB028ykkkIuvyqEXxFCFIPgkZAUy5gTxTR8x9c9Amy9i7Ms/3N/jn61YClAQCCeVQzTJt4gTmzaBuN9Yl4pSyrxOfG4SRckfmS67PEb45LLHMvkzWxmnpgnFkpdLHexUjY14mnimKrplM/lPFYZbzHWqnWlfU/2wkhBX1lmOs0RpLCIJYgQIKOOCqqwEadVJ8VChvaTPv5h1y+SSyZXBQo5FlCDBsn1g/3B726t4tSklxRJAqEXx/kYBcK7QKvhON/HjtM6AYLPwJXe8deawMwn6Y2OFjsCBraBi+uOJu8BlztA9MmQTMmVgjS5YhF4P6NvygNDt0Dfmtdbex+nD0CWukrfAAeHwFiJstd93t3b3du/Z9r9/QCTWnK0U2qr3AAAAXRQTFRFAAAAPI2VPY6WPY+XPo+XP5CYP5GYP5GZQJKaQZKbP5OZQZOaQZObQJSbQpScQZWbQ5WdRJaeQpedQpidRZegQ5meQ5mfQ5qfRpmhRJqfRJufRJugR5qjRZygRZyhSJukRpyiRZ2hRp2iRp6iSZ2mR56jR56kSJ6kR5+jSJ+kSKCkSaCmSaGlSaGmTKCpSqGnTaGqS6SoS6SpTqOsTKSpT6StTaWrTaaqTaarTqasUaavUKeuUaewT6itUKmuUKqvU6myUaqvUauwVKq0U6uyVKu1UqyxVKyzVay1U62yVa22VK6zVa+0Vq+2V6+5V7G3V7G4WLG6WbG7V7K3WbK6WbK8WrK8WbO6WrO8WrO9W7O9W7S+W7W9Wra7Wra8XLe/XLi+XbjAXbm/XrvBYLvEX7zCX7zDYLzFYL3DYb3GYr7HYb/FYr/GY7/IY8DIZMDJY8HHZMHKZcHKZMLJZcLLZMPJZcPKZ8bMZ8bNaMfOacnQasrRAzEVEwAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH5AUYEBkLDLjQ1AAAAWRJREFUOMuV0/k7AkEcBvBtGvdRaGSkcxCF3OQWIkXO0LiJ3GJCu/+8srW17bbP4/1x38/M/vCdL8fJQwinFZKLZh8OBIMVCSELn0I2T1OqhJCRhCCGvxxQEuI54wUpmWgfKTse+RZkSS+XXELI/LugSHK8QJosHpVeEBLEiv8ABAZn5Ke8/go4MUIi6JhpaPWc86V1Zp90+q7cItDb6eFQjXk0KdX89aDFcfDBvBKgdLur3rqYFvvnaRtefWFMBihdMRpI9CYUvgs58eQtYwpA4xO1bdlZuSzuU8bUAKV7xmpsRf4UqwSoHUCEtlhlsAYhsj1oALoBHcVeDcRgP/s/gKa4OnjryQMwrA5m88PSg8bjInBL/SNG7eKDAKBuTgFSOzaEpTelA6ZNObjwFo5zhVu6d4vg3p//vYxUjZ2I4HUdI7XF0YHmpRjsZUcuZK6wWzrQArEPIY3tzE1Tc705ffmHX9q9zK6WUG6/AAAAAElFTkSuQmCC"
-                        class="img-thumbnail pull-left" alt="IPFS.io">
-                    <h4 class="modal-title">Publish to <a href="https://ipfs.io/" target="_blank">IPFS</a></h4>
-                </div>
-                <div class="modal-body">
-                    <label class="post-basics" for="ipfs-gateway">IPFS Gateway</label>
-                    <div class="post-basics input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-link"></span>
-                        </span>
-                        <input title="A gateway to access content stored on the InterPlanetary File System (IPFS)"
-                               type="text" class="form-control" id="ipfs-gateway" list="ipfs-gateways"
-                               placeholder="an IPFS gateway like https://ipfs.io/ipfs (or http://localhost:8080/ipfs)"
-                               style="border-radius: 0 4px 4px 0;">
-                        <datalist id="ipfs-gateways">
-                            <option>https://ipfs.io/ipfs</option>
-                            <option>https://cloudflare-ipfs.com/ipfs</option>
-                            <option>http://localhost:8080/ipfs</option>
-                        </select>
-                        <div class="input-group-btn hidden-xs hidden-sm">
-                            <button class="btn btn-outline-dark" type="button" tabindex="-1" title="IPFS Gateway"
-                                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                                    data-content="A gateway to access content stored on the InterPlanetary File System (IPFS)">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+                    <div id="ipfs-tab" role="tabpanel" class="tab-pane active">
+                        {% include 'editor/0000-dialog/0001-publish-ipfs.html' %}
                     </div>
-                    <!--
-                    <br class="post-basics" />
-                    <label class="post-basics" for="post-title">IPNS Title</label>
-                    <div class="post-basics input-group">
-                        <span class="input-group-addon">
-                            <input type="checkbox" data-toggle="tooltip" data-placement="top"
-                                title="Update the most recent post with the same title, if any such exists."
-                                style="margin-top: 3px" tabindex="-1" checked>
-                        </span>
-                        <input type="text" class="form-control" id="ipns-title"
-                               placeholder="a new or an existing IPNS title">
-                        <div class="input-group-btn hidden-xs hidden-sm">
-                            <button class="btn btn-outline-dark" type="button" tabindex="-1" title="Post Title"
-                                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                                data-content="...">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+                    <div id="blog-tab" role="tabpanel" class="tab-pane">
+                        {% include 'editor/0000-dialog/0001-publish-blog.html' %}
                     </div>
-                    -->
-                </div>
-            </div>
-            <div class="tab-blog" style="display: none;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAACr1BMVEUhfwD/ghv/hB7/hhX/hR//hiL/iB7/iCD/iCX/iCf/iSH/iiD/iiH/iij/iyD/iyr/jCr/jCv/jCz/jiH/jSz/jS7/jiX/jS//jTP/jir/jiz/ji3/ji7/jyX/jjP/jyr/jyz/jy//jzD/jzL/jzP/kCr/kDD/kDP/kiD/kDT/kSv/kiL/kS3/kTD/kTP/kir/kTT/kyL/kjP/kjT/kyv/kjX/lCL/ky7/ky//kzD/kzP/kzT/lCv/lC//lDH/lDL/lDT/lDX/liT/lS7/lS//lTL/lTP/lTT/lTX/ljD/lTr/lTv/lTz/ljT/ljX/ly7/ly//ljz/lzT/lzX/lzf/mC7/mC//lzn/mDX/mS3/mDj/mTD/mTb/mEL/mjH/mjL/mjX/mjb/mjf/mzP/mzb/mzf/mkH/mkP/nDb/nDf/nD3/nTb/nTf/nEP/nTv/nEf/nT7/njb/njf/njj/nUb/nj7/nUj/nj//nzb/nkD/nzf/oDf/oDn/oDr/oTf/oTz/ojj/ozj/oz3/oVX/o0f/o0j/olX/o1L/p1X/p1j/p1n/qFn/qVn/qVr/q1n/q1r/rWL/rWf/rmP/rmb/r2P/sGf/tGj/tWn/tXX/vIH/vIP/vIT/vIX/vYH/vYX/vYb/voX/v4X/v4b/v4j/wYP/wYf/wYj/xIr/xJL/xpX/x5b/yZf/ypr/y5r/zJz/zJ//zZ7/zZ//z6f/0af/0qr/1Kn/1a//1rP/17T/2LH/27n/27z/3Lr/3b//3cH/3r//3sD/3sH/3sL/3sP/38L/38P/4MX/4cX/48v/5Mv/5dH/5tD/5tH/59D/6NL/6NT/6df/6tj/69r/69v/7uD/7+L/8ub/8+n/9Or/9Ov/9ez/9u//9/D/+vf//fv//fz//f3//v3//v7///7///8n95ryAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfgAxAINiKfRh1EAAACJElEQVQoz2NgaGqoq6uqKizMzshISUhIiIiICPL1dXd3d7C2NtJjYKhvrMMpb6VnzFALlK6uxiVvwFADk86Ojw7w9/f3DEKW1wPKV4PkiyI1okvLKysrI4RlXf2A8g5g+/UYiquqq6qqKsxal+88evz4sWO7NkwSM/dDlq8qrKpwmn7+CQzcWmNnCTbeWg8on1MIBIbT7jxBAhvd7JHlsyNbziFLP7k/1Q1kvDFIPjM7O1t7yWMU+Se7Q0DawfKpGRnJoVtBgjdXL122bO6qa0DmnXCo8WD5uLw9IPl1zjYmJvrMG4HMByWSCrqmQGl1hqSUlLDSQyD5s1P6+vs7ek8CmY/Wd3WmyUDkExL8Sw8+wQRbBNRA8okJCQEFB7DIX80X0FNXZ4jBJX+5DCwfHBHhkrUfi/ylfAF1dRX88ipgedusvSCB0xN6ukGgq337Q7A8v4qKHIOfr69F1C6Q/FodVVVVeXlJSa4Zd4HcC7GCUHk7rc0g+RsrFy5asGDevFnzL4KC+4SouIocWN6Xb+YjTPs3MQKl5Rg8gElJK/cUhvT1Nl6wvANQ3oN78m006XtzWDTh8g4OPBPPoEhfmc2hApKWYwDGozUwMbCnL96278ghEDh8aMeKZlZlsLQEWB4IHBXYpLwCwcDHW4mJUxksKwGTNwICRWkRIJASERIRh2gGyxsDZfSQADDMITaDpSUYDPRQZVGlJRgYTJElQdJyyNIAygzFuhksnCgAAAAASUVORK5CYII="
-                         class="img-thumbnail pull-left" alt="Blogger.com">
-                    <h4 class="modal-title">Publish to <a href="https://www.blogger.com/" target="_blank">Blogger.com</a></h4>
-                </div>
-                <div class="modal-body">
-                    <label class="post-basics" for="blog-url">Blog URL</label>
-                    <div class="post-basics input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-link"></span>
-                        </span>
-                        <input type="text" class="form-control" id="blog-url"
-                            placeholder="a blog URL like https://my.blogspot.com">
-                        <div class="input-group-btn hidden-xs hidden-sm">
-                            <button class="btn btn-outline-dark" type="button" tabindex="-1" title="Blog URL"
-                                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                                data-content="Ensure to provide an existing blog URL with read and write access.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <br class="post-basics" />
-                    <label class="post-basics" for="post-title">Post Title</label>
-                    <div class="post-basics input-group">
-                        <span class="input-group-addon">
-                            <input type="checkbox" data-toggle="tooltip" data-placement="top"
-                                title="Update the most recent post with the same title, if any such exists."
-                                style="margin-top: 3px" tabindex="-1" checked>
-                        </span>
-                        <input type="text" class="form-control" id="post-title"
-                            placeholder="a new or an existing post title">
-                        <div class="input-group-btn hidden-xs hidden-sm">
-                            <button class="btn btn-outline-dark" type="button" tabindex="-1" title="Post Title"
-                                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                                data-content="Updates most recent post with same title, unless checkbox is unchecked.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <br class="post-settings" />
-                    <ul class="post-settings nav nav-tabs nav-justified nav-stacked">
-                        <li role="presentation" class="active scripts">
-                            <a href="#">Scripts</a>
-                        </li>
-                        <li role="presentation" class="styles">
-                            <a href="#">Styles</a>
-                        </li>
-                    </ul>
-                    <div class="post-settings scripts input-group">
-                        <span class="input-group-addon">
-                            <input style="margin-top: 3px" tabindex="-1" type="checkbox" data-toggle="tooltip"
-                                data-placement="top"
-                                title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!">
-                        </span>
-                        <textarea type="textarea" class="form-control" id="post-scripts" placeholder="<script>..</script>"><!--
-      -- Highlight.js v10.0.2
-      -->
-
-    <link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/default.min.css' rel='stylesheet'></link>
-
-    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js'></script>
-
-    <!--
-      -- MathJax v3.y.z
-      -->
-
-    <script>
-    function script(url) {
-        var element = document.createElement('script');
-        element.src = url; element.async = true;
-        document.head.appendChild(element);
-    };
-    if (
-        typeof window.MathJax === 'undefined'
-    ) {
-        window.MathJax = {
-            startup: {
-                ready: () => {
-                    MathJax.startup.defaultReady();
-                    if (typeof PATCH === 'function') {
-                        MathJax.startup.promise.then(PATCH);
-                    }
-                }
-            },
-            tex: {
-                inlineMath: [['$', '$'], ['$$', '$$']],
-                tags: 'ams',
-            },
-            svg: {
-                fontCache: 'global'
-            },
-            addMenu: [
-                0, '', ''
-            ]
-        };
-        script(
-            'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
-        );
-    } else if (
-        typeof window.MathJax.typesetPromise === 'function'
-    ) {
-        MathJax.startup.promise = MathJax.startup.promise.then(() => {
-        MathJax.texReset(); return typeof PATCH === 'function'
-            ? MathJax.typesetPromise().then(PATCH)
-            : MathJax.typesetPromise();
-        });
-    };
-    </script></textarea>
-                    </div>
-                    <div class="post-settings styles input-group" style="display: none;">
-                        <span class="input-group-addon">
-                            <input style="margin-top: 3px" tabindex="-1" type="checkbox" data-toggle="tooltip"
-                                data-placement="top"
-                                title="Append styles to this post: If possible try to modify a blog's template directly instead of including the styles separately for each post!">
-                        </span>
-                        <textarea type="textarea" class="form-control" id="post-styles" placeholder="<style>..</style>"><link href="https://fonts.googleapis.com/css2?family=Habibi&display=swap" rel="stylesheet">
-
-    <style>
-    body {
-        font-family: Habibi, serif;
-    }
-    </style>
-
-    <style>
-    .post-title {
-        color: inherit;
-    }
-    .post-body {
-        font-size: larger;
-        text-align: justify;
-    }
-    .post-body .header-anchor {
-        opacity: 0.05;
-    }
-    .post-body .header-anchor:hover {
-        opacity: 1.00;
-    }
-    .post-body br {
-        display: none;
-    }
-    .post-body .embed-responsive {
-        text-align: center;
-    }
-    .post-body .embed-responsive > iframe {
-        border: none;
-        padding: 4px;
-        width: calc(100% - 1em);
-    }
-    .post-body figure {
-        text-align: center;
-    }
-    .post-body figure > img {
-        box-shadow: none;
-        border-radius: 2mm;
-        max-width: calc(100% - 1em);
-    }
-    .post-body figure > figcaption {
-        text-align: center;
-    }
-    .post-body .footnotes {
-        font-size: small;
-    }
-    .post-body .footnote-ref {
-        font-size: x-small;
-    }
-    .post-body .footnotes-sep {
-        border: none;
-        border-bottom: 1px solid #f5f5f5;
-    }
-    .post-body .mjx-math,
-    .post-body .mjx-char {
-        color: inherit;
-    }
-    .post-body blockquote {
-        border-left: 0.25em solid #f5f5f5;
-        padding-bottom: 0.125em;
-        padding-left: 0.75em;
-        padding-top: 0.125em;
-    }
-    .post-body pre {
-        background-color: #f5f5f5;
-        border-top: 1px solid lightgray;
-        border-bottom: 1px solid lightgray;
-        font-size: medium;
-        padding: 0.5em;
-    }
-    .post-body p > code {
-        background-color: #f5f5f5;
-        font-size: smaller;
-        padding: 1px 2px;
-    }
-    .post-footer {
-        font-size: inherit;
-    }
-    .date-header {
-        font-size: x-small;
-        text-align: right;
-        width: 100%;
-    }
-    .date-header span {
-        background-color: #4c4c4c;
-        border: 3px double;
-        padding: 0.5em;
-    }
-    </style></textarea>
-                    </div>
-                </div>
+                  </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark pull-left" id="expand" disabled>
-                    <span class="glyphicon glyphicon-chevron-down" style="top: 2px;"></span>
+                <button type="button" class="btn btn-outline-dark mr-auto" id="expand" disabled>
+                    <span class="glyphicon glyphicon-chevron-down"></span>
                 </button>
-                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
-                    Close
-                </button>
-                <button type="button" class="btn btn-primary"
-                    data-publishing-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Publishing.."
-                    data-published-text="<span class='glyphicon glyphicon-cloud-upload'></span>&nbsp;Published">
-                    <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Publish
-                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Publish</button>
             </div>
         </div>
     </div>

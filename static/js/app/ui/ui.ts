@@ -90,10 +90,10 @@ export class Ui {
         return $('#publish-dlg');
     }
     public get $publishDialogBlogNav() {
-        return this.$publishDialog.find('.nav-blog');
+        return this.$publishDialog.find('.blog-nav');
     }
     public get $publishDialogBlogTab() {
-        return this.$publishDialog.find('.tab-blog');
+        return this.$publishDialog.find('#blog-tab');
     }
     public get $publishDialogBlogUrl() {
         return this.$publishDialog.find('#blog-url');
@@ -141,10 +141,10 @@ export class Ui {
         return this.$publishDialogBlogStyles.find('textarea');
     }
     public get $publishDialogIpfsNav() {
-        return this.$publishDialog.find('.nav-ipfs');
+        return this.$publishDialog.find('.ipfs-nav');
     }
     public get $publishDialogIpfsTab() {
-        return this.$publishDialog.find('.tab-ipfs');
+        return this.$publishDialog.find('#ipfs-tab');
     }
     public get $publishDialogIpfsGateway() {
         return this.$publishDialog.find('#ipfs-gateway');

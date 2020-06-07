@@ -55,7 +55,7 @@ export class PublishIpfsManager {
     }
     private async onPrimaryClick() {
         const $nav = this.ui.$publishDialogIpfsNav;
-        if (!$nav.hasClass('active')) {
+        if (!$nav.find('a').hasClass('active')) {
             return;
         }
         const gateway = this.ui.$publishDialogIpfsGateway.val() as string;
@@ -79,10 +79,8 @@ export class PublishIpfsManager {
                     this.ipfs_gateway = gateway;
                     this.ui.$publishDialogPrimary.prop('disabled', false);
                     this.ui.$publishDialogPrimary.addClass('btn-success');
-                    this.ui.$publishDialogPrimary.button('published');
                     setTimeout(() => {
                         this.ui.$publishDialog.modal('hide');
-                        this.ui.$publishDialogPrimary.button('reset');
                     }, 600);
                 }
             });
@@ -90,7 +88,6 @@ export class PublishIpfsManager {
             this.ui.$publishDialogPrimary.removeClass('btn-success');
             this.ui.$publishDialogPrimary.removeClass('btn-warning');
             this.ui.$publishDialogPrimary.removeClass('btn-danger');
-            this.ui.$publishDialogPrimary.button('publishing');
         }
     }
     private get ed() {

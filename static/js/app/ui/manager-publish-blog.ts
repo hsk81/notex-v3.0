@@ -84,7 +84,7 @@ export class PublishBlogManager {
         if (blog_url && typeof blog_url === 'string') {
             $url.val(blog_url);
         }
-        const title = MdEditor.me.title;
+        const title = this.ed.title;
         if (title && typeof title === 'string') {
             $title.val(title);
         }
@@ -114,19 +114,22 @@ export class PublishBlogManager {
     private onBsModalHidden() {
     }
     private onExpandClick() {
-        const $glyphicon = this.ui.$publishDialogExpand.find('.glyphicon');
+        const $expand = this.ui.$publishDialogExpand;
+        const $glyphicon = $expand.find('.glyphicon');
+        const $scripts_nav = this.ui.$publishDialogBlogScriptsNav;
+        const $styles_nav = this.ui.$publishDialogBlogStylesNav;
         const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
         const $settings = this.ui.$publishDialogBlogSettings;
         const $title = this.ui.$publishDialogBlogTitle;
-        if (this.ui.$publishDialogExpand.data('state') === 'expanded') {
-            this.ui.$publishDialogExpand.data('state', 'collapsed');
+        if ($expand.data('state') === 'expanded') {
+            $expand.data('state', 'collapsed');
         } else {
-            this.ui.$publishDialogExpand.data('state', 'expanded');
+            $expand.data('state', 'expanded');
         }
-        if (this.ui.$publishDialogExpand.data('state') === 'expanded') {
-            if (this.ui.$publishDialogBlogScriptsNav.hasClass('active')) {
+        if ($expand.data('state') === 'expanded') {
+            if ($scripts_nav.find('a').hasClass('active')) {
                 $settings.filter(':not(.styles)').show();
-            } else if (this.ui.$publishDialogBlogStylesNav.hasClass('active')) {
+            } else if ($styles_nav.find('a').hasClass('active')) {
                 $settings.filter(':not(.scripts)').show();
             } else {
                 $settings.show();
@@ -144,9 +147,9 @@ export class PublishBlogManager {
         }
     }
     private onScriptsNavClick() {
-        this.ui.$publishDialogBlogStylesNav.removeClass('active');
+        this.ui.$publishDialogBlogStylesNav.find('a').removeClass('active');
         this.ui.$publishDialogBlogStyles.hide();
-        this.ui.$publishDialogBlogScriptsNav.addClass('active');
+        this.ui.$publishDialogBlogScriptsNav.find('a').addClass('active');
         this.ui.$publishDialogBlogScripts.show();
         this.ui.$publishDialogBlogScriptsTextarea.focus();
     }
@@ -154,9 +157,9 @@ export class PublishBlogManager {
         this.scripts_flag = $(ev.target as any).prop('checked');
     }
     private onStylesNavClick() {
-        this.ui.$publishDialogBlogScriptsNav.removeClass('active');
+        this.ui.$publishDialogBlogScriptsNav.find('a').removeClass('active');
         this.ui.$publishDialogBlogScripts.hide();
-        this.ui.$publishDialogBlogStylesNav.addClass('active');
+        this.ui.$publishDialogBlogStylesNav.find('a').addClass('active');
         this.ui.$publishDialogBlogStyles.show();
         this.ui.$publishDialogBlogStylesTextarea.focus();
     }
@@ -164,8 +167,8 @@ export class PublishBlogManager {
         this.styles_flag = $(ev.target as any).prop('checked');
     }
     private onPrimaryClick() {
-        const $blog_nav = this.ui.$publishDialogBlogNav;
-        if (!$blog_nav.hasClass('active')) {
+        const $nav = this.ui.$publishDialogBlogNav;
+        if (!$nav.find('a').hasClass('active')) {
             return;
         }
         const $url = this.ui.$publishDialogBlogUrl;
@@ -240,29 +243,24 @@ export class PublishBlogManager {
                             this.blog_url = url;
                             this.ui.$publishDialogPrimary.prop('disabled', false);
                             this.ui.$publishDialogPrimary.addClass('btn-success');
-                            this.ui.$publishDialogPrimary.button('published');
                             setTimeout(() => {
-                                $('#publish-dlg').modal('hide');
-                                this.ui.$publishDialogPrimary.button('reset');
+                                this.ui.$publishDialog.modal('hide');
                             }, 600);
                         }),
                         before(on_fail, () => {
                             this.ui.$publishDialogPrimary.prop('disabled', false);
                             this.ui.$publishDialogPrimary.addClass('btn-danger');
-                            this.ui.$publishDialogPrimary.button('reset');
                         })
                     );
                 } else {
                     this.ui.$publishDialogPrimary.prop('disabled', false);
                     this.ui.$publishDialogPrimary.addClass('btn-danger');
-                    this.ui.$publishDialogPrimary.button('reset');
                 }
             });
             this.ui.$publishDialogPrimary.prop('disabled', true);
             this.ui.$publishDialogPrimary.removeClass('btn-success');
             this.ui.$publishDialogPrimary.removeClass('btn-warning');
             this.ui.$publishDialogPrimary.removeClass('btn-danger');
-            this.ui.$publishDialogPrimary.button('publishing');
         }
     }
     private doInsert(blogger: any, blog: any, title: any) {

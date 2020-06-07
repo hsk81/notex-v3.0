@@ -1,0 +1,53 @@
+<!--
+-- Highlight.js v10
+-->
+
+<link href='//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/styles/default.min.css' rel='stylesheet'>
+<script src='//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/highlight.min.js'></script>
+
+<!--
+-- MathJax v3.y.z
+-->
+
+<script>
+function script(url) {
+    var element = document.createElement('script');
+    element.src = url; element.async = true;
+    document.head.appendChild(element);
+};
+if (
+    typeof window.MathJax === 'undefined'
+) {
+    window.MathJax = {
+        startup: {
+            ready: () => {
+                MathJax.startup.defaultReady();
+                if (typeof PATCH === 'function') {
+                    MathJax.startup.promise.then(PATCH);
+                }
+            }
+        },
+        tex: {
+            inlineMath: [['$', '$'], ['$$', '$$']],
+            tags: 'ams',
+        },
+        svg: {
+            fontCache: 'global'
+        },
+        addMenu: [
+            0, '', ''
+        ]
+    };
+    script(
+        'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+    );
+} else if (
+    typeof window.MathJax.typesetPromise === 'function'
+) {
+    MathJax.startup.promise = MathJax.startup.promise.then(() => {
+        MathJax.texReset(); return typeof PATCH === 'function'
+            ? MathJax.typesetPromise().then(PATCH)
+            : MathJax.typesetPromise();
+    });
+};
+</script>
