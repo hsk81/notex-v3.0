@@ -23,7 +23,6 @@ export class MdEditorAibar {
             this.hide();
         }
         this.events();
-        this.tips();
     }
     private show() {
         this.ui.$aibar.fadeIn('slow', () => {
@@ -33,10 +32,6 @@ export class MdEditorAibar {
     }
     private hide() {
         this.ui.$rhs.removeClass('with-aibar');
-    }
-    private tips() {
-        // this.ui.$aibar.find('[data-toggle="tooltip"]').tooltip();
-        // this.ui.$aibar.find('[data-toggle="popover"]').popover();
     }
     private events() {
         $(this.ed).on(

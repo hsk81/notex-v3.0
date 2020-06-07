@@ -28,8 +28,6 @@ export class PublishManager {
             'click', this.onBlogNavClick.bind(this));
     }
     private onBsModalShow() {
-        // this.ui.$publishDialog.find('[data-toggle="tooltip"]').tooltip();
-        // this.ui.$publishDialog.find('[data-toggle="popover"]').popover();
         this.ui.$publishDialogPrimary.prop('disabled', false);
         this.ui.$publishDialogPrimary.removeClass('btn-success');
         this.ui.$publishDialogPrimary.removeClass('btn-warning');

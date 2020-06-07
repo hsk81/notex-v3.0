@@ -21,8 +21,6 @@ export class MdEditorToolbarRhs {
     public constructor() {
         if (!this.ed.mobile) {
             this.ui.$rhsToolbarOuter.fadeIn('slow', () => {
-                // this.ui.$rhsToolbar.find('[data-toggle="tooltip"]').tooltip();
-                // this.ui.$rhsToolbar.find('[data-toggle="popover"]').popover();
                 this.refresh();
             });
         }

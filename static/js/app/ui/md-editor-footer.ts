@@ -1,5 +1,6 @@
 import { MdEditor } from "./md-editor";
 import { UiMode } from "./ui-mode";
+import * as uiMode from "./ui-mode";
 import { Ui } from "./ui";
 
 import { buffered } from "../decorator/buffered";
@@ -63,20 +64,11 @@ export class MdEditorFooter {
             .on('click', this.onSpellCheckButtonClick.bind(this) as any);
     }
     private tips() {
-        // this.ui.$lhsFooter.find('[data-toggle="tooltip"]').tooltip({
-        //     trigger: 'hover'
-        // });
-        // this.ui.$lhsFooter.find('[data-toggle="dropdown"]').tooltip({
-        //     trigger: 'hover'
-        // });
-        // this.ui.$lhsFooter.find('[data-toggle="popover"]').popover({
-        //     trigger: 'manual'
-        // })
-        // this.ui.$lhsFooterMirror.tooltip({
-        //     container: 'body', title: (function (this: any) {
-        //         return `${this.ed.mirror ? 'Simple' : 'Advanced'} Mode`;
-        //     }).bind(this)
-        // });
+        if (this.ed.uiMode === UiMode.simple) {
+            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.mirror));
+        } else {
+            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.simple));
+        }
     }
     private onMirrorClick() {
         if (this.ed.mirror) {
@@ -94,7 +86,7 @@ export class MdEditorFooter {
             $input[0].setSelectionRange(
                 Math.min(start, end), Math.max(start, end)
             );
-            // this.ui.$lhsFooterMirror.tooltip('hide');
+            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.mirror))
             this.ui.$lhsFooterCliFind.val('');
             this.hide();
         } else {
@@ -113,7 +105,7 @@ export class MdEditorFooter {
                 mirror.posFromIndex(selection.start),
                 mirror.posFromIndex(selection.end)
             );
-            // this.ui.$lhsFooterMirror.tooltip('hide');
+            this.ui.$lhsFooterMirror.attr('title', uiMode.text(UiMode.simple));
             this.ui.$lhsFooterCliFind.val('');
             this.show();
         }

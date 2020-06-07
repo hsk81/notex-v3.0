@@ -15,8 +15,6 @@ export class MdEditorToolbarLhs {
     public constructor() {
         if (!this.ed.mobile) {
             this.ui.$lhsToolbarOuter.fadeIn('slow', () => {
-                // this.ui.$lhsToolbar.find('[data-toggle="tooltip"]').tooltip();
-                // this.ui.$lhsToolbar.find('[data-toggle="popover"]').popover();
                 this.refresh();
             });
         }
