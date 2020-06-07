@@ -30,17 +30,19 @@ export class MarkdownIt {
     public constructor() {
         this._mdi = new markdownit({
             highlight: function (text: string, language: string) {
-                if (language && hljs.getLanguage(language)) {
-                    try {
-                        return hljs.highlight(language, text).value;
-                    } catch (ex) {
-                        console.error('[on:markdown-it.highlight]', ex);
-                    }
-                } else {
-                    try {
-                        return hljs.highlightAuto(text).value;
-                    } catch (ex) {
-                        console.error('[on:markdown-it.highlight]', ex);
+                if (typeof hljs !== 'undefined') {
+                    if (language && hljs.getLanguage(language)) {
+                        try {
+                            return hljs.highlight(language, text).value;
+                        } catch (ex) {
+                            console.error(ex);
+                        }
+                    } else {
+                        try {
+                            return hljs.highlightAuto(text).value;
+                        } catch (ex) {
+                            console.error(ex);
+                        }
                     }
                 }
                 return null; // escape HTML

@@ -41,7 +41,7 @@ def css_minify(tgt_path):
     minify(tgt_path,
         'static/css/lib/bootstrap/bootstrap-theme-3.4.1.min.css')
     minify(tgt_path,
-        'static/css/lib/highlight/default-10.0.2.min.css')
+        'static/css/lib/highlight/default-10.0.3.min.css')
     minify(tgt_path,
         'static/js/lib/codemirror.lib/codemirror.css')
     minify(tgt_path,
@@ -65,7 +65,7 @@ def js_minify(tgt_path):
     concat(tmp_path,
         'static/js/lib/bootstrap/bootstrap-3.4.1.min.js')
     concat(tmp_path,
-        'static/js/lib/highlight/highlight-10.0.2.min.js')
+        'static/js/lib/highlight/highlight-10.0.3.min.js')
     concat(tmp_path,
         'static/js/lib/iscroll/iscroll-5.2.0.min.js')
     concat(tmp_path,

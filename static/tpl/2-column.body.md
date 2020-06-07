@@ -154,7 +154,7 @@
   -- ----------------------------------------------------------------->
 
 <style>
-  @import url('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/styles/default.min.css')
+  @import url('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/styles/default.min.css')
 </style>
 
 <style>
