@@ -1,0 +1,27 @@
+.lhs-toolbar {
+    .toolbar-outer:nth-of-type(1) {
+        height: 100%;
+    }
+    .toolbar-outer {
+        .toolbar-inner {
+            .btn-group-vertical {
+                margin-bottom: 4px;
+            }
+            padding: 3px 3px 0;
+        }
+        .iScrollVerticalScrollbar {
+            .iScrollIndicator {
+                background-color: #343a40 !important;
+            }
+            left: 0 !important;
+            width: 4px !important;
+            z-index: 999 !important;
+        }
+        overflow-y: hidden;
+        position: relative;
+    }
+    display: none;
+    float: left;
+    height: calc(100% - 47px);
+    max-width: 48px;
+}

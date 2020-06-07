@@ -112,33 +112,6 @@ body {
 .center {
   .row {
     .lhs {
-      div.toolbar-outer {
-        display: none;
-        float: left;
-        height: calc(100% - 47px);
-        max-width: 48px;
-      }
-      div.toolbar-inner:nth-of-type(1) {
-        height: 100%;
-      }
-      div.toolbar-inner {
-        div.md-toolbar {
-          .btn-group-vertical {
-            margin-bottom: 4px;
-          }
-          padding: 3px 3px 0;
-        }
-        .iScrollVerticalScrollbar {
-          .iScrollIndicator {
-            background-color: #343a40 !important;
-          }
-          left: 0 !important;
-          width: 4px !important;
-          z-index: 999 !important;
-        }
-        overflow-y: hidden;
-        position: relative;
-      }
       div.CodeMirror {
         span.cm-m-markdown.cm-spell-error:not(.cm-link):not(.cm-url) {
           background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC);
@@ -175,32 +148,32 @@ body {
       padding: 0;
     }
     .rhs {
-      div.toolbar-outer {
+      .toolbar {
+        .toolbar-outer:nth-of-type(1) {
+          height: 100%;
+        }
+        .toolbar-outer {
+          .toolbar-inner {
+            .btn-group-vertical {
+              margin-bottom: 4px;
+            }
+            padding: 3px 3px 0;
+          }
+          .iScrollVerticalScrollbar {
+            .iScrollIndicator {
+              background-color: #343a40 !important;
+            }
+            right: 0 !important;
+            width: 4px !important;
+            z-index: 999 !important;
+          }
+          overflow-y: hidden;
+          position: relative;
+        }
         display: none;
         float: right;
         height: 100%;
         max-width: 48px;
-      }
-      div.toolbar-inner:nth-of-type(1) {
-        height: 100%;
-      }
-      div.toolbar-inner {
-        div.md-toolbar {
-          .btn-group-vertical {
-            margin-bottom: 4px;
-          }
-          padding: 3px 3px 0;
-        }
-        .iScrollVerticalScrollbar {
-          .iScrollIndicator {
-            background-color: #343a40 !important;
-          }
-          right: 0 !important;
-          width: 4px !important;
-          z-index: 999 !important;
-        }
-        overflow-y: hidden;
-        position: relative;
       }
       iframe#output,
       iframe#cached {

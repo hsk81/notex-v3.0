@@ -1,4 +1,4 @@
-import { MdEditorToolbarLhs } from "./md-editor-toolbar-lhs";
+import { LhsToolbar } from "../components/lhs-toolbar/index";
 import { MdEditorToolbarRhs } from "./md-editor-toolbar-rhs";
 import { MdEditor } from "./md-editor";
 import { Ui } from "./ui";
@@ -53,7 +53,7 @@ export class HeaderMenu {
         this.ed.focus();
     }
     private get toolbarLhs() {
-        return MdEditorToolbarLhs.me;
+        return LhsToolbar.me;
     }
     private get toolbarRhs() {
         return MdEditorToolbarRhs.me;

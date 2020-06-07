@@ -1,20 +1,20 @@
-import { MdEditor } from "./md-editor";
-import { Index } from "./md-index";
-import { Ui } from "./ui";
+import { MdEditor } from "../../ui/md-editor";
+import { Index } from "../../ui/md-index";
+import { Ui } from "../../ui/ui";
 
-import { trace } from "../decorator/trace";
+import { trace } from "../../decorator/trace";
 
 @trace
-export class MdEditorToolbarLhs {
+export class LhsToolbar {
     public static get me() {
-        if (window.MD_EDITOR_TOOLBAR_LHS === undefined) {
-            window.MD_EDITOR_TOOLBAR_LHS = new MdEditorToolbarLhs();
+        if (window.LHS_TOOLBAR === undefined) {
+            window.LHS_TOOLBAR = new LhsToolbar();
         }
-        return window.MD_EDITOR_TOOLBAR_LHS;
+        return window.LHS_TOOLBAR;
     }
     public constructor() {
         if (!this.ed.mobile) {
-            this.ui.$lhsToolbarOuter.fadeIn('slow', () => {
+            this.ui.$lhsToolbar.fadeIn('slow', () => {
                 this.refresh();
             });
         }
@@ -1080,7 +1080,7 @@ export class MdEditorToolbarLhs {
     }
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll(this.ui.$lhsToolbarInner[0], {
+            this._scroll = new IScroll(this.ui.$lhsToolbarOuter[0], {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true
@@ -1097,7 +1097,7 @@ export class MdEditorToolbarLhs {
     private set clipboard(value: string) {
         this._clipboard = value;
     }
-    private _clipboard: string|undefined; //@TODO: [I]Clipboard?
+    private _clipboard: string|undefined; /** @todo: [I]Clipboard? */
     private _scroll: any;
 }
-export default MdEditorToolbarLhs;
+export default LhsToolbar;

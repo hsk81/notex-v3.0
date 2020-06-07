@@ -20,7 +20,7 @@ export class MdEditorToolbarRhs {
     }
     public constructor() {
         if (!this.ed.mobile) {
-            this.ui.$rhsToolbarOuter.fadeIn('slow', () => {
+            this.ui.$rhsToolbar.fadeIn('slow', () => {
                 this.refresh();
             });
         }
@@ -97,7 +97,7 @@ export class MdEditorToolbarRhs {
     }
     private get scroll(): any {
         if (this._scroll === undefined) {
-            this._scroll = new IScroll(this.ui.$rhsToolbarInner[0], {
+            this._scroll = new IScroll(this.ui.$rhsToolbarOuter[0], {
                 interactiveScrollbars: true,
                 mouseWheel: true,
                 scrollbars: true

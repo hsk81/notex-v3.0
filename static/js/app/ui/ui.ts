@@ -66,13 +66,13 @@ export class Ui {
         return this.$lhs.find('#input');
     }
     public get $lhsToolbar() {
-        return this.$lhsToolbarInner.find('>.md-toolbar');
+        return this.$lhs.find('>.lhs-toolbar');
+    }
+    public get $lhsToolbarOuter() {
+        return this.$lhsToolbar.find('>.toolbar-outer');
     }
     public get $lhsToolbarInner() {
         return this.$lhsToolbarOuter.find('>.toolbar-inner');
-    }
-    public get $lhsToolbarOuter() {
-        return this.$lhs.find('>.toolbar-outer');
     }
     public get $publishDialog() {
         return $('#publish-dlg');
@@ -188,10 +188,10 @@ export class Ui {
         return this.$rhsOutput.contents().find('head');
     }
     public get $rhsToolbar() {
-        return this.$rhsToolbarInner.find('>.md-toolbar');
+        return this.$rhs.find('>.rhs-toolbar');
     }
     public get $rhsToolbarOuter() {
-        return this.$rhs.find('>.toolbar-outer');
+        return this.$rhsToolbar.find('>.toolbar-outer');
     }
     public get $rhsToolbarInner() {
         return this.$rhsToolbarOuter.find('>.toolbar-inner');
@@ -209,100 +209,100 @@ export class Ui {
         return this.$templateDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
     }
     public get $toolbar() {
-        return this.$toolbarInner.find('>.md-toolbar');
+        return $('.toolbar');
+    }
+    public get $toolbarOuter() {
+        return this.$toolbar.find('>.toolbar-outer');
     }
     public get $toolbarInner() {
         return this.$toolbarOuter.find('>.toolbar-inner');
     }
-    public get $toolbarOuter() {
-        return $('.toolbar-outer');
-    }
     public get $toolbarOpen() {
-        return this.$toolbar.find('#source-bar,#source-mob');
+        return this.$toolbarInner.find('#source-bar,#source-mob');
     }
     public get $toolbarSave() {
-        return this.$toolbar.find('a[name=save]');
+        return this.$toolbarInner.find('a[name=save]');
     }
     public get $toolbarSwap() {
-        return this.$toolbar.find('[name=swap]');
+        return this.$toolbarInner.find('[name=swap]');
     }
     public get $toolbar1Column() {
-        return this.$toolbar.find('.glyphicon.1-column').closest('button');
+        return this.$toolbarInner.find('.glyphicon.1-column').closest('button');
     }
     public get $toolbar2Columns() {
-        return this.$toolbar.find('.glyphicon.2-column').closest('button');
+        return this.$toolbarInner.find('.glyphicon.2-column').closest('button');
     }
     public get $toolbar3Columns() {
-        return this.$toolbar.find('.glyphicon.3-column').closest('button');
+        return this.$toolbarInner.find('.glyphicon.3-column').closest('button');
     }
     public get $toolbarBold() {
-        return this.$toolbar.find('.glyphicon-bold').closest('button');
+        return this.$toolbarInner.find('.glyphicon-bold').closest('button');
     }
     public get $toolbarCopy() {
-        return this.$toolbar.find('.glyphicon-copy').closest('button');
+        return this.$toolbarInner.find('.glyphicon-copy').closest('button');
     }
     public get $toolbarCut() {
-        return this.$toolbar.find('.glyphicon-scissors').closest('button');
+        return this.$toolbarInner.find('.glyphicon-scissors').closest('button');
     }
     public get $toolbarErase() {
-        return this.$toolbar.find('.glyphicon-erase').closest('button');
+        return this.$toolbarInner.find('.glyphicon-erase').closest('button');
     }
     public get $toolbarFont() {
-        return this.$toolbar.find('.glyphicon-font').closest('button');
+        return this.$toolbarInner.find('.glyphicon-font').closest('button');
     }
     public get $toolbarHeader() {
-        return this.$toolbar.find('.glyphicon-header').closest('button');
+        return this.$toolbarInner.find('.glyphicon-header').closest('button');
     }
     public get $toolbarImage() {
-        return this.$toolbar.find('.glyphicon-picture').closest('button');
+        return this.$toolbarInner.find('.glyphicon-picture').closest('button');
     }
     public get $toolbarIndent() {
-        return this.$toolbar.find('.glyphicon-indent-left').closest('button');
+        return this.$toolbarInner.find('.glyphicon-indent-left').closest('button');
     }
     public get $toolbarItalic() {
-        return this.$toolbar.find('.glyphicon-italic').closest('button');
+        return this.$toolbarInner.find('.glyphicon-italic').closest('button');
     }
     public get $toolbarLink() {
-        return this.$toolbar.find('.glyphicon-link').closest('button');
+        return this.$toolbarInner.find('.glyphicon-link').closest('button');
     }
     public get $toolbarOutdent() {
-        return this.$toolbar.find('.glyphicon-indent-right').closest('button');
+        return this.$toolbarInner.find('.glyphicon-indent-right').closest('button');
     }
     public get $toolbarPaste() {
-        return this.$toolbar.find('.glyphicon-paste').closest('button');
+        return this.$toolbarInner.find('.glyphicon-paste').closest('button');
     }
     public get $toolbarProduct() {
-        return this.$toolbar.find('.glyphicon.product').closest('button');
+        return this.$toolbarInner.find('.glyphicon.product').closest('button');
     }
     public get $toolbarPrint() {
-        return this.$toolbar.find('.glyphicon.print').closest('button');
+        return this.$toolbarInner.find('.glyphicon.print').closest('button');
     }
     public get $toolbarPublish() {
-        return this.$toolbar.find('.glyphicon.publish').closest('button');
+        return this.$toolbarInner.find('.glyphicon.publish').closest('button');
     }
     public get $toolbarRedo() {
-        return this.$toolbar.find('.glyphicon.redo').closest('button');
+        return this.$toolbarInner.find('.glyphicon.redo').closest('button');
     }
     public get $toolbarRefresh() {
-        return this.$toolbar.find('.glyphicon.refresh').closest('button');
+        return this.$toolbarInner.find('.glyphicon.refresh').closest('button');
     }
     public get $toolbarSubscript() {
-        return this.$toolbar.find('.glyphicon-subscript').closest('button');
+        return this.$toolbarInner.find('.glyphicon-subscript').closest('button');
     }
     public get $toolbarSum() {
-        return this.$toolbar.find('.glyphicon.sum').closest('button');
+        return this.$toolbarInner.find('.glyphicon.sum').closest('button');
     }
     public get $toolbarSupscript() {
-        return this.$toolbar.find('.glyphicon-superscript').closest('button');
+        return this.$toolbarInner.find('.glyphicon-superscript').closest('button');
     }
     public get $toolbarTemplate() {
-        return this.$toolbar.find('.glyphicon.template').closest('button');
+        return this.$toolbarInner.find('.glyphicon.template').closest('button');
     }
     public get $toolbarUndo() {
-        return this.$toolbar.find('.glyphicon.undo').closest('button');
+        return this.$toolbarInner.find('.glyphicon.undo').closest('button');
     }
     public get $toolbarVideo() {
-        return this.$toolbar.find('.glyphicon-film').closest('button');
+        return this.$toolbarInner.find('.glyphicon-film').closest('button');
     }
     public get $viewer() {
         if (this.$rhsCached.css('visibility') !== 'hidden') {

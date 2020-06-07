@@ -6,7 +6,7 @@ import { HeaderMenu } from "./ui/header-menu";
 import { MdEditor } from "./ui/md-editor";
 import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
-import { MdEditorToolbarLhs } from "./ui/md-editor-toolbar-lhs";
+import { LhsToolbar } from "./components/lhs-toolbar/index";
 import { MdEditorToolbarRhs } from "./ui/md-editor-toolbar-rhs";
 
 import { trace } from "./decorator/trace";
@@ -21,24 +21,24 @@ export class App {
         return window.APP;
     }
     public constructor() {
-        this._header_menu = HeaderMenu.me;
-        this._editor = MdEditor.me;
-        this._editor_toolbar_lhs = MdEditorToolbarLhs.me;
-        this._editor_toolbar_rhs = MdEditorToolbarRhs.me;
-        this._editor_aibar = RhsFooter.me;
-        this._editor_footer = LhsFooter.me;
-        this._manager_download = DownloadManager.me;
-        this._manager_publish = PublishManager.me;
-        this._manager_template = TemplateManager.me;
+        this.header_menu = HeaderMenu.me;
+        this.editor = MdEditor.me;
+        this.lhs_toolbar = LhsToolbar.me;
+        this.rhs_toolbar = MdEditorToolbarRhs.me;
+        this.rhs_footer = RhsFooter.me;
+        this.lhs_footer = LhsFooter.me;
+        this.download_manager = DownloadManager.me;
+        this.publish_manager = PublishManager.me;
+        this.template_manager = TemplateManager.me;
     }
-    private readonly _editor: MdEditor;
-    private readonly _editor_footer: LhsFooter;
-    private readonly _editor_aibar: RhsFooter;
-    private readonly _editor_toolbar_lhs: MdEditorToolbarLhs;
-    private readonly _editor_toolbar_rhs: MdEditorToolbarRhs;
-    private readonly _header_menu: HeaderMenu;
-    private readonly _manager_publish: PublishManager;
-    private readonly _manager_template: TemplateManager;
-    private readonly _manager_download: DownloadManager;
+    private readonly editor: MdEditor;
+    private readonly lhs_footer: LhsFooter;
+    private readonly rhs_footer: RhsFooter;
+    private readonly lhs_toolbar: LhsToolbar;
+    private readonly rhs_toolbar: MdEditorToolbarRhs;
+    private readonly header_menu: HeaderMenu;
+    private readonly publish_manager: PublishManager;
+    private readonly template_manager: TemplateManager;
+    private readonly download_manager: DownloadManager;
 }
 export default App.me;
