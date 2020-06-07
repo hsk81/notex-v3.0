@@ -1,20 +1,20 @@
-import { MdEditor } from "./md-editor";
-import { AiMode } from "./ai-mode";
-import { UiMode } from "./ui-mode";
-import { Ui } from "./ui";
+import { MdEditor } from "../../ui/md-editor";
+import { AiMode } from "../../ui/ai-mode";
+import { UiMode } from "../../ui/ui-mode";
+import { Ui } from "../../ui/ui";
 
-import { buffered } from "../decorator/buffered";
-import { trace } from "../decorator/trace";
+import { buffered } from "../../decorator/buffered";
+import { trace } from "../../decorator/trace";
 
 declare const $: JQueryStatic;
 
 @trace
-export class MdEditorAibar {
+export class RhsFooter {
     public static get me() {
-        if (window.MD_EDITOR_AIBAR === undefined) {
-            window.MD_EDITOR_AIBAR = new MdEditorAibar();
+        if (window.RHS_FOOTER === undefined) {
+            window.RHS_FOOTER = new RhsFooter();
         }
-        return window.MD_EDITOR_AIBAR;
+        return window.RHS_FOOTER;
     }
     public constructor() {
         if (this.ed.empty) {
@@ -25,13 +25,13 @@ export class MdEditorAibar {
         this.events();
     }
     private show() {
-        this.ui.$aibar.fadeIn('slow', () => {
-            this.ui.$rhs.addClass('with-aibar');
-            this.ui.$aibar.removeAttr('style');
+        this.ui.$rhsFooter.fadeIn('slow', () => {
+            this.ui.$rhs.addClass('with-footer');
+            this.ui.$rhsFooter.removeAttr('style');
         });
     }
     private hide() {
-        this.ui.$rhs.removeClass('with-aibar');
+        this.ui.$rhs.removeClass('with-footer');
     }
     private events() {
         $(this.ed).on(
@@ -42,24 +42,24 @@ export class MdEditorAibar {
             'ai-mode', (ev, { value }) => this.onAiMode(value));
         $(this.ed).on(
             'ai-page', (ev, { value }) => this.onAiPage(value));
-        this.ui.$aibarLhsButton.on(
+        this.ui.$rhsFooter1stButton.on(
             'click', this.onLhsButtonClick.bind(this));
-        this.ui.$aibarMidButton.on(
+        this.ui.$rhsFooter2ndButton.on(
             'click', this.onMidButtonClick.bind(this));
-        this.ui.$aibarRhsButton.on(
+        this.ui.$rhsFooter3rdButton.on(
             'click', this.onRhsButtonClick.bind(this));
     }
     private onUiModeChange(mode: UiMode) {
         if (this.ed.empty) {
-            this.ui.$aibar.fadeIn('slow');
+            this.ui.$rhsFooter.fadeIn('slow');
         }
     }
     @buffered(40)
     private onEditorChange(empty: boolean) {
         if (empty || this.aiMode === AiMode.help) {
-            this.ui.$rhs.addClass('with-aibar');
+            this.ui.$rhs.addClass('with-footer');
         } else {
-            this.ui.$rhs.removeClass('with-aibar');
+            this.ui.$rhs.removeClass('with-footer');
         }
     }
     private onRhsButtonClick() {
@@ -87,9 +87,9 @@ export class MdEditorAibar {
     }
     private onAiMode(mode: AiMode) {
         if (mode !== AiMode.help) {
-            this.ui.$aibarMidButton.text('Help');
+            this.ui.$rhsFooter2ndButton.text('Help');
         } else {
-            this.ui.$aibarMidButton.text('Exit');
+            this.ui.$rhsFooter2ndButton.text('Exit');
         }
         if (mode !== AiMode.help) {
             this.aiPage = undefined;
@@ -143,4 +143,4 @@ export class MdEditorAibar {
         return Ui.me;
     }
 }
-export default MdEditorAibar;
+export default RhsFooter;

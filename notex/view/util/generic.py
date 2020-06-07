@@ -12,7 +12,9 @@ import ujson as JSON
 ###############################################################################
 
 from jinja2 import Environment, FileSystemLoader
-env = Environment(loader=FileSystemLoader('./template'))
+env = Environment(loader=FileSystemLoader([
+    './template', './static/js/app'
+]))
 
 if not ARGs.debug():
     env.add_extension('compressinja.html.HtmlCompressor')

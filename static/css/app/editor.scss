@@ -99,16 +99,13 @@ body {
       iframe.viewer {
         height: calc(100%);
       }
-      .aibar {
-        display: none;
-      }
       height: 100%;
     }
-    .rhs.with-aibar {
+    .rhs.with-footer {
       iframe.viewer {
         height: calc(100% - 47px);
       }
-      .aibar {
+      .rhs-footer {
         display: block;
       }
       height: 100%;

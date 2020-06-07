@@ -8,18 +8,6 @@ export class Ui {
         }
         return window.UI;
     }
-    public get $aibar() {
-        return this.$rhs.find('.aibar');
-    }
-    public get $aibarLhsButton() {
-        return this.$aibar.find('button.ai-lhs');
-    }
-    public get $aibarMidButton() {
-        return this.$aibar.find('button.ai-mid');
-    }
-    public get $aibarRhsButton() {
-        return this.$aibar.find('button.ai-rhs');
-    }
     public get $document() {
         return $(document);
     }
@@ -173,6 +161,18 @@ export class Ui {
     }
     public get $rhsCachedHead() {
         return this.$rhsCached.contents().find('head');
+    }
+    public get $rhsFooter() {
+        return this.$rhs.find('.rhs-footer');
+    }
+    public get $rhsFooter1stButton() {
+        return this.$rhsFooter.find('button.rhs-footer-1st');
+    }
+    public get $rhsFooter2ndButton() {
+        return this.$rhsFooter.find('button.rhs-footer-2nd');
+    }
+    public get $rhsFooter3rdButton() {
+        return this.$rhsFooter.find('button.rhs-footer-3rd');
     }
     public get $rhsOutput() {
         return this.$rhs.find('#output') as JQuery<HTMLFrameElement>;

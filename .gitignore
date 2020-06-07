@@ -22,11 +22,15 @@
 
 pip-selfcheck.json
 
-## minified
+## css
 
 static/css/**/*.css
 static/css/**/*.css.map
 static/css/**/*.css.gz
+
+static/js/app/**/*.css
+static/js/app/**/*.css.map
+static/js/app/**/*.css.gz
 
 ## javascript
 

@@ -36,7 +36,7 @@
         "debug": "source ./bin/activate && DEBUG=1 gunicorn -c config.py wsgi:app",
         "prestart": "source ./bin/activate && npm run build",
         "start": "source ./bin/activate && DEBUG=0 gunicorn -c config.py wsgi:app --preload",
-        "watch": "npx tsc -w & npx sass ./static/css --no-source-map --watch"
+        "watch": "npx tsc -w & npx sass ./static --no-source-map --watch"
     },
     "engines": {
         "node": "^13.5.0"
