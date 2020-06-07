@@ -9,7 +9,7 @@ from setuptools import setup
 setup (
     name='notex',
     version='3.1.1',
-    description='blog editor',
+    description='Markdown editor',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
     url='https://hsk81@bitbucket.org/hsk81/notex.git',
