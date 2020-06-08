@@ -35,9 +35,7 @@ def css_minify(tgt_path):
         concat(tgt_path, src_path, flag=flag, func=rcssmin.cssmin)
 
     minify(tgt_path,
-        'static/css/app/font.css', 'w')
-    minify(tgt_path,
-        'static/css/lib/highlight/default-10.0.3.min.css')
+        'static/css/lib/highlight/default-10.0.3.min.css', 'w')
     minify(tgt_path,
         'static/css/lib/bootstrap/bootstrap-4.5.0.min.css')
     minify(tgt_path,
