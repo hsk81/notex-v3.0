@@ -1,4 +1,4 @@
-import { MdEditor } from "../../ui/md-editor";
+import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/ui";
 
 import { trace } from "../../decorator/trace";
@@ -114,7 +114,7 @@ export class TemplateDialog {
         this._my_body = text;
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

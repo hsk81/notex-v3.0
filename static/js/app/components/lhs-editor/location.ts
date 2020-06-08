@@ -1,8 +1,8 @@
-import { MdEditor } from "./md-editor";
+import { LhsEditor } from "./index";
 
-export class Index {
+export class Location {
     public static asPosition(index: number): CodeMirror.Position {
-        const mirror = MdEditor.me.mirror;
+        const mirror = LhsEditor.me.mirror;
         if (mirror) {
             return mirror.posFromIndex(index);
         }
@@ -13,7 +13,7 @@ export class Index {
         };
     }
     public static asNumber(position: CodeMirror.Position): number {
-        const mirror = MdEditor.me.mirror;
+        const mirror = LhsEditor.me.mirror;
         if (mirror) {
             return mirror.indexFromPos(position);
         }
@@ -24,7 +24,7 @@ export class Index {
         return text.length;
     }
     private static values(index?: number): string[] {
-        const value = MdEditor.me.getValue();
+        const value = LhsEditor.me.getValue();
         if (index !== undefined) {
             return value.substring(0, index).split('\n');
         }
@@ -32,13 +32,13 @@ export class Index {
     }
     public constructor(index: number|CodeMirror.Position, delta = 0) {
         if (typeof index === 'number') {
-            this._position = Index.asPosition(index + delta);
+            this._position = Location.asPosition(index + delta);
             this._index = index + delta;
         }
         else {
-            this._index = Index.asNumber(index) + delta;
+            this._index = Location.asNumber(index) + delta;
             if (delta !== 0) {
-                this._position = Index.asPosition(this._index);
+                this._position = Location.asPosition(this._index);
             }
             else {
                 this._position = index;

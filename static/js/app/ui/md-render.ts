@@ -1,7 +1,7 @@
 import { MarkdownIt } from "../markdown-it/markdown-it";
 import { DownloadManager } from "./manager-download";
 import { TemplateDialog } from "../components/dlg-template/index";
-import { MdEditor } from "./md-editor";
+import { LhsEditor } from "../components/lhs-editor/index";
 import { Ui } from "./ui";
 
 import { buffered } from "../decorator/buffered";
@@ -95,7 +95,7 @@ export class MdRender {
         return '/editor/0200-center/0221-rhs.output-placeholder.html';
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

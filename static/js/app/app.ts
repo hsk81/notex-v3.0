@@ -3,7 +3,7 @@ import { PublishDialog } from "./components/dlg-publish/index";
 import { TemplateDialog } from "./components/dlg-template/index";
 
 import { NavHeader } from "./components/nav-header/index";
-import { MdEditor } from "./ui/md-editor";
+import { LhsEditor } from "./components/lhs-editor/index";
 import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
 import { LhsToolbar } from "./components/lhs-toolbar/index";
@@ -22,7 +22,7 @@ export class App {
     }
     public constructor() {
         this.nav_header = NavHeader.me;
-        this.editor = MdEditor.me;
+        this.md_editor = LhsEditor.me;
         this.lhs_toolbar = LhsToolbar.me;
         this.rhs_toolbar = RhsToolbar.me;
         this.rhs_footer = RhsFooter.me;
@@ -31,7 +31,7 @@ export class App {
         this.publish_dialog = PublishDialog.me;
         this.template_dialog = TemplateDialog.me;
     }
-    private readonly editor: MdEditor;
+    private readonly md_editor: LhsEditor;
     private readonly lhs_footer: LhsFooter;
     private readonly rhs_footer: RhsFooter;
     private readonly lhs_toolbar: LhsToolbar;

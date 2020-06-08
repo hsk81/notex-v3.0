@@ -1,6 +1,6 @@
 import { LhsToolbar } from "../lhs-toolbar/index";
 import { RhsToolbar } from "../rhs-toolbar/index";
-import { MdEditor } from "../../ui/md-editor";
+import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/ui";
 
 import { trace } from "../../decorator/trace";
@@ -59,7 +59,7 @@ export class NavHeader {
         return RhsToolbar.me;
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

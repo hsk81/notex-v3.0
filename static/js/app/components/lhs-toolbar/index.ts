@@ -1,5 +1,5 @@
-import { MdEditor } from "../../ui/md-editor";
-import { Index } from "../../ui/md-index";
+import { LhsEditor } from "../lhs-editor/index";
+import { Location } from "../lhs-editor/location";
 import { Ui } from "../../ui/ui";
 
 import { trace } from "../../decorator/trace";
@@ -691,16 +691,16 @@ export class LhsToolbar {
             return;
         }
         const at_next = (
-            sep: string, index?: Index
+            sep: string, location?: Location
         ) => {
-            const v = this.ed.getValue(index);
+            const v = this.ed.getValue(location);
             for (var i=0; i<v.length; i++) {
                 if (v[i] === sep) break;
             }
-            if (index) {
-                return new Index(i + index.number);
+            if (location) {
+                return new Location(i + location.number);
             } else {
-                return new Index(i);
+                return new Location(i);
             }
         };
         const { value: caption, lhs } = this.ed.getSelection();
@@ -714,13 +714,13 @@ export class LhsToolbar {
             );
             if (caption.length) {
                 this.ed.setSelection(
-                    new Index(at.number, 3),
-                    new Index(at.number, 3 + caption.length)
+                    new Location(at.number, 3),
+                    new Location(at.number, 3 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 2),
-                    new Index(lhs.number, 9)
+                    new Location(lhs.number, 2),
+                    new Location(lhs.number, 9)
                 );
             }
         } else if (ev.ctrlKey) {
@@ -733,13 +733,13 @@ export class LhsToolbar {
             );
             if (caption.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 4 + caption.length),
-                    new Index(lhs.number, 7 + caption.length)
+                    new Location(lhs.number, 4 + caption.length),
+                    new Location(lhs.number, 7 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 2),
-                    new Index(lhs.number, 9)
+                    new Location(lhs.number, 2),
+                    new Location(lhs.number, 9)
                 );
             }
         } else {
@@ -748,13 +748,13 @@ export class LhsToolbar {
             );
             if (caption.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 4 + caption.length),
-                    new Index(lhs.number, 7 + caption.length)
+                    new Location(lhs.number, 4 + caption.length),
+                    new Location(lhs.number, 7 + caption.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 2),
-                    new Index(lhs.number, 9)
+                    new Location(lhs.number, 2),
+                    new Location(lhs.number, 9)
                 );
             }
         }
@@ -796,16 +796,16 @@ export class LhsToolbar {
             return;
         }
         const at_next = (
-            sep: string, index?: Index
+            sep: string, index?: Location
         ) => {
             const v = this.ed.getValue(index);
             for (var i=0; i<v.length; i++) {
                 if (v[i] === sep) break;
             }
             if (index) {
-                return new Index(i + index.number);
+                return new Location(i + index.number);
             } else {
-                return new Index(i);
+                return new Location(i);
             }
         };
         const { value: text, lhs } = this.ed.getSelection();
@@ -819,13 +819,13 @@ export class LhsToolbar {
             );
             if (text.length) {
                 this.ed.setSelection(
-                    new Index(at.number, 3),
-                    new Index(at.number, 3 + text.length)
+                    new Location(at.number, 3),
+                    new Location(at.number, 3 + text.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Location(lhs.number, 1),
+                    new Location(lhs.number, 5)
                 );
             }
         } else if (ev.ctrlKey) {
@@ -838,13 +838,13 @@ export class LhsToolbar {
             );
             if (text.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 3 + text.length),
-                    new Index(lhs.number, 6 + text.length)
+                    new Location(lhs.number, 3 + text.length),
+                    new Location(lhs.number, 6 + text.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Location(lhs.number, 1),
+                    new Location(lhs.number, 5)
                 );
             }
         } else {
@@ -853,13 +853,13 @@ export class LhsToolbar {
             );
             if (text.length) {
                 this.ed.setSelection(
-                    new Index(lhs.number, 3 + text.length),
-                    new Index(lhs.number, 6 + text.length)
+                    new Location(lhs.number, 3 + text.length),
+                    new Location(lhs.number, 6 + text.length)
                 );
             } else {
                 this.ed.setSelection(
-                    new Index(lhs.number, 1),
-                    new Index(lhs.number, 5)
+                    new Location(lhs.number, 1),
+                    new Location(lhs.number, 5)
                 );
             }
         }
@@ -914,16 +914,16 @@ export class LhsToolbar {
                 `\n$$\\sum_{i=a}^{b}{i}$$\n`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 9),
-                new Index(rhs.number, 12)
+                new Location(lhs.number, 9),
+                new Location(rhs.number, 12)
             );
         } else {
             this.ed.replaceSelection(
                 `$\\sum_{i=a}^{b}{i}$`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 7),
-                new Index(rhs.number, 10)
+                new Location(lhs.number, 7),
+                new Location(rhs.number, 10)
             );
         }
         this.ed.focus();
@@ -938,16 +938,16 @@ export class LhsToolbar {
                 `\n$$\\prod_{i=a}^{b}{i}$$\n`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 10),
-                new Index(rhs.number, 13)
+                new Location(lhs.number, 10),
+                new Location(rhs.number, 13)
             );
         } else {
             this.ed.replaceSelection(
                 `$\\prod_{i=a}^{b}{i}$`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 8),
-                new Index(rhs.number, 11)
+                new Location(lhs.number, 8),
+                new Location(rhs.number, 11)
             );
         }
         this.ed.focus();
@@ -961,8 +961,8 @@ export class LhsToolbar {
         const { rhs } = this.ed.getSelection();
         this.ed.insertValue(`^{ }`, rhs);
         this.ed.setSelection(
-            new Index(rhs.number, 2),
-            new Index(rhs.number, 3)
+            new Location(rhs.number, 2),
+            new Location(rhs.number, 3)
         );
         this.ed.focus();
     }
@@ -975,8 +975,8 @@ export class LhsToolbar {
         const { rhs } = this.ed.getSelection();
         this.ed.insertValue(`_{ }`, rhs);
         this.ed.setSelection(
-            new Index(rhs.number, 2),
-            new Index(rhs.number, 3)
+            new Location(rhs.number, 2),
+            new Location(rhs.number, 3)
         );
         this.ed.focus();
     }
@@ -990,24 +990,24 @@ export class LhsToolbar {
                 `@[prezi](URL)`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 9),
-                new Index(lhs.number, 12)
+                new Location(lhs.number, 9),
+                new Location(lhs.number, 12)
             );
         } else if (ev.ctrlKey) {
             this.ed.replaceSelection(
                 `@[vimeo](URL)`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 9),
-                new Index(lhs.number, 12)
+                new Location(lhs.number, 9),
+                new Location(lhs.number, 12)
             );
         } else {
             this.ed.replaceSelection(
                 `@[youtube](URL)`
             );
             this.ed.setSelection(
-                new Index(lhs.number, 11),
-                new Index(lhs.number, 14)
+                new Location(lhs.number, 11),
+                new Location(lhs.number, 14)
             );
         }
         this.ed.focus();
@@ -1073,7 +1073,7 @@ export class LhsToolbar {
         }
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

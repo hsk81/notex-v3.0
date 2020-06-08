@@ -1,22 +1,22 @@
-import { MdRender } from "./md-render";
-import { Index } from "./md-index";
+import { MdRender } from "../../ui/md-render";
+import { Location } from "./location";
 import { UiMode } from "./ui-mode";
-import { Ui } from "./ui";
+import { Ui } from "../../ui/ui";
 
-import { Lingua } from "../spell-checker/spell-checker";
-import { Overlay } from "../spell-checker/spell-checker";
-import { SpellChecker } from "../spell-checker/spell-checker";
+import { Lingua } from "../../spell-checker/spell-checker";
+import { Overlay } from "../../spell-checker/spell-checker";
+import { SpellChecker } from "../../spell-checker/spell-checker";
 
-import { IPFS, Buffer } from "../ipfs/index";
-import { gateway } from "../ipfs/index";
+import { IPFS, Buffer } from "../../ipfs/index";
+import { gateway } from "../../ipfs/index";
 
-import { traceable } from "../decorator/trace";
-import { trace } from "../decorator/trace";
-import { cookie } from "../cookie/cookie";
+import { traceable } from "../../decorator/trace";
+import { trace } from "../../decorator/trace";
+import { cookie } from "../../cookie/cookie";
+
+import "./md-mode";
 
 declare const $: JQueryStatic;
-
-import "./md-editor-mode";
 declare const CodeMirror: {
     fromTextArea: (
         host: HTMLTextAreaElement,
@@ -25,12 +25,12 @@ declare const CodeMirror: {
 };
 
 @trace
-export class MdEditor {
-    public static get me(): MdEditor {
-        if (window.MD_EDITOR === undefined) {
-            window.MD_EDITOR = new MdEditor();
+export class LhsEditor {
+    public static get me(): LhsEditor {
+        if (window.LHS_EDITOR === undefined) {
+            window.LHS_EDITOR = new LhsEditor();
         }
-        return window.MD_EDITOR;
+        return window.LHS_EDITOR;
     }
     public constructor() {
         if (this.mobile) {
@@ -153,7 +153,7 @@ export class MdEditor {
     }
     @traceable(false)
     public getValue(
-        lhs?: Index, rhs?: Index
+        lhs?: Location, rhs?: Location
     ): string {
         const value = this.mirror
             ? this.mirror.getValue()
@@ -180,7 +180,7 @@ export class MdEditor {
             this.ui.$lhsInput.trigger('change');
         }
     }
-    public insertValue(value: string, at?: Index) {
+    public insertValue(value: string, at?: Location) {
         if (at === undefined) {
             const { rhs: at } = this.getSelection();
             this.setSelection(at, at);
@@ -193,21 +193,21 @@ export class MdEditor {
         this.setValue(this.value + value);
     }
     public getSelection(): {
-        lhs: Index, rhs: Index, value: string
+        lhs: Location, rhs: Location, value: string
     } {
         if (this.mirror) {
-            const lhs = new Index(this.mirror.getCursor('from'));
-            const rhs = new Index(this.mirror.getCursor('to'));
+            const lhs = new Location(this.mirror.getCursor('from'));
+            const rhs = new Location(this.mirror.getCursor('to'));
             return {
                 lhs, rhs, value: this.mirror.getSelection()
             };
         } else {
             const inp = this.ui.$lhsInput[0] as HTMLInputElement;
-            const lhs = new Index(Math.min(
+            const lhs = new Location(Math.min(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
             ));
-            const rhs = new Index(Math.max(
+            const rhs = new Location(Math.max(
                 inp.selectionStart as number,
                 inp.selectionEnd as number
             ));
@@ -219,7 +219,7 @@ export class MdEditor {
         }
     }
     public setSelection(
-        lhs: Index, rhs: Index
+        lhs: Location, rhs: Location
     ) {
         if (this.mirror) {
             this.mirror.setSelection(
@@ -274,7 +274,7 @@ export class MdEditor {
         ) => {
             if (!this.mirror) {
                 this.setValue(value);
-                this.setSelection(new Index(0), new Index(-1));
+                this.setSelection(new Location(0), new Location(-1));
             }
         };
         const ins_image = (
@@ -482,15 +482,15 @@ export class MdEditor {
     }) {
         if (!options || !options.ctrlKey) {
             if (!options || !options.altKey) {
-                const beg_value = this.getValue(new Index(0), new Index(this.index||0));
-                const end_value = this.getValue(new Index(this.index||0));
+                const beg_value = this.getValue(new Location(0), new Location(this.index||0));
+                const end_value = this.getValue(new Location(this.index||0));
                 this.setValue(beg_value + end_value.replace(query, new_value));
             }
             this.select(query, !options?.shiftKey ? '+' : '-');
         } else {
             const { lhs, rhs, value } = this.getSelection();
             if (value) {
-                const lhs_value = this.getValue(new Index(0), lhs);
+                const lhs_value = this.getValue(new Location(0), lhs);
                 const mid_value = value.replace(query, new_value);
                 const rhs_value = this.getValue(rhs);
                 this.setValue(
@@ -500,7 +500,7 @@ export class MdEditor {
                     ? new_value.length - query.length
                     : new_value.length - query.source.length;
                 this.setSelection(
-                    lhs, new Index(rhs.number + delta)
+                    lhs, new Location(rhs.number + delta)
                 );
             }
         }
@@ -533,11 +533,13 @@ export class MdEditor {
             return p;
         };
         const lhs = (index: number) => {
-            return new Index(index);
+            return new Location(index);
         };
         const rhs = (index: number) => {
-            const m = this.value.substring(index).match(query);
-            return m ? new Index(index + m[0].length) : new Index(index);
+            const match = this.value.substring(index).match(query);
+            return match
+                ? new Location(index + match[0].length)
+                : new Location(index);
         }
         if (length(query) > 0) {
             this.index = direction === '+'
@@ -562,4 +564,4 @@ export class MdEditor {
     private _spellChecker: SpellChecker|undefined;
     private _searchOverlay: Overlay|undefined;
 }
-export default MdEditor;
+export default LhsEditor;

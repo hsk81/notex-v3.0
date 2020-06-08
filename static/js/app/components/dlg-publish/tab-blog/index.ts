@@ -1,6 +1,6 @@
 import { BloggerApi } from "../../../google-api/blogger-api";
 import { MarkdownIt } from "../../../markdown-it/markdown-it";
-import { MdEditor } from "../../../ui/md-editor";
+import { LhsEditor } from "../../lhs-editor/index";
 import { Ui } from "../../../ui/ui";
 
 import { after } from "../../../function/after";
@@ -331,7 +331,7 @@ export class BlogTab {
         return $content.html();
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

@@ -1,5 +1,5 @@
 import { TemplateDialog } from "../../dlg-template/index";
-import { MdEditor } from "../../../ui/md-editor";
+import { LhsEditor } from "../../lhs-editor/index";
 import { Ui } from "../../../ui/ui";
 
 import { gateway, html } from "../../../ipfs/index";
@@ -89,7 +89,7 @@ export class IpfsTab {
         }
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

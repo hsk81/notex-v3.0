@@ -1,6 +1,6 @@
 import { BlogTab } from "./tab-blog/index";
 import { IpfsTab } from "./tab-ipfs/index";
-import { MdEditor } from "../../ui/md-editor";
+import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/ui";
 
 import { trace } from "../../decorator/trace";
@@ -65,7 +65,7 @@ export class PublishDialog {
         this.ui.$publishDialogBlogTab.show();
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

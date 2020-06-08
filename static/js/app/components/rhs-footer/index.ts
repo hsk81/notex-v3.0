@@ -1,6 +1,6 @@
-import { MdEditor } from "../../ui/md-editor";
-import { AiMode } from "../../ui/ai-mode";
-import { UiMode } from "../../ui/ui-mode";
+import { LhsEditor } from "../lhs-editor/index";
+import { AiMode } from "./ai-mode";
+import { UiMode } from "../lhs-editor/ui-mode";
 import { Ui } from "../../ui/ui";
 
 import { buffered } from "../../decorator/buffered";
@@ -137,7 +137,7 @@ export class RhsFooter {
         });
     }
     private get ed() {
-        return MdEditor.me;
+        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;
