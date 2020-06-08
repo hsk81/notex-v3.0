@@ -1,0 +1,92 @@
+<div id="blog-tab" role="tabpanel" class="tab-pane">
+    <style scoped>
+        {% include 'components/dlg-publish/tab-blog/index.css' %}
+    </style>
+    <label class="post-basics" for="blog-url">Blog URL</label>
+    <div class="input-group post-basics">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                <span class="glyphicon glyphicon-link"></span>
+            </button>
+        </div>
+        <input
+            class="form-control" id="blog-url"
+            placeholder="a blog URL like https://my.blogspot.com"
+            title="Blog URL" type="text"
+            >
+        <div class="input-group-append">
+            <button
+                class="btn btn-outline-dark" type="button" tabindex="-1" title="Blog URL"
+                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                data-content="Ensure to provide an existing blog URL with read and write access."
+                >
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+        </div>
+    </div>
+    <br/>
+    <label class="post-basics" for="blog-url">Post Title</label>
+    <div class="input-group post-basics">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input
+                    title="Update the most recent post with the same title, if any such exists."
+                    tabindex="-1" type="checkbox" checked>
+            </div>
+        </div>
+        <input
+            class="form-control" id="post-title"
+            placeholder="a new or an existing post title"
+            title="Post Title" type="text"
+            >
+        <div class="input-group-append">
+            <button
+                class="btn btn-outline-dark" tabindex="-1" title="Post Title" type="button"
+                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                data-content="Updates most recent post with same title, unless checkbox is unchecked."
+                >
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+        </div>
+    </div>
+    <br/>
+    <ul class="post-settings nav nav-pills nav-fill" role="tablist">
+        <li class="scripts">
+            <a href="#" class="nav-link active">
+                Scripts
+            </a>
+        </li>
+        <li role="presentation" class="styles">
+            <a href="#" class="nav-link">
+                Styles
+            </a>
+        </li>
+    </ul>
+    <div class="input-group post-settings scripts">
+        <span class="input-group-prepend">
+            <div class="input-group-text">
+                <input
+                    tabindex="-1" type="checkbox"
+                    title="Append scripts to this post: If possible try to modify a blog's template directly instead of including the scripts separately for each post!"
+                    >
+            </div>
+        </span>
+        <textarea
+            class="form-control" id="post-scripts" type="textarea"
+            placeholder="&lt;script&gt;..&lt;/script&gt;"
+            >{% include 'components/dlg-publish/tab-blog/post-scripts.html' %}</textarea>
+    </div>
+    <div class="input-group post-settings styles" style="display: none;">
+        <span class="input-group-prepend">
+            <div class="input-group-text">
+                <input
+                    tabindex="-1" type="checkbox"
+                    title="Append styles to this post: If possible try to modify a blog's template directly instead of including the styles separately for each post!">
+            </div>
+        </span>
+        <textarea
+            class="form-control" id="post-styles" type="textarea"
+            placeholder="&lt;style&gt;..&lt;/style&gt;"
+            >{% include 'components/dlg-publish/tab-blog/post-styles.html' %}</textarea>
+    </div>
+</div>

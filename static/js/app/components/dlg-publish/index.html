@@ -14,13 +14,9 @@
                 </li>
             </ul>
             <div class="modal-body">
-                <div class="tab-content" id="myTabContent">
-                    <div id="ipfs-tab" role="tabpanel" class="tab-pane active">
-                        {% include 'editor/0000-dialog/0001-publish-ipfs.html' %}
-                    </div>
-                    <div id="blog-tab" role="tabpanel" class="tab-pane">
-                        {% include 'editor/0000-dialog/0001-publish-blog.html' %}
-                    </div>
+                <div class="tab-content">
+                    {% include 'components/dlg-publish/tab-ipfs/index.html' %}
+                    {% include 'components/dlg-publish/tab-blog/index.html' %}
                   </div>
             </div>
             <div class="modal-footer">

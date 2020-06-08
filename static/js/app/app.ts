@@ -1,5 +1,5 @@
 import { DownloadManager } from "./ui/manager-download";
-import { PublishManager } from "./ui/manager-publish";
+import { PublishDialog } from "./components/dlg-publish/index";
 import { TemplateDialog } from "./components/dlg-template/index";
 
 import { NavHeader } from "./components/nav-header/index";
@@ -28,7 +28,7 @@ export class App {
         this.rhs_footer = RhsFooter.me;
         this.lhs_footer = LhsFooter.me;
         this.download_manager = DownloadManager.me;
-        this.publish_manager = PublishManager.me;
+        this.publish_dialog = PublishDialog.me;
         this.template_dialog = TemplateDialog.me;
     }
     private readonly editor: MdEditor;
@@ -37,7 +37,7 @@ export class App {
     private readonly lhs_toolbar: LhsToolbar;
     private readonly rhs_toolbar: RhsToolbar;
     private readonly nav_header: NavHeader;
-    private readonly publish_manager: PublishManager;
+    private readonly publish_dialog: PublishDialog;
     private readonly template_dialog: TemplateDialog;
     private readonly download_manager: DownloadManager;
 }

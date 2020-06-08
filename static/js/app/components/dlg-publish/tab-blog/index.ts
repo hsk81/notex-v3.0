@@ -1,23 +1,23 @@
-import { BloggerApi } from "../google-api/blogger-api";
-import { MarkdownIt } from "../markdown-it/markdown-it";
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { BloggerApi } from "../../../google-api/blogger-api";
+import { MarkdownIt } from "../../../markdown-it/markdown-it";
+import { MdEditor } from "../../../ui/md-editor";
+import { Ui } from "../../../ui/ui";
 
-import { after } from "../function/after";
-import { assert } from "../function/assert";
-import { before } from "../function/before";
-import { cookie } from "../cookie/cookie";
-import { trace } from "../decorator/trace";
+import { after } from "../../../function/after";
+import { assert } from "../../../function/assert";
+import { before } from "../../../function/before";
+import { cookie } from "../../../cookie/cookie";
+import { trace } from "../../../decorator/trace";
 
 declare const $: JQueryStatic;
 
 @trace
-export class PublishBlogManager {
+export class BlogTab {
     public static get me() {
-        if (window.PUBLISH_BLOG_MANAGER === undefined) {
-            window.PUBLISH_BLOG_MANAGER = new PublishBlogManager();
+        if (window.PUBLISH_DIALOG_BLOG_TAB === undefined) {
+            window.PUBLISH_DIALOG_BLOG_TAB = new BlogTab();
         }
-        return window.PUBLISH_BLOG_MANAGER;
+        return window.PUBLISH_DIALOG_BLOG_TAB;
     }
     private get blog_url(): string {
         return cookie.get('blog-url') as string;
@@ -337,4 +337,4 @@ export class PublishBlogManager {
         return Ui.me;
     }
 }
-export default PublishBlogManager;
+export default BlogTab;

@@ -1,0 +1,29 @@
+<div id="ipfs-tab" role="tabpanel" class="tab-pane active">
+    <label class="post-basics" for="ipfs-gateway">IPFS Gateway</label>
+    <div class="post-basics input-group">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                <span class="glyphicon glyphicon-link"></span>
+            </button>
+        </div>
+        <input
+            class="form-control" id="ipfs-gateway" list="ipfs-gateways"
+            placeholder="an IPFS gateway like https://ipfs.io/ipfs"
+            title="IPFS Gateway" type="text"
+            >
+        <div class="input-group-append">
+            <button
+                class="btn btn-outline-dark" tabindex="-1" title="IPFS Gateway" type="button"
+                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                data-content="A gateway to access content stored on the InterPlanetary File System (IPFS)."
+                >
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+        </div>
+    </div>
+    <datalist id="ipfs-gateways">
+        <option>https://ipfs.io/ipfs</option>
+        <option>https://cloudflare-ipfs.com/ipfs</option>
+        <option>http://localhost:8080/ipfs</option>
+    </datalist>
+</div>

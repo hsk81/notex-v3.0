@@ -1,20 +1,18 @@
-import { TemplateDialog } from "../components/dlg-template/index";
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { TemplateDialog } from "../../dlg-template/index";
+import { MdEditor } from "../../../ui/md-editor";
+import { Ui } from "../../../ui/ui";
 
-import { gateway, html } from "../ipfs/index";
-import { IPFS, Buffer } from "../ipfs/index";
-import { trace } from "../decorator/trace";
-
-declare const $: JQueryStatic;
+import { gateway, html } from "../../../ipfs/index";
+import { IPFS, Buffer } from "../../../ipfs/index";
+import { trace } from "../../../decorator/trace";
 
 @trace
-export class PublishIpfsManager {
+export class IpfsTab {
     public static get me() {
-        if (window.PUBLISH_IPFS_MANAGER === undefined) {
-            window.PUBLISH_IPFS_MANAGER = new PublishIpfsManager();
+        if (window.PUBLISH_DIALOG_IPFS_TAB === undefined) {
+            window.PUBLISH_DIALOG_IPFS_TAB = new IpfsTab();
         }
-        return window.PUBLISH_IPFS_MANAGER;
+        return window.PUBLISH_DIALOG_IPFS_TAB;
     }
     private get ipfs_gateway(): string {
         return gateway.get() as string;
@@ -97,4 +95,4 @@ export class PublishIpfsManager {
         return Ui.me;
     }
 }
-export default PublishIpfsManager;
+export default IpfsTab;

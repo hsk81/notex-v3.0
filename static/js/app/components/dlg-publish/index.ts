@@ -1,17 +1,17 @@
-import { PublishBlogManager } from "./manager-publish-blog";
-import { PublishIpfsManager } from "./manager-publish-ipfs";
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { BlogTab } from "./tab-blog/index";
+import { IpfsTab } from "./tab-ipfs/index";
+import { MdEditor } from "../../ui/md-editor";
+import { Ui } from "../../ui/ui";
 
-import { trace } from "../decorator/trace";
+import { trace } from "../../decorator/trace";
 
 @trace
-export class PublishManager {
+export class PublishDialog {
     public static get me() {
-        if (window.PUBLISH_MANAGER === undefined) {
-            window.PUBLISH_MANAGER = new PublishManager();
+        if (window.PUBLISH_DIALOG === undefined) {
+            window.PUBLISH_DIALOG = new PublishDialog();
         }
-        return window.PUBLISH_MANAGER;
+        return window.PUBLISH_DIALOG;
     }
     public constructor() {
         this.ui.$publishDialog.find('[data-toggle="popover"]')
@@ -70,7 +70,7 @@ export class PublishManager {
     private get ui() {
         return Ui.me;
     }
-    private readonly _manager_blog_publish = PublishBlogManager.me;
-    private readonly _manager_ipfs_publish = PublishIpfsManager.me;
+    private readonly blog_tab = BlogTab.me;
+    private readonly ipfs_tab = IpfsTab.me;
 }
-export default PublishManager;
+export default PublishDialog;
