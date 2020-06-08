@@ -1,20 +1,20 @@
-import { MarkdownIt } from "../markdown-it/markdown-it";
-import { DownloadManager } from "./manager-download";
-import { TemplateDialog } from "../components/dlg-template/index";
-import { LhsEditor } from "../components/lhs-editor/index";
-import { Ui } from "./ui";
+import { MarkdownIt } from "../../markdown-it/markdown-it";
+import { DownloadManager } from "../../ui/manager-download";
+import { TemplateDialog } from "../dlg-template/index";
+import { LhsEditor } from "../lhs-editor/index";
+import { Ui } from "../../ui/ui";
 
-import { buffered } from "../decorator/buffered";
-import { trace } from "../decorator/trace";
+import { buffered } from "../../decorator/buffered";
+import { trace } from "../../decorator/trace";
 declare const morphdom: any;
 
 @trace
-export class MdRender {
-    public static get me(): MdRender {
-        if (window.MD_RENDERER === undefined) {
-            window.MD_RENDERER = new MdRender();
+export class RhsViewer {
+    public static get me(): RhsViewer {
+        if (window.RHS_VIEWER === undefined) {
+            window.RHS_VIEWER = new RhsViewer();
         }
-        return window.MD_RENDERER;
+        return window.RHS_VIEWER;
     }
     @buffered(40)
     public async do(force: 'hard'|'soft'|'none' = 'none') {
@@ -92,7 +92,7 @@ export class MdRender {
         return $header ? $header.text().slice(0,-2) : undefined;
     }
     private get placeholder() {
-        return '/editor/0200-center/0221-rhs.output-placeholder.html';
+        return '/components/rhs-viewer/placeholder.html';
     }
     private get ed() {
         return LhsEditor.me;
@@ -101,4 +101,4 @@ export class MdRender {
         return Ui.me;
     }
 }
-export default MdRender;
+export default RhsViewer;

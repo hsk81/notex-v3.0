@@ -1,4 +1,4 @@
-import { MdRender } from "../../ui/md-render";
+import { RhsViewer } from "../rhs-viewer/index";
 import { Location } from "./location";
 import { UiMode } from "./ui-mode";
 import { Ui } from "../../ui/ui";
@@ -349,7 +349,7 @@ export class LhsEditor {
         this.render('none');
     }
     private get renderer() {
-        return MdRender.me;
+        return RhsViewer.me;
     }
     public get mirror(): CodeMirror.Editor|undefined {
         return window.CODE_MIRROR;

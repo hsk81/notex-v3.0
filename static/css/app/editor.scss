@@ -24,18 +24,6 @@ body {
  * ========================================================================= */
 
 .center {
-  .row {
-    .rhs {
-      iframe.viewer {
-        @media (max-width: 767px) {
-          width: calc(100%);
-        }
-        @media (min-width: 768px) {
-          width: calc(100% - 48px);
-        }
-      }
-    }
-  }
   @media (max-width: 767px) {
     height: calc(100% - 46px);
   }
@@ -45,38 +33,7 @@ body {
 }
 .center {
   .row {
-    .rhs {
-      iframe.viewer {
-        height: calc(100%);
-      }
-      height: 100%;
-    }
-    .rhs.with-footer {
-      iframe.viewer {
-        height: calc(100% - 47px);
-      }
-      .rhs-footer {
-        display: block;
-      }
-      height: 100%;
-    }
     height: 100%;
-  }
-}
-.center {
-  .row {
-    .rhs {
-      iframe#output,
-      iframe#cached {
-        border-left: 4px double #e7e7e7;
-        box-shadow: inset 0 0 8px #e7e7e7;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 0;
-        position: absolute;
-      }
-      padding: 0;
-    }
   }
 }
 

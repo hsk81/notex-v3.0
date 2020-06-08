@@ -225,7 +225,7 @@ export class LhsFooter {
         }
     }
     private onSpellCheckButtonClick(ev: JQuery.ClickEvent) {
-        const menu_url = '/static/js/app/components/lhs-footer/spell-checker/index.html';
+        const menu_url = '/components/lhs-footer/spell-checker/index.html';
         const $menu = this.ui.$lhsFooterSpellCheckerMenu;
         const $spin = $menu.find('>.spin');
         let $item = $menu.find('>li');

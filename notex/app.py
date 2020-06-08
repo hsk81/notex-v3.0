@@ -4,6 +4,7 @@ __author__ = 'hsk81'
 ###############################################################################
 
 from bottle import Bottle
+from notex.view.components import app_components
 from notex.view.debug import app_debug
 from notex.view.editor import app_edit
 from notex.view.i18n import app_i18n
@@ -17,6 +18,7 @@ from notex import ARGs
 ###############################################################################
 
 app_main = Bottle()
+app_main.merge(app_components)
 app_main.merge(app_edit)
 app_main.merge(app_i18n)
 app_main.merge(app_index)
