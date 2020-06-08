@@ -225,11 +225,12 @@ export class LhsFooter {
         }
     }
     private onSpellCheckButtonClick(ev: JQuery.ClickEvent) {
+        const menu_url = '/static/js/app/components/lhs-footer/spell-checker/index.html';
         const $menu = this.ui.$lhsFooterSpellCheckerMenu;
         const $spin = $menu.find('>.spin');
         let $item = $menu.find('>li');
         if ($item.length === 0) {
-            $.get('/static/html/spell-checker-menu.html').done((html) => {
+            $.get(menu_url).done((html) => {
                 $menu.html(html).append($spin);
                 $item = $menu.find('>li').hide();
                 $item.find('img').on('load', this.onMenuItemLoad.bind(this));
