@@ -1,11 +1,44 @@
-#spell-checker-menu > span.spin {
+ul#spell-checker-menu > span.spin {
     color: #ddd;
     font-size: 3em;
     left: calc(50% - 0.5em);
     position: absolute;
     top: calc(50% - 0.5em);
 }
-
-#spell-checker-menu > span.spin {
+ul#spell-checker-menu > span.spin {
     text-shadow: 0 0 1em;
+}
+ul#spell-checker-menu {
+    li:active {
+        a {
+            color: white;
+        }
+    }
+    li:hover {
+        cursor: pointer;
+    }
+    li {
+        a:active {
+            color: white;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        a {
+            img {
+                float: right;
+                margin-top: 5px;
+            }
+            span.line2,
+            span.language {
+                font-size: smaller;
+            }
+            color: black;
+        }
+    }
+    height: 307px;
+    overflow: hidden;
+    overflow-y: scroll;
+    user-select: none;
+    width: 260px;
 }

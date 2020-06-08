@@ -4,42 +4,12 @@
     }
     #cli {
         .input-group {
-            /**
-             * @todo: extract as component!
-             */
-            ul#spell-checker-menu {
-                li:active {
-                    a {
-                        color: white;
-                    }
-                }
-                li:hover {
-                    cursor: pointer;
-                }
-                li {
-                    a:active {
-                        color: white;
-                    }
-                    a:hover {
-                        text-decoration: none;
-                    }
-                    a {
-                        img {
-                            float: right;
-                            margin-top: 5px;
-                        }
-                        span.line2,
-                        span.language {
-                            font-size: smaller;
-                        }
-                        color: black;
-                    }
-                }
-                height: 307px;
-                overflow: hidden;
-                overflow-y: scroll;
-                user-select: none;
-                width: 260px;
+            #spell-checker-button.dropdown-toggle::after {
+                display: none !important;
+            }
+            #spell-checker-button {
+                height: 38px;
+                width: 42px;
             }
             float: left;
             width: 100%;

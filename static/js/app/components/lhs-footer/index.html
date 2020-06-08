@@ -1,6 +1,8 @@
 <div class="lhs-footer d-none d-md-block">
     <style scoped>
         {% include 'components/lhs-footer/index.css' %}
+    </style>
+    <style scoped>
         {% include 'components/lhs-footer/spell-checker/index.css' %}
     </style>
     <div class="btn-group" role="group">
@@ -17,15 +19,6 @@
                         data-container="body" data-toggle="dropdown"
                         data-placement="top" title="Spellchecking"
                     >
-                    <style>
-                        #spell-checker-button.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                        #spell-checker-button {
-                            height: 38px;
-                            width: 42px;
-                        }
-                    </style>
                     <span class="glyphicon glyphicon-eye-close"></span>
                 </button>
                 <ul id="spell-checker-menu"
