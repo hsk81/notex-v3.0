@@ -1,17 +1,17 @@
-import { LhsToolbar } from "../components/lhs-toolbar/index";
-import { RhsToolbar } from "../components/rhs-toolbar/index";
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { LhsToolbar } from "../lhs-toolbar/index";
+import { RhsToolbar } from "../rhs-toolbar/index";
+import { MdEditor } from "../../ui/md-editor";
+import { Ui } from "../../ui/ui";
 
-import { trace } from "../decorator/trace";
+import { trace } from "../../decorator/trace";
 
 @trace
-export class HeaderMenu {
+export class NavHeader {
     public static get me() {
-        if (window.HEADER_MENU === undefined) {
-            window.HEADER_MENU = new HeaderMenu();
+        if (window.NAV_HEADER === undefined) {
+            window.NAV_HEADER = new NavHeader();
         }
-        return window.HEADER_MENU;
+        return window.NAV_HEADER;
     }
     public constructor() {
         this.ui.$headerOpen.on(
@@ -65,4 +65,4 @@ export class HeaderMenu {
         return Ui.me;
     }
 }
-export default HeaderMenu;
+export default NavHeader;

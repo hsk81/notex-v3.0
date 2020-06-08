@@ -2,7 +2,7 @@ import { DownloadManager } from "./ui/manager-download";
 import { PublishManager } from "./ui/manager-publish";
 import { TemplateManager } from "./ui/manager-template";
 
-import { HeaderMenu } from "./ui/header-menu";
+import { NavHeader } from "./components/nav-header/index";
 import { MdEditor } from "./ui/md-editor";
 import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
@@ -21,7 +21,7 @@ export class App {
         return window.APP;
     }
     public constructor() {
-        this.header_menu = HeaderMenu.me;
+        this.nav_header = NavHeader.me;
         this.editor = MdEditor.me;
         this.lhs_toolbar = LhsToolbar.me;
         this.rhs_toolbar = RhsToolbar.me;
@@ -36,7 +36,7 @@ export class App {
     private readonly rhs_footer: RhsFooter;
     private readonly lhs_toolbar: LhsToolbar;
     private readonly rhs_toolbar: RhsToolbar;
-    private readonly header_menu: HeaderMenu;
+    private readonly nav_header: NavHeader;
     private readonly publish_manager: PublishManager;
     private readonly template_manager: TemplateManager;
     private readonly download_manager: DownloadManager;
