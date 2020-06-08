@@ -25,11 +25,14 @@ export class BlogTab {
     private set blog_url(value: string) {
         cookie.set('blog-url', value);
     }
-    private get scripts(): string {
-        return localStorage.getItem('post-scripts') as string;
+    private get scripts(): Promise<string> {
+        const value = localStorage.getItem('post-scripts');
+        if (typeof value === 'string') return Promise.resolve(value);
+        const url = 'components/dlg-publish/tab-blog/post-scripts.html';
+        return fetch(url).then((res) => res.text());
     }
-    private set scripts(value: string) {
-        localStorage.setItem('post-scripts', value);
+    private set scripts(value: Promise<string>) {
+        value.then((text) => localStorage.setItem('post-scripts', text));
     }
     private get scripts_flag(): boolean {
         return cookie.get('post-scripts-flag', true) as boolean;
@@ -37,11 +40,14 @@ export class BlogTab {
     private set scripts_flag(value: boolean) {
         cookie.set('post-scripts-flag', value);
     }
-    private get styles(): string {
-        return localStorage.getItem('post-styles') as string;
+    private get styles(): Promise<string> {
+        const value = localStorage.getItem('post-styles');
+        if (typeof value === 'string') return Promise.resolve(value);
+        const url = 'components/dlg-publish/tab-blog/post-styles.html';
+        return fetch(url).then((res) => res.text());
     }
-    private set styles(value: string) {
-        localStorage.setItem('post-styles', value);
+    private set styles(value: Promise<string>) {
+        value.then((text) => localStorage.setItem('post-styles', text));
     }
     private get styles_flag(): boolean {
         return cookie.get('post-styles-flag', true) as boolean;
@@ -93,11 +99,11 @@ export class BlogTab {
         const $scripts_cb = this.ui.$publishDialogBlogScriptsCheckbox;
         $scripts_cb.prop('checked', this.scripts_flag);
         const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
-        if (this.scripts) $scripts_ta.val(this.scripts);
+        this.scripts.then((text: string) => $scripts_ta.val(text));
         const $styles_cb = this.ui.$publishDialogBlogStylesCheckbox;
         $styles_cb.prop('checked', this.styles_flag);
         const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
-        if (this.styles) $styles_ta.val(this.styles);
+        this.styles.then((text: string) => $styles_ta.val(text));
     }
     private onBsModalShown() {
         if (!this.ui.$publishDialogBlogUrl.val()) {
@@ -238,8 +244,8 @@ export class BlogTab {
                     });
                     url_request.then(
                         after(on_done, () => {
-                            this.scripts = $scripts_ta.val() as string;
-                            this.styles = $styles_ta.val() as string;
+                            this.scripts = Promise.resolve($scripts_ta.val() as string);
+                            this.styles = Promise.resolve($styles_ta.val() as string);
                             this.blog_url = url;
                             this.ui.$publishDialogPrimary.prop('disabled', false);
                             this.ui.$publishDialogPrimary.addClass('btn-success');
