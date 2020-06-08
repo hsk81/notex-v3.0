@@ -1,0 +1,16 @@
+#template-dlg {
+    a {
+        p {
+            color: black;
+        }
+    }
+    a.active {
+        p {
+            color: white;
+        }
+        color: white;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+}

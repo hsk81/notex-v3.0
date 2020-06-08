@@ -1,4 +1,4 @@
-import { TemplateManager } from "./manager-template";
+import { TemplateDialog } from "../components/dlg-template/index";
 import { MdEditor } from "./md-editor";
 import { Ui } from "./ui";
 
@@ -68,7 +68,7 @@ export class PublishIpfsManager {
             });
         }
         if (!this.ui.$publishDialogIpfsGatewayInputGroup.hasClass('has-error')) {
-            const head = TemplateManager.me.head({ title: this.ed.title });
+            const head = TemplateDialog.me.head({ title: this.ed.title });
             const body = this.ui.$viewer.contents().find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {

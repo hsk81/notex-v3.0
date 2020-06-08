@@ -1,5 +1,5 @@
-import { TemplateManager } from "../../ui/manager-template";
-import { Template } from "../../ui/manager-template";
+import { TemplateDialog } from "../dlg-template/index";
+import { Template } from "../dlg-template/index";
 import { MdEditor } from "../../ui/md-editor";
 import { Ui } from "../../ui/ui";
 
@@ -12,10 +12,10 @@ import { trace } from "../../decorator/trace";
 @trace
 export class RhsToolbar {
     public static get me() {
-        if (window.MD_EDITOR_TOOLBAR_RHS === undefined) {
-            window.MD_EDITOR_TOOLBAR_RHS = new RhsToolbar();
+        if (window.RHS_TOOLBAR === undefined) {
+            window.RHS_TOOLBAR = new RhsToolbar();
         }
-        return window.MD_EDITOR_TOOLBAR_RHS;
+        return window.RHS_TOOLBAR;
     }
     public constructor() {
         if (!this.ed.mobile) {
@@ -57,7 +57,7 @@ export class RhsToolbar {
     private async onPublishClick(ev: JQueryEventObject) {
         if (ev.ctrlKey) {
             const $contents = this.ui.$viewer.contents();
-            const head = TemplateManager.me.head({ title: this.ed.title });
+            const head = TemplateDialog.me.head({ title: this.ed.title });
             const body = $contents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {
@@ -80,13 +80,13 @@ export class RhsToolbar {
         this.ui.$templateDialog.modal();
     }
     private onSingleColumnClick() {
-        TemplateManager.me.select(Template.SingleColumn);
+        TemplateDialog.me.select(Template.SingleColumn);
     }
     private onDoubleColumnClick() {
-        TemplateManager.me.select(Template.DoubleColumn);
+        TemplateDialog.me.select(Template.DoubleColumn);
     }
     private onTripleColumnClick() {
-        TemplateManager.me.select(Template.TripleColumn);
+        TemplateDialog.me.select(Template.TripleColumn);
     }
     private get ed() {
         return MdEditor.me;

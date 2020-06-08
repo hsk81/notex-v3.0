@@ -4,6 +4,9 @@
     }
     #cli {
         .input-group {
+            /**
+             * @todo: extract as component!
+             */
             ul#spell-checker-menu {
                 li:active {
                     a {

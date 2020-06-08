@@ -1,6 +1,6 @@
 import { MarkdownIt } from "../markdown-it/markdown-it";
 import { DownloadManager } from "./manager-download";
-import { TemplateManager } from "./manager-template";
+import { TemplateDialog } from "../components/dlg-template/index";
 import { MdEditor } from "./md-editor";
 import { Ui } from "./ui";
 
@@ -53,9 +53,9 @@ export class MdRender {
             }
         }
         {
-            this.ui.$rhsCachedHead.html(TemplateManager.me.head());
+            this.ui.$rhsCachedHead.html(TemplateDialog.me.head());
             this.ui.$rhsCachedBody.html(MarkdownIt.me.render(
-                TemplateManager.me.body(md_value), {
+                TemplateDialog.me.body(md_value), {
                     document: this.ui.$rhsCached.contents()[0] as Document
                 }
             ));

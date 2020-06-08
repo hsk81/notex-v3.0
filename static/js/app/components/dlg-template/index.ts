@@ -1,7 +1,7 @@
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { MdEditor } from "../../ui/md-editor";
+import { Ui } from "../../ui/ui";
 
-import { trace } from "../decorator/trace";
+import { trace } from "../../decorator/trace";
 declare const $: JQueryStatic;
 
 export enum Template {
@@ -16,13 +16,16 @@ const TemplatePath = {
     [Template.DoubleColumn]: '/static/tpl/2-column',
     [Template.TripleColumn]: '/static/tpl/3-column'
 };
+/**
+ * @todo: extract template management!
+ */
 @trace
-export class TemplateManager {
+export class TemplateDialog {
     public static get me() {
-        if (window.TEMPLATE_MANAGER === undefined) {
-            window.TEMPLATE_MANAGER = new TemplateManager();
+        if (window.TEMPLATE_DIALOG === undefined) {
+            window.TEMPLATE_DIALOG = new TemplateDialog();
         }
-        return window.TEMPLATE_MANAGER;
+        return window.TEMPLATE_DIALOG;
     }
     public constructor() {
         this.select(
@@ -123,4 +126,4 @@ const HEAD_FALLBACK =
     '<meta name="viewport" content="width=device-width,initial-scale=1"/>';
 const BODY_FALLBACK = '${MD_CONTENT}\n'
     + '<script>if (typeof PATCH !== "undefined") PATCH();</script>';
-export default TemplateManager;
+export default TemplateDialog;
