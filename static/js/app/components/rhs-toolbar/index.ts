@@ -31,12 +31,14 @@ export class RhsToolbar {
             .on('click', this.onRefreshClick.bind(this));
         this.ui.$toolbarTemplate
             .on('click', this.onTemplateClick.bind(this));
-        this.ui.$toolbar1Column
+        this.ui.$toolbar1Columns
             .on('click', this.onSingleColumnClick.bind(this));
         this.ui.$toolbar2Columns
             .on('click', this.onDoubleColumnClick.bind(this));
         this.ui.$toolbar3Columns
             .on('click', this.onTripleColumnClick.bind(this));
+        $(this.ui.$templateDialog)
+            .on('select', this.onSelectTemplate.bind(this));
     }
     public refresh() {
         this.ed.refresh();
@@ -87,6 +89,32 @@ export class RhsToolbar {
     }
     private onTripleColumnClick() {
         TemplateDialog.me.select(Template.TripleColumn);
+    }
+    private onSelectTemplate(ev: JQuery.Event, { template }: {
+        template: Template
+    }) {
+        switch (template) {
+            case Template.SingleColumn:
+                this.ui.$toolbar1Columns.addClass('active');
+                this.ui.$toolbar2Columns.removeClass('active');
+                this.ui.$toolbar3Columns.removeClass('active');
+                break;
+            case Template.DoubleColumn:
+                this.ui.$toolbar1Columns.removeClass('active');
+                this.ui.$toolbar2Columns.addClass('active');
+                this.ui.$toolbar3Columns.removeClass('active');
+                break;
+            case Template.TripleColumn:
+                this.ui.$toolbar1Columns.removeClass('active');
+                this.ui.$toolbar2Columns.removeClass('active');
+                this.ui.$toolbar3Columns.addClass('active');
+                break;
+            default:
+                this.ui.$toolbar1Columns.removeClass('active');
+                this.ui.$toolbar2Columns.removeClass('active');
+                this.ui.$toolbar3Columns.removeClass('active');
+                break;
+        }
     }
     private get ed() {
         return LhsEditor.me;

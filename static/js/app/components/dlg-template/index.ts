@@ -1,7 +1,5 @@
-import { LhsEditor } from "../lhs-editor/index";
-import { Ui } from "../../ui/ui";
-
 import { trace } from "../../decorator/trace";
+import { Ui } from "../../ui/ui";
 declare const $: JQueryStatic;
 
 export enum Template {
@@ -61,8 +59,10 @@ export class TemplateDialog {
         const path = TemplatePath[template];
         this.my_head = await this.fetch(`${path}.head.md`);
         this.my_body = await this.fetch(`${path}.body.md`);
+        $(this.ui.$templateDialog).trigger('select', {
+            template
+        });
         this.activateBy(template);
-        this.ed.render('soft');
     }
     private onBsModalShow() {
     }
@@ -71,7 +71,6 @@ export class TemplateDialog {
     private onBsModalHide() {
     }
     private onBsModalHidden() {
-        this.ed.render('soft');
     }
     private onPrimaryClick() {
         this.select(this.ui.$templateDialogItemActive.data('tpl') as Template);
@@ -112,9 +111,6 @@ export class TemplateDialog {
     }
     private set my_body(text: string) {
         this._my_body = text;
-    }
-    private get ed() {
-        return LhsEditor.me;
     }
     private get ui() {
         return Ui.me;

@@ -226,14 +226,14 @@ export class Ui {
     public get $toolbarSwap() {
         return this.$toolbarInner.find('[name=swap]');
     }
-    public get $toolbar1Column() {
-        return this.$toolbarInner.find('.glyphicon.1-column').closest('button');
+    public get $toolbar1Columns() {
+        return this.$toolbarInner.find('.1-column').closest('button');
     }
     public get $toolbar2Columns() {
-        return this.$toolbarInner.find('.glyphicon.2-column').closest('button');
+        return this.$toolbarInner.find('.2-column').closest('button');
     }
     public get $toolbar3Columns() {
-        return this.$toolbarInner.find('.glyphicon.3-column').closest('button');
+        return this.$toolbarInner.find('.3-column').closest('button');
     }
     public get $toolbarBold() {
         return this.$toolbarInner.find('.glyphicon-bold').closest('button');

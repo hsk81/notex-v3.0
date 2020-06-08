@@ -266,6 +266,9 @@ export class LhsEditor {
                my_mode.rhs.name === mode;
     }
     private events() {
+        $(this.ui.$templateDialog).on('select', () => {
+            this.render('soft');
+        });
         this.dnd();
     }
     public dnd() {
