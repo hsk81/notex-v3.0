@@ -1,66 +1,42 @@
-/**
- * @todo: remove .lhs wrappers?
- */
-.lhs {
-    textarea#input,
-    div.CodeMirror {
-        @media (max-width: 767px) {
-            width: calc(100%);
-        }
-        @media (min-width: 768px) {
-            width: calc(100% - 48px);
-        }
+div.CodeMirror,
+textarea#input {
+    @media (max-width: 767px) {
+        width: calc(100%);
     }
+    @media (min-width: 768px) {
+        width: calc(100% - 48px);
+    }
+    height: calc(100% - 47px);
 }
-.lhs {
-    textarea#input {
-        height: calc(100% - 47px);
+div.CodeMirror {
+    span.cm-m-markdown.cm-spell-error:not(.cm-link):not(.cm-url) {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC);
+        background-position: bottom;
+        background-repeat: repeat-x;
     }
-    height: 100%;
+    span.CodeMirror-matchingbracket {
+        color: #000000;
+        font-weight: bolder;
+        text-decoration: underline;
+    }
+    pre.CodeMirror-placeholder {
+        color: #999999;
+    }
+    div.CodeMirror-activeline-background {
+        background-color: #f7fbff;
+    }
+    box-shadow: inset 0 0 8px #e7e7e7;
+    font-family: monospace;
+    font-size: 12px;
 }
-.lhs.without-footer {
-    textarea#input {
-        height: calc(100%);
-    }
-    .lhs-footer {
-        display: block;
-        width: 48px;
-    }
-    height: 100%;
-}
-.lhs {
-    div.CodeMirror {
-        span.cm-m-markdown.cm-spell-error:not(.cm-link):not(.cm-url) {
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVQIW2NkgIL/DAxAxMDACGcA2SABAEwWBAGHorwgAAAAAElFTkSuQmCC);
-            background-position: bottom;
-            background-repeat: repeat-x;
-        }
-        span.CodeMirror-matchingbracket {
-            color: #000000;
-            font-weight: bolder;
-            text-decoration: underline;
-        }
-        pre.CodeMirror-placeholder {
-            color: #999999;
-        }
-        div.CodeMirror-activeline-background {
-            background-color: #f7fbff;
-        }
-        box-shadow: inset 0 0 8px #e7e7e7;
-        font-family: monospace;
-        font-size: 12px;
-        height: calc(100% - 47px);
-    }
-    textarea#input {
-        border: none;
-        box-shadow: inset 0 0 8px #e7e7e7;
-        display: none;
-        font-family: monospace;
-        font-size: 12px;
-        outline-width: 0;
-        overflow-y: auto;
-        padding: 1em 1em 0;
-        resize: none;
-    }
-    padding: 0;
+textarea#input {
+    border: none;
+    box-shadow: inset 0 0 8px #e7e7e7;
+    display: none;
+    font-family: monospace;
+    font-size: 12px;
+    outline-width: 0;
+    overflow-y: auto;
+    padding: 1em 1em 0;
+    resize: none;
 }

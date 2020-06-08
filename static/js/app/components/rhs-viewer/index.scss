@@ -1,39 +1,17 @@
-/**
- * @todo: remove .rhs wrappers?
- */
-.rhs {
-    iframe.viewer {
-        @media (max-width: 767px) {
-            width: calc(100%);
-        }
-        @media (min-width: 768px) {
-            width: calc(100% - 48px);
-        }
+ iframe.viewer {
+    @media (max-width: 767px) {
+        width: calc(100%);
     }
-}
-.rhs {
-    iframe.viewer {
-        height: calc(100%);
+    @media (min-width: 768px) {
+        width: calc(100% - 48px);
     }
     height: 100%;
 }
-.rhs.with-footer {
-    iframe.viewer {
-        height: calc(100% - 47px);
-    }
-    .rhs-footer {
-        display: block;
-    }
-    height: 100%;
-}
-.rhs {
-    iframe.viewer {
-        border-left: 4px double #e7e7e7;
-        box-shadow: inset 0 0 8px #e7e7e7;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 0;
-        position: absolute;
-    }
+iframe.viewer {
+    border-left: 4px double #e7e7e7;
+    box-shadow: inset 0 0 8px #e7e7e7;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 0;
+    position: absolute;
 }
