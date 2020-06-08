@@ -148,33 +148,6 @@ body {
       padding: 0;
     }
     .rhs {
-      .toolbar {
-        .toolbar-outer:nth-of-type(1) {
-          height: 100%;
-        }
-        .toolbar-outer {
-          .toolbar-inner {
-            .btn-group-vertical {
-              margin-bottom: 4px;
-            }
-            padding: 3px 3px 0;
-          }
-          .iScrollVerticalScrollbar {
-            .iScrollIndicator {
-              background-color: #343a40 !important;
-            }
-            right: 0 !important;
-            width: 4px !important;
-            z-index: 999 !important;
-          }
-          overflow-y: hidden;
-          position: relative;
-        }
-        display: none;
-        float: right;
-        height: 100%;
-        max-width: 48px;
-      }
       iframe#output,
       iframe#cached {
         border-left: 4px double #e7e7e7;

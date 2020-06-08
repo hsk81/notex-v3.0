@@ -1,5 +1,5 @@
 import { LhsToolbar } from "../components/lhs-toolbar/index";
-import { MdEditorToolbarRhs } from "./md-editor-toolbar-rhs";
+import { RhsToolbar } from "../components/rhs-toolbar/index";
 import { MdEditor } from "./md-editor";
 import { Ui } from "./ui";
 
@@ -48,15 +48,15 @@ export class HeaderMenu {
         this.ui.$rhs
             .toggleClass('d-none d-md-block')
             .toggleClass('col-xs-12 col-sm-12');
-        this.toolbarLhs.refresh();
-        this.toolbarRhs.refresh();
+        this.lhsToolbar.refresh();
+        this.rhsToolbar.refresh();
         this.ed.focus();
     }
-    private get toolbarLhs() {
+    private get lhsToolbar() {
         return LhsToolbar.me;
     }
-    private get toolbarRhs() {
-        return MdEditorToolbarRhs.me;
+    private get rhsToolbar() {
+        return RhsToolbar.me;
     }
     private get ed() {
         return MdEditor.me;

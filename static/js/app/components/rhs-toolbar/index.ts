@@ -1,20 +1,19 @@
-import { TemplateManager } from "./manager-template";
-import { Template } from "./manager-template";
-import { MdEditor } from "./md-editor";
-import { Ui } from "./ui";
+import { TemplateManager } from "../../ui/manager-template";
+import { Template } from "../../ui/manager-template";
+import { MdEditor } from "../../ui/md-editor";
+import { Ui } from "../../ui/ui";
 
-import { gateway, html } from "../ipfs/index";
-import { IPFS, Buffer } from "../ipfs/index";
+import { gateway, html } from "../../ipfs/index";
+import { IPFS, Buffer } from "../../ipfs/index";
 
-import { buffered } from "../decorator/buffered";
-import { trace } from "../decorator/trace";
-declare const $: JQueryStatic;
+import { buffered } from "../../decorator/buffered";
+import { trace } from "../../decorator/trace";
 
 @trace
-export class MdEditorToolbarRhs {
+export class RhsToolbar {
     public static get me() {
         if (window.MD_EDITOR_TOOLBAR_RHS === undefined) {
-            window.MD_EDITOR_TOOLBAR_RHS = new MdEditorToolbarRhs();
+            window.MD_EDITOR_TOOLBAR_RHS = new RhsToolbar();
         }
         return window.MD_EDITOR_TOOLBAR_RHS;
     }
@@ -45,7 +44,7 @@ export class MdEditorToolbarRhs {
     }
     @buffered
     private onRefreshClick(ev: JQueryEventObject) {
-        const $span = $(ev.target).closest('button').find('span');
+        const $span = this.ui.$toolbarRefresh.find('span');
         setTimeout(() => $span.removeClass('spin'), 600);
         setTimeout(() => $span.addClass('spin'), 0);
         if (ev.ctrlKey) {
@@ -69,7 +68,7 @@ export class MdEditorToolbarRhs {
                 }
             });
         } else {
-            $('#publish-dlg').modal();
+            this.ui.$publishDialog.modal();
         }
     }
     private onPrintClick() {
@@ -78,7 +77,7 @@ export class MdEditorToolbarRhs {
         }
     }
     private onTemplateClick() {
-        $('#template-dlg').modal();
+        this.ui.$templateDialog.modal();
     }
     private onSingleColumnClick() {
         TemplateManager.me.select(Template.SingleColumn);
@@ -107,4 +106,4 @@ export class MdEditorToolbarRhs {
     }
     private _scroll: any;
 }
-export default MdEditorToolbarRhs;
+export default RhsToolbar;

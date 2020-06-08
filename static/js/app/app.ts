@@ -7,7 +7,7 @@ import { MdEditor } from "./ui/md-editor";
 import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
 import { LhsToolbar } from "./components/lhs-toolbar/index";
-import { MdEditorToolbarRhs } from "./ui/md-editor-toolbar-rhs";
+import { RhsToolbar } from "./components/rhs-toolbar/index";
 
 import { trace } from "./decorator/trace";
 import "./string/random";
@@ -24,7 +24,7 @@ export class App {
         this.header_menu = HeaderMenu.me;
         this.editor = MdEditor.me;
         this.lhs_toolbar = LhsToolbar.me;
-        this.rhs_toolbar = MdEditorToolbarRhs.me;
+        this.rhs_toolbar = RhsToolbar.me;
         this.rhs_footer = RhsFooter.me;
         this.lhs_footer = LhsFooter.me;
         this.download_manager = DownloadManager.me;
@@ -35,7 +35,7 @@ export class App {
     private readonly lhs_footer: LhsFooter;
     private readonly rhs_footer: RhsFooter;
     private readonly lhs_toolbar: LhsToolbar;
-    private readonly rhs_toolbar: MdEditorToolbarRhs;
+    private readonly rhs_toolbar: RhsToolbar;
     private readonly header_menu: HeaderMenu;
     private readonly publish_manager: PublishManager;
     private readonly template_manager: TemplateManager;
