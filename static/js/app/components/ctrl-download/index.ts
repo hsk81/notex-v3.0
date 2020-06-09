@@ -13,7 +13,7 @@ export class DownloadController {
         return window.DOWNLOAD_CONTROLLER;
     }
     public constructor() {
-        $(RhsViewer.me).on('rendered', this.onRendered.bind(this));
+        $(this.viewer).on('rendered', this.onRendered.bind(this));
     }
     @buffered(600)
     private onRendered(ev: JQuery.Event, { md_content, title }: {
@@ -36,6 +36,9 @@ export class DownloadController {
         this.ui.$toolbarSave.attr("href", URL.createObjectURL(
             new Blob([content], { type: 'text/markdown' })
         ));
+    }
+    private get viewer() {
+        return RhsViewer.me;
     }
     private get ui() {
         return Ui.me;
