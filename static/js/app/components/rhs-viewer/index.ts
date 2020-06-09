@@ -16,7 +16,7 @@ export class RhsViewer {
         return window.RHS_VIEWER;
     }
     public get title() {
-        const $header = this.ui.$rhsCachedBody.find(':header').first();
+        const $header = this.ui.$rhsOutputBody.find(':header').first();
         return $header ? $header.text().slice(0,-2) : undefined;
     }
     public constructor() {
