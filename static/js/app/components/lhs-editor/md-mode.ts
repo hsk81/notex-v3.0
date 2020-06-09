@@ -1,4 +1,4 @@
-CodeMirror.defineMode('md-mode', function (config) {
+CodeMirror.defineMode('notex-md', function (config) {
     return (CodeMirror as any).multiplexingMode(
         CodeMirror.getMode(config, 'gfm'), {
             mode: CodeMirror.getMode(config, 'text/x-stex'),
