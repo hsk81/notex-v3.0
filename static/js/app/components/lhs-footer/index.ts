@@ -1,7 +1,7 @@
 import { LhsEditor } from "../lhs-editor/index";
 import { UiMode } from "../lhs-editor/ui-mode";
 import * as uiMode from "../lhs-editor/ui-mode";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { buffered } from "../../decorator/buffered";
 import { trace } from "../../decorator/trace";

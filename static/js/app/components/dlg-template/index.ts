@@ -1,5 +1,5 @@
 import { trace } from "../../decorator/trace";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 declare const $: JQueryStatic;
 
 export enum Template {

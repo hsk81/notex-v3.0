@@ -1,7 +1,7 @@
 import { RhsViewer } from "../rhs-viewer/index";
 import { Location } from "./location";
 import { UiMode } from "./ui-mode";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { Lingua } from "../../spell-checker/spell-checker";
 import { Overlay } from "../../spell-checker/spell-checker";
@@ -119,10 +119,10 @@ export class LhsEditor {
         this.ui.$viewerContentBody.scrollTop(value);
     }
     public render(force: 'hard'|'soft'|'none' = 'none') {
-        this.renderer.do(force);
+        this.viewer.render(force);
     }
     public get title() {
-        return this.renderer.title;
+        return this.viewer.title;
     }
     public refresh() {
         if (this.mirror) {
@@ -351,7 +351,7 @@ export class LhsEditor {
         $(this).trigger('change');
         this.render('none');
     }
-    private get renderer() {
+    private get viewer() {
         return RhsViewer.me;
     }
     public get mirror(): CodeMirror.Editor|undefined {

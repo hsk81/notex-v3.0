@@ -1,8 +1,7 @@
 import { MarkdownIt } from "../../markdown-it/markdown-it";
-import { DownloadManager } from "../../ui/manager-download";
 import { TemplateDialog } from "../dlg-template/index";
 import { LhsEditor } from "../lhs-editor/index";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { buffered } from "../../decorator/buffered";
 import { trace } from "../../decorator/trace";
@@ -16,56 +15,36 @@ export class RhsViewer {
         }
         return window.RHS_VIEWER;
     }
+    public get title() {
+        const $header = this.ui.$rhsCachedBody.find(':header').first();
+        return $header ? $header.text().slice(0,-2) : undefined;
+    }
+    public constructor() {
+        $(this).on('rendered', this.onRendered.bind(this));
+    }
     @buffered(40)
-    public async do(force: 'hard'|'soft'|'none' = 'none') {
-        const md_value = this.ed.getValue();
+    public async render(force: 'hard'|'soft'|'none' = 'none') {
+        const md_content = this.ed.getValue();
         {
-            if (md_value.length === 0) {
+            if (md_content.length === 0) {
                 force = 'hard';
             }
-            if (force !== 'none') switch (force) {
-                case 'hard':
-                    this.ui.$rhsOutput = $('<iframe>', {
-                        id: 'output', class: 'viewer', frameborder: '0'
-                    });
-                case 'soft':
-                    this.ui.$rhsCached = $('<iframe>', {
-                        id: 'cached', class: 'viewer', frameborder: '0',
-                        style: 'visibility:hidden'
-                    });
-                    const window = this.ui.$rhsCached.get(0).contentWindow;
-                    if (window) window.PATCH = () => this.patch();
-                default:
-                    const { userAgent: agent } = navigator;
-                    const ms = !agent || !agent.match(/chrome/i) ? 100 : 0;
-                    await new Promise((resolve) => setTimeout(resolve, ms));
-            }
-        }
-        {
-            if (md_value.length === 0) {
-                $.get(this.placeholder).done((html) => setTimeout(() => {
-                    if (this.ed.getValue().length > 0) return;
-                    this.ui.$rhsCachedBody.hide().html(html);
-                    this.ui.$rhsCachedBody.fadeIn('slow');
-                    this.ui.$rhsOutputBody.hide().html(html);
-                    this.ui.$rhsOutputBody.fadeIn('slow');
-                }, 600));
+            if (force !== 'none') {
+                await this.refresh(force);
             }
         }
         {
             this.ui.$rhsCachedHead.html(TemplateDialog.me.head());
             this.ui.$rhsCachedBody.html(MarkdownIt.me.render(
-                TemplateDialog.me.body(md_value), {
+                TemplateDialog.me.body(md_content), {
                     document: this.ui.$rhsCached.contents()[0] as Document
                 }
             ));
         }
         {
-            if (md_value.length > 0) {
-                const title = `${this.title || new Date().toISOString()}.md`;
-                DownloadManager.me.title = title;
-                DownloadManager.me.content = md_value;
-            }
+            $(this).trigger('rendered', {
+                md_content, title: this.title
+            });
         }
     }
     @buffered(0)
@@ -87,9 +66,37 @@ export class RhsViewer {
             childrenOnly: true
         });
     }
-    public get title() {
-        const $header = this.ui.$rhsCachedBody.find(':header').first();
-        return $header ? $header.text().slice(0,-2) : undefined;
+    private async refresh(force: 'hard'|'soft') {
+        switch (force) {
+            case 'hard':
+                this.ui.$rhsOutput = $('<iframe>', {
+                    id: 'output', class: 'viewer', frameborder: '0'
+                });
+            case 'soft':
+                this.ui.$rhsCached = $('<iframe>', {
+                    id: 'cached', class: 'viewer', frameborder: '0',
+                    style: 'visibility:hidden'
+                });
+                const window = this.ui.$rhsCached.get(0).contentWindow;
+                if (window) window.PATCH = () => this.patch();
+            default:
+                const { userAgent: agent } = navigator;
+                const ms = !agent || !agent.match(/chrome/i) ? 100 : 0;
+                await new Promise((resolve) => setTimeout(resolve, ms));
+        }
+    }
+    @buffered(600)
+    private onRendered(ev: JQuery.Event, { md_content }: {
+        md_content: string
+    }) {
+        if (md_content.length === 0) {
+            $.get(this.placeholder).done((html) => {
+                this.ui.$rhsCachedBody.hide().html(html);
+                this.ui.$rhsCachedBody.fadeIn('slow');
+                this.ui.$rhsOutputBody.hide().html(html);
+                this.ui.$rhsOutputBody.fadeIn('slow');
+            });
+        }
     }
     private get placeholder() {
         return '/components/rhs-viewer/placeholder.html';

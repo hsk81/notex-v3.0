@@ -1,4 +1,4 @@
-import { DownloadManager } from "./ui/manager-download";
+import { DownloadController } from "./components/ctrl-download/index";
 import { PublishDialog } from "./components/dlg-publish/index";
 import { TemplateDialog } from "./components/dlg-template/index";
 
@@ -27,7 +27,7 @@ export class App {
         this.rhs_toolbar = RhsToolbar.me;
         this.rhs_footer = RhsFooter.me;
         this.lhs_footer = LhsFooter.me;
-        this.download_manager = DownloadManager.me;
+        this.download_controller = DownloadController.me;
         this.publish_dialog = PublishDialog.me;
         this.template_dialog = TemplateDialog.me;
     }
@@ -39,6 +39,6 @@ export class App {
     private readonly nav_header: NavHeader;
     private readonly publish_dialog: PublishDialog;
     private readonly template_dialog: TemplateDialog;
-    private readonly download_manager: DownloadManager;
+    private readonly download_controller: DownloadController;
 }
 export default App.me;

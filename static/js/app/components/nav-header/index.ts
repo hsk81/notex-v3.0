@@ -1,7 +1,7 @@
 import { LhsToolbar } from "../lhs-toolbar/index";
 import { RhsToolbar } from "../rhs-toolbar/index";
 import { LhsEditor } from "../lhs-editor/index";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { trace } from "../../decorator/trace";
 

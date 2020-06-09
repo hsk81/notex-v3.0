@@ -1,6 +1,6 @@
 import { LhsEditor } from "../lhs-editor/index";
 import { Location } from "../lhs-editor/location";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { trace } from "../../decorator/trace";
 

@@ -1,7 +1,7 @@
 import { BloggerApi } from "../../../google-api/blogger-api";
 import { MarkdownIt } from "../../../markdown-it/markdown-it";
 import { LhsEditor } from "../../lhs-editor/index";
-import { Ui } from "../../../ui/ui";
+import { Ui } from "../../../ui/index";
 
 import { after } from "../../../function/after";
 import { assert } from "../../../function/assert";

@@ -1,6 +1,6 @@
 import { TemplateDialog } from "../../dlg-template/index";
 import { LhsEditor } from "../../lhs-editor/index";
-import { Ui } from "../../../ui/ui";
+import { Ui } from "../../../ui/index";
 
 import { gateway, html } from "../../../ipfs/index";
 import { IPFS, Buffer } from "../../../ipfs/index";

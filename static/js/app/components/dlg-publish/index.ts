@@ -1,7 +1,7 @@
 import { BlogTab } from "./tab-blog/index";
 import { IpfsTab } from "./tab-ipfs/index";
 import { LhsEditor } from "../lhs-editor/index";
-import { Ui } from "../../ui/ui";
+import { Ui } from "../../ui/index";
 
 import { trace } from "../../decorator/trace";
 
