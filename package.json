@@ -3,7 +3,6 @@
     "description": "editor",
     "license": "GPL-3.0",
     "dependencies": {
-        "bootstrap-icons": "^1.0.0-alpha4",
         "ipfs": "^0.46.0",
         "markdown-it": "^11.0.0",
         "markdown-it-abbr": "^1.0.4",
@@ -41,5 +40,5 @@
     "engines": {
         "node": "^13.5.0"
     },
-    "version": "3.4.19"
+    "version": "3.4.20"
 }
