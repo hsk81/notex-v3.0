@@ -28,8 +28,8 @@ export class BlogTab {
     private get scripts(): Promise<string> {
         const value = localStorage.getItem('post-scripts');
         if (typeof value === 'string') return Promise.resolve(value);
-        const url = 'components/dlg-publish/tab-blog/post-scripts.html';
-        return fetch(url).then((res) => res.text());
+        const url = 'components/dlg-publish/tab-blog/post-scripts.txt';
+        return fetch(`/static/js/app/${url}`).then((res) => res.text());
     }
     private set scripts(value: Promise<string>) {
         value.then((text) => localStorage.setItem('post-scripts', text));
@@ -43,8 +43,8 @@ export class BlogTab {
     private get styles(): Promise<string> {
         const value = localStorage.getItem('post-styles');
         if (typeof value === 'string') return Promise.resolve(value);
-        const url = 'components/dlg-publish/tab-blog/post-styles.html';
-        return fetch(url).then((res) => res.text());
+        const url = 'components/dlg-publish/tab-blog/post-styles.txt';
+        return fetch(`/static/js/app/${url}`).then((res) => res.text());
     }
     private set styles(value: Promise<string>) {
         value.then((text) => localStorage.setItem('post-styles', text));

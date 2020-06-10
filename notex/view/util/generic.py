@@ -23,8 +23,8 @@ env.globals.update({'JSON': JSON})
 
 ###############################################################################
 
-def generic(tpl_name, **kwargs):
-    tpl = env.get_template(tpl_name + '.html')
+def generic(tpl_name, ext='.html', **kwargs):
+    tpl = env.get_template(tpl_name + ext)
 
     return tpl.render(
         debug=ARGs.debug(),

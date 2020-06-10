@@ -19,15 +19,15 @@ app = app_components
 ###############################################################################
 ###############################################################################
 
-@app.get('/components/<path:path>.html')
-def components(path):
+@app.get('/components/<path:path><ext:re:\.html$>')
+def components(path, ext):
 
     @rdb.memoize(
         expiry=rdb.NEVER, unless=lambda: ARGs.debug() or aaa.current)
     def memoized(*args, **kwargs):
 
         html = os.path.join('components', path)
-        return generic(html, i18n=get(detect('en')))
+        return generic(html, ext, i18n=get(detect('en')))
 
     name = 'views.components:{0}.html:{1}'.format(path, detect('en'))
     return memoized(name=name)
