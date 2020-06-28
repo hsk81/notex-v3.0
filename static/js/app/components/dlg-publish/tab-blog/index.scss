@@ -1,5 +1,15 @@
 #blog-tab {
+    label:not(:first-of-type) {
+        margin-top: 0.5em;
+    }
+    label {
+        margin-bottom: 0;
+    }
+    label + .input-group {
+        margin-top: 0.5em;
+    }
     .post-settings.nav {
+        margin-top: 1em;
         margin-bottom: 1em;
     }
     .post-settings {

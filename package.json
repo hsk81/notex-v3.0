@@ -12,7 +12,9 @@
         "markdown-it-footnote": "^3.0.2",
         "markdown-it-mark": "^3.0.0",
         "markdown-it-math": "^4.1.1",
-        "markdown-it-video": "^0.6.3"
+        "markdown-it-video": "^0.6.3",
+        "qrcode": "^1.4.4",
+        "web3": "^1.2.9"
     },
     "devDependencies": {
         "@types/bootstrap": "^4.5.0",

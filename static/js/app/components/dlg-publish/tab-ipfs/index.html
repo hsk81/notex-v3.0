@@ -1,6 +1,10 @@
 <div id="ipfs-tab" role="tabpanel" class="tab-pane active">
-    <label class="post-basics" for="ipfs-gateway">IPFS Gateway</label>
-    <div class="post-basics input-group">
+    <style scoped>{% include 'components/dlg-publish/tab-ipfs/index.css' %}</style>
+
+    <label for="ipfs-gateway">
+        <a href="https://ipfs.io/" target="_blank">IPFS</a> Gateway
+    </label>
+    <div class="input-group">
         <div class="input-group-prepend">
             <button class="btn btn-outline-dark" type="button" tabindex="-1">
                 <span class="glyphicon glyphicon-link"></span>
@@ -8,8 +12,8 @@
         </div>
         <input class="form-control" id="ipfs-gateway" list="ipfs-gateways"
             placeholder="an IPFS gateway like https://ipfs.io/ipfs"
-            title="IPFS Gateway" type="text"
-            >
+            title="IPFS Gateway" type="url"
+        >
         <div class="input-group-append">
             <button class="btn btn-outline-dark" tabindex="-1" title="IPFS Gateway" type="button"
                 data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
@@ -19,9 +23,121 @@
             </button>
         </div>
     </div>
+
+    <label for="nft-group" style="display: none">
+        <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank">NFT</a> Certificate
+    </label>
+    <div class="input-group" id="nft-group" style="display: none">
+        <label for="meta-title">Title</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                    <span class="glyphicon glyphicon-header"></span>
+                </button>
+            </div>
+            <input class="form-control" id="meta-title"
+                placeholder="post title" title="Title" type="text"
+            >
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" tabindex="-1" title="Title" type="button"
+                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                    data-content="Mandatory title (aka name), the IPFS document shall be certified with."
+                    >
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+
+        <label for="meta-description">Description</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                    <span class="glyphicon glyphicon-compressed"></span>
+                </button>
+            </div>
+            <input class="form-control" id="meta-description"
+                placeholder="content description" title="Description" type="text"
+            >
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" tabindex="-1" title="Description" type="button"
+                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                    data-content="Mandatory succinct description, the IPFS document shall be certified with."
+                    >
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+
+        <label for="meta-authors">Authorship</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                    <span class="glyphicon glyphicon-user"></span>
+                </button>
+            </div>
+            <input class="form-control" id="meta-authors"
+                placeholder="author name(s)" title="Authorship" type="text"
+            >
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" tabindex="-1" title="Authorship" type="button"
+                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                    data-content="Optional comma separated list of authors, the IPFS document shall be certified for."
+                    >
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+
+        <label for="meta-emails">Emails</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                </button>
+            </div>
+            <input class="form-control" id="meta-emails"
+                placeholder="email address(es)" title="Email" type="email"
+            >
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" tabindex="-1" title="Emails" type="button"
+                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                    data-content="Optional comma separated list of emails, the IPFS document shall be certified with."
+                    >
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+
+        <label for="meta-description">Keywords</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-dark" type="button" tabindex="-1">
+                    <span class="glyphicon glyphicon-list"></span>
+                </button>
+            </div>
+            <input class="form-control" id="meta-keywords"
+                placeholder="keywords" title="Keywords" type="text"
+            >
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" tabindex="-1" title="Keywords" type="button"
+                    data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
+                    data-content="Optional comma separated list of keywords, the IPFS document shall be certified with."
+                    >
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <datalist id="ipfs-gateways">
         <option>https://ipfs.io/ipfs</option>
         <option>https://cloudflare-ipfs.com/ipfs</option>
         <option>http://localhost:8080/ipfs</option>
+    </datalist>
+
+    <datalist id="nft-contracts">
+        <option>ETH Mainnet</option>
+        <option>ETH Kovan</option>
+        <option>AVA Denali</option>
     </datalist>
 </div>

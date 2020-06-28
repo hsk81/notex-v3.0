@@ -66,15 +66,36 @@ def npm_ipfs(any, name='ipfs', ext='js'):
     root = os.path.normpath('node_modules/{0}'.format(name))
     return static_file(path, root=root)
 
-###############################################################################
+@app.get('/<any:path>/@npm/qrcode.<ext:re:[^/]+>')
+def npm_qrcode(any, name='qrcode', ext='js'):
 
-@app.get('/<any:path>/@npm/<name:re:[^/]+>/<path:path>.<ext:re:[^/]+>')
-@app.get('/<any:path>/@npm/<name:re:[^/]+>.<ext:re:[^/]+>')
-def npm(any, name, path=None, ext='js'):
-
-    path = 'dist/{0}.{1}'.format(path if path is not None else name, ext)
+    path = 'build/{0}.min.{1}'.format(name, ext)
     root = os.path.normpath('node_modules/{0}'.format(name))
     return static_file(path, root=root)
+
+###############################################################################
+
+@app.get('/<any:path>/@npm/<name:re:[^/.]+>/<path:path>.<ext:re:[^/]+>')
+@app.get('/<any:path>/@npm/<name:re:[^/.]+>.<ext:re:[^/]+>')
+@app.get('/<any:path>/@npm/<name:re:[^/.]+>')
+def npm_to(any, name, path=None, ext=None):
+
+    path = path if path is not None else name
+    path = 'dist/{0}.{1}'.format(path, ext or 'js')
+    root = os.path.normpath('node_modules/{0}'.format(name))
+    return static_file(path, root=root)
+
+@app.get('/@npm/<name:re:[^/.]+>/<path:path>.<ext:re:[^/]+>')
+@app.get('/@npm/<name:re:[^/.]+>.<ext:re:[^/]+>')
+@app.get('/@npm/<name:re:[^/.]+>')
+def npm_at(name, path=None, ext=None):
+
+    path = path if path is not None else name
+    path = 'dist/{0}.{1}'.format(path, ext or 'js')
+    root = os.path.normpath('node_modules/{0}'.format(name))
+    return static_file(path, root=root)
+
+###############################################################################
 
 def npm_resolve(name, item='main', ext=None):
 

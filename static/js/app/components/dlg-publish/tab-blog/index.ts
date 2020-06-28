@@ -79,12 +79,10 @@ export class BlogTab {
     }
     private onBsModalShow() {
         const $url = this.ui.$publishDialogBlogUrl;
-        const $url_ig = this.ui.$publishDialogBlogUrlInputGroup;
-        $url_ig.removeClass('has-error');
+        $url.removeClass('is-invalid');
         const $title = this.ui.$publishDialogBlogTitle;
-        const $title_ig = this.ui.$publishDialogBlogTitleInputGroup;
         const $title_cb = this.ui.$publishDialogBlogTitleCheckbox;
-        $title_ig.removeClass('has-error');
+        $title.removeClass('is-invalid');
         $title_cb.prop('checked', true);
         const blog_url = this.blog_url;
         if (blog_url && typeof blog_url === 'string') {
@@ -182,30 +180,28 @@ export class BlogTab {
             return;
         }
         const $url = this.ui.$publishDialogBlogUrl;
-        const $url_ig = this.ui.$publishDialogBlogUrlInputGroup;
         const $title = this.ui.$publishDialogBlogTitle;
-        const $title_ig = this.ui.$publishDialogBlogTitleInputGroup;
         const $title_cb = this.ui.$publishDialogBlogTitleCheckbox;
         const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
         const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
         const $primary =  this.ui.$publishDialogPrimary;
         const url = $url.val() as string;
         if (!url) {
-            $url_ig.addClass('has-error');
+            $url.addClass('is-invalid');
             $url.focus().off('blur').on('blur', () => {
-                if ($url.val()) $url_ig.removeClass('has-error');
+                if ($url.val()) $url.removeClass('is-invalid');
             });
         }
         const title = $title.val();
         if (!title) {
-            $title_ig.addClass('has-error');
+            $title.addClass('is-invalid');
             $title.focus().off('blur').on('blur', () => {
-                if ($title.val()) $title_ig.removeClass('has-error');
+                if ($title.val()) $title.removeClass('is-invalid');
             });
         }
-        if ($url_ig.hasClass('has-error')) {
+        if ($url.hasClass('is-invalid')) {
             $url.focus();
-        } else if ($title_ig.hasClass('has-error')) {
+        } else if ($title.hasClass('is-invalid')) {
             $title.focus();
         } else {
             spin(this.ui.$publishDialogPrimary[0], 'Publishing');
@@ -238,9 +234,9 @@ export class BlogTab {
                     }
                 };
                 const on_fail = (res: any) => {
-                    $url_ig.addClass('has-error');
+                    $url.addClass('is-invalid');
                     $url.focus().off('blur').on('blur', () => {
-                        if ($url.val()) $url_ig.removeClass('has-error');
+                        if ($url.val()) $url.removeClass('is-invalid');
                     });
                     console.error('[on:blogger.blogs.get-by-url]', res);
                 };

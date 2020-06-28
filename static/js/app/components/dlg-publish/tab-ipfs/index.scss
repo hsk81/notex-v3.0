@@ -1,0 +1,23 @@
+#ipfs-tab {
+    [for=nft-group] {
+        margin-top: 0.5em;
+        margin-bottom: 0;
+    }
+    #nft-group {
+        label {
+            display: none;
+        }
+        label + .input-group {
+            margin-top: 0.5em;
+        }
+    }
+}
+#ipfs-tab {
+    [for=nft-contract] {
+        margin-top: 0.5em;
+        margin-bottom: 0;
+    }
+    [for=nft-contract] + .input-group {
+        margin-top: 0.5em;
+    }
+}

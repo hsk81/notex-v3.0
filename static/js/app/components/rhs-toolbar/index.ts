@@ -65,8 +65,8 @@ export class RhsToolbar {
             IPFS.me(async (ipfs: any) => {
                 for await (const item of ipfs.add(buffer)) {
                     const url = `${gateway.get()}/${item.cid}`;
-                    const tab = window.open(url, '_black');
-                    if (tab) tab.focus();
+                    const tab = window.open(url, '_same');
+                    if (tab && tab.focus) tab.focus();
                 }
             });
         } else {

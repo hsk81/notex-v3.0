@@ -28,7 +28,11 @@
     "@npm/markdown-it-sup":
       "../../../static/js/lib/markdown-it/markdown-it-sup-2.0.0.min",
     "@npm/markdown-it-video":
-      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min"
+      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min",
+    "@npm/qrcode":
+      "../../../node_modules/qrcode/build/qrcode.min",
+    "@npm/web3":
+      "../../../node_modules/web3/dist/web3.min"
   },
   "optimize": "none"
 }

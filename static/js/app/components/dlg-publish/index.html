@@ -1,4 +1,5 @@
 <div class="modal fade" id="publish-dlg" role="dialog" tabindex="-1">
+    <style scoped>{% include 'components/dlg-publish/index.css' %}</style>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <ul class="nav nav-tabs nav-fill" role="tablist">
@@ -20,7 +21,22 @@
                   </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark mr-auto" id="expand" disabled>
+                <div class="btn-group mr-auto" role="group">
+                    <button type="button" class="btn btn-outline-dark mm-disconnected"
+                        id="metamask" style="padding: 3px 5px" title="Install"
+                        >
+                        <img src="/static/ico/metamask.png">
+                    </button>
+                    <button type="button" class="btn btn-outline-dark"  tabindex="-1" title="Why the fox?"
+                        data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="focus"
+                        data-content="This fox allows you to get digital NoTex certificates (ERC-721 NFTs), to e.g. prove authorship of your content. Click to install and connect to an Ethereum or Avalanche compatible wallet!"
+                        >
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-outline-dark"
+                    id="expand" style="display: none"
+                    >
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

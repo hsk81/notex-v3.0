@@ -86,17 +86,17 @@ export class Ui {
     public get $publishDialogBlogUrl() {
         return this.$publishDialog.find('#blog-url');
     }
-    public get $publishDialogBlogUrlInputGroup() {
+    public get $publishDialogBlogUrlIg() {
         return this.$publishDialogBlogUrl.parent('.input-group');
     }
     public get $publishDialogBlogTitle() {
         return this.$publishDialog.find('#post-title');
     }
-    public get $publishDialogBlogTitleInputGroup() {
+    public get $publishDialogBlogTitleIg() {
         return this.$publishDialogBlogTitle.parent('.input-group');
     }
     public get $publishDialogBlogTitleCheckbox() {
-        return this.$publishDialogBlogTitleInputGroup.find('[type=checkbox]');
+        return this.$publishDialogBlogTitleIg.find('[type=checkbox]');
     }
     public get $publishDialogBlogSettings() {
         return this.$publishDialog.find('.post-settings');
@@ -137,11 +137,47 @@ export class Ui {
     public get $publishDialogIpfsGateway() {
         return this.$publishDialog.find('#ipfs-gateway');
     }
-    public get $publishDialogIpfsGatewayInputGroup() {
+    public get $publishDialogIpfsGatewayIg() {
         return this.$publishDialogIpfsGateway.parent('.input-group');
+    }
+    public get $publishDialogIpfsMetaAuthors() {
+        return this.$publishDialog.find('#meta-authors');
+    }
+    public get $publishDialogIpfsMetaAuthorsIg() {
+        return this.$publishDialogIpfsMetaAuthors.parent('.input-group');
+    }
+    public get $publishDialogIpfsMetaEmails() {
+        return this.$publishDialog.find('#meta-emails');
+    }
+    public get $publishDialogIpfsMetaEmailsIg() {
+        return this.$publishDialogIpfsMetaEmails.parent('.input-group');
+    }
+    public get $publishDialogIpfsMetaTitle() {
+        return this.$publishDialog.find('#meta-title');
+    }
+    public get $publishDialogIpfsMetaTitleIg() {
+        return this.$publishDialogIpfsMetaTitle.parent('.input-group');
+    }
+    public get $publishDialogIpfsMetaDescription() {
+        return this.$publishDialog.find('#meta-description');
+    }
+    public get $publishDialogIpfsMetaDescriptionIg() {
+        return this.$publishDialogIpfsMetaDescription.parent('.input-group');
+    }
+    public get $publishDialogIpfsMetaKeywords() {
+        return this.$publishDialog.find('#meta-keywords');
+    }
+    public get $publishDialogIpfsMetaKeywordsIg() {
+        return this.$publishDialogIpfsMetaKeywords.parent('.input-group');
     }
     public get $publishDialogExpand() {
         return this.$publishDialog.find('#expand');
+    }
+    public get $publishDialogMetamask() {
+        return this.$publishDialog.find('#metamask');
+    }
+    public get $publishDialogMetamaskHelp() {
+        return this.$publishDialog.find('#metamask-help');
     }
     public get $publishDialogPrimary() {
         return this.$publishDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
