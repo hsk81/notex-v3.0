@@ -52,6 +52,13 @@ def npm_mdi_sup(any, name='markdown-it-sup-2.0.0', ext='js'):
     root = os.path.normpath('static/js/lib')
     return static_file(path, root=root)
 
+@app.get('/<any:path>/@npm/buffer.<ext:re:[^/]+>')
+def npm_buffer(any, name='buffer-5.6.0', ext='js'):
+
+    path = 'buffer/{0}.min.{1}'.format(name, ext)
+    root = os.path.normpath('static/js/lib')
+    return static_file(path, root=root)
+
 @app.get('/<any:path>/@npm/ipfs.<ext:re:[^/]+>')
 def npm_ipfs(any, name='ipfs', ext='js'):
 

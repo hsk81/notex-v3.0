@@ -1,6 +1,6 @@
-import { cookie } from "../cookie/cookie";
+import { cookie } from '../cookie/cookie';
+export { Buffer } from '@npm/buffer';
 import * as Ipfs from '@npm/ipfs';
-export const Buffer = Ipfs.Buffer;
 
 export const html = async (head: string, body: string) => {
     const link_1 = /<link\s+rel="icon"\s+href(="")?\s*\/?>/gi;
@@ -55,16 +55,16 @@ export class IPFS {
     public static async me(
         this: any, callback?: Function
     ) {
-        if (this['_me'] === undefined) {
-            this['_me'] = await Ipfs.create({
+        if (this._me === undefined) {
+            this._me = await Ipfs.create({
                 silent: false
             });
         }
         if (callback !== undefined) {
-            callback(this['_me']);
+            callback(this._me);
         }
-        return this['_me'];
+        return this._me;
     }
+    private static _me: any;
 }
-window.IPFS = IPFS;
 export default IPFS;
