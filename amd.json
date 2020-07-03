@@ -5,8 +5,6 @@
   "paths": {
     "@npm/buffer":
       "../../../static/js/lib/buffer/buffer-5.6.0.min",
-    "@npm/ipfs":
-      "../../../node_modules/ipfs/dist/index.min",
     "@npm/markdown-it":
       "../../../node_modules/markdown-it/dist/markdown-it.min",
     "@npm/markdown-it-abbr":
