@@ -113,6 +113,10 @@ export class BlogTab {
         } else {
             this.ui.$publishDialogPrimary.focus();
         }
+        this.ui.$publishDialogPrimary.removeClass('btn-success');
+        this.ui.$publishDialogPrimary.removeClass('btn-warning');
+        this.ui.$publishDialogPrimary.removeClass('btn-danger');
+        this.ui.$publishDialogPrimary.html('Publish');
     }
     private onBsModalHide() {
         this.ui.$publishDialogBlogSettings.hide();
@@ -184,6 +188,7 @@ export class BlogTab {
         const $title_cb = this.ui.$publishDialogBlogTitleCheckbox;
         const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
         const $styles_ta = this.ui.$publishDialogBlogStylesTextarea;
+        const $primary =  this.ui.$publishDialogPrimary;
         const url = $url.val() as string;
         if (!url) {
             $url_ig.addClass('has-error');
@@ -203,6 +208,7 @@ export class BlogTab {
         } else if ($title_ig.hasClass('has-error')) {
             $title.focus();
         } else {
+            spin(this.ui.$publishDialogPrimary[0], 'Publishing');
             BloggerApi.me.get((blogger: any) => {
                 const on_done = (res: any) => {
                     const blog = assert(res && res.result);
@@ -244,29 +250,36 @@ export class BlogTab {
                     });
                     url_request.then(
                         after(on_done, () => {
-                            this.scripts = Promise.resolve($scripts_ta.val() as string);
-                            this.styles = Promise.resolve($styles_ta.val() as string);
+                            this.scripts = Promise.resolve(
+                                $scripts_ta.val() as string
+                            );
+                            this.styles = Promise.resolve(
+                                $styles_ta.val() as string
+                            );
                             this.blog_url = url;
-                            this.ui.$publishDialogPrimary.prop('disabled', false);
-                            this.ui.$publishDialogPrimary.addClass('btn-success');
+                            $primary.prop('disabled', false);
+                            $primary.addClass('btn-success');
+                            $primary.html('Publish');
                             setTimeout(() => {
                                 this.ui.$publishDialog.modal('hide');
                             }, 600);
                         }),
                         before(on_fail, () => {
-                            this.ui.$publishDialogPrimary.prop('disabled', false);
-                            this.ui.$publishDialogPrimary.addClass('btn-danger');
+                            $primary.prop('disabled', false);
+                            $primary.addClass('btn-danger');
+                            $primary.html('Publish');
                         })
                     );
                 } else {
-                    this.ui.$publishDialogPrimary.prop('disabled', false);
-                    this.ui.$publishDialogPrimary.addClass('btn-danger');
+                    $primary.prop('disabled', false);
+                    $primary.addClass('btn-danger');
+                    $primary.html('Publish');
                 }
             });
-            this.ui.$publishDialogPrimary.prop('disabled', true);
-            this.ui.$publishDialogPrimary.removeClass('btn-success');
-            this.ui.$publishDialogPrimary.removeClass('btn-warning');
-            this.ui.$publishDialogPrimary.removeClass('btn-danger');
+            $primary.prop('disabled', true);
+            $primary.removeClass('btn-success');
+            $primary.removeClass('btn-warning');
+            $primary.removeClass('btn-danger');
         }
     }
     private doInsert(blogger: any, blog: any, title: any) {
@@ -342,5 +355,13 @@ export class BlogTab {
     private get ui() {
         return Ui.me;
     }
+}
+function spin(
+    el: HTMLElement, text: string
+) {
+    $(el).html(
+        `<span class="spinner-border spinner-border-sm" role="status">
+        </span>&nbsp;${text}...`
+    );
 }
 export default BlogTab;
