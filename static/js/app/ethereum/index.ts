@@ -1,3 +1,4 @@
+export { TransactionReceipt } from './ntx-certificate';
 import { NtxCertificate } from './ntx-certificate';
 
 export class Ethereum {

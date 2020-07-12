@@ -1,0 +1,122 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NTXCertificate</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        body {
+            font-family: monospace;
+        }
+        .grid-container {
+            display: flex;
+            border: 1em double;
+            height: calc(100% - 2em);
+            width: calc(100% - 2em);
+        }
+        .grid-lhs-container {
+            border-right: 1px solid;
+            height: 100%;
+            display: grid;
+            flex: 50%;
+        }
+        .grid-lhs-container .grid-item {
+            display: inline-grid;
+        }
+        .grid-lhs-container .grid-item .key {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            height: 1em;
+            padding: 1em;
+        }
+        .grid-lhs-container .grid-item .value {
+            text-align: center;
+            padding: 1em;
+            width: calc(100% - 2em);
+        }
+        .grid-lhs-container .grid-item .value>span {
+            font-size: x-large;
+            font-weight: bold;
+        }
+        .grid-rhs-container {
+            align-items: center;
+            display: grid;
+            flex: 50%;
+            height: 100%;
+        }
+        .grid-rhs-container .grid-item .qrcode {
+            text-align: center;
+            width: 100%;
+        }
+        .grid-rhs-container .grid-item .qrcode>svg {
+            vertical-align: middle;
+            width: 67%;
+        }
+        .grid-rhs-container .grid-item .label {
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            top: 0.5em;
+        }
+        .grid-rhs-container .grid-item .value {
+            font-size: 0.5em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="grid-lhs-container">
+            <div class="grid-item id">
+                <div class="key"><span>Certificate ID</span></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item name">
+                <div class="key"><span>Title</span></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item description">
+                <div class="key"><span>Description</span></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item authors">
+                <div class="key"><span>Author(s)</span></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item emails">
+                <div class="key"><span>Email(s)</span></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item keywords">
+                <div class="key"><span>Keywords</span></div>
+                <div class="value"><span></span></div>
+            </div>
+        </div>
+        <div class="grid-rhs-container">
+            <div class="grid-item" id="content-url">
+                <div class="label"><span>Content URL</span></div>
+                <div class="qrcode"></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item" id="cert-url">
+                <div class="label"><span>Certificate URL</span></div>
+                <div class="qrcode"></div>
+                <div class="value"><span></span></div>
+            </div>
+            <div class="grid-item" id="tx-hash">
+                <div class="label"><span>Transaction URL</span></div>
+                <div class="qrcode"></div>
+                <div class="value"><span></span></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

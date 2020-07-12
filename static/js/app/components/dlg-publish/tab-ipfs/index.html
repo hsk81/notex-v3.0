@@ -1,6 +1,5 @@
 <div id="ipfs-tab" role="tabpanel" class="tab-pane active">
     <style scoped>{% include 'components/dlg-publish/tab-ipfs/index.css' %}</style>
-
     <label for="ipfs-gateway">
         <a href="https://ipfs.io/" target="_blank">IPFS</a> Gateway
     </label>
@@ -23,7 +22,6 @@
             </button>
         </div>
     </div>
-
     <label for="nft-group" style="display: none">
         <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank">NFT</a> Certificate
     </label>
@@ -47,7 +45,6 @@
                 </button>
             </div>
         </div>
-
         <label for="meta-description">Description</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -67,7 +64,6 @@
                 </button>
             </div>
         </div>
-
         <label for="meta-authors">Authorship</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -87,7 +83,6 @@
                 </button>
             </div>
         </div>
-
         <label for="meta-emails">Emails</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -107,7 +102,6 @@
                 </button>
             </div>
         </div>
-
         <label for="meta-description">Keywords</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -128,16 +122,15 @@
             </div>
         </div>
     </div>
-
     <datalist id="ipfs-gateways">
         <option>https://ipfs.io/ipfs</option>
         <option>https://cloudflare-ipfs.com/ipfs</option>
         <option>http://localhost:8080/ipfs</option>
     </datalist>
-
     <datalist id="nft-contracts">
         <option>ETH Mainnet</option>
         <option>ETH Kovan</option>
         <option>AVA Denali</option>
     </datalist>
+    <iframe id="nft-certificate" frameborder="0" style="display: none"></iframe>
 </div>

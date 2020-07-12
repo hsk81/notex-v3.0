@@ -1,13 +1,16 @@
 import { TemplateDialog } from "../../dlg-template/index";
 import { LhsEditor } from "../../lhs-editor/index";
+import { QRCode } from '../../../qr-code/index';
 import { Ui } from "../../../ui/index";
 
+import { PdfCertificateMeta } from "../../pdf-certificate/index";
+import { PdfCertificate } from "../../pdf-certificate/index";
+import { TransactionReceipt } from "../../../ethereum/index";
 import { Ethereum } from "../../../ethereum/index";
 import { gateway, html } from "../../../ipfs/index";
 import { IPFS, Buffer } from "../../../ipfs/index";
 
 import { trace } from "../../../decorator/trace";
-import { Transaction } from '@npm/web3-core';
 declare const require: Function;
 
 @trace
@@ -114,10 +117,10 @@ export class IpfsTab {
             for await (const item of ipfs.add(buffer)) {
                 if (this.certifiable) {
                     this.certify(ipfs_gateway, `${item.cid}`).then(({
-                        tx, cert_url
+                        tx, cert
                     }) => {
                         $(this).trigger('certified', {
-                            tx, cert_url, post_url
+                            tx, cert, post_url
                         });
                     }).catch((ex) => {
                         $(this).trigger('rejected');
@@ -138,23 +141,24 @@ export class IpfsTab {
     }
     private async certify(ipfs_gateway: string, cid: string) {
         $(this).trigger('certifying');
-        const post_url = `${ipfs_gateway}/${cid}`;
-        const image_url = await this.image_url(post_url);
-        const buffer = Buffer.from(JSON.stringify({
+        const content_url = `${ipfs_gateway}/${cid}`;
+        const cert_meta: PdfCertificateMeta = {
             name: this.title,
             description: this.description,
             authors: this.authors,
             emails: this.emails,
-            image: image_url,
             keywords: this.keywords,
-            datetime_iso: this.datetime_iso,
-            ipfs: post_url
-        }));
+            content: content_url,
+            image: await this.image_url(ipfs_gateway, content_url)
+        };
+        const buffer = Buffer.from(JSON.stringify(cert_meta, null, 2));
         return IPFS.me().then(async (ipfs: any) => {
             for await (const item of ipfs.add(buffer)) {
                 const cert_url = `${ipfs_gateway}/${item.cid}`;
                 const tx = await this.eth.nft(cert_url);
-                if (tx) return { tx, cert_url };
+                if (tx) return {
+                    cert: { meta: cert_meta, url: cert_url }, tx
+                };
             }
             throw null;
         });
@@ -176,12 +180,13 @@ export class IpfsTab {
         spin(this.ui.$publishDialogPrimary[0], 'Certifying');
     }
     private onCertified(ev: JQuery.Event, data: {
-        tx: Transaction, cert_url: string, post_url: string
+        cert: { meta: PdfCertificateMeta, url: string },
+        post_url: string, tx: TransactionReceipt
     }) {
         this.ui.$publishDialogPrimary.addClass('btn-success');
         this.ui.$publishDialogPrimary.prop('disabled', false);
         this.ui.$publishDialogPrimary.html('Certified');
-        console.debug('[on:certified]', ev, data);
+        PdfCertificate.print(data);
     }
     private onRejected() {
         this.ui.$publishDialogPrimary.addClass('btn-danger');
@@ -195,10 +200,10 @@ export class IpfsTab {
         this.ui.$publishDialogIpfsGateway.val(value);
     }
     private get title() {
-        return this.ui.$publishDialogIpfsMetaTitle.val();
+        return this.ui.$publishDialogIpfsMetaTitle.val() as string;
     }
     private get description() {
-        return this.ui.$publishDialogIpfsMetaDescription.val();
+        return this.ui.$publishDialogIpfsMetaDescription.val() as string;
     }
     private get authors() {
         const list = this.ui.$publishDialogIpfsMetaAuthors.val();
@@ -214,12 +219,17 @@ export class IpfsTab {
         }
         return [];
     }
-    private image_url(ipfs_url: string) {
+    private image_url(ipfs_gateway: string, ipfs_url: string) {
         return new Promise<string>((resolve) => {
-            require(['@npm/qrcode'], (QRCode: any) => {
-                resolve(QRCode.toDataURL(ipfs_url));
+            QRCode(ipfs_url).then((svg) => {
+                const buffer = Buffer.from(svg);
+                IPFS.me().then(async (ipfs: any) => {
+                    for await (const item of ipfs.add(buffer)) {
+                        resolve(`${ipfs_gateway}/${item.cid}`);
+                    }
+                });
             });
-        })
+        });
     }
     private get keywords() {
         const list = this.ui.$publishDialogIpfsMetaKeywords.val();
@@ -227,12 +237,6 @@ export class IpfsTab {
             return list.split(',').map(w => w.trim()).filter(w => w);
         }
         return [];
-    }
-    /**
-     * @todo: get timestamp from ntp.org?
-     */
-    private get datetime_iso() {
-        return new Date().toISOString();
     }
     private get eth() {
         return Ethereum.me;

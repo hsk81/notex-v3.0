@@ -1,9 +1,35 @@
 import { Contract } from '@npm/web3-eth-contract';
-import { Transaction } from '@npm/web3-core';
 import { PromiEvent } from '@npm/web3-core';
+import { TransactionReceipt } from '@npm/web3-core';
+export { TransactionReceipt };
+
 import { MyWeb3 } from "./my-web3";
 
 export class NtxCertificate {
+    public static address(chain_id: string) {
+        if (chain_id) switch (chain_id.toLowerCase()) {
+            case '0x1': // ETH Mainnet
+                return '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18';
+            case '0x2a': // ETH Kovan
+                return '0x436e85c85600a9060456610f679543eaafe59f1f';
+            case '0xa866': // AVA Denali
+                return '0x9c77a6268b31fa482aabccdd53931d5ad91460d7';
+            default:
+                return undefined;
+        }
+    }
+    public static explorer(address: string) {
+        if (address) switch (address.toLowerCase()) {
+            case '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18': // ETH Mainnet
+                return 'https://etherscan.io';
+            case '0x436e85c85600a9060456610f679543eaafe59f1f': // ETH Kovan
+                return 'https://kovan.etherscan.io';
+            case '0x9c77a6268b31fa482aabccdd53931d5ad91460d7': // AVA Denali
+                return 'http://cchain.avaexplorer.com';
+            default:
+                return undefined;
+        }
+    }
     public constructor(chain_id: string) {
         this._chain_id = chain_id;
     }
@@ -14,7 +40,7 @@ export class NtxCertificate {
                 const tx = contract.methods.publish(author, uri).send({
                     from: author
                 });
-                return tx as PromiEvent<Transaction>;
+                return tx as PromiEvent<TransactionReceipt>;
             }
         }
     }
@@ -24,7 +50,7 @@ export class NtxCertificate {
             if (eth) {
                 const abi = await NtxCertificate.abi();
                 if (abi) {
-                    const address = this.address();
+                    const address = NtxCertificate.address(this._chain_id);
                     if (address) {
                         this._contract = new eth.Contract(abi, address);
                     }
@@ -32,18 +58,6 @@ export class NtxCertificate {
             }
         }
         return this._contract;
-    }
-    private address() {
-        switch (this._chain_id) {
-            case '0x1': // ETH Mainnet
-                return '0x3db17B20D4f4313248f004DbFCe2C8e5E8517B18';
-            case '0x2a': // ETH Kovan
-                return '0x436e85c85600a9060456610f679543EAAFe59f1f';
-            case '0xa866': // AVA Denali
-                return '0x9C77A6268b31fA482AAbccDD53931d5ad91460D7';
-            default:
-                return undefined;
-        }
     }
     private get eth() {
         return MyWeb3.me.eth;
