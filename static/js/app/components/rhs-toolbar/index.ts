@@ -23,12 +23,12 @@ export class RhsToolbar {
                 this.refresh();
             });
         }
-        this.ui.$toolbarPrint
-            .on('click', this.onPrintClick.bind(this));
-        this.ui.$toolbarPublish
-            .on('click', this.onPublishClick.bind(this));
         this.ui.$toolbarRefresh
             .on('click', this.onRefreshClick.bind(this));
+        this.ui.$toolbarPublish
+            .on('click', this.onPublishClick.bind(this));
+        this.ui.$toolbarPrint
+            .on('click', this.onPrintClick.bind(this));
         this.ui.$toolbarTemplate
             .on('click', this.onTemplateClick.bind(this));
         this.ui.$toolbar1Columns
@@ -39,6 +39,14 @@ export class RhsToolbar {
             .on('click', this.onTripleColumnClick.bind(this));
         $(this.ui.$templateDialog)
             .on('select', this.onSelectTemplate.bind(this));
+        this.ui.$toolbarFigureEnum
+            .on('click', this.onFigureEnumClick.bind(this));
+        this.ui.$toolbarH1Enum
+            .on('click', this.onH1EnumClick.bind(this));
+        this.ui.$toolbarH2Enum
+            .on('click', this.onH2EnumClick.bind(this));
+        this.ui.$toolbarH3Enum
+            .on('click', this.onH3EnumClick.bind(this));
     }
     public refresh() {
         this.ed.refresh();
@@ -52,14 +60,14 @@ export class RhsToolbar {
         if (ev.ctrlKey) {
             this.ed.render('hard');
         } else {
-            this.ed.render('hard');
+            this.ed.render('soft');
         }
     }
     @buffered
     private async onPublishClick(ev: JQueryEventObject) {
         if (ev.ctrlKey) {
             const $contents = this.ui.$viewer.contents();
-            const head = TemplateDialog.me.head({ title: this.ed.title });
+            const head = TemplateDialog.me.getHead({ title: this.ed.title });
             const body = $contents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {
@@ -115,6 +123,70 @@ export class RhsToolbar {
                 this.ui.$toolbar3Columns.removeClass('active');
                 break;
         }
+    }
+    @buffered
+    private onFigureEnumClick() {
+        this.enumFigures();
+    }
+    @buffered
+    private onH1EnumClick() {
+        this.enumHeadings();
+    }
+    @buffered
+    private onH2EnumClick() {
+        this.enumHeadings();
+    }
+    @buffered
+    private onH3EnumClick() {
+        this.enumHeadings();
+    }
+    private enumFigures() {
+        const active = this.ui.$toolbarFigureEnum.hasClass('active');
+        const before = active
+            ? '"Fig. " counter(figures) " – "'
+            : '""';
+        TemplateDialog.me.setStyle({
+            figures: `<style>`
+                + `figure>figcaption:before { content: ${before}; }`
+                + `</style>`
+        });
+        this.ed.render('soft');
+    }
+    private enumHeadings() {
+        const h1_active = this.ui.$toolbarH1Enum.hasClass('active');
+        const h1_before = h1_active
+            ? `counter(h1-headings) " "`
+            : '""';
+        const h2_active = this.ui.$toolbarH2Enum.hasClass('active');
+        const h2_before = h2_active
+            ? h1_active
+                ? `counter(h1-headings) "."`
+                + `counter(h2-headings) " "`
+                : `counter(h2-headings) " "`
+            : '""';
+        const h3_active = this.ui.$toolbarH3Enum.hasClass('active');
+        const h3_before = h3_active
+            ? h2_active
+                ? h1_active
+                    ? `counter(h1-headings) "."`
+                    + `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                    : `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                : h1_active
+                    ? `counter(h1-headings) "."`
+                    + `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                    : `counter(h3-headings) " "`
+            : '""';
+        TemplateDialog.me.setStyle({
+            headings: `<style>`
+              + `h1:before { content: ${h1_before}; }`
+              + `h2:before { content: ${h2_before}; }`
+              + `h3:before { content: ${h3_before}; }`
+              + `</style>`
+        });
+        this.ed.render('soft');
     }
     private get ed() {
         return LhsEditor.me;

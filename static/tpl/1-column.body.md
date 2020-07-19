@@ -35,21 +35,30 @@
 </style>
 
 <style>
+  body {
+    counter-reset: h1-headings;
+  }
   h1 {
-    counter-reset: section;
+    counter-increment: h1-headings;
+    counter-reset: h2-headings;
+  }
+  h1:before {
+    content: "";
   }
   h2 {
-    counter-reset: sub-section;
+    counter-increment: h2-headings;
+    counter-reset: h3-headings;
   }
   h2:before {
-    counter-increment: section;
-    content: counter(section) " ";
+    content: counter(h2-headings) " ";
+  }
+  h3 {
+    counter-increment: h3-headings;
   }
   h3:before {
-    counter-increment: sub-section;
-    content: counter(section) "."
-             counter(sub-section) " ";
-}
+    content: counter(h2-headings) "."
+             counter(h3-headings) " ";
+  }
 </style>
 
 <style>

@@ -286,6 +286,18 @@ export class Ui {
     public get $toolbarFont() {
         return this.$toolbarInner.find('.glyphicon-font').closest('button');
     }
+    public get $toolbarFigureEnum() {
+        return this.$toolbarInner.find('.figure-enum').closest('button');
+    }
+    public get $toolbarH1Enum() {
+        return this.$toolbarInner.find('.h1-enum').closest('button');
+    }
+    public get $toolbarH2Enum() {
+        return this.$toolbarInner.find('.h2-enum').closest('button');
+    }
+    public get $toolbarH3Enum() {
+        return this.$toolbarInner.find('.h3-enum').closest('button');
+    }
     public get $toolbarHeader() {
         return this.$toolbarInner.find('.glyphicon-header').closest('button');
     }

@@ -14,12 +14,31 @@ const TemplatePath = {
     [Template.DoubleColumn]: '/static/tpl/2-column',
     [Template.TripleColumn]: '/static/tpl/3-column'
 };
-/**
- * @todo: extract template management!
- */
+type TemplateStyleData = {
+    figures?: string;
+    headings?: string
+};
+class TemplateStyle {
+    public toString() {
+        let html = '';
+        if (this._data.figures) {
+            html += `${this._data.figures}\n`;
+        }
+        if (this._data.headings) {
+            html += `${this._data.headings}\n`;
+        }
+        return html;
+    }
+    public set data(value: TemplateStyleData) {
+        this._data = { ...this._data, ...value };
+    }
+    private _data: TemplateStyleData = {
+        figures: '', headings: ''
+    };
+}
 @trace
 export class TemplateDialog {
-    public static get me() {
+    public static get me(): TemplateDialog {
         if (window.TEMPLATE_DIALOG === undefined) {
             window.TEMPLATE_DIALOG = new TemplateDialog();
         }
@@ -28,49 +47,36 @@ export class TemplateDialog {
     public constructor() {
         this.select(
             this.ui.$templateDialogItemActive.data('tpl') as Template);
-        this.ui.$templateDialog.on(
-            'show.bs.modal', this.onBsModalShow.bind(this));
-        this.ui.$templateDialog.on(
-            'shown.bs.modal', this.onBsModalShown.bind(this));
-        this.ui.$templateDialog.on(
-            'hide.bs.modal', this.onBsModalHide.bind(this));
-        this.ui.$templateDialog.on(
-            'hidden.bs.modal', this.onBsModalHidden.bind(this));
         this.ui.$templateDialogItem.on(
             'click', this.onItemClick.bind(this));
         this.ui.$templateDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
     }
-    public head({ title }: { title?: string } = {}) {
+    public getHead({ title }: { title?: string } = {}) {
         if (title) {
-            return `<title>${title}</title>\n${this.my_head}`;
+            return `<title>${title}</title>\n${this.head}`;
         }
-        return this.my_head;
+        return this.head;
     }
-    public body(md: string, pattern = '${MD_CONTENT}') {
+    public getBody(md: string, pattern = '${MD_CONTENT}') {
         // avoid `String.prototype.replace` due to $$-sign!
-        const lhs_index = this.my_body.indexOf(pattern);
-        const lhs = this.my_body.slice(0, lhs_index);
+        const lhs_index = this.body.indexOf(pattern);
+        const lhs = this.body.slice(0, lhs_index);
         const rhs_index = lhs_index + pattern.length;
-        const rhs = this.my_body.slice(rhs_index);
-        return lhs + md + rhs;
+        const rhs = this.body.slice(rhs_index);
+        return `${lhs}${this._style}${md}${rhs}`;
+    }
+    public setStyle(value: TemplateStyleData) {
+        this._style.data = value;
     }
     public async select(template: Template) {
         const path = TemplatePath[template];
-        this.my_head = await this.fetch(`${path}.head.md`);
-        this.my_body = await this.fetch(`${path}.body.md`);
+        this.head = await this.fetch(`${path}.head.md`);
+        this.body = await this.fetch(`${path}.body.md`);
         $(this.ui.$templateDialog).trigger('select', {
             template
         });
         this.activateBy(template);
-    }
-    private onBsModalShow() {
-    }
-    private onBsModalShown() {
-    }
-    private onBsModalHide() {
-    }
-    private onBsModalHidden() {
     }
     private onPrimaryClick() {
         this.select(this.ui.$templateDialogItemActive.data('tpl') as Template);
@@ -94,29 +100,30 @@ export class TemplateDialog {
     ) {
         return await fetch(url).then((res) => res.text());
     }
-    private get my_head(): string {
-        if (this._my_head === undefined) {
-            this._my_head = HEAD_FALLBACK;
+    private get head() {
+        if (this._head === undefined) {
+            this._head = HEAD_FALLBACK;
         }
-        return this._my_head;
+        return this._head;
     }
-    private set my_head(text: string) {
-        this._my_head = text;
+    private set head(text: string) {
+        this._head = text;
     }
-    private get my_body(): string {
-        if (this._my_body === undefined) {
-            this._my_body = BODY_FALLBACK;
+    private get body() {
+        if (this._body === undefined) {
+            this._body = BODY_FALLBACK;
         }
-        return this._my_body;
+        return this._body;
     }
-    private set my_body(text: string) {
-        this._my_body = text;
+    private set body(text: string) {
+        this._body = text;
     }
     private get ui() {
         return Ui.me;
     }
-    private _my_head?: string;
-    private _my_body?: string;
+    private _head?: string;
+    private _body?: string;
+    private _style = new TemplateStyle();
 }
 const HEAD_FALLBACK =
     '<meta name="viewport" content="width=device-width,initial-scale=1"/>';

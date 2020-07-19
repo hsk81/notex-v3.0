@@ -106,7 +106,7 @@ export class IpfsTab {
             $(this).trigger('publishing');
         }
         {
-            const head = TemplateDialog.me.head({ title: this.ed.title });
+            const head = TemplateDialog.me.getHead({ title: this.ed.title });
             const body = this.ui.$viewer.contents().find('body').html();
             this.publish(this.ipfs_gateway, await html(head, body));
         }

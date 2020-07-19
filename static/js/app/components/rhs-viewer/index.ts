@@ -34,12 +34,12 @@ export class RhsViewer {
             }
         }
         {
-            this.ui.$rhsCachedHead.html(TemplateDialog.me.head());
-            this.ui.$rhsCachedBody.html(MarkdownIt.me.render(
-                TemplateDialog.me.body(md_content), {
-                    document: this.ui.$rhsCached.contents()[0] as Document
-                }
-            ));
+            const head = TemplateDialog.me.getHead();
+            this.ui.$rhsCachedHead.html(head);
+            const body = TemplateDialog.me.getBody(md_content);
+            this.ui.$rhsCachedBody.html(MarkdownIt.me.render(body, {
+                document: this.ui.$rhsCached.contents()[0] as Document
+            }));
         }
         {
             $(this).trigger('rendered', {
