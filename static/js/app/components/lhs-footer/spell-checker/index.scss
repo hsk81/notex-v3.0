@@ -27,16 +27,29 @@ ul#spell-checker-menu {
         a {
             img {
                 float: right;
-                margin-top: 5px;
+                margin-top: 10px;
+            }
+            span.line1,
+            span.country {
+                display: inline-block;
+                position: relative;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                top: 3px;
+                white-space: nowrap;
+                width: 10em;
             }
             span.line2,
             span.language {
                 font-size: smaller;
+                position: relative;
+                top: -7px;
             }
             color: black;
         }
+        max-height: 56px;
     }
-    height: 307px;
+    height: 308px;
     overflow: hidden;
     overflow-y: scroll;
     user-select: none;
