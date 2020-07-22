@@ -108,17 +108,22 @@ export class LhsEditor {
         this.simple = true;
         return this.ui.$lhsInput;
     }
-    public onScroll(e: HTMLElement) {
-        const $body = this.ui.$viewerContentBody;
-        const q = e.scrollTop / e.scrollHeight;
-        const h = $body[0].scrollHeight;
-        const c = $body[0].clientHeight;
-        this.doScroll(q*h+q*c);
+    public set lockScroll(flag: boolean) {
+        this._lock_scroll = flag;
+    }
+    private onScroll(e: HTMLElement) {
+        if (this._lock_scroll) {
+            const $body = this.ui.$viewerContentBody;
+            const q = e.scrollTop / e.scrollHeight;
+            const h = $body[0].scrollHeight;
+            const c = $body[0].clientHeight;
+            this.doScroll(q * h + q * c);
+        }
     }
     public doScroll(value: number) {
         this.ui.$viewerContentBody.scrollTop(value);
     }
-    public render(force: 'hard'|'soft'|'none' = 'none') {
+    public render(force: 'hard' | 'soft' | 'none' = 'none') {
         this.viewer.render(force);
     }
     public get title() {
@@ -263,7 +268,7 @@ export class LhsEditor {
             return undefined;
         }
         return my_mode.lhs.name === mode &&
-               my_mode.rhs.name === mode;
+            my_mode.rhs.name === mode;
     }
     private events() {
         $(this.ui.$templateDialog).on('select', () => {
@@ -285,7 +290,7 @@ export class LhsEditor {
         ) => {
             const url = `${gateway.get()}/${hash}`;
             const query = name ? `?filename=${encodeURIComponent(name)}` : '';
-            this.replaceSelection(`![${name||''}](${url}${query})\n`);
+            this.replaceSelection(`![${name || ''}](${url}${query})\n`);
         };
         this.ui.$document.on('dragenter dragover dragleave drop', (ev) => {
             ev.preventDefault();
@@ -354,11 +359,11 @@ export class LhsEditor {
     private get viewer() {
         return RhsViewer.me;
     }
-    public get mirror(): CodeMirror.Editor|undefined {
+    public get mirror(): CodeMirror.Editor | undefined {
         return window.CODE_MIRROR;
     }
     private setMirror(
-        value: CodeMirror.Editor|undefined
+        value: CodeMirror.Editor | undefined
     ) {
         window.CODE_MIRROR = value;
     }
@@ -383,13 +388,13 @@ export class LhsEditor {
         const value = cookie.get<boolean>('simple-flag');
         return value ? UiMode.simple : UiMode.mirror;
     }
-    private set spellChecker(value: SpellChecker|undefined) {
+    private set spellChecker(value: SpellChecker | undefined) {
         this._spellChecker = value;
     }
-    private get spellCheckerOverlay(): Overlay|undefined {
+    private get spellCheckerOverlay(): Overlay | undefined {
         return this._spellCheckerOverlay;
     }
-    private set spellCheckerOverlay(value: Overlay|undefined) {
+    private set spellCheckerOverlay(value: Overlay | undefined) {
         this._spellCheckerOverlay = value;
     }
     public spellCheck(
@@ -454,13 +459,13 @@ export class LhsEditor {
             }
         };
     };
-    private get searchOverlay(): Overlay|undefined {
+    private get searchOverlay(): Overlay | undefined {
         return this._searchOverlay;
     }
-    private set searchOverlay(value: Overlay|undefined) {
+    private set searchOverlay(value: Overlay | undefined) {
         this._searchOverlay = value;
     }
-    public search(query: string|RegExp, options?: {
+    public search(query: string | RegExp, options?: {
         altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
@@ -480,13 +485,13 @@ export class LhsEditor {
             }
         }
     }
-    public replace(query: string|RegExp, new_value: string, options?: {
+    public replace(query: string | RegExp, new_value: string, options?: {
         altKey: boolean, ctrlKey: boolean, shiftKey: boolean
     }) {
         if (!options || !options.ctrlKey) {
             if (!options || !options.altKey) {
-                const beg_value = this.getValue(new Location(0), new Location(this.index||0));
-                const end_value = this.getValue(new Location(this.index||0));
+                const beg_value = this.getValue(new Location(0), new Location(this.index || 0));
+                const end_value = this.getValue(new Location(this.index || 0));
                 this.setValue(beg_value + end_value.replace(query, new_value));
             }
             this.select(query, !options?.shiftKey ? '+' : '-');
@@ -508,12 +513,12 @@ export class LhsEditor {
             }
         }
     }
-    private select(query: string|RegExp, direction: '+'|'-') {
-        const length = (query: string|RegExp) => {
+    private select(query: string | RegExp, direction: '+' | '-') {
+        const length = (query: string | RegExp) => {
             return typeof query !== 'string'
                 ? query.source.length : query.length;
         };
-        const next = (index: number|undefined) => {
+        const next = (index: number | undefined) => {
             if (index !== undefined) {
                 const n = this.value.substring(index + 1).search(query);
                 return n >= 0 ? n + (index + 1) : undefined;
@@ -522,8 +527,8 @@ export class LhsEditor {
                 return n >= 0 ? n : undefined;
             }
         };
-        const prev = (index: number|undefined) => {
-            let p: number|undefined;
+        const prev = (index: number | undefined) => {
+            let p: number | undefined;
             while (true) {
                 const n = next(p);
                 if (n !== undefined) {
@@ -554,17 +559,18 @@ export class LhsEditor {
             this.index = undefined;
         }
     }
-    private get index(): number|undefined {
+    private get index(): number | undefined {
         return window.INDEX;
     }
-    private set index(value: number|undefined) {
+    private set index(value: number | undefined) {
         window.INDEX = value;
     }
     private get ui() {
         return Ui.me;
     }
-    private _spellCheckerOverlay: Overlay|undefined;
-    private _spellChecker: SpellChecker|undefined;
-    private _searchOverlay: Overlay|undefined;
+    private _spellCheckerOverlay: Overlay | undefined;
+    private _spellChecker: SpellChecker | undefined;
+    private _searchOverlay: Overlay | undefined;
+    private _lock_scroll = true;
 }
 export default LhsEditor;

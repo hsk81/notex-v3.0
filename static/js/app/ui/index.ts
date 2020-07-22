@@ -334,6 +334,9 @@ export class Ui {
     public get $toolbarRefresh() {
         return this.$toolbarInner.find('.glyphicon.refresh').closest('button');
     }
+    public get $toolbarLockScrolling() {
+        return this.$toolbarInner.find('.glyphicon.lock-scrolling').closest('button');
+    }
     public get $toolbarSubscript() {
         return this.$toolbarInner.find('.glyphicon-subscript').closest('button');
     }

@@ -23,12 +23,14 @@ export class RhsToolbar {
                 this.refresh();
             });
         }
-        this.ui.$toolbarRefresh
-            .on('click', this.onRefreshClick.bind(this));
         this.ui.$toolbarPublish
             .on('click', this.onPublishClick.bind(this));
         this.ui.$toolbarPrint
             .on('click', this.onPrintClick.bind(this));
+        this.ui.$toolbarRefresh
+            .on('click', this.onRefreshClick.bind(this));
+        this.ui.$toolbarLockScrolling
+            .on('click', this.onLockScrollingClick.bind(this));
         this.ui.$toolbarTemplate
             .on('click', this.onTemplateClick.bind(this));
         this.ui.$toolbar1Columns
@@ -62,6 +64,17 @@ export class RhsToolbar {
         } else {
             this.ed.render('soft');
         }
+    }
+    @buffered
+    private onLockScrollingClick() {
+        const $button = this.ui.$toolbarLockScrolling;
+        const active = $button.hasClass('active');
+        if (active) {
+            $button.prop('title', 'Unlock Scrolling');
+        } else {
+            $button.prop('title', 'Lock Scrolling');
+        }
+        this.ed.lockScroll = active;
     }
     @buffered
     private async onPublishClick(ev: JQueryEventObject) {
