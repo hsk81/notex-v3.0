@@ -14,18 +14,18 @@
         "markdown-it-math": "^4.1.1",
         "markdown-it-video": "^0.6.3",
         "qrcode": "^1.4.4",
-        "web3": "^1.2.9"
+        "web3": "^1.2.11"
     },
     "devDependencies": {
         "@types/bootstrap": "^4.5.0",
         "@types/codemirror": "^0.0.97",
         "@types/iscroll": "^5.2.4",
         "@types/jquery": "^3.5.0",
-        "@types/node": "^14.0.23",
+        "@types/node": "^14.0.24",
         "browserify": "^16.5.1",
         "sass": "^1.26.10",
         "terser": "^4.8.0",
-        "typescript": "^3.9.6"
+        "typescript": "^3.9.7"
     },
     "repository": {
         "url": "git@bitbucket.org:hsk81/notex.git"
@@ -42,5 +42,5 @@
     "engines": {
         "node": "^13.5.0"
     },
-    "version": "3.5.1"
+    "version": "3.5.2"
 }
