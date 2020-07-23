@@ -286,6 +286,12 @@ export class Ui {
     public get $toolbarFont() {
         return this.$toolbarInner.find('.glyphicon-font').closest('button');
     }
+    public get $toolbarFontSizeLarger() {
+        return this.$toolbarInner.find('.font-size-larger').closest('button');
+    }
+    public get $toolbarFontSizeSmaller() {
+        return this.$toolbarInner.find('.font-size-smaller').closest('button');
+    }
     public get $toolbarFigureEnum() {
         return this.$toolbarInner.find('.figure-enum').closest('button');
     }

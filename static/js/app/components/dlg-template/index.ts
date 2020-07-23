@@ -15,17 +15,23 @@ const TemplatePath = {
     [Template.TripleColumn]: '/static/tpl/3-column'
 };
 type TemplateStyleData = {
+    body?: { fontSize?: string },
     figures?: string;
     headings?: string
 };
 class TemplateStyle {
     public toString() {
         let html = '';
+        if (this._data.body) {
+            if (this._data.body.fontSize) {
+                html += `<style>${this._data.body.fontSize}</style>\n`;
+            }
+        }
         if (this._data.figures) {
-            html += `${this._data.figures}\n`;
+            html += `<style>${this._data.figures}</style>\n`;
         }
         if (this._data.headings) {
-            html += `${this._data.headings}\n`;
+            html += `<style>${this._data.headings}</style>\n`;
         }
         return html;
     }
@@ -33,7 +39,7 @@ class TemplateStyle {
         this._data = { ...this._data, ...value };
     }
     private _data: TemplateStyleData = {
-        figures: '', headings: ''
+        body: { fontSize: '' }, figures: '', headings: ''
     };
 }
 @trace
@@ -127,6 +133,6 @@ export class TemplateDialog {
 }
 const HEAD_FALLBACK =
     '<meta name="viewport" content="width=device-width,initial-scale=1"/>';
-const BODY_FALLBACK = '${MD_CONTENT}\n'
-    + '<script>if (typeof PATCH !== "undefined") PATCH();</script>';
+const BODY_FALLBACK = '${MD_CONTENT}\n' +
+    '<script>if (typeof PATCH !== "undefined") PATCH();</script>';
 export default TemplateDialog;

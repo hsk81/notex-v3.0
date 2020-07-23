@@ -39,8 +39,12 @@ export class RhsToolbar {
             .on('click', this.onDoubleColumnClick.bind(this));
         this.ui.$toolbar3Columns
             .on('click', this.onTripleColumnClick.bind(this));
-        $(this.ui.$templateDialog)
+        this.ui.$templateDialog
             .on('select', this.onSelectTemplate.bind(this));
+        this.ui.$toolbarFontSizeLarger
+            .on('click', this.onFontSizeLargerClick.bind(this));
+        this.ui.$toolbarFontSizeSmaller
+            .on('click', this.onFontSizeSmallerClick.bind(this));
         this.ui.$toolbarFigureEnum
             .on('click', this.onFigureEnumClick.bind(this));
         this.ui.$toolbarH1Enum
@@ -138,6 +142,26 @@ export class RhsToolbar {
         }
     }
     @buffered
+    private onFontSizeLargerClick() {
+        const active = this.ui.$toolbarFontSizeLarger.hasClass('active');
+        if (active) this.ui.$toolbarFontSizeSmaller.removeClass('active');
+        const value = active ? 'larger' : '';
+        TemplateDialog.me.setStyle({
+            body: { fontSize: `body, table { font-size: ${value}; }` }
+        });
+        this.ed.render('soft');
+    }
+    @buffered
+    private onFontSizeSmallerClick() {
+        const active = this.ui.$toolbarFontSizeSmaller.hasClass('active');
+        if (active) this.ui.$toolbarFontSizeLarger.removeClass('active');
+        const value = active ? 'smaller' : '';
+        TemplateDialog.me.setStyle({
+            body: { fontSize: `body, table { font-size: ${value}; }` }
+        });
+        this.ed.render('soft');
+    }
+    @buffered
     private onFigureEnumClick() {
         this.enumFigures();
     }
@@ -159,9 +183,7 @@ export class RhsToolbar {
             ? '"Fig. " counter(figures) " – "'
             : '""';
         TemplateDialog.me.setStyle({
-            figures: `<style>`
-                + `figure>figcaption:before { content: ${before}; }`
-                + `</style>`
+            figures: `figure>figcaption:before { content: ${before}; }`
         });
         this.ed.render('soft');
     }
@@ -193,11 +215,11 @@ export class RhsToolbar {
                     : `counter(h3-headings) " "`
             : '""';
         TemplateDialog.me.setStyle({
-            headings: `<style>`
-              + `h1:before { content: ${h1_before}; }`
-              + `h2:before { content: ${h2_before}; }`
-              + `h3:before { content: ${h3_before}; }`
-              + `</style>`
+            headings:
+                `h1:before { content: ${h1_before}; }` +
+                `h2:before { content: ${h2_before}; }` +
+                `h3:before { content: ${h3_before}; }`
+
         });
         this.ed.render('soft');
     }
