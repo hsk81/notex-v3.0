@@ -292,6 +292,18 @@ export class Ui {
     public get $toolbarFontSizeSmaller() {
         return this.$toolbarInner.find('.font-size-smaller').closest('button');
     }
+    public get $toolbarAlignLeft() {
+        return this.$toolbarInner.find('.align-left').closest('button');
+    }
+    public get $toolbarAlignCenter() {
+        return this.$toolbarInner.find('.align-center').closest('button');
+    }
+    public get $toolbarAlignRight() {
+        return this.$toolbarInner.find('.align-right').closest('button');
+    }
+    public get $toolbarAlignJustifiy() {
+        return this.$toolbarInner.find('.align-justify').closest('button');
+    }
     public get $toolbarFigureEnum() {
         return this.$toolbarInner.find('.figure-enum').closest('button');
     }

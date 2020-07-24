@@ -17,7 +17,8 @@ const TemplatePath = {
 type TemplateStyleData = {
     body?: { fontSize?: string },
     figures?: string;
-    headings?: string
+    headings?: string;
+    p?: string;
 };
 class TemplateStyle {
     public toString() {
@@ -33,13 +34,34 @@ class TemplateStyle {
         if (this._data.headings) {
             html += `<style>${this._data.headings}</style>\n`;
         }
+        if (this._data.p) {
+            html += `<style>${this._data.p}</style>\n`;
+        }
         return html;
     }
     public set data(value: TemplateStyleData) {
         this._data = { ...this._data, ...value };
     }
     private _data: TemplateStyleData = {
-        body: { fontSize: '' }, figures: '', headings: ''
+        body: {
+            fontSize: `body, table { font-size: ${
+                'medium'
+            }; }`
+        },
+        figures:
+            `figure>figcaption:before { content: ${
+                '"Fig. " counter(figures) " – "'
+            }; }`,
+        headings:
+            `h1:before { content: ${'""'}; }` +
+            `h2:before { content: ${
+                'counter(h2-headings) " "'}; }` +
+            `h3:before { content: ${
+                'counter(h2-headings) "."' +
+                'counter(h3-headings) " "'}; }`,
+        p: `p, li, figcaption { text-align: ${
+            'justify'
+        }; }`
     };
 }
 @trace

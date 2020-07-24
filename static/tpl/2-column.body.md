@@ -79,6 +79,8 @@
 <style>
   p {
     margin: 0.5em 0;
+  }
+  p, li, figcaption {
     text-align: justify;
   }
 </style>
@@ -125,7 +127,6 @@
   }
   figure>figcaption {
     font-size: smaller;
-    text-align: center;
     margin-top: 1em;
   }
 </style>

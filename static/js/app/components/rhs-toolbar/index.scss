@@ -22,6 +22,9 @@
     }
     display: none;
     float: right;
-    height: 100%;
+    height: calc(100% - 47px);
     max-width: 48px;
+}
+.rhs-toolbar.long {
+    height: calc(100%);
 }

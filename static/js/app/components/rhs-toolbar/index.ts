@@ -1,7 +1,9 @@
 import { TemplateDialog } from "../dlg-template/index";
 import { Template } from "../dlg-template/index";
 import { LhsEditor } from "../lhs-editor/index";
+import { AiMode } from "../rhs-footer/ai-mode";
 import { Ui } from "../../ui/index";
+
 
 import { gateway, html } from "../../ipfs/index";
 import { IPFS, Buffer } from "../../ipfs/index";
@@ -23,6 +25,8 @@ export class RhsToolbar {
                 this.refresh();
             });
         }
+        $(this.ed).on(
+            'change', (ev) => this.onEditorChange(this.ed.empty));
         this.ui.$toolbarPublish
             .on('click', this.onPublishClick.bind(this));
         this.ui.$toolbarPrint
@@ -45,6 +49,14 @@ export class RhsToolbar {
             .on('click', this.onFontSizeLargerClick.bind(this));
         this.ui.$toolbarFontSizeSmaller
             .on('click', this.onFontSizeSmallerClick.bind(this));
+        this.ui.$toolbarAlignLeft
+            .on('click', this.onAlignLeftClick.bind(this));
+        this.ui.$toolbarAlignCenter
+            .on('click', this.onAlignCenterClick.bind(this));
+        this.ui.$toolbarAlignRight
+            .on('click', this.onAlignRightClick.bind(this));
+        this.ui.$toolbarAlignJustifiy
+            .on('click', this.onAlignJustifyClick.bind(this));
         this.ui.$toolbarFigureEnum
             .on('click', this.onFigureEnumClick.bind(this));
         this.ui.$toolbarH1Enum
@@ -56,6 +68,15 @@ export class RhsToolbar {
     }
     public refresh() {
         this.ed.refresh();
+        this.scroll.refresh();
+    }
+    @buffered(40)
+    private onEditorChange(empty: boolean) {
+        if (empty || this.aiMode === AiMode.help) {
+            this.ui.$rhsToolbar.removeClass('long');
+        } else {
+            this.ui.$rhsToolbar.addClass('long');
+        }
         this.scroll.refresh();
     }
     @buffered
@@ -145,7 +166,7 @@ export class RhsToolbar {
     private onFontSizeLargerClick() {
         const active = this.ui.$toolbarFontSizeLarger.hasClass('active');
         if (active) this.ui.$toolbarFontSizeSmaller.removeClass('active');
-        const value = active ? 'larger' : '';
+        const value = active ? 'larger' : 'medium';
         TemplateDialog.me.setStyle({
             body: { fontSize: `body, table { font-size: ${value}; }` }
         });
@@ -155,9 +176,61 @@ export class RhsToolbar {
     private onFontSizeSmallerClick() {
         const active = this.ui.$toolbarFontSizeSmaller.hasClass('active');
         if (active) this.ui.$toolbarFontSizeLarger.removeClass('active');
-        const value = active ? 'smaller' : '';
+        const value = active ? 'smaller' : 'medium';
         TemplateDialog.me.setStyle({
             body: { fontSize: `body, table { font-size: ${value}; }` }
+        });
+        this.ed.render('soft');
+    }
+    @buffered
+    private onAlignLeftClick() {
+        const active = this.ui.$toolbarAlignLeft.hasClass('active');
+        if (active) {
+            this.ui.$toolbarAlignCenter.removeClass('active');
+            this.ui.$toolbarAlignRight.removeClass('active');
+            this.ui.$toolbarAlignJustifiy.removeClass('active');
+        }
+        TemplateDialog.me.setStyle({
+            p: 'p, li, figcaption { text-align: left; }'
+        });
+        this.ed.render('soft');
+    }
+    @buffered
+    private onAlignCenterClick() {
+        const active = this.ui.$toolbarAlignCenter.hasClass('active');
+        if (active) {
+            this.ui.$toolbarAlignLeft.removeClass('active');
+            this.ui.$toolbarAlignRight.removeClass('active');
+            this.ui.$toolbarAlignJustifiy.removeClass('active');
+        }
+        TemplateDialog.me.setStyle({
+            p: 'p, li, figcaption { text-align: center; }'
+        });
+        this.ed.render('soft');
+    }
+    @buffered
+    private onAlignRightClick() {
+        const active = this.ui.$toolbarAlignRight.hasClass('active');
+        if (active) {
+            this.ui.$toolbarAlignLeft.removeClass('active');
+            this.ui.$toolbarAlignCenter.removeClass('active');
+            this.ui.$toolbarAlignJustifiy.removeClass('active');
+        }
+        TemplateDialog.me.setStyle({
+            p: 'p, li, figcaption { text-align: right; }'
+        });
+        this.ed.render('soft');
+    }
+    @buffered
+    private onAlignJustifyClick() {
+        const active = this.ui.$toolbarAlignJustifiy.hasClass('active');
+        if (active) {
+            this.ui.$toolbarAlignLeft.removeClass('active');
+            this.ui.$toolbarAlignCenter.removeClass('active');
+            this.ui.$toolbarAlignRight.removeClass('active');
+        }
+        TemplateDialog.me.setStyle({
+            p: 'p, li, figcaption { text-align: justify; }'
         });
         this.ed.render('soft');
     }
@@ -222,6 +295,9 @@ export class RhsToolbar {
 
         });
         this.ed.render('soft');
+    }
+    private get aiMode() {
+        return window.AI_MODE as AiMode;
     }
     private get ed() {
         return LhsEditor.me;
