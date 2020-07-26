@@ -1,4 +1,5 @@
 import { trace } from "../../decorator/trace";
+import { cookie } from "../../cookie/cookie";
 import { Ui } from "../../ui/index";
 declare const $: JQueryStatic;
 
@@ -59,11 +60,16 @@ class TemplateStyle {
             `h3:before { content: ${
                 'counter(h2-headings) "."' +
                 'counter(h3-headings) " "'}; }`,
-        p: `p, li, figcaption { text-align: ${
-            'justify'
-        }; }`
+        p:
+            `p, li, figcaption { text-align: ${
+                'justify'
+            }; }`
     };
 }
+export type Alignment
+    = 'left' | 'center' | 'right' | 'justify';
+export type FontSize
+    = 'smaller' | 'medium' | 'larger';
 @trace
 export class TemplateDialog {
     public static get me(): TemplateDialog {
@@ -73,12 +79,39 @@ export class TemplateDialog {
         return window.TEMPLATE_DIALOG;
     }
     public constructor() {
-        this.select(
-            this.ui.$templateDialogItemActive.data('tpl') as Template);
+        this.select(this.template).then(() => {
+            const alignment = cookie.get<Alignment>('alignment') ?? 'justify';
+            this.alignment = alignment;
+            const enum_figures = cookie.get<string>('enum-figures') ?? 'true';
+            this.enumFigures = JSON.parse(enum_figures);
+            const enum_h1s = cookie.get<string>('enum-h1s') ?? 'false';
+            const enum_h2s = cookie.get<string>('enum-h2s') ?? 'true';
+            const enum_h3s = cookie.get<string>('enum-h3s') ?? 'true';
+            this.enumHeaders = {
+                h1: JSON.parse(enum_h1s),
+                h2: JSON.parse(enum_h2s),
+                h3: JSON.parse(enum_h3s)
+            };
+            const font_size = cookie.get<FontSize>('font-size') ?? 'medium';
+            this.fontSize = font_size;
+        });
         this.ui.$templateDialogItem.on(
             'click', this.onItemClick.bind(this));
         this.ui.$templateDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
+    }
+    public async select(template: Template) {
+        const path = TemplatePath[template];
+        this.head = await this.fetch(`${path}.head.md`);
+        this.body = await this.fetch(`${path}.body.md`);
+        $(this.ui.$templateDialog).trigger('select', {
+            template
+        });
+        cookie.set('template', template);
+        this.activateBy(template);
+    }
+    public get template() {
+        return cookie.get<Template>('template') ?? '1-column' as Template
     }
     public getHead({ title }: { title?: string } = {}) {
         if (title) {
@@ -94,17 +127,86 @@ export class TemplateDialog {
         const rhs = this.body.slice(rhs_index);
         return `${lhs}${this._style}${md}${rhs}`;
     }
-    public setStyle(value: TemplateStyleData) {
-        this._style.data = value;
-    }
-    public async select(template: Template) {
-        const path = TemplatePath[template];
-        this.head = await this.fetch(`${path}.head.md`);
-        this.body = await this.fetch(`${path}.body.md`);
-        $(this.ui.$templateDialog).trigger('select', {
-            template
+    public set alignment(value: Alignment) {
+        this.setStyle({
+            p: `p, li, figcaption { text-align: ${value}; }`
         });
-        this.activateBy(template);
+        $(this.ui.$templateDialog).trigger('alignment', {
+            alignment: value
+        });
+        cookie.set('alignment', value);
+    }
+    public set enumFigures(flag: boolean) {
+        const before = flag
+            ? '"Fig. " counter(figures) " – "'
+            : '""';
+        this.setStyle({
+            figures: `figure>figcaption:before { content: ${before}; }`
+        });
+        $(this.ui.$templateDialog).trigger('figure-enum', {
+            flag
+        });
+        cookie.set('enum-figures', JSON.stringify(flag));
+    }
+    public set enumHeaders(flags: {
+        h1: boolean, h2: boolean, h3: boolean
+    }) {
+        const h1_active = flags.h1;
+        const h1_before = h1_active
+            ? `counter(h1-headings) " "`
+            : '""';
+        const h2_active = flags.h2;
+        const h2_before = h2_active
+            ? h1_active
+                ? `counter(h1-headings) "."`
+                + `counter(h2-headings) " "`
+                : `counter(h2-headings) " "`
+            : '""';
+        const h3_active = flags.h3;
+        const h3_before = h3_active
+            ? h2_active
+                ? h1_active
+                    ? `counter(h1-headings) "."`
+                    + `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                    : `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                : h1_active
+                    ? `counter(h1-headings) "."`
+                    + `counter(h2-headings) "."`
+                    + `counter(h3-headings) " "`
+                    : `counter(h3-headings) " "`
+            : '""';
+        this.setStyle({
+            headings:
+                `h1:before { content: ${h1_before}; }` +
+                `h2:before { content: ${h2_before}; }` +
+                `h3:before { content: ${h3_before}; }`
+        });
+        $(this.ui.$templateDialog).trigger('h1-enum', {
+            flag: flags.h1
+        });
+        $(this.ui.$templateDialog).trigger('h2-enum', {
+            flag: flags.h2
+        });
+        $(this.ui.$templateDialog).trigger('h3-enum', {
+            flag: flags.h3
+        });
+        cookie.set('enum-h1s', JSON.stringify(flags.h1));
+        cookie.set('enum-h2s', JSON.stringify(flags.h2));
+        cookie.set('enum-h3s', JSON.stringify(flags.h3));
+    }
+    public set fontSize(value: FontSize) {
+        this.setStyle({
+            body: { fontSize: `body, table { font-size: ${value}; }` }
+        });
+        $(this.ui.$templateDialog).trigger('font-size', {
+            font_size: value
+        });
+        cookie.set('font-size', value);
+    }
+    private setStyle(data: TemplateStyleData) {
+        this._style.data = data;
     }
     private onPrimaryClick() {
         this.select(this.ui.$templateDialogItemActive.data('tpl') as Template);

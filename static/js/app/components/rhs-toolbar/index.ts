@@ -1,9 +1,10 @@
 import { TemplateDialog } from "../dlg-template/index";
+import { Alignment } from "../dlg-template/index";
+import { FontSize } from "../dlg-template/index";
 import { Template } from "../dlg-template/index";
 import { LhsEditor } from "../lhs-editor/index";
 import { AiMode } from "../rhs-footer/ai-mode";
 import { Ui } from "../../ui/index";
-
 
 import { gateway, html } from "../../ipfs/index";
 import { IPFS, Buffer } from "../../ipfs/index";
@@ -49,6 +50,8 @@ export class RhsToolbar {
             .on('click', this.onFontSizeLargerClick.bind(this));
         this.ui.$toolbarFontSizeSmaller
             .on('click', this.onFontSizeSmallerClick.bind(this));
+        this.ui.$templateDialog
+            .on('font-size', this.onFontSize.bind(this));
         this.ui.$toolbarAlignLeft
             .on('click', this.onAlignLeftClick.bind(this));
         this.ui.$toolbarAlignCenter
@@ -57,14 +60,24 @@ export class RhsToolbar {
             .on('click', this.onAlignRightClick.bind(this));
         this.ui.$toolbarAlignJustifiy
             .on('click', this.onAlignJustifyClick.bind(this));
+        this.ui.$templateDialog
+            .on('alignment', this.onAlign.bind(this));
         this.ui.$toolbarFigureEnum
             .on('click', this.onFigureEnumClick.bind(this));
+        this.ui.$templateDialog
+            .on('figure-enum', this.onFigureEnum.bind(this));
         this.ui.$toolbarH1Enum
             .on('click', this.onH1EnumClick.bind(this));
+        this.ui.$templateDialog
+            .on('h1-enum', this.onH1Enum.bind(this));
         this.ui.$toolbarH2Enum
             .on('click', this.onH2EnumClick.bind(this));
+        this.ui.$templateDialog
+            .on('h2-enum', this.onH2Enum.bind(this));
         this.ui.$toolbarH3Enum
             .on('click', this.onH3EnumClick.bind(this));
+        this.ui.$templateDialog
+            .on('h3-enum', this.onH3Enum.bind(this));
     }
     public refresh() {
         this.ed.refresh();
@@ -105,7 +118,7 @@ export class RhsToolbar {
     private async onPublishClick(ev: JQueryEventObject) {
         if (ev.ctrlKey) {
             const $contents = this.ui.$viewer.contents();
-            const head = TemplateDialog.me.getHead({ title: this.ed.title });
+            const head = this.template.getHead({ title: this.ed.title });
             const body = $contents.find('body').html();
             const buffer = Buffer.from(await html(head, body));
             IPFS.me(async (ipfs: any) => {
@@ -128,176 +141,185 @@ export class RhsToolbar {
         this.ui.$templateDialog.modal();
     }
     private onSingleColumnClick() {
-        TemplateDialog.me.select(Template.SingleColumn);
+        this.template.select(Template.SingleColumn);
     }
     private onDoubleColumnClick() {
-        TemplateDialog.me.select(Template.DoubleColumn);
+        this.template.select(Template.DoubleColumn);
     }
     private onTripleColumnClick() {
-        TemplateDialog.me.select(Template.TripleColumn);
+        this.template.select(Template.TripleColumn);
     }
     private onSelectTemplate(ev: JQuery.Event, { template }: {
         template: Template
     }) {
+        if (template !== Template.SingleColumn) {
+            this.ui.$toolbar1Columns.removeClass('active');
+        }
+        if (template !== Template.DoubleColumn) {
+            this.ui.$toolbar2Columns.removeClass('active');
+        }
+        if (template !== Template.TripleColumn) {
+            this.ui.$toolbar3Columns.removeClass('active');
+        }
         switch (template) {
             case Template.SingleColumn:
                 this.ui.$toolbar1Columns.addClass('active');
-                this.ui.$toolbar2Columns.removeClass('active');
-                this.ui.$toolbar3Columns.removeClass('active');
                 break;
             case Template.DoubleColumn:
-                this.ui.$toolbar1Columns.removeClass('active');
                 this.ui.$toolbar2Columns.addClass('active');
-                this.ui.$toolbar3Columns.removeClass('active');
                 break;
             case Template.TripleColumn:
-                this.ui.$toolbar1Columns.removeClass('active');
-                this.ui.$toolbar2Columns.removeClass('active');
                 this.ui.$toolbar3Columns.addClass('active');
-                break;
-            default:
-                this.ui.$toolbar1Columns.removeClass('active');
-                this.ui.$toolbar2Columns.removeClass('active');
-                this.ui.$toolbar3Columns.removeClass('active');
                 break;
         }
     }
     @buffered
     private onFontSizeLargerClick() {
         const active = this.ui.$toolbarFontSizeLarger.hasClass('active');
-        if (active) this.ui.$toolbarFontSizeSmaller.removeClass('active');
-        const value = active ? 'larger' : 'medium';
-        TemplateDialog.me.setStyle({
-            body: { fontSize: `body, table { font-size: ${value}; }` }
-        });
-        this.ed.render('soft');
+        this.template.fontSize = active ? 'larger' : 'medium';
+        this.ed.render();
     }
     @buffered
     private onFontSizeSmallerClick() {
         const active = this.ui.$toolbarFontSizeSmaller.hasClass('active');
-        if (active) this.ui.$toolbarFontSizeLarger.removeClass('active');
-        const value = active ? 'smaller' : 'medium';
-        TemplateDialog.me.setStyle({
-            body: { fontSize: `body, table { font-size: ${value}; }` }
-        });
-        this.ed.render('soft');
+        this.template.fontSize = active ? 'smaller' : 'medium';
+        this.ed.render();
+    }
+    private onFontSize(ev: JQuery.Event, { font_size }: {
+        font_size: FontSize
+    }) {
+        if (font_size !== 'smaller') {
+            this.ui.$toolbarFontSizeSmaller.removeClass('active');
+        }
+        if (font_size !== 'larger') {
+            this.ui.$toolbarFontSizeLarger.removeClass('active');
+        }
+        switch (font_size) {
+            case 'smaller':
+                this.ui.$toolbarFontSizeSmaller.addClass('active');
+                break;
+            case 'larger':
+                this.ui.$toolbarFontSizeLarger.addClass('active');
+                break;
+        }
     }
     @buffered
     private onAlignLeftClick() {
-        const active = this.ui.$toolbarAlignLeft.hasClass('active');
-        if (active) {
-            this.ui.$toolbarAlignCenter.removeClass('active');
-            this.ui.$toolbarAlignRight.removeClass('active');
-            this.ui.$toolbarAlignJustifiy.removeClass('active');
-        }
-        TemplateDialog.me.setStyle({
-            p: 'p, li, figcaption { text-align: left; }'
-        });
-        this.ed.render('soft');
+        this.template.alignment = 'left';
+        this.ed.render();
     }
     @buffered
     private onAlignCenterClick() {
-        const active = this.ui.$toolbarAlignCenter.hasClass('active');
-        if (active) {
-            this.ui.$toolbarAlignLeft.removeClass('active');
-            this.ui.$toolbarAlignRight.removeClass('active');
-            this.ui.$toolbarAlignJustifiy.removeClass('active');
-        }
-        TemplateDialog.me.setStyle({
-            p: 'p, li, figcaption { text-align: center; }'
-        });
-        this.ed.render('soft');
+        this.template.alignment = 'center';
+        this.ed.render();
     }
     @buffered
     private onAlignRightClick() {
-        const active = this.ui.$toolbarAlignRight.hasClass('active');
-        if (active) {
-            this.ui.$toolbarAlignLeft.removeClass('active');
-            this.ui.$toolbarAlignCenter.removeClass('active');
-            this.ui.$toolbarAlignJustifiy.removeClass('active');
-        }
-        TemplateDialog.me.setStyle({
-            p: 'p, li, figcaption { text-align: right; }'
-        });
-        this.ed.render('soft');
+        this.template.alignment = 'right';
+        this.ed.render();
     }
     @buffered
     private onAlignJustifyClick() {
-        const active = this.ui.$toolbarAlignJustifiy.hasClass('active');
-        if (active) {
+        this.template.alignment = 'justify';
+        this.ed.render();
+    }
+    private onAlign(ev: JQuery.Event, { alignment }: {
+        alignment: Alignment
+    }) {
+        if (alignment !== 'left') {
             this.ui.$toolbarAlignLeft.removeClass('active');
+        }
+        if (alignment !== 'center') {
             this.ui.$toolbarAlignCenter.removeClass('active');
+        }
+        if (alignment !== 'right') {
             this.ui.$toolbarAlignRight.removeClass('active');
         }
-        TemplateDialog.me.setStyle({
-            p: 'p, li, figcaption { text-align: justify; }'
-        });
-        this.ed.render('soft');
+        if (alignment !== 'justify') {
+            this.ui.$toolbarAlignJustifiy.removeClass('active');
+        }
+        switch (alignment) {
+            case 'left':
+                this.ui.$toolbarAlignLeft.addClass('active');
+                break;
+            case 'center':
+                this.ui.$toolbarAlignCenter.addClass('active');
+                break;
+            case 'right':
+                this.ui.$toolbarAlignRight.addClass('active');
+                break;
+            case 'justify':
+                this.ui.$toolbarAlignJustifiy.addClass('active');
+                break;
+        }
     }
     @buffered
     private onFigureEnumClick() {
-        this.enumFigures();
+        const active = this.ui.$toolbarFigureEnum.hasClass('active');
+        this.template.enumFigures = active;
+        this.ed.render();
+    }
+    private onFigureEnum(ev: JQuery.Event, { flag }: {
+        flag: boolean
+    }) {
+        if (flag) {
+            this.ui.$toolbarFigureEnum.addClass('active');
+        } else {
+            this.ui.$toolbarFigureEnum.removeClass('active');
+        }
     }
     @buffered
     private onH1EnumClick() {
         this.enumHeadings();
     }
+    private onH1Enum(ev: JQuery.Event, { flag }: {
+        flag: boolean
+    }) {
+        if (flag) {
+            this.ui.$toolbarH1Enum.addClass('active');
+        } else {
+            this.ui.$toolbarH1Enum.removeClass('active');
+        }
+    }
     @buffered
     private onH2EnumClick() {
         this.enumHeadings();
+    }
+    private onH2Enum(ev: JQuery.Event, { flag }: {
+        flag: boolean
+    }) {
+        if (flag) {
+            this.ui.$toolbarH2Enum.addClass('active');
+        } else {
+            this.ui.$toolbarH2Enum.removeClass('active');
+        }
     }
     @buffered
     private onH3EnumClick() {
         this.enumHeadings();
     }
-    private enumFigures() {
-        const active = this.ui.$toolbarFigureEnum.hasClass('active');
-        const before = active
-            ? '"Fig. " counter(figures) " – "'
-            : '""';
-        TemplateDialog.me.setStyle({
-            figures: `figure>figcaption:before { content: ${before}; }`
-        });
-        this.ed.render('soft');
+    private onH3Enum(ev: JQuery.Event, { flag }: {
+        flag: boolean
+    }) {
+        if (flag) {
+            this.ui.$toolbarH3Enum.addClass('active');
+        } else {
+            this.ui.$toolbarH3Enum.removeClass('active');
+        }
     }
     private enumHeadings() {
-        const h1_active = this.ui.$toolbarH1Enum.hasClass('active');
-        const h1_before = h1_active
-            ? `counter(h1-headings) " "`
-            : '""';
-        const h2_active = this.ui.$toolbarH2Enum.hasClass('active');
-        const h2_before = h2_active
-            ? h1_active
-                ? `counter(h1-headings) "."`
-                + `counter(h2-headings) " "`
-                : `counter(h2-headings) " "`
-            : '""';
-        const h3_active = this.ui.$toolbarH3Enum.hasClass('active');
-        const h3_before = h3_active
-            ? h2_active
-                ? h1_active
-                    ? `counter(h1-headings) "."`
-                    + `counter(h2-headings) "."`
-                    + `counter(h3-headings) " "`
-                    : `counter(h2-headings) "."`
-                    + `counter(h3-headings) " "`
-                : h1_active
-                    ? `counter(h1-headings) "."`
-                    + `counter(h2-headings) "."`
-                    + `counter(h3-headings) " "`
-                    : `counter(h3-headings) " "`
-            : '""';
-        TemplateDialog.me.setStyle({
-            headings:
-                `h1:before { content: ${h1_before}; }` +
-                `h2:before { content: ${h2_before}; }` +
-                `h3:before { content: ${h3_before}; }`
-
-        });
-        this.ed.render('soft');
+        this.template.enumHeaders = {
+            h1: this.ui.$toolbarH1Enum.hasClass('active'),
+            h2: this.ui.$toolbarH2Enum.hasClass('active'),
+            h3: this.ui.$toolbarH3Enum.hasClass('active')
+        };
+        this.ed.render();
     }
     private get aiMode() {
         return window.AI_MODE as AiMode;
+    }
+    private get template() {
+        return TemplateDialog.me;
     }
     private get ed() {
         return LhsEditor.me;
