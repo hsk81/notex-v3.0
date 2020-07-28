@@ -704,7 +704,7 @@ export class LhsToolbar {
             }
         };
         const { value: caption, lhs } = this.ed.getSelection();
-        if (ev.ctrlKey && ev.shiftKey) {
+        if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey) {
             this.ed.replaceSelection(
                 `![${caption||'CAPTION'}]`
             );
@@ -723,7 +723,7 @@ export class LhsToolbar {
                     new Location(lhs.number, 9)
                 );
             }
-        } else if (ev.ctrlKey) {
+        } else if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.replaceSelection(
                 `![${caption||'CAPTION'}][REF]`
             );
@@ -809,7 +809,7 @@ export class LhsToolbar {
             }
         };
         const { value: text, lhs } = this.ed.getSelection();
-        if (ev.ctrlKey && ev.shiftKey) {
+        if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey) {
             this.ed.replaceSelection(
                 `[${text||'TEXT'}]`
             );
@@ -828,7 +828,7 @@ export class LhsToolbar {
                     new Location(lhs.number, 5)
                 );
             }
-        } else if (ev.ctrlKey) {
+        } else if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.replaceSelection(
                 `[${text||'TEXT'}][REF]`
             );
@@ -909,7 +909,7 @@ export class LhsToolbar {
             return;
         }
         const { lhs, rhs } = this.ed.getSelection();
-        if (ev.ctrlKey) {
+        if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.replaceSelection(
                 `\n$$\\sum_{i=a}^{b}{i}$$\n`
             );
@@ -933,7 +933,7 @@ export class LhsToolbar {
             return;
         }
         const { lhs, rhs } = this.ed.getSelection();
-        if (ev.ctrlKey) {
+        if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.replaceSelection(
                 `\n$$\\prod_{i=a}^{b}{i}$$\n`
             );
@@ -985,7 +985,7 @@ export class LhsToolbar {
             return;
         }
         const { lhs } = this.ed.getSelection();
-        if (ev.ctrlKey && ev.shiftKey) {
+        if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey) {
             this.ed.replaceSelection(
                 `@[prezi](URL)`
             );
@@ -993,7 +993,7 @@ export class LhsToolbar {
                 new Location(lhs.number, 9),
                 new Location(lhs.number, 12)
             );
-        } else if (ev.ctrlKey) {
+        } else if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.replaceSelection(
                 `@[vimeo](URL)`
             );

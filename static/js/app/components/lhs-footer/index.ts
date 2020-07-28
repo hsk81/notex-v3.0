@@ -117,6 +117,7 @@ export class LhsFooter {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
+                metaKey: ev.metaKey,
                 shiftKey: ev.shiftKey
             });
             this.ui.$lhsFooterCliFind.val('');
@@ -126,6 +127,7 @@ export class LhsFooter {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
+                metaKey: ev.metaKey,
                 shiftKey: ev.shiftKey
             });
         }
@@ -135,6 +137,7 @@ export class LhsFooter {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
+            metaKey: ev.metaKey,
             shiftKey: false
         });
     }
@@ -143,6 +146,7 @@ export class LhsFooter {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
+            metaKey: ev.metaKey,
             shiftKey: true
         });
     }
@@ -156,6 +160,7 @@ export class LhsFooter {
                 key: ev.key,
                 altKey: ev.altKey,
                 ctrlKey: ev.ctrlKey,
+                metaKey: ev.metaKey,
                 shiftKey: ev.shiftKey
             });
         }
@@ -165,6 +170,7 @@ export class LhsFooter {
             key: 'Enter',
             altKey: ev.altKey,
             ctrlKey: ev.ctrlKey,
+            metaKey: ev.metaKey,
             shiftKey: ev.shiftKey
         });
     }

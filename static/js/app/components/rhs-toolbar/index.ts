@@ -97,7 +97,7 @@ export class RhsToolbar {
         const $span = this.ui.$toolbarRefresh.find('span');
         setTimeout(() => $span.removeClass('spin'), 600);
         setTimeout(() => $span.addClass('spin'), 0);
-        if (ev.ctrlKey) {
+        if ((ev.ctrlKey || ev.metaKey)) {
             this.ed.render('hard');
         } else {
             this.ed.render('soft');
@@ -116,7 +116,7 @@ export class RhsToolbar {
     }
     @buffered
     private async onPublishClick(ev: JQueryEventObject) {
-        if (ev.ctrlKey) {
+        if ((ev.ctrlKey || ev.metaKey)) {
             const $contents = this.ui.$viewer.contents();
             const head = this.template.getHead({ title: this.ed.title });
             const body = $contents.find('body').html();
