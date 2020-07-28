@@ -11,6 +11,9 @@
 /lib
 /share
 
+.Python
+pyvenv.cfg
+
 # setuptools
 
 /build
