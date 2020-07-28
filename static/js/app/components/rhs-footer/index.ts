@@ -10,7 +10,7 @@ declare const $: JQueryStatic;
 
 @trace
 export class RhsFooter {
-    public static get me() {
+    public static get me(): RhsFooter {
         if (window.RHS_FOOTER === undefined) {
             window.RHS_FOOTER = new RhsFooter();
         }

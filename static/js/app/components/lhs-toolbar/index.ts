@@ -1,12 +1,12 @@
-import { LhsEditor } from "../lhs-editor/index";
 import { Location } from "../lhs-editor/location";
+import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/index";
 
 import { trace } from "../../decorator/trace";
 
 @trace
 export class LhsToolbar {
-    public static get me() {
+    public static get me(): LhsToolbar {
         if (window.LHS_TOOLBAR === undefined) {
             window.LHS_TOOLBAR = new LhsToolbar();
         }

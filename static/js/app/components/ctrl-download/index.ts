@@ -6,7 +6,7 @@ import { trace } from "../../decorator/trace";
 
 @trace
 export class DownloadController {
-    public static get me() {
+    public static get me(): DownloadController {
         if (window.DOWNLOAD_CONTROLLER === undefined) {
             window.DOWNLOAD_CONTROLLER = new DownloadController();
         }
@@ -19,22 +19,22 @@ export class DownloadController {
     private onRendered(ev: JQuery.Event, { md_content, title }: {
         md_content: string, title?: string
     }) {
+        this.title = title ? title : this.viewer.title;
         this.md_content = md_content;
-        this.title = title;
     }
-    private set title(title: string|undefined) {
-        if (!title) {
-            title = new Date().toISOString();
+    private set title(value: string | undefined) {
+        if (!value) {
+            value = new Date().toISOString();
         }
-        this.ui.$toolbarSave.attr("download", `${title}.md`);
-        this.ui.$headerSave.attr("download", `${title}.md`);
+        this.ui.$toolbarSave.attr("download", `${value}.md`);
+        this.ui.$headerSave.attr("download", `${value}.md`);
     }
-    private set md_content(content: string) {
+    private set md_content(value: string) {
         this.ui.$headerSave.attr("href", URL.createObjectURL(
-            new Blob([content], { type: 'text/markdown' })
+            new Blob([value], { type: 'text/markdown' })
         ));
         this.ui.$toolbarSave.attr("href", URL.createObjectURL(
-            new Blob([content], { type: 'text/markdown' })
+            new Blob([value], { type: 'text/markdown' })
         ));
     }
     private get viewer() {

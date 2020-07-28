@@ -14,7 +14,7 @@ import { trace } from "../../decorator/trace";
 
 @trace
 export class RhsToolbar {
-    public static get me() {
+    public static get me(): RhsToolbar {
         if (window.RHS_TOOLBAR === undefined) {
             window.RHS_TOOLBAR = new RhsToolbar();
         }

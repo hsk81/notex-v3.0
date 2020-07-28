@@ -8,7 +8,7 @@ import { trace } from "../../decorator/trace";
 
 @trace
 export class PublishDialog {
-    public static get me() {
+    public static get me(): PublishDialog {
         if (window.PUBLISH_DIALOG === undefined) {
             window.PUBLISH_DIALOG = new PublishDialog();
         }

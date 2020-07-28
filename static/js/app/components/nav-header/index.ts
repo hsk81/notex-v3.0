@@ -7,7 +7,7 @@ import { trace } from "../../decorator/trace";
 
 @trace
 export class NavHeader {
-    public static get me() {
+    public static get me(): NavHeader {
         if (window.NAV_HEADER === undefined) {
             window.NAV_HEADER = new NavHeader();
         }

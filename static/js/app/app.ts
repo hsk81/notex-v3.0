@@ -8,6 +8,7 @@ import { LhsFooter } from "./components/lhs-footer/index";
 import { RhsFooter } from "./components/rhs-footer/index";
 import { LhsToolbar } from "./components/lhs-toolbar/index";
 import { RhsToolbar } from "./components/rhs-toolbar/index";
+import { KeyShortcuts } from "./components/key-shortcuts/index";
 
 import { trace } from "./decorator/trace";
 import "./string/random";
@@ -27,9 +28,10 @@ export class App {
         this.rhs_toolbar = RhsToolbar.me;
         this.rhs_footer = RhsFooter.me;
         this.lhs_footer = LhsFooter.me;
-        this.download_controller = DownloadController.me;
         this.publish_dialog = PublishDialog.me;
         this.template_dialog = TemplateDialog.me;
+        this.key_shortcuts = KeyShortcuts.me;
+        this.download_controller = DownloadController.me;
     }
     private readonly md_editor: LhsEditor;
     private readonly lhs_footer: LhsFooter;
@@ -39,6 +41,7 @@ export class App {
     private readonly nav_header: NavHeader;
     private readonly publish_dialog: PublishDialog;
     private readonly template_dialog: TemplateDialog;
+    private readonly key_shortcuts: KeyShortcuts;
     private readonly download_controller: DownloadController;
 }
 export default App.me;
