@@ -3,6 +3,8 @@ import { RhsToolbar } from "../rhs-toolbar/index";
 import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/index";
 
+import { OpenFileFrom } from "../../commands/open-file-from";
+import { Commands } from "../../commands/index";
 import { trace } from "../../decorator/trace";
 
 @trace
@@ -25,20 +27,7 @@ export class NavHeader {
     }
     private onOpenItemChange(ev: JQuery.ChangeEvent) {
         for (const file of ev.target.files) {
-            if (!file.type || file.type.match(/text/)) {
-                const reader = new FileReader();
-                reader.onload = (progress_ev) => {
-                    const target = progress_ev.target;
-                    if (target && target.readyState === 2 &&
-                        typeof target.result === 'string'
-                    ) {
-                        this.ed.setValue(target.result);
-                        this.ed.render('hard');
-                        this.ed.focus();
-                    }
-                };
-                reader.readAsText(file);
-            }
+            Commands.me.run(new OpenFileFrom(file));
         }
     }
     private onSwapItemClick() {

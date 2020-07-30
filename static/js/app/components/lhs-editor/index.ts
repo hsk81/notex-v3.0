@@ -124,7 +124,7 @@ export class LhsEditor {
         this.ui.$viewerContentBody.scrollTop(value);
     }
     public render(force: 'hard' | 'soft' | 'none' = 'none') {
-        this.viewer.render(force);
+        return this.viewer.render(force);
     }
     public get title() {
         return this.viewer.title;

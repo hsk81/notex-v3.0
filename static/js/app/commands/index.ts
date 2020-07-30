@@ -1,18 +1,8 @@
 import { trace } from '../decorator/trace';
 
-export interface ICommand {
-    redo: () => ICommand;
-    undo: () => ICommand;
-}
-export class Command implements ICommand {
-    public constructor(
-        redo: () => void, undo: () => void
-    ) {
-        this.redo = () => { redo(); return this; };
-        this.undo = () => { undo(); return this; };
-    }
-    public redo: () => ICommand;
-    public undo: () => ICommand;
+export interface Command {
+    redo: () => Promise<Command>;
+    undo?: () => Promise<Command>;
 }
 @trace
 export class Commands {
@@ -26,7 +16,7 @@ export class Commands {
         this._redone = [];
         this._undone = [];
     }
-    public add(command: ICommand) {
+    public add(command: Command) {
         const ex_command = <IExCommand>command;
         const re_command = Commands.top(this._redone);
         if (re_command) {
@@ -34,39 +24,43 @@ export class Commands {
         }
         this._redone.push(ex_command);
     }
-    public run(command: ICommand) {
+    public async run(command: Command) {
         const ex_command = <IExCommand>command;
         const re_command = Commands.top(this._redone);
         if (re_command) {
             ex_command.link = re_command;
         }
-        this._redone.push(ex_command.redo());
+        this._redone.push(await ex_command.redo());
     }
-    public undo() {
+    public async undo() {
         const ex_command = Commands.pop(this._redone);
-        if (ex_command) {
-            this._undone.push(ex_command.undo());
+        if (ex_command && typeof ex_command.undo === 'function') {
+            this._undone.push(await ex_command.undo());
         }
     }
-    public redo() {
+    public async redo() {
         const re_command = Commands.top(this._redone);
         const un_command = Commands.pop(this._undone);
         if (un_command && un_command.link === re_command) {
-            this._redone.push(un_command.redo());
+            this._redone.push(await un_command.redo());
         }
     }
-    private static top(array: Array<IExCommand>): IExCommand|undefined {
+    private static top(
+        array: Array<IExCommand>
+    ): IExCommand | undefined {
         return array[array.length - 1];
     }
-    private static pop(array: Array<IExCommand>): IExCommand|undefined {
+    private static pop(
+        array: Array<IExCommand>
+    ): IExCommand | undefined {
         return array.pop();
     }
     private _redone: Array<IExCommand>;
     private _undone: Array<IExCommand>;
 }
-interface IExCommand extends ICommand {
-    redo: () => IExCommand;
-    undo: () => IExCommand;
-    link: ICommand;
+interface IExCommand extends Command {
+    redo: () => Promise<IExCommand>;
+    undo: () => Promise<IExCommand>;
+    link: Command;
 }
 export default Commands;

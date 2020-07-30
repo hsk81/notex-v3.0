@@ -1,4 +1,6 @@
-import { Ui } from "../../ui/index";
+import { Commands } from "../../commands/index";
+import { SaveFile } from "../../commands/save-file";
+import { OpenFile } from "../../commands/open-file";
 
 import { buffered } from "../../decorator/buffered";
 import { trace } from "../../decorator/trace";
@@ -29,19 +31,14 @@ export class KeyShortcuts {
         });
     }
     private open() {
-        this.ui.$toolbarOpen.click();
+        this.commands.run(new OpenFile());
     }
     @buffered
     private save() {
-        const a = document.createElement('a')
-        a.href = this.ui.$toolbarSave.attr('href') as any;
-        a.download = this.ui.$toolbarSave.attr('download') as any;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        this.commands.run(new SaveFile());
     }
-    private get ui() {
-        return Ui.me;
+    private get commands() {
+        return Commands.me;
     }
 }
 export default KeyShortcuts;
