@@ -316,7 +316,7 @@ export class Ui {
     public get $toolbarH3Enum() {
         return this.$toolbarInner.find('.h3-enum').closest('button');
     }
-    public get $toolbarHeader() {
+    public get $toolbarHeading() {
         return this.$toolbarInner.find('.glyphicon-header').closest('button');
     }
     public get $toolbarImage() {
