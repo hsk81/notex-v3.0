@@ -17,7 +17,6 @@ export class UndoText implements Command {
             }
             this.ui.$lhsInput.trigger('change');
         }
-        this.ed.focus();
         return Promise.resolve(this);
     }
     public undo() {
@@ -32,7 +31,6 @@ export class UndoText implements Command {
             }
             this.ui.$lhsInput.trigger('change');
         }
-        this.ed.focus();
         return Promise.resolve(this);
     }
     private get ed() {

@@ -3,6 +3,10 @@ import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/index";
 
 import { Commands } from "../../commands/index";
+import { CopyText } from "../../commands/copy-text";
+import { CutText } from "../../commands/cut-text";
+import { DeleteText } from "../../commands/delete-text";
+import { PasteText } from "../../commands/paste-text";
 import { RedoText } from "../../commands/redo-text";
 import { UndoText } from "../../commands/undo-text";
 
@@ -66,64 +70,34 @@ export class LhsToolbar {
         this.scroll.refresh();
     }
     private onUndoClick() {
-        Commands.me.run(new UndoText());
+        Commands.me.run(new UndoText()).then(() => {
+            this.ed.focus();
+        });
     }
     private onRedoClick() {
-        Commands.me.run(new RedoText());
-    }
-    private onCutClick() {
-        const { value } = this.ed.getSelection();
-        this.clipboard = value;
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.replaceSelection('');
-        } else {
-            try {
-                document.execCommand('cut')
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
-        }
-        this.ed.focus();
+        Commands.me.run(new RedoText()).then(() => {
+            this.ed.focus();
+        });
     }
     private onCopyClick() {
-        const { value } = this.ed.getSelection();
-        this.clipboard = value;
-        try {
-            document.execCommand('copy');
-        } catch (ex) {
-            console.error(ex);
-        }
-        this.ed.focus();
+        Commands.me.run(new CopyText()).then(() => {
+            this.ed.focus();
+        });
+    }
+    private onCutClick() {
+        Commands.me.run(new CutText()).then(() => {
+            this.ed.focus();
+        });
     }
     private onPasteClick() {
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.replaceSelection(this.clipboard);
-        } else {
-            try {
-                document.execCommand('insertText', false, this.clipboard);
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
-        }
-        this.ed.focus();
+        Commands.me.run(new PasteText()).then(() => {
+            this.ed.focus();
+        });
     }
     private onEraseClick() {
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.replaceSelection('');
-        } else {
-            try {
-                document.execCommand('insertText', false, '');
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
-        }
-        this.ed.focus();
+        Commands.me.run(new DeleteText()).then(() => {
+            this.ed.focus();
+        });
     }
     private onHeaderClick() {
         if (this.ed.mirror) {
@@ -1071,15 +1045,14 @@ export class LhsToolbar {
         return this._scroll;
     }
     private get clipboard(): string {
-        if (this._clipboard === undefined) {
-            this._clipboard = '';
+        if (window.CLIPBOARD === undefined) {
+            window.CLIPBOARD = '';
         }
-        return this._clipboard;
+        return window.CLIPBOARD;
     }
     private set clipboard(value: string) {
-        this._clipboard = value;
+        window.CLIPBOARD = value;
     }
-    private _clipboard: string|undefined; /** @todo: [I]Clipboard? */
     private _scroll: any;
 }
 export default LhsToolbar;

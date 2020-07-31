@@ -4,18 +4,14 @@ import { Command } from "./index";
 import { Ui } from "../ui/index";
 
 @trace
-export class RedoText implements Command {
+export class CopyText implements Command {
     public redo() {
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.execCommand('redo');
-        } else {
-            try {
-                document.execCommand('redo')
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
+        const { value } = this.ed.getSelection();
+        this.clipboard = value;
+        try {
+            document.execCommand('copy');
+        } catch (ex) {
+            console.error(ex);
         }
         return Promise.resolve(this);
     }
@@ -39,5 +35,8 @@ export class RedoText implements Command {
     private get ui() {
         return Ui.me;
     }
+    private set clipboard(value: string) {
+        window.CLIPBOARD = value;
+    }
 }
-export default RedoText;
+export default CopyText;

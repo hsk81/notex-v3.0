@@ -4,14 +4,16 @@ import { Command } from "./index";
 import { Ui } from "../ui/index";
 
 @trace
-export class RedoText implements Command {
+export class CutText implements Command {
     public redo() {
+        const { value } = this.ed.getSelection();
+        this.clipboard = value;
         const mirror = this.ed.mirror;
         if (mirror) {
-            mirror.execCommand('redo');
+            mirror.replaceSelection('');
         } else {
             try {
-                document.execCommand('redo')
+                document.execCommand('cut')
             } catch (ex) {
                 console.error(ex);
             }
@@ -33,6 +35,9 @@ export class RedoText implements Command {
         }
         return Promise.resolve(this);
     }
+    private set clipboard(value: string) {
+        window.CLIPBOARD = value;
+    }
     private get ed() {
         return LhsEditor.me;
     }
@@ -40,4 +45,4 @@ export class RedoText implements Command {
         return Ui.me;
     }
 }
-export default RedoText;
+export default CutText;

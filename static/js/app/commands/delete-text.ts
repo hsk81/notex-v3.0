@@ -4,14 +4,14 @@ import { Command } from "./index";
 import { Ui } from "../ui/index";
 
 @trace
-export class RedoText implements Command {
+export class DeleteText implements Command {
     public redo() {
         const mirror = this.ed.mirror;
         if (mirror) {
-            mirror.execCommand('redo');
+            mirror.replaceSelection('');
         } else {
             try {
-                document.execCommand('redo')
+                document.execCommand('insertText', false, '');
             } catch (ex) {
                 console.error(ex);
             }
@@ -40,4 +40,4 @@ export class RedoText implements Command {
         return Ui.me;
     }
 }
-export default RedoText;
+export default DeleteText;
