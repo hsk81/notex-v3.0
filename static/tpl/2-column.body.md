@@ -257,7 +257,7 @@ ${MD_CONTENT}
       },
     };
     script(
-      '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+      '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js'
     );
   } else if (
     typeof window.MathJax.typesetPromise === 'function'
