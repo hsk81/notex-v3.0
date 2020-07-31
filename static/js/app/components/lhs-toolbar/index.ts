@@ -1,4 +1,3 @@
-import { Location } from "../lhs-editor/location";
 import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/index";
 
@@ -6,8 +5,10 @@ import { Commands } from "../../commands/index";
 import { CopyText } from "../../commands/copy-text";
 import { CutText } from "../../commands/cut-text";
 import { DeleteText } from "../../commands/delete-text";
-import { MathSum } from "../../commands/math-sum";
 import { MathProduct } from "../../commands/math-product";
+import { MathSubscript } from "../../commands/math-subscript";
+import { MathSum } from "../../commands/math-sum";
+import { MathSuperscript } from "../../commands/math-superscript";
 import { MdBold } from "../../commands/md-bold";
 import { MdCode } from "../../commands/md-code";
 import { MdHeading } from "../../commands/md-heading";
@@ -161,32 +162,14 @@ export class LhsToolbar {
         });
     }
     private onSupscriptClick() {
-        if (this.ed.isMode('markdown') === false &&
-            this.ed.isMode('stex') === false
-        ) {
-            return;
-        }
-        const { rhs } = this.ed.getSelection();
-        this.ed.insertValue(`^{ }`, rhs);
-        this.ed.setSelection(
-            new Location(rhs.number, 2),
-            new Location(rhs.number, 3)
-        );
-        this.ed.focus();
+        Commands.me.run(new MathSuperscript()).then(() => {
+            this.ed.focus();
+        });
     }
     private onSubscriptClick() {
-        if (this.ed.isMode('markdown') === false &&
-            this.ed.isMode('stex') === false
-        ) {
-            return;
-        }
-        const { rhs } = this.ed.getSelection();
-        this.ed.insertValue(`_{ }`, rhs);
-        this.ed.setSelection(
-            new Location(rhs.number, 2),
-            new Location(rhs.number, 3)
-        );
-        this.ed.focus();
+        Commands.me.run(new MathSubscript()).then(() => {
+            this.ed.focus();
+        });
     }
     private onVideoClick(ev: JQueryEventObject) {
         Commands.me.run(new MdVideo(ev)).then(() => {
