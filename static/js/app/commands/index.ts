@@ -4,6 +4,11 @@ export interface Command {
     redo: () => Promise<Command>;
     undo?: () => Promise<Command>;
 }
+interface CommandEx extends Command {
+    redo: () => Promise<CommandEx>;
+    undo?: () => Promise<CommandEx>;
+    link: Command;
+}
 @trace
 export class Commands {
     public static get me(): Commands {
@@ -17,7 +22,7 @@ export class Commands {
         this._undone = [];
     }
     public add(command: Command) {
-        const ex_command = <IExCommand>command;
+        const ex_command = <CommandEx>command;
         const re_command = Commands.top(this._redone);
         if (re_command) {
             ex_command.link = re_command;
@@ -25,7 +30,7 @@ export class Commands {
         this._redone.push(ex_command);
     }
     public async run(command: Command) {
-        const ex_command = <IExCommand>command;
+        const ex_command = <CommandEx>command;
         const re_command = Commands.top(this._redone);
         if (re_command) {
             ex_command.link = re_command;
@@ -46,21 +51,16 @@ export class Commands {
         }
     }
     private static top(
-        array: Array<IExCommand>
-    ): IExCommand | undefined {
+        array: Array<CommandEx>
+    ): CommandEx | undefined {
         return array[array.length - 1];
     }
     private static pop(
-        array: Array<IExCommand>
-    ): IExCommand | undefined {
+        array: Array<CommandEx>
+    ): CommandEx | undefined {
         return array.pop();
     }
-    private _redone: Array<IExCommand>;
-    private _undone: Array<IExCommand>;
-}
-interface IExCommand extends Command {
-    redo: () => Promise<IExCommand>;
-    undo: () => Promise<IExCommand>;
-    link: Command;
+    private _redone: Array<CommandEx>;
+    private _undone: Array<CommandEx>;
 }
 export default Commands;

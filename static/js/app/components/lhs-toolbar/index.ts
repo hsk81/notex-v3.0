@@ -2,6 +2,10 @@ import { Location } from "../lhs-editor/location";
 import { LhsEditor } from "../lhs-editor/index";
 import { Ui } from "../../ui/index";
 
+import { Commands } from "../../commands/index";
+import { RedoText } from "../../commands/redo-text";
+import { UndoText } from "../../commands/undo-text";
+
 import { trace } from "../../decorator/trace";
 
 @trace
@@ -62,32 +66,10 @@ export class LhsToolbar {
         this.scroll.refresh();
     }
     private onUndoClick() {
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.execCommand('undo');
-        } else {
-            try {
-                document.execCommand('undo')
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
-        }
-        this.ed.focus();
+        Commands.me.run(new UndoText());
     }
     private onRedoClick() {
-        const mirror = this.ed.mirror;
-        if (mirror) {
-            mirror.execCommand('redo');
-        } else {
-            try {
-                document.execCommand('redo')
-            } catch (ex) {
-                console.error(ex);
-            }
-            this.ui.$lhsInput.trigger('change');
-        }
-        this.ed.focus();
+        Commands.me.run(new RedoText());
     }
     private onCutClick() {
         const { value } = this.ed.getSelection();
