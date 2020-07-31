@@ -6,6 +6,8 @@ import { Commands } from "../../commands/index";
 import { CopyText } from "../../commands/copy-text";
 import { CutText } from "../../commands/cut-text";
 import { DeleteText } from "../../commands/delete-text";
+import { MathSum } from "../../commands/math-sum";
+import { MathProduct } from "../../commands/math-product";
 import { MdBold } from "../../commands/md-bold";
 import { MdCode } from "../../commands/md-code";
 import { MdHeading } from "../../commands/md-heading";
@@ -149,52 +151,14 @@ export class LhsToolbar {
         });
     }
     private onSumClick(ev: JQueryEventObject) {
-        if (this.ed.isMode('markdown') === false) {
-            return;
-        }
-        const { lhs, rhs } = this.ed.getSelection();
-        if ((ev.ctrlKey || ev.metaKey)) {
-            this.ed.replaceSelection(
-                `\n$$\\sum_{i=a}^{b}{i}$$\n`
-            );
-            this.ed.setSelection(
-                new Location(lhs.number, 9),
-                new Location(rhs.number, 12)
-            );
-        } else {
-            this.ed.replaceSelection(
-                `$\\sum_{i=a}^{b}{i}$`
-            );
-            this.ed.setSelection(
-                new Location(lhs.number, 7),
-                new Location(rhs.number, 10)
-            );
-        }
-        this.ed.focus();
+        Commands.me.run(new MathSum(ev)).then(() => {
+            this.ed.focus();
+        });
     }
     private onProductClick(ev: JQueryEventObject) {
-        if (this.ed.isMode('markdown') === false) {
-            return;
-        }
-        const { lhs, rhs } = this.ed.getSelection();
-        if ((ev.ctrlKey || ev.metaKey)) {
-            this.ed.replaceSelection(
-                `\n$$\\prod_{i=a}^{b}{i}$$\n`
-            );
-            this.ed.setSelection(
-                new Location(lhs.number, 10),
-                new Location(rhs.number, 13)
-            );
-        } else {
-            this.ed.replaceSelection(
-                `$\\prod_{i=a}^{b}{i}$`
-            );
-            this.ed.setSelection(
-                new Location(lhs.number, 8),
-                new Location(rhs.number, 11)
-            );
-        }
-        this.ed.focus();
+        Commands.me.run(new MathProduct(ev)).then(() => {
+            this.ed.focus();
+        });
     }
     private onSupscriptClick() {
         if (this.ed.isMode('markdown') === false &&
