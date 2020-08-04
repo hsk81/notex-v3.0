@@ -87,7 +87,7 @@ export class TemplateDialog {
             const enum_h1s = cookie.get<string>('enum-h1s') ?? 'false';
             const enum_h2s = cookie.get<string>('enum-h2s') ?? 'true';
             const enum_h3s = cookie.get<string>('enum-h3s') ?? 'true';
-            this.enumHeaders = {
+            this.enumHeadings = {
                 h1: JSON.parse(enum_h1s),
                 h2: JSON.parse(enum_h2s),
                 h3: JSON.parse(enum_h3s)
@@ -148,7 +148,7 @@ export class TemplateDialog {
         });
         cookie.set('enum-figures', JSON.stringify(flag));
     }
-    public set enumHeaders(flags: {
+    public set enumHeadings(flags: {
         h1: boolean, h2: boolean, h3: boolean
     }) {
         const h1_active = flags.h1;

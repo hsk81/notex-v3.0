@@ -1,4 +1,3 @@
-import { TemplateDialog } from "../dlg-template/index";
 import { Alignment } from "../dlg-template/index";
 import { FontSize } from "../dlg-template/index";
 import { Template } from "../dlg-template/index";
@@ -6,8 +5,17 @@ import { LhsEditor } from "../lhs-editor/index";
 import { AiMode } from "../rhs-footer/ai-mode";
 import { Ui } from "../../ui/index";
 
-import { gateway, html } from "../../ipfs/index";
-import { IPFS, Buffer } from "../../ipfs/index";
+import { Commands } from "../../commands/index";
+import { AlignText } from "../../commands/align-text";
+import { EnumFigures } from "../../commands/enum-figures";
+import { EnumHeadings } from "../../commands/enum-headings";
+import { LargerFontSize } from "../../commands/larger-font-size";
+import { LockScrolling } from "../../commands/lock-scrolling";
+import { PrintFile } from "../../commands/print-file";
+import { PublishBlog } from "../../commands/publish-blog";
+import { RefreshView } from "../../commands/refresh-view";
+import { SelectTemplate } from "../../commands/select-template";
+import { SmallerFontSize } from "../../commands/smaller-font-size";
 
 import { buffered } from "../../decorator/buffered";
 import { trace } from "../../decorator/trace";
@@ -94,60 +102,30 @@ export class RhsToolbar {
     }
     @buffered
     private onRefreshClick(ev: JQueryEventObject) {
-        const $span = this.ui.$toolbarRefresh.find('span');
-        setTimeout(() => $span.removeClass('spin'), 600);
-        setTimeout(() => $span.addClass('spin'), 0);
-        if ((ev.ctrlKey || ev.metaKey)) {
-            this.ed.render('hard');
-        } else {
-            this.ed.render('soft');
-        }
+        Commands.me.run(new RefreshView(ev));
     }
     @buffered
     private onLockScrollingClick() {
-        const $button = this.ui.$toolbarLockScrolling;
-        const active = $button.hasClass('active');
-        if (active) {
-            $button.prop('title', 'Unlock Scrolling');
-        } else {
-            $button.prop('title', 'Lock Scrolling');
-        }
-        this.ed.lockScroll = active;
+        Commands.me.run(new LockScrolling());
     }
     @buffered
-    private async onPublishClick(ev: JQueryEventObject) {
-        if ((ev.ctrlKey || ev.metaKey)) {
-            const $contents = this.ui.$viewer.contents();
-            const head = this.template.getHead({ title: this.ed.title });
-            const body = $contents.find('body').html();
-            const buffer = Buffer.from(await html(head, body));
-            IPFS.me(async (ipfs: any) => {
-                for await (const item of ipfs.add(buffer)) {
-                    const url = `${gateway.get()}/${item.cid}`;
-                    const tab = window.open(url, '_same');
-                    if (tab && tab.focus) tab.focus();
-                }
-            });
-        } else {
-            this.ui.$publishDialog.modal();
-        }
+    private onPublishClick(ev: JQueryEventObject) {
+        Commands.me.run(new PublishBlog(ev));
     }
     private onPrintClick() {
-        if (this.ui.$viewer[0].contentWindow) {
-            this.ui.$viewer[0].contentWindow.print();
-        }
+        Commands.me.run(new PrintFile());
     }
     private onTemplateClick() {
-        this.ui.$templateDialog.modal();
+        Commands.me.run(new SelectTemplate());
     }
     private onSingleColumnClick() {
-        this.template.select(Template.SingleColumn);
+        Commands.me.run(new SelectTemplate(Template.SingleColumn));
     }
     private onDoubleColumnClick() {
-        this.template.select(Template.DoubleColumn);
+        Commands.me.run(new SelectTemplate(Template.DoubleColumn));
     }
     private onTripleColumnClick() {
-        this.template.select(Template.TripleColumn);
+        Commands.me.run(new SelectTemplate(Template.TripleColumn));
     }
     private onSelectTemplate(ev: JQuery.Event, { template }: {
         template: Template
@@ -175,15 +153,11 @@ export class RhsToolbar {
     }
     @buffered
     private onFontSizeLargerClick() {
-        const active = this.ui.$toolbarFontSizeLarger.hasClass('active');
-        this.template.fontSize = active ? 'larger' : 'medium';
-        this.ed.render();
+        Commands.me.run(new LargerFontSize());
     }
     @buffered
     private onFontSizeSmallerClick() {
-        const active = this.ui.$toolbarFontSizeSmaller.hasClass('active');
-        this.template.fontSize = active ? 'smaller' : 'medium';
-        this.ed.render();
+        Commands.me.run(new SmallerFontSize());
     }
     private onFontSize(ev: JQuery.Event, { font_size }: {
         font_size: FontSize
@@ -205,23 +179,19 @@ export class RhsToolbar {
     }
     @buffered
     private onAlignLeftClick() {
-        this.template.alignment = 'left';
-        this.ed.render();
+        Commands.me.run(new AlignText('left'));
     }
     @buffered
     private onAlignCenterClick() {
-        this.template.alignment = 'center';
-        this.ed.render();
+        Commands.me.run(new AlignText('center'));
     }
     @buffered
     private onAlignRightClick() {
-        this.template.alignment = 'right';
-        this.ed.render();
+        Commands.me.run(new AlignText('right'));
     }
     @buffered
     private onAlignJustifyClick() {
-        this.template.alignment = 'justify';
-        this.ed.render();
+        Commands.me.run(new AlignText('justify'));
     }
     private onAlign(ev: JQuery.Event, { alignment }: {
         alignment: Alignment
@@ -255,9 +225,7 @@ export class RhsToolbar {
     }
     @buffered
     private onFigureEnumClick() {
-        const active = this.ui.$toolbarFigureEnum.hasClass('active');
-        this.template.enumFigures = active;
-        this.ed.render();
+        Commands.me.run(new EnumFigures());
     }
     private onFigureEnum(ev: JQuery.Event, { flag }: {
         flag: boolean
@@ -270,7 +238,7 @@ export class RhsToolbar {
     }
     @buffered
     private onH1EnumClick() {
-        this.enumHeadings();
+        Commands.me.run(new EnumHeadings());
     }
     private onH1Enum(ev: JQuery.Event, { flag }: {
         flag: boolean
@@ -283,7 +251,7 @@ export class RhsToolbar {
     }
     @buffered
     private onH2EnumClick() {
-        this.enumHeadings();
+        Commands.me.run(new EnumHeadings());
     }
     private onH2Enum(ev: JQuery.Event, { flag }: {
         flag: boolean
@@ -296,7 +264,7 @@ export class RhsToolbar {
     }
     @buffered
     private onH3EnumClick() {
-        this.enumHeadings();
+        Commands.me.run(new EnumHeadings());
     }
     private onH3Enum(ev: JQuery.Event, { flag }: {
         flag: boolean
@@ -307,19 +275,8 @@ export class RhsToolbar {
             this.ui.$toolbarH3Enum.removeClass('active');
         }
     }
-    private enumHeadings() {
-        this.template.enumHeaders = {
-            h1: this.ui.$toolbarH1Enum.hasClass('active'),
-            h2: this.ui.$toolbarH2Enum.hasClass('active'),
-            h3: this.ui.$toolbarH3Enum.hasClass('active')
-        };
-        this.ed.render();
-    }
     private get aiMode() {
         return window.AI_MODE as AiMode;
-    }
-    private get template() {
-        return TemplateDialog.me;
     }
     private get ed() {
         return LhsEditor.me;
