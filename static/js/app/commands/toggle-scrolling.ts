@@ -5,16 +5,18 @@ import { Ui } from "../ui/index";
 import { trace } from "../decorator/trace";
 
 @trace
-export class LockScrolling implements Command {
+export class ToggleScrolling implements Command {
     public redo() {
         const $button = this.ui.$toolbarLockScrolling;
-        const active = $button.hasClass('active');
-        if (active) {
-            $button.prop('title', 'Unlock Scrolling');
+        if (this.ed.lockScroll) {
+            $button.prop('title', 'Lock Scrolling [CTRL+L]');
+            $button.removeClass('active');
+            this.ed.lockScroll = false;
         } else {
-            $button.prop('title', 'Lock Scrolling');
+            $button.prop('title', 'Unlock Scrolling [CTRL+L]');
+            $button.addClass('active');
+            this.ed.lockScroll = true;
         }
-        this.ed.lockScroll = active;
         return Promise.resolve(this);
     }
     private get ed() {
@@ -24,4 +26,4 @@ export class LockScrolling implements Command {
         return Ui.me;
     }
 }
-export default LockScrolling;
+export default ToggleScrolling;

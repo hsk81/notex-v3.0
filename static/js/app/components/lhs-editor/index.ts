@@ -108,6 +108,9 @@ export class LhsEditor {
         this.simple = true;
         return this.ui.$lhsInput;
     }
+    public get lockScroll() {
+        return this._lock_scroll;
+    }
     public set lockScroll(flag: boolean) {
         this._lock_scroll = flag;
     }

@@ -6,11 +6,10 @@ import { Ui } from "../ui/index";
 
 @trace
 export class MdImage implements Command {
-    constructor({ ctrlKey, metaKey, shiftKey }: {
-        ctrlKey: boolean, metaKey: boolean, shiftKey: boolean
+    constructor({ altKey, shiftKey }: {
+        altKey: boolean, shiftKey: boolean
     }) {
-        this.ctrlKey = ctrlKey;
-        this.metaKey = metaKey;
+        this.altKey = altKey;
         this.shiftKey = shiftKey;
     }
     public redo() {
@@ -31,7 +30,7 @@ export class MdImage implements Command {
             }
         };
         const { value: caption, lhs } = this.ed.getSelection();
-        if ((this.ctrlKey || this.metaKey) && this.shiftKey) {
+        if (this.altKey && this.shiftKey) {
             this.ed.replaceSelection(
                 `![${caption||'CAPTION'}]`
             );
@@ -50,7 +49,7 @@ export class MdImage implements Command {
                     new Location(lhs.number, 9)
                 );
             }
-        } else if ((this.ctrlKey || this.metaKey)) {
+        } else if (this.altKey) {
             this.ed.replaceSelection(
                 `![${caption||'CAPTION'}][REF]`
             );
@@ -107,8 +106,7 @@ export class MdImage implements Command {
     private get ui() {
         return Ui.me;
     }
-    private ctrlKey: boolean;
-    private metaKey: boolean;
+    private altKey: boolean;
     private shiftKey: boolean;
 }
 export default MdImage;

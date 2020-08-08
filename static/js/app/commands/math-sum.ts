@@ -6,18 +6,17 @@ import { Ui } from "../ui/index";
 
 @trace
 export class MathSum implements Command {
-    constructor({ ctrlKey, metaKey }: {
-        ctrlKey: boolean, metaKey: boolean
+    constructor({ altKey }: {
+        altKey: boolean
     }) {
-        this.ctrlKey = ctrlKey;
-        this.metaKey = metaKey;
+        this.altKey = altKey;
     }
     public redo() {
         if (this.ed.isMode('markdown') === false) {
             return Promise.resolve(this);
         }
         const { lhs, rhs } = this.ed.getSelection();
-        if ((this.ctrlKey || this.metaKey)) {
+        if ((this.altKey)) {
             this.ed.replaceSelection(
                 `\n$$\\sum_{i=a}^{b}{i}$$\n`
             );
@@ -56,7 +55,6 @@ export class MathSum implements Command {
     private get ui() {
         return Ui.me;
     }
-    private ctrlKey: boolean;
-    private metaKey: boolean;
+    private altKey: boolean;
 }
 export default MathSum;

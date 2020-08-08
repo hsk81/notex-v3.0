@@ -10,7 +10,7 @@ import { AlignText } from "../../commands/align-text";
 import { EnumFigures } from "../../commands/enum-figures";
 import { EnumHeadings } from "../../commands/enum-headings";
 import { LargerFontSize } from "../../commands/larger-font-size";
-import { LockScrolling } from "../../commands/lock-scrolling";
+import { ToggleScrolling } from "../../commands/toggle-scrolling";
 import { PrintFile } from "../../commands/print-file";
 import { PublishBlog } from "../../commands/publish-blog";
 import { RefreshView } from "../../commands/refresh-view";
@@ -106,7 +106,7 @@ export class RhsToolbar {
     }
     @buffered
     private onLockScrollingClick() {
-        Commands.me.run(new LockScrolling());
+        Commands.me.run(new ToggleScrolling());
     }
     @buffered
     private onPublishClick(ev: JQueryEventObject) {

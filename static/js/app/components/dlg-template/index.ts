@@ -196,6 +196,9 @@ export class TemplateDialog {
         cookie.set('enum-h2s', JSON.stringify(flags.h2));
         cookie.set('enum-h3s', JSON.stringify(flags.h3));
     }
+    public get fontSize() {
+        return cookie.get('font-size') || 'medium';
+    }
     public set fontSize(value: FontSize) {
         this.setStyle({
             body: { fontSize: `body, table { font-size: ${value}; }` }

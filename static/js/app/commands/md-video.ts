@@ -6,11 +6,10 @@ import { Ui } from "../ui/index";
 
 @trace
 export class MdVideo implements Command {
-    constructor({ ctrlKey, metaKey, shiftKey }: {
-        ctrlKey: boolean, metaKey: boolean, shiftKey: boolean
+    constructor({ altKey, shiftKey }: {
+        altKey: boolean, shiftKey: boolean
     }) {
-        this.ctrlKey = ctrlKey;
-        this.metaKey = metaKey;
+        this.altKey = altKey;
         this.shiftKey = shiftKey;
     }
     public redo() {
@@ -18,7 +17,7 @@ export class MdVideo implements Command {
             return Promise.resolve(this);
         }
         const { lhs } = this.ed.getSelection();
-        if ((this.ctrlKey || this.metaKey) && this.shiftKey) {
+        if (this.altKey && this.shiftKey) {
             this.ed.replaceSelection(
                 `@[prezi](URL)`
             );
@@ -26,7 +25,7 @@ export class MdVideo implements Command {
                 new Location(lhs.number, 9),
                 new Location(lhs.number, 12)
             );
-        } else if ((this.ctrlKey || this.metaKey)) {
+        } else if (this.altKey) {
             this.ed.replaceSelection(
                 `@[vimeo](URL)`
             );
@@ -65,8 +64,7 @@ export class MdVideo implements Command {
     private get ui() {
         return Ui.me;
     }
-    private ctrlKey: boolean;
-    private metaKey: boolean;
+    private altKey: boolean;
     private shiftKey: boolean;
 }
 export default MdVideo;

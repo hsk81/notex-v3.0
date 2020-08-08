@@ -6,17 +6,16 @@ import { trace } from "../decorator/trace";
 
 @trace
 export class RefreshView implements Command {
-    constructor({ ctrlKey, metaKey }: {
-        ctrlKey: boolean, metaKey: boolean
+    constructor({ altKey }: {
+        altKey: boolean
     }) {
-        this.ctrlKey = ctrlKey;
-        this.metaKey = metaKey;
+        this.altKey = altKey;
     }
     public async redo() {
         const $span = this.ui.$toolbarRefresh.find('span');
         setTimeout(() => $span.removeClass('spin'), 600);
         setTimeout(() => $span.addClass('spin'), 0);
-        if ((this.ctrlKey || this.metaKey)) {
+        if ((this.altKey)) {
             await this.ed.render('hard');
         } else {
             await this.ed.render('soft');
@@ -29,7 +28,6 @@ export class RefreshView implements Command {
     private get ui() {
         return Ui.me;
     }
-    private ctrlKey: boolean;
-    private metaKey: boolean;
+    private altKey: boolean;
 }
 export default RefreshView;

@@ -9,14 +9,13 @@ import { trace } from "../decorator/trace";
 
 @trace
 export class PublishBlog implements Command {
-    constructor({ ctrlKey, metaKey }: {
-        ctrlKey: boolean, metaKey: boolean
+    constructor({ altKey }: {
+        altKey: boolean
     }) {
-        this.ctrlKey = ctrlKey;
-        this.metaKey = metaKey;
+        this.altKey = altKey;
     }
     public async redo() {
-        if ((this.ctrlKey || this.metaKey)) {
+        if ((this.altKey)) {
             const $contents = this.ui.$viewer.contents();
             const head = this.template_dlg.getHead({ title: this.ed.title });
             const body = $contents.find('body').html();
@@ -42,7 +41,6 @@ export class PublishBlog implements Command {
     private get ui() {
         return Ui.me;
     }
-    private ctrlKey: boolean;
-    private metaKey: boolean;
+    private altKey: boolean;
 }
 export default PublishBlog;
