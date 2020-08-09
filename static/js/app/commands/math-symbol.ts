@@ -18,11 +18,11 @@ export class MathSymbol implements Command {
         const { lhs, rhs, value } = this.ed.getSelection();
         if ((this.altKey)) {
             this.ed.replaceSelection(
-                `$$${value}$$`
+                `\n$$${value}$$\n`
             );
             this.ed.setSelection(
-                new Location(lhs.number, 2),
-                new Location(rhs.number, 2)
+                new Location(lhs.number, 3),
+                new Location(rhs.number, 3)
             );
         } else {
             this.ed.replaceSelection(

@@ -15,14 +15,14 @@ export class MathProduct implements Command {
         if (this.ed.isMode('markdown') === false) {
             return Promise.resolve(this);
         }
-        const { lhs, rhs } = this.ed.getSelection();
+        const { lhs } = this.ed.getSelection();
         if ((this.altKey)) {
             this.ed.replaceSelection(
                 `\n$$\\prod_{i=a}^{b}{i}$$\n`
             );
             this.ed.setSelection(
                 new Location(lhs.number, 10),
-                new Location(rhs.number, 13)
+                new Location(lhs.number, 13)
             );
         } else {
             this.ed.replaceSelection(
@@ -30,7 +30,7 @@ export class MathProduct implements Command {
             );
             this.ed.setSelection(
                 new Location(lhs.number, 8),
-                new Location(rhs.number, 11)
+                new Location(lhs.number, 11)
             );
         }
         return Promise.resolve(this);

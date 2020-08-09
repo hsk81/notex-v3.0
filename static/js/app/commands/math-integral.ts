@@ -15,14 +15,14 @@ export class MathIntegral implements Command {
         if (this.ed.isMode('markdown') === false) {
             return Promise.resolve(this);
         }
-        const { lhs, rhs } = this.ed.getSelection();
+        const { lhs } = this.ed.getSelection();
         if ((this.altKey)) {
             this.ed.replaceSelection(
                 `\n$$\\int_{a}^{b}{t}\\,dt$$\n`
             );
             this.ed.setSelection(
                 new Location(lhs.number, 9),
-                new Location(rhs.number, 10)
+                new Location(lhs.number, 10)
             );
         } else {
             this.ed.replaceSelection(
@@ -30,7 +30,7 @@ export class MathIntegral implements Command {
             );
             this.ed.setSelection(
                 new Location(lhs.number, 7),
-                new Location(rhs.number, 8)
+                new Location(lhs.number, 8)
             );
         }
         return Promise.resolve(this);
