@@ -5,10 +5,12 @@ import { Commands } from "../../commands/index";
 import { CopyText } from "../../commands/copy-text";
 import { CutText } from "../../commands/cut-text";
 import { DeleteText } from "../../commands/delete-text";
+import { MathIntegral } from "../../commands/math-integral";
 import { MathProduct } from "../../commands/math-product";
 import { MathSubscript } from "../../commands/math-subscript";
 import { MathSum } from "../../commands/math-sum";
 import { MathSuperscript } from "../../commands/math-superscript";
+import { MathSymbol } from "../../commands/math-symbol";
 import { MdBold } from "../../commands/md-bold";
 import { MdCode } from "../../commands/md-code";
 import { MdHeading } from "../../commands/md-heading";
@@ -62,16 +64,20 @@ export class LhsToolbar {
             .on('click', this.onOutdentClick.bind(this));
         this.ui.$toolbarPaste
             .on('click', this.onPasteClick.bind(this));
-        this.ui.$toolbarProduct
-            .on('click', this.onProductClick.bind(this));
         this.ui.$toolbarRedo
             .on('click', this.onRedoClick.bind(this));
-        this.ui.$toolbarSum
-            .on('click', this.onSumClick.bind(this));
-        this.ui.$toolbarSubscript
-            .on('click', this.onSubscriptClick.bind(this));
-        this.ui.$toolbarSupscript
-            .on('click', this.onSupscriptClick.bind(this));
+        this.ui.$toolbarMathSymbol
+            .on('click', this.onMathSymbolClick.bind(this));
+        this.ui.$toolbarMathSum
+            .on('click', this.onMathSumClick.bind(this));
+        this.ui.$toolbarMathProduct
+            .on('click', this.onMathProductClick.bind(this));
+        this.ui.$toolbarMathIntegral
+            .on('click', this.onMathIntegralClick.bind(this));
+        this.ui.$toolbarMathSubscript
+            .on('click', this.onMathSubscriptClick.bind(this));
+        this.ui.$toolbarMathSuperscript
+            .on('click', this.onMathSupscriptClick.bind(this));
         this.ui.$toolbarUndo
             .on('click', this.onUndoClick.bind(this));
         this.ui.$toolbarVideo
@@ -151,22 +157,32 @@ export class LhsToolbar {
             this.ed.focus();
         });
     }
-    private onSumClick(ev: JQueryEventObject) {
+    private onMathSymbolClick(ev: JQueryEventObject) {
+        Commands.me.run(new MathSymbol(ev)).then(() => {
+            this.ed.focus();
+        });
+    }
+    private onMathSumClick(ev: JQueryEventObject) {
         Commands.me.run(new MathSum(ev)).then(() => {
             this.ed.focus();
         });
     }
-    private onProductClick(ev: JQueryEventObject) {
+    private onMathProductClick(ev: JQueryEventObject) {
         Commands.me.run(new MathProduct(ev)).then(() => {
             this.ed.focus();
         });
     }
-    private onSupscriptClick() {
+    private onMathIntegralClick(ev: JQueryEventObject) {
+        Commands.me.run(new MathIntegral(ev)).then(() => {
+            this.ed.focus();
+        });
+    }
+    private onMathSupscriptClick() {
         Commands.me.run(new MathSuperscript()).then(() => {
             this.ed.focus();
         });
     }
-    private onSubscriptClick() {
+    private onMathSubscriptClick() {
         Commands.me.run(new MathSubscript()).then(() => {
             this.ed.focus();
         });

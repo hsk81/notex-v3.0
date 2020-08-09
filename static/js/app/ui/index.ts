@@ -331,14 +331,29 @@ export class Ui {
     public get $toolbarLink() {
         return this.$toolbarInner.find('.glyphicon-link').closest('button');
     }
+    public get $toolbarMathIntegral() {
+        return this.$toolbarInner.find('.glyphicon.integral').closest('button');
+    }
+    public get $toolbarMathProduct() {
+        return this.$toolbarInner.find('.glyphicon.product').closest('button');
+    }
+    public get $toolbarMathSubscript() {
+        return this.$toolbarInner.find('.glyphicon-subscript').closest('button');
+    }
+    public get $toolbarMathSum() {
+        return this.$toolbarInner.find('.glyphicon.sum').closest('button');
+    }
+    public get $toolbarMathSuperscript() {
+        return this.$toolbarInner.find('.glyphicon-superscript').closest('button');
+    }
+    public get $toolbarMathSymbol() {
+        return this.$toolbarInner.find('.glyphicon.symbol').closest('button');
+    }
     public get $toolbarOutdent() {
         return this.$toolbarInner.find('.glyphicon-indent-right').closest('button');
     }
     public get $toolbarPaste() {
         return this.$toolbarInner.find('.glyphicon-paste').closest('button');
-    }
-    public get $toolbarProduct() {
-        return this.$toolbarInner.find('.glyphicon.product').closest('button');
     }
     public get $toolbarPrint() {
         return this.$toolbarInner.find('.glyphicon.print').closest('button');
@@ -354,15 +369,6 @@ export class Ui {
     }
     public get $toolbarLockScrolling() {
         return this.$toolbarInner.find('.glyphicon.lock-scrolling').closest('button');
-    }
-    public get $toolbarSubscript() {
-        return this.$toolbarInner.find('.glyphicon-subscript').closest('button');
-    }
-    public get $toolbarSum() {
-        return this.$toolbarInner.find('.glyphicon.sum').closest('button');
-    }
-    public get $toolbarSupscript() {
-        return this.$toolbarInner.find('.glyphicon-superscript').closest('button');
     }
     public get $toolbarTemplate() {
         return this.$toolbarInner.find('.glyphicon.template').closest('button');
