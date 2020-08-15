@@ -11,16 +11,28 @@
  * Glyphicon classes:
  * ========================================================================= */
 
-.glyphicon {
+.glyphicon-basic {
+  display: inline-block;
+  // font-family: "Glyphicons Basic";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.375em;
+  left: -3px;
+  // line-height: 1;
   position: relative;
-  top: 2px;
+  top: -6px;
+}
+
+.glyphicon {
   display: inline-block;
   font-family: "Glyphicons Halflings";
   font-style: normal;
   font-weight: 400;
+  font-size: 1em;
+  left: 0;
   line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  top: 2px;
 }
 
 .glyphicon-asterisk:before {

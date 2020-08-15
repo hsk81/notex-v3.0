@@ -284,7 +284,7 @@ export class Ui {
         return this.$toolbarInner.find('.glyphicon-erase').closest('button');
     }
     public get $toolbarFont() {
-        return this.$toolbarInner.find('.glyphicon-font').closest('button');
+        return this.$toolbarInner.find('.glyphicon-basic.font').closest('button');
     }
     public get $toolbarFontSizeLarger() {
         return this.$toolbarInner.find('.font-size-larger').closest('button');
@@ -332,22 +332,22 @@ export class Ui {
         return this.$toolbarInner.find('.glyphicon-link').closest('button');
     }
     public get $toolbarMathIntegral() {
-        return this.$toolbarInner.find('.glyphicon.integral').closest('button');
+        return this.$toolbarInner.find('.glyphicon-basic.integral').closest('button');
     }
     public get $toolbarMathProduct() {
-        return this.$toolbarInner.find('.glyphicon.product').closest('button');
+        return this.$toolbarInner.find('.glyphicon-basic.product').closest('button');
     }
     public get $toolbarMathSubscript() {
         return this.$toolbarInner.find('.glyphicon-subscript').closest('button');
     }
     public get $toolbarMathSum() {
-        return this.$toolbarInner.find('.glyphicon.sum').closest('button');
+        return this.$toolbarInner.find('.glyphicon-basic.sum').closest('button');
     }
     public get $toolbarMathSuperscript() {
         return this.$toolbarInner.find('.glyphicon-superscript').closest('button');
     }
     public get $toolbarMathSymbol() {
-        return this.$toolbarInner.find('.glyphicon.symbol').closest('button');
+        return this.$toolbarInner.find('.glyphicon-basic.symbol').closest('button');
     }
     public get $toolbarOutdent() {
         return this.$toolbarInner.find('.glyphicon-indent-right').closest('button');
