@@ -1,3 +1,4 @@
+import { SessionController } from "../ctrl-session/index";
 import { Alignment } from "../dlg-template/index";
 import { FontSize } from "../dlg-template/index";
 import { Template } from "../dlg-template/index";

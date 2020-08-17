@@ -1,3 +1,4 @@
+import { SessionController } from "../ctrl-session/index";
 import { RhsViewer } from "../rhs-viewer/index";
 import { Location } from "./location";
 import { UiMode } from "./ui-mode";
@@ -15,6 +16,7 @@ import { trace } from "../../decorator/trace";
 import { cookie } from "../../cookie/cookie";
 
 import "./md-mode";
+import buffered from "../../decorator/buffered";
 
 declare const $: JQueryStatic;
 declare const CodeMirror: {
@@ -33,10 +35,12 @@ export class LhsEditor {
         return window.LHS_EDITOR;
     }
     public constructor() {
-        const match = location.hash.match(/session=([0-9a-z]{16})/i)
-        if (match && match[1]) {
-            const md_content = localStorage[`${match[1]}:md-content`];
-            if (md_content) this.setValue(md_content);
+        const content = this.session.item('content');
+        if (typeof content === 'string') {
+            setTimeout(() => {
+                $(this).trigger('change');
+            });
+            this.setValue(content);
         }
         if (this.mobile) {
             this.toInput({ footer: false });
@@ -572,6 +576,9 @@ export class LhsEditor {
     }
     private set index(value: number | undefined) {
         window.INDEX = value;
+    }
+    private get session() {
+        return SessionController.me;
     }
     private get ui() {
         return Ui.me;

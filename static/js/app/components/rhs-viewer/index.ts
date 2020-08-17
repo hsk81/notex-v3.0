@@ -24,9 +24,9 @@ export class RhsViewer {
     }
     @buffered(40)
     public async render(force: 'hard'|'soft'|'none' = 'none') {
-        const md_content = this.ed.getValue();
+        const content = this.ed.getValue();
         {
-            if (md_content.length === 0) {
+            if (content.length === 0) {
                 force = 'hard';
             }
             if (force !== 'none') {
@@ -36,14 +36,15 @@ export class RhsViewer {
         {
             const head = TemplateDialog.me.getHead();
             this.ui.$rhsCachedHead.html(head);
-            const body = TemplateDialog.me.getBody(md_content);
+            const body = TemplateDialog.me.getBody(content);
             this.ui.$rhsCachedBody.html(MarkdownIt.me.render(body, {
                 document: this.ui.$rhsCached.contents()[0] as Document
             }));
         }
         {
             $(this).trigger('rendered', {
-                md_content, title: this.title
+                content, title: this.title,
+                type: 'text/markdown; charset=UTF-8'
             });
         }
     }
@@ -86,10 +87,10 @@ export class RhsViewer {
         }
     }
     @buffered(600)
-    private onRendered(ev: JQuery.Event, { md_content }: {
-        md_content: string
+    private onRendered(ev: JQuery.Event, { content }: {
+        content: string
     }) {
-        if (md_content.length === 0) {
+        if (content.length === 0) {
             $.get(this.placeholder).done((html) => {
                 this.ui.$rhsCachedBody.hide().html(html);
                 this.ui.$rhsCachedBody.fadeIn('slow');

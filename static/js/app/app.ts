@@ -1,4 +1,5 @@
 import { DownloadController } from "./components/ctrl-download/index";
+import { SessionController } from "./components/ctrl-session/index";
 import { PublishDialog } from "./components/dlg-publish/index";
 import { TemplateDialog } from "./components/dlg-template/index";
 
@@ -31,6 +32,7 @@ export class App {
         this.publish_dialog = PublishDialog.me;
         this.template_dialog = TemplateDialog.me;
         this.key_shortcuts = KeyShortcuts.me;
+        this.session_controller = SessionController.me;
         this.download_controller = DownloadController.me;
     }
     private readonly md_editor: LhsEditor;
@@ -42,6 +44,7 @@ export class App {
     private readonly publish_dialog: PublishDialog;
     private readonly template_dialog: TemplateDialog;
     private readonly key_shortcuts: KeyShortcuts;
+    private readonly session_controller: SessionController;
     private readonly download_controller: DownloadController;
 }
 export default App.me;

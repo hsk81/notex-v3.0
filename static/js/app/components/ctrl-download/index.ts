@@ -16,11 +16,11 @@ export class DownloadController {
         $(this.viewer).on('rendered', this.onRendered.bind(this));
     }
     @buffered(600)
-    private onRendered(ev: JQuery.Event, { md_content, title }: {
-        md_content: string, title?: string
+    private onRendered(ev: JQuery.Event, { content, type, title }: {
+        content: string, type: string, title?: string
     }) {
         this.title = title ? title : this.viewer.title;
-        this.md_content = md_content;
+        this.blobs = { content, type };
     }
     private set title(value: string | undefined) {
         if (!value) {
@@ -29,20 +29,12 @@ export class DownloadController {
         this.ui.$toolbarSave.attr("download", `${value}.md`);
         this.ui.$headerSave.attr("download", `${value}.md`);
     }
-    private set md_content(value: string) {
-        this.ui.$headerSave.attr("href", URL.createObjectURL(
-            new Blob([value], { type: 'text/markdown' })
-        ));
-        this.ui.$toolbarSave.attr("href", URL.createObjectURL(
-            new Blob([value], { type: 'text/markdown' })
-        ));
-        this.session = value;
-    }
-    private set session(value: string) {
-        const match = location.hash.match(/session=([0-9a-z]{16})/i)
-        const session = match && match[1] || String.random();
-        localStorage[`${session}:md-content`] = value;
-        location.hash = `#session=${session}`;
+    private set blobs(data: { content: string, type: string }) {
+        const url = URL.createObjectURL(
+            new Blob([data.content], { type: data.type })
+        );
+        this.ui.$toolbarSave.attr("href", url);
+        this.ui.$headerSave.attr("href", url);
     }
     private get viewer() {
         return RhsViewer.me;
