@@ -109,7 +109,7 @@ export class PublishDialog {
             }
         } else {
             const tab = window.open('https://metamask.io/', '_black');
-            if (tab) tab.focus();
+            if (tab && tab.focus) tab.focus();
         }
     }
     private onEthConnected() {
