@@ -20,6 +20,7 @@ import { MdItalic } from "../../commands/md-italic";
 import { MdLink } from "../../commands/md-link";
 import { MdOutdent } from "../../commands/md-outdent";
 import { MdVideo } from "../../commands/md-video";
+import { NewSession } from "../../commands/new-session";
 import { PasteText } from "../../commands/paste-text";
 import { RedoText } from "../../commands/redo-text";
 import { UndoText } from "../../commands/undo-text";
@@ -78,6 +79,8 @@ export class LhsToolbar {
             .on('click', this.onMathSubscriptClick.bind(this));
         this.ui.$toolbarMathSuperscript
             .on('click', this.onMathSupscriptClick.bind(this));
+        this.ui.$toolbarNew
+            .on('click', this.onNewClick.bind(this));
         this.ui.$toolbarUndo
             .on('click', this.onUndoClick.bind(this));
         this.ui.$toolbarVideo
@@ -86,6 +89,11 @@ export class LhsToolbar {
     public refresh() {
         this.ed.refresh();
         this.scroll.refresh();
+    }
+    private onNewClick() {
+        Commands.me.run(new NewSession()).then(() => {
+            this.ed.focus();
+        });
     }
     private onUndoClick() {
         Commands.me.run(new UndoText()).then(() => {

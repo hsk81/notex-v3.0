@@ -349,6 +349,9 @@ export class Ui {
     public get $toolbarMathSymbol() {
         return this.$toolbarInner.find('.glyphicon-basic.symbol').closest('button');
     }
+    public get $toolbarNew() {
+        return this.$toolbarInner.find('.glyphicon-basic.square-plus').closest('button');
+    }
     public get $toolbarOutdent() {
         return this.$toolbarInner.find('.glyphicon-indent-right').closest('button');
     }

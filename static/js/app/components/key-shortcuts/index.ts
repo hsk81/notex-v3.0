@@ -6,6 +6,7 @@ import { MdBold } from "../../commands/md-bold";
 import { MdCode } from "../../commands/md-code";
 import { MdHeading } from "../../commands/md-heading";
 import { MdItalic } from "../../commands/md-italic";
+import { NewSession } from "../../commands/new-session";
 import { OpenFile } from "../../commands/open-file";
 import { PrintFile } from "../../commands/print-file";
 import { PublishBlog } from "../../commands/publish-blog";
@@ -95,6 +96,10 @@ export class KeyShortcuts {
                         ev.preventDefault();
                         this.md_code();
                         return;
+                    case 'N':
+                        ev.preventDefault();
+                        this.new_session();
+                        return;
                     case 'O':
                         ev.preventDefault();
                         this.open_file();
@@ -150,6 +155,10 @@ export class KeyShortcuts {
     @buffered
     private md_italic() {
         Commands.me.run(new MdItalic());
+    }
+    @buffered
+    private new_session() {
+        Commands.me.run(new NewSession());
     }
     private open_file() {
         Commands.me.run(new OpenFile());

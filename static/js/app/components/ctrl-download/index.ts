@@ -36,6 +36,13 @@ export class DownloadController {
         this.ui.$toolbarSave.attr("href", URL.createObjectURL(
             new Blob([value], { type: 'text/markdown' })
         ));
+        this.session = value;
+    }
+    private set session(value: string) {
+        const match = location.hash.match(/session=([0-9a-z]{16})/i)
+        const session = match && match[1] || String.random();
+        localStorage[`${session}:md-content`] = value;
+        location.hash = `#session=${session}`;
     }
     private get viewer() {
         return RhsViewer.me;

@@ -33,6 +33,11 @@ export class LhsEditor {
         return window.LHS_EDITOR;
     }
     public constructor() {
+        const match = location.hash.match(/session=([0-9a-z]{16})/i)
+        if (match && match[1]) {
+            const md_content = localStorage[`${match[1]}:md-content`];
+            if (md_content) this.setValue(md_content);
+        }
         if (this.mobile) {
             this.toInput({ footer: false });
         } else if (this.simple) {
