@@ -16,7 +16,6 @@ import { trace } from "../../decorator/trace";
 import { cookie } from "../../cookie/cookie";
 
 import "./md-mode";
-import buffered from "../../decorator/buffered";
 
 declare const $: JQueryStatic;
 declare const CodeMirror: {
@@ -37,9 +36,6 @@ export class LhsEditor {
     public constructor() {
         const content = this.session.item('content');
         if (typeof content === 'string') {
-            setTimeout(() => {
-                $(this).trigger('change');
-            });
             this.setValue(content);
         }
         if (this.mobile) {

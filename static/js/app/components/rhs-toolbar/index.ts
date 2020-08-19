@@ -1,4 +1,3 @@
-import { SessionController } from "../ctrl-session/index";
 import { Alignment } from "../dlg-template/index";
 import { FontSize } from "../dlg-template/index";
 import { Template } from "../dlg-template/index";
@@ -35,8 +34,6 @@ export class RhsToolbar {
                 this.refresh();
             });
         }
-        $(this.ed).on(
-            'change', (ev) => this.onEditorChange(this.ed.empty));
         this.ui.$toolbarPublish
             .on('click', this.onPublishClick.bind(this));
         this.ui.$toolbarPrint
@@ -90,15 +87,6 @@ export class RhsToolbar {
     }
     public refresh() {
         this.ed.refresh();
-        this.scroll.refresh();
-    }
-    @buffered(40)
-    private onEditorChange(empty: boolean) {
-        if (empty || this.aiMode === AiMode.help) {
-            this.ui.$rhsToolbar.removeClass('long');
-        } else {
-            this.ui.$rhsToolbar.addClass('long');
-        }
         this.scroll.refresh();
     }
     @buffered
