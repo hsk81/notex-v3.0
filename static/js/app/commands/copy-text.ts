@@ -1,9 +1,7 @@
 import { LhsEditor } from "../components/lhs-editor/index";
-import { trace } from "../decorator/trace";
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-@trace
 export class CopyText implements Command {
     public redo() {
         const { value } = this.ed.getSelection();

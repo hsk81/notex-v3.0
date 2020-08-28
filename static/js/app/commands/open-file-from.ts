@@ -1,8 +1,6 @@
 import { LhsEditor } from "../components/lhs-editor/index";
-import { trace } from "../decorator/trace";
 import { Command } from "./index";
 
-@trace
 export class OpenFileFrom implements Command {
     public constructor(file: File) {
         this.file = file;

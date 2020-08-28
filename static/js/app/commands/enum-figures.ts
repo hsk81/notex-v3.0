@@ -3,9 +3,6 @@ import { LhsEditor } from "../components/lhs-editor/index";
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-import { trace } from "../decorator/trace";
-
-@trace
 export class EnumFigures implements Command {
     public async redo() {
         const active = this.ui.$toolbarFigureEnum.hasClass('active');

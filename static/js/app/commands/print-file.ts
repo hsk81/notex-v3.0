@@ -1,9 +1,6 @@
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-import { trace } from "../decorator/trace";
-
-@trace
 export class PrintFile implements Command {
     public redo() {
         if (this.ui.$viewer[0].contentWindow) {

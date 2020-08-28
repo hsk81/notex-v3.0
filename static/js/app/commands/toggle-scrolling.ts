@@ -2,9 +2,6 @@ import { LhsEditor } from "../components/lhs-editor/index";
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-import { trace } from "../decorator/trace";
-
-@trace
 export class ToggleScrolling implements Command {
     public redo() {
         const $button = this.ui.$toolbarLockScrolling;

@@ -1,8 +1,6 @@
-import { trace } from "../decorator/trace";
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-@trace
 export class SaveFile implements Command {
     public redo() {
         const a = document.createElement('a')

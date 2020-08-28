@@ -1,3 +1,4 @@
+import { Analytics } from "../analytics/index";
 import { trace } from '../decorator/trace';
 
 export interface Command {
@@ -35,6 +36,9 @@ export class Commands {
         if (re_command) {
             ex_command.link = re_command;
         }
+        Analytics.me.event(
+            'Commands', 'run', command.constructor.name
+        );
         this._redone.push(await ex_command.redo());
     }
     public async undo() {

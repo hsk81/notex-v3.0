@@ -1,7 +1,5 @@
-import { trace } from "../decorator/trace";
 import { Command } from "./index";
 
-@trace
 export class NewSession implements Command {
     public redo() {
         const hash = `session=${String.random()}`;

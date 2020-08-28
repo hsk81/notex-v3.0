@@ -5,9 +5,7 @@ import { Ui } from "../ui/index";
 
 import { gateway, html } from "../ipfs/index";
 import { IPFS, Buffer } from "../ipfs/index";
-import { trace } from "../decorator/trace";
 
-@trace
 export class PublishBlog implements Command {
     constructor({ altKey }: {
         altKey: boolean

@@ -52,7 +52,7 @@ def js_minify(tgt_path):
         concat(tgt_path, amd.optimize(amd_conf), flag=flag)
 
     def minify(tgt_path, src_path):
-        subprocess.call(['npx', 'terser', '-cmo', tgt_path, src_path])
+        subprocess.call(['npx', 'terser', '-co', tgt_path, src_path])
 
     concat(tmp_path,
         'static/js/lib/jquery/jquery-2.2.4.min.js', 'w')

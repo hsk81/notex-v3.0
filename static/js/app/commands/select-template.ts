@@ -3,9 +3,6 @@ import { Template } from "../components/dlg-template/index";
 import { Command } from "./index";
 import { Ui } from "../ui/index";
 
-import { trace } from "../decorator/trace";
-
-@trace
 export class SelectTemplate implements Command {
     constructor(template?: Template) {
         this.template = template;
