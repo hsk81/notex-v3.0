@@ -12,8 +12,8 @@ export class NtxCertificate {
                 return '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18';
             case '0x2a': // ETH Kovan
                 return '0x436e85c85600a9060456610f679543eaafe59f1f';
-            case '0xa866': // AVA Denali
-                return '0x9c77a6268b31fa482aabccdd53931d5ad91460d7';
+            case '0xa866': // AVAX Everest
+                return '0x317e4FAb05e6D398B6693E11724bfAe69D35CD4D';
             default:
                 return undefined;
         }
@@ -24,8 +24,8 @@ export class NtxCertificate {
                 return 'https://etherscan.io';
             case '0x436e85c85600a9060456610f679543eaafe59f1f': // ETH Kovan
                 return 'https://kovan.etherscan.io';
-            case '0x9c77a6268b31fa482aabccdd53931d5ad91460d7': // AVA Denali
-                return 'http://cchain.avaexplorer.com';
+            case '0x317e4FAb05e6D398B6693E11724bfAe69D35CD4D': // AVAX Everest
+                return 'https://cchain.explorer.avax.network';
             default:
                 return undefined;
         }
