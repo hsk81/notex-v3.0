@@ -64,7 +64,7 @@ export class BlogTab {
             'hide.bs.modal', this.onBsModalHide.bind(this));
         this.ui.$publishDialog.on(
             'hidden.bs.modal', this.onBsModalHidden.bind(this));
-        this.ui.$publishDialogExpand.on(
+        this.ui.$publishDialogExpandBlog.on(
             'click', this.onExpandClick.bind(this));
         this.ui.$publishDialogBlogScriptsNav.on(
             'click', this.onScriptsNavClick.bind(this));
@@ -76,6 +76,71 @@ export class BlogTab {
             'click', this.onStylesCheckboxClick.bind(this));
         this.ui.$publishDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
+        $(this).on(
+            'show', this.onShow.bind(this));
+        $(this).on(
+            'hide', this.onHide.bind(this));
+    }
+    private onShow() {
+        this.ui.$publishDialogExpandBlog.show();
+        this.ui.$publishDialogBlogNav.find('a').addClass('active');
+        this.ui.$publishDialogBlogTab.show();
+        this.ui.$publishDialogPrimary.removeClass('btn-success');
+        this.ui.$publishDialogPrimary.removeClass('btn-warning');
+        this.ui.$publishDialogPrimary.removeClass('btn-danger');
+        this.ui.$publishDialogPrimary.html('Publish');
+    }
+    private onHide(
+        ev: JQuery.Event, flags?: { expansion: boolean, tab: boolean }
+    ) {
+        if (!flags || flags.tab) {
+            this.ui.$publishDialogBlogNav.find('a').removeClass('active');
+            this.ui.$publishDialogBlogTab.hide();
+            this.ui.$publishDialogExpandBlog.hide();
+        }
+        if (!flags || flags.expansion) {
+            const $expand = this.ui.$publishDialogExpandBlog;
+            $expand.data('state', 'collapsed');
+            $expand.prop('title', 'Expand');
+            const $glyphicon = $expand.find('.glyphicon');
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
+        }
+    }
+    private onExpandClick() {
+        const $expand = this.ui.$publishDialogExpandBlog;
+        const $glyphicon = $expand.find('.glyphicon');
+        const $scripts_nav = this.ui.$publishDialogBlogScriptsNav;
+        const $styles_nav = this.ui.$publishDialogBlogStylesNav;
+        const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
+        const $settings = this.ui.$publishDialogBlogSettings;
+        const $title = this.ui.$publishDialogBlogTitle;
+        if ($expand.data('state') === 'expanded') {
+            $expand.data('state', 'collapsed');
+            $expand.prop('title', 'Expand');
+        } else {
+            $expand.data('state', 'expanded');
+            $expand.prop('title', 'Collapse');
+        }
+        if ($expand.data('state') === 'expanded') {
+            if ($scripts_nav.find('a').hasClass('active')) {
+                $settings.filter(':not(.styles)').show();
+            } else if ($styles_nav.find('a').hasClass('active')) {
+                $settings.filter(':not(.scripts)').show();
+            } else {
+                $settings.show();
+            }
+            $glyphicon.removeClass('glyphicon-chevron-down');
+            $glyphicon.addClass('glyphicon-chevron-up');
+            $scripts_ta[0].setSelectionRange(0, 0);
+            $scripts_ta.scrollTop(0);
+            $scripts_ta.focus();
+        } else {
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
+            $settings.hide();
+            $title.focus();
+        }
     }
     private onBsModalShow() {
         const $url = this.ui.$publishDialogBlogUrl;
@@ -120,39 +185,6 @@ export class BlogTab {
         this.ui.$publishDialogBlogSettings.hide();
     }
     private onBsModalHidden() {
-    }
-    private onExpandClick() {
-        const $expand = this.ui.$publishDialogExpand;
-        const $glyphicon = $expand.find('.glyphicon');
-        const $scripts_nav = this.ui.$publishDialogBlogScriptsNav;
-        const $styles_nav = this.ui.$publishDialogBlogStylesNav;
-        const $scripts_ta = this.ui.$publishDialogBlogScriptsTextarea;
-        const $settings = this.ui.$publishDialogBlogSettings;
-        const $title = this.ui.$publishDialogBlogTitle;
-        if ($expand.data('state') === 'expanded') {
-            $expand.data('state', 'collapsed');
-        } else {
-            $expand.data('state', 'expanded');
-        }
-        if ($expand.data('state') === 'expanded') {
-            if ($scripts_nav.find('a').hasClass('active')) {
-                $settings.filter(':not(.styles)').show();
-            } else if ($styles_nav.find('a').hasClass('active')) {
-                $settings.filter(':not(.scripts)').show();
-            } else {
-                $settings.show();
-            }
-            $glyphicon.removeClass('glyphicon-chevron-down');
-            $glyphicon.addClass('glyphicon-chevron-up');
-            $scripts_ta[0].setSelectionRange(0, 0);
-            $scripts_ta.scrollTop(0);
-            $scripts_ta.focus();
-        } else {
-            $glyphicon.removeClass('glyphicon-chevron-up');
-            $glyphicon.addClass('glyphicon-chevron-down');
-            $settings.hide();
-            $title.focus();
-        }
     }
     private onScriptsNavClick() {
         this.ui.$publishDialogBlogStylesNav.find('a').removeClass('active');

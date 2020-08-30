@@ -170,8 +170,11 @@ export class Ui {
     public get $publishDialogIpfsMetaKeywordsIg() {
         return this.$publishDialogIpfsMetaKeywords.parent('.input-group');
     }
-    public get $publishDialogExpand() {
-        return this.$publishDialog.find('#expand');
+    public get $publishDialogExpandBlog() {
+        return this.$publishDialog.find('#expand-blog');
+    }
+    public get $publishDialogExpandIpfs() {
+        return this.$publishDialog.find('#expand-ipfs');
     }
     public get $publishDialogMetamask() {
         return this.$publishDialog.find('#metamask');

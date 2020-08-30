@@ -46,16 +46,97 @@ export class IpfsTab {
             'certified', this.onCertified.bind(this));
         $(this).on(
             'rejected', this.onRejected.bind(this));
+        this.ui.$publishDialogExpandIpfs.on(
+            'click', this.onExpandClick.bind(this));
+        $(this).on(
+            'show', this.onShow.bind(this));
+        $(this).on(
+            'hide', this.onHide.bind(this));
+    }
+    private onShow() {
+        this.ui.$publishDialogExpandIpfs.show();
+        this.ui.$publishDialogMetamask.parent().addClass('mr-auto');
+        this.ui.$publishDialogMetamask.parent().show();
+        this.ui.$publishDialogIpfsNav.find('a').addClass('active');
+        this.ui.$publishDialogIpfsTab.show();
+        this.ui.$publishDialogPrimary.removeClass('btn-success');
+        this.ui.$publishDialogPrimary.removeClass('btn-warning');
+        this.ui.$publishDialogPrimary.removeClass('btn-danger');
+        this.ui.$publishDialogPrimary.html('Publish');
+    }
+    private onHide(
+        ev: JQuery.Event, flags?: { expansion: boolean, tab: boolean }
+    ) {
+        if (!flags || flags.tab) {
+            this.ui.$publishDialogMetamask.parent().hide();
+            this.ui.$publishDialogMetamask.parent().removeClass('mr-auto');
+        }
+        if (!flags || flags.tab) {
+            this.ui.$publishDialogIpfsNav.find('a').removeClass('active');
+            this.ui.$publishDialogIpfsTab.hide();
+            this.ui.$publishDialogExpandIpfs.hide();
+        }
+        if (!flags || flags.expansion) {
+            const $expand = this.ui.$publishDialogExpandIpfs;
+            $expand.data('state', 'collapsed');
+            $expand.prop('title', 'Expand');
+            const $glyphicon = $expand.find('.glyphicon');
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
+        }
+    }
+    private onExpandClick() {
+        const $expand = this.ui.$publishDialogExpandIpfs;
+        const $glyphicon = $expand.find('.glyphicon');
+        if ($expand.data('state') === 'expanded') {
+            $expand.data('state', 'collapsed');
+            $expand.prop('title', 'Expand');
+        } else {
+            $expand.data('state', 'expanded');
+            $expand.prop('title', 'Collapse');
+        }
+        if ($expand.data('state') === 'expanded') {
+            $glyphicon.removeClass('glyphicon-chevron-down');
+            $glyphicon.addClass('glyphicon-chevron-up');
+        } else {
+            $glyphicon.removeClass('glyphicon-chevron-up');
+            $glyphicon.addClass('glyphicon-chevron-down');
+        }
+        if ($expand.data('state') === 'expanded') {
+            this.ui.$publishDialogIpfsTab.find('[for=nft-group]').show();
+            this.ui.$publishDialogIpfsTab.find('#nft-group').show();
+        } else {
+            this.ui.$publishDialogIpfsTab.find('[for=nft-group]').hide();
+            this.ui.$publishDialogIpfsTab.find('#nft-group').hide();
+        }
     }
     private onEthConnected() {
-        this.ui.$publishDialogIpfsTab.find('[for=nft-group]').show();
-        this.ui.$publishDialogIpfsTab.find('#nft-group').show();
+        const $expand = this.ui.$publishDialogExpandIpfs;
+        $expand.data('state', 'expanded');
+        $expand.prop('title', 'Collapse');
+        $expand.prop('disabled', true);
+        const $glyphicon = $expand.find('.glyphicon');
+        $glyphicon.removeClass('glyphicon-chevron-down');
+        $glyphicon.addClass('glyphicon-chevron-up');
+        const $tab = this.ui.$publishDialogIpfsTab;
+        $tab.find('[for=nft-group]').show();
+        $tab.find('#nft-group').show();
     }
     private onEthDisconnected() {
-        this.ui.$publishDialogIpfsTab.find('[for=nft-group]').hide();
-        this.ui.$publishDialogIpfsTab.find('#nft-group').hide();
+        const $expand = this.ui.$publishDialogExpandIpfs;
+        $expand.data('state', 'collapsed');
+        $expand.prop('title', 'Expand');
+        $expand.prop('disabled', false);
+        const $glyphicon = $expand.find('.glyphicon');
+        $glyphicon.removeClass('glyphicon-chevron-up');
+        $glyphicon.addClass('glyphicon-chevron-down');
+        const $tab = this.ui.$publishDialogIpfsTab;
+        $tab.find('[for=nft-group]').hide();
+        $tab.find('#nft-group').hide();
     }
     private onBsModalShow() {
+        this.ui.$publishDialogIpfsTab.find('[for=nft-group]').hide();
+        this.ui.$publishDialogIpfsTab.find('#nft-group').hide();
         this.ipfs_gateway = gateway.get() ? gateway.get() as string : '';
         this.ui.$publishDialog.find('input').removeClass('is-invalid');
         this.ui.$publishDialogIpfsMetaTitle.val(this.ed.title as string);

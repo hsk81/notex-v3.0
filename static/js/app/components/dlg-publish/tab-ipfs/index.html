@@ -1,7 +1,7 @@
 <div id="ipfs-tab" role="tabpanel" class="tab-pane active">
     <style scoped>{% include 'components/dlg-publish/tab-ipfs/index.css' %}</style>
     <label for="ipfs-gateway">
-        <a href="https://ipfs.io/" target="_blank">IPFS</a> Gateway
+        Gateway
     </label>
     <div class="input-group">
         <div class="input-group-prepend">
@@ -12,7 +12,7 @@
         <input class="form-control" id="ipfs-gateway" list="ipfs-gateways"
             placeholder="an IPFS gateway like https://ipfs.io/ipfs"
             title="IPFS Gateway" type="url"
-        >
+            >
         <div class="input-group-append">
             <button class="btn btn-outline-dark" tabindex="-1" title="IPFS Gateway" type="button"
                 data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
@@ -23,7 +23,7 @@
         </div>
     </div>
     <label for="nft-group" style="display: none">
-        <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank">NFT</a> Certificate
+        Metadata
     </label>
     <div class="input-group" id="nft-group" style="display: none">
         <label for="meta-title">Title</label>
@@ -39,7 +39,7 @@
             <div class="input-group-append">
                 <button class="btn btn-outline-dark" tabindex="-1" title="Title" type="button"
                     data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                    data-content="Mandatory title (aka name), the IPFS document shall be certified with."
+                    data-content="Mandatory title (aka name), the IPFS document shall be posted (and certified) with."
                     >
                     <span class="glyphicon glyphicon-question-sign"></span>
                 </button>
@@ -58,7 +58,7 @@
             <div class="input-group-append">
                 <button class="btn btn-outline-dark" tabindex="-1" title="Description" type="button"
                     data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                    data-content="Mandatory succinct description, the IPFS document shall be certified with."
+                    data-content="Mandatory succinct description, the IPFS document shall be posted (and certified) with."
                     >
                     <span class="glyphicon glyphicon-question-sign"></span>
                 </button>
@@ -77,7 +77,7 @@
             <div class="input-group-append">
                 <button class="btn btn-outline-dark" tabindex="-1" title="Authorship" type="button"
                     data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                    data-content="Optional comma separated list of authors, the IPFS document shall be certified for."
+                    data-content="Optional comma separated list of authors, the IPFS document shall be posted (and certified) with."
                     >
                     <span class="glyphicon glyphicon-question-sign"></span>
                 </button>
@@ -96,7 +96,7 @@
             <div class="input-group-append">
                 <button class="btn btn-outline-dark" tabindex="-1" title="Emails" type="button"
                     data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                    data-content="Optional comma separated list of emails, the IPFS document shall be certified with."
+                    data-content="Optional comma separated list of emails, the IPFS document shall be posted (and certified) with."
                     >
                     <span class="glyphicon glyphicon-question-sign"></span>
                 </button>
@@ -115,7 +115,7 @@
             <div class="input-group-append">
                 <button class="btn btn-outline-dark" tabindex="-1" title="Keywords" type="button"
                     data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
-                    data-content="Optional comma separated list of keywords, the IPFS document shall be certified with."
+                    data-content="Optional comma separated list of keywords, the IPFS document shall be posted (and certified) with."
                     >
                     <span class="glyphicon glyphicon-question-sign"></span>
                 </button>

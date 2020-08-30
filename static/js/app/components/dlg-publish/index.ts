@@ -64,41 +64,28 @@ export class PublishDialog {
         }
     }
     private onBsModalHide() {
-        const $glyphicon = this.ui.$publishDialogExpand.find('.glyphicon');
-        this.ui.$publishDialogExpand.data('state', 'collapsed');
-        $glyphicon.removeClass('glyphicon-chevron-up');
-        $glyphicon.addClass('glyphicon-chevron-down');
+        if (this.eth) this.eth.disable();
     }
     private onBsModalHidden() {
+        $(this.blog_tab).trigger('hide', {
+            expansion: true, tab: false
+        });
+        $(this.ipfs_tab).trigger('hide', {
+            expansion: true, tab: false
+        });
         setTimeout(() => this.ed.focus(), 1);
     }
     private onIpfsNavClick() {
-        this.ui.$publishDialogExpand.hide();
-        this.ui.$publishDialogExpand.removeClass('mr-auto');
-        this.ui.$publishDialogMetamask.parent().addClass('mr-auto');
-        this.ui.$publishDialogMetamask.parent().show();
-        this.ui.$publishDialogBlogNav.find('a').removeClass('active');
-        this.ui.$publishDialogBlogTab.hide();
-        this.ui.$publishDialogIpfsNav.find('a').addClass('active');
-        this.ui.$publishDialogIpfsTab.show();
-        this.ui.$publishDialogPrimary.removeClass('btn-success');
-        this.ui.$publishDialogPrimary.removeClass('btn-warning');
-        this.ui.$publishDialogPrimary.removeClass('btn-danger');
-        this.ui.$publishDialogPrimary.html('Publish');
+        $(this.blog_tab).trigger('hide', {
+            expansion: false, tab: true
+        });
+        $(this.ipfs_tab).trigger('show');
     }
     private onBlogNavClick() {
-        this.ui.$publishDialogMetamask.parent().hide();
-        this.ui.$publishDialogMetamask.parent().removeClass('mr-auto');
-        this.ui.$publishDialogExpand.addClass('mr-auto');
-        this.ui.$publishDialogExpand.show();
-        this.ui.$publishDialogIpfsNav.find('a').removeClass('active');
-        this.ui.$publishDialogIpfsTab.hide();
-        this.ui.$publishDialogBlogNav.find('a').addClass('active');
-        this.ui.$publishDialogBlogTab.show();
-        this.ui.$publishDialogPrimary.removeClass('btn-success');
-        this.ui.$publishDialogPrimary.removeClass('btn-warning');
-        this.ui.$publishDialogPrimary.removeClass('btn-danger');
-        this.ui.$publishDialogPrimary.html('Publish');
+        $(this.ipfs_tab).trigger('hide', {
+            expansion: false, tab: true
+        });
+        $(this.blog_tab).trigger('show');
     }
     private onMetamaskClick() {
         if (this.eth) {
