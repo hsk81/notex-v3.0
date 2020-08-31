@@ -7,7 +7,7 @@ import { Ui } from "../ui/index";
 
 import { gateway, html } from "../ipfs/index";
 import { IPFS, Buffer } from "../ipfs/index";
-import { QRCode } from "../qr-code";
+import { QRCode } from "../qr-code/index";
 
 export class PublishBlog implements Command {
     constructor({ altKey, meta }: {
@@ -28,7 +28,7 @@ export class PublishBlog implements Command {
                 for await (
                     const item of ipfs.add(buffer)
                 ) {
-                    if (this.certifiable && this.meta) {
+                    if (this.meta) {
                         this.certify(
                             `${gateway.get()}`, `${item.cid}`, this.meta
                         ).then(({
@@ -65,10 +65,16 @@ export class PublishBlog implements Command {
         return IPFS.me().then(async (ipfs: any) => {
             for await (const item of ipfs.add(buffer)) {
                 const cert_url = `${ipfs_gateway}/${item.cid}`;
-                const tx = await this.eth.nft(cert_url);
-                if (tx) return {
-                    cert: { meta: meta, url: cert_url }, tx
-                };
+                if (this.eth_supported) {
+                    const tx = await this.eth.nft(cert_url);
+                    if (tx) return {
+                        cert: { meta, url: cert_url }, tx
+                    };
+                } else {
+                    return {
+                        cert: { meta, url: cert_url }, tx: undefined
+                    };
+                }
             }
             throw null;
         });
@@ -87,14 +93,14 @@ export class PublishBlog implements Command {
             });
         });
     }
-    private get certifiable() {
+    private get eth_supported() {
         return this.eth && this.eth.enabled && this.eth.supported;
-    }
-    private get template_dlg() {
-        return TemplateDialog.me;
     }
     private get eth() {
         return Ethereum.me;
+    }
+    private get template_dlg() {
+        return TemplateDialog.me;
     }
     private get ed() {
         return LhsEditor.me;

@@ -7,8 +7,8 @@ import { TransactionReceipt } from "../../../ethereum/index";
 import { Ethereum } from "../../../ethereum/index";
 import { gateway } from "../../../ipfs/index";
 
-import { PublishBlog } from "static/js/app/commands/publish-blog";
-import { Commands } from "static/js/app/commands";
+import { PublishBlog } from "../../../commands/publish-blog";
+import { Commands } from "../../../commands/index";
 import { trace } from "../../../decorator/trace";
 
 @trace
@@ -205,7 +205,7 @@ export class IpfsTab {
     }
     private onCertified(ev: JQuery.Event, data: {
         cert: { meta: PdfCertificateMeta, url: string },
-        post_url: string, tx: TransactionReceipt
+        post_url: string, tx?: TransactionReceipt
     }) {
         this.ui.$publishDialogPrimary.addClass('btn-success');
         this.ui.$publishDialogPrimary.prop('disabled', false);

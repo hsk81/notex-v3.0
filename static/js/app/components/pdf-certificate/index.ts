@@ -5,20 +5,22 @@ import { QRCode } from '../../qr-code/index';
 export class PdfCertificate {
     public static print(data: {
         cert: { meta: PdfCertificateMeta, url: string },
-        post_url: string, tx: TransactionReceipt
+        post_url: string, tx?: TransactionReceipt
     }) {
         $.get(this.pdf_html).done(async (html: string) => {
             const head = html.match(/<head>([^]+)<\/head>/im);
             this.$pdf_head.html(head ? head[0] : '');
             const body = html.match(/<body>([^]+)<\/body>/im);
             this.$pdf_body.html(body ? body[0] : '');
-            this.setTitle(data.tx.events?.Transfer.returnValues.tokenId);
-            this.setId(data.tx.events?.Transfer.returnValues.tokenId);
-            this.setName(data.cert.meta.name);
-            this.setDescription(data.cert.meta.description);
-            this.setAuthors(data.cert.meta.authors);
-            this.setEmails(data.cert.meta.emails);
-            this.setKeywords(data.cert.meta.keywords);
+            {
+                this.setTitle(data.tx?.events?.Transfer.returnValues.tokenId);
+                this.setId(data.tx?.events?.Transfer.returnValues.tokenId);
+                this.setName(data.cert.meta.name);
+                this.setDescription(data.cert.meta.description);
+                this.setAuthors(data.cert.meta.authors);
+                this.setEmails(data.cert.meta.emails);
+                this.setKeywords(data.cert.meta.keywords);
+            }
             await Promise.all([
                 this.setContentUrl(data.cert.meta.content as string),
                 this.setCertUrl(data.cert.url),
@@ -40,11 +42,11 @@ export class PdfCertificate {
     private static getTitle() {
         return this.$pdf_head.find('title').text();
     }
-    private static setTitle(value: string) {
-        this.$pdf_head.find('title').text(`NTXCertificate #${value}`);
+    private static setTitle(value?: string) {
+        this.$pdf_head.find('title').text(`NTXCertificate #${value||'N/A'}`);
     }
-    private static setId(value: string) {
-        this.$pdf_body.find('.id>.value>span').text(value);
+    private static setId(value?: string) {
+        this.$pdf_body.find('.id>.value>span').text(value||'N/A');
     }
     private static setName(value: string) {
         this.$pdf_body.find('.name>.value>span').text(value);
@@ -69,11 +71,15 @@ export class PdfCertificate {
         this.$pdf_body.find('#cert-url>.qrcode').html(await QRCode(value));
         this.$pdf_body.find('#cert-url>.value>span').text(value);
     }
-    private static async setTxUrl(tx: TransactionReceipt) {
-        const explorer = NtxCertificate.explorer(tx.to);
-        const tx_url = `${explorer}/tx/${tx.transactionHash}`;
-        this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
-        this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);
+    private static async setTxUrl(tx?: TransactionReceipt) {
+        if (tx) {
+            const explorer = NtxCertificate.explorer(tx.to);
+            const tx_url = `${explorer}/tx/${tx.transactionHash}`;
+            this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
+            this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);
+        } else {
+            this.$pdf_body.find('#tx-hash').remove();
+        }
     }
     private static get $pdf_head() {
         return this.$pdf.contents().find('head');
