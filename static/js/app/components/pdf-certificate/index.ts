@@ -20,7 +20,7 @@ export class PdfCertificate {
             this.setEmails(data.cert.meta.emails);
             this.setKeywords(data.cert.meta.keywords);
             await Promise.all([
-                this.setContentUrl(data.cert.meta.content),
+                this.setContentUrl(data.cert.meta.content as string),
                 this.setCertUrl(data.cert.url),
                 this.setTxUrl(data.tx)
             ]);
@@ -91,7 +91,7 @@ export type PdfCertificateMeta = {
     authors: string[],
     emails: string[],
     keywords: string[],
-    content: string,
-    image: string
+    content?: string,
+    image?: string
 };
 export default PdfCertificate;

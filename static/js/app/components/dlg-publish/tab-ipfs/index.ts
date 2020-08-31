@@ -1,17 +1,15 @@
-import { TemplateDialog } from "../../dlg-template/index";
 import { LhsEditor } from "../../lhs-editor/index";
-import { QRCode } from '../../../qr-code/index';
 import { Ui } from "../../../ui/index";
 
 import { PdfCertificateMeta } from "../../pdf-certificate/index";
 import { PdfCertificate } from "../../pdf-certificate/index";
 import { TransactionReceipt } from "../../../ethereum/index";
 import { Ethereum } from "../../../ethereum/index";
-import { gateway, html } from "../../../ipfs/index";
-import { IPFS, Buffer } from "../../../ipfs/index";
+import { gateway } from "../../../ipfs/index";
 
+import { PublishBlog } from "static/js/app/commands/publish-blog";
+import { Commands } from "static/js/app/commands";
 import { trace } from "../../../decorator/trace";
-declare const require: Function;
 
 @trace
 export class IpfsTab {
@@ -30,22 +28,8 @@ export class IpfsTab {
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.ui.$publishDialog.on(
             'shown.bs.modal', this.onBsModalShown.bind(this));
-        this.ui.$publishDialog.on(
-            'hide.bs.modal', this.onBsModalHide.bind(this));
-        this.ui.$publishDialog.on(
-            'hidden.bs.modal', this.onBsModalHidden.bind(this));
         this.ui.$publishDialogPrimary.on(
             'click', this.onPrimaryClick.bind(this));
-        $(this).on(
-            'publishing', this.onPublishing.bind(this));
-        $(this).on(
-            'published', this.onPublished.bind(this));
-        $(this).on(
-            'certifying', this.onCertifying.bind(this));
-        $(this).on(
-            'certified', this.onCertified.bind(this));
-        $(this).on(
-            'rejected', this.onRejected.bind(this));
         this.ui.$publishDialogExpandIpfs.on(
             'click', this.onExpandClick.bind(this));
         $(this).on(
@@ -87,7 +71,6 @@ export class IpfsTab {
     }
     private onExpandClick() {
         const $expand = this.ui.$publishDialogExpandIpfs;
-        const $glyphicon = $expand.find('.glyphicon');
         if ($expand.data('state') === 'expanded') {
             $expand.data('state', 'collapsed');
             $expand.prop('title', 'Expand');
@@ -96,9 +79,11 @@ export class IpfsTab {
             $expand.prop('title', 'Collapse');
         }
         if ($expand.data('state') === 'expanded') {
+            const $glyphicon = $expand.find('.glyphicon');
             $glyphicon.removeClass('glyphicon-chevron-down');
             $glyphicon.addClass('glyphicon-chevron-up');
         } else {
+            const $glyphicon = $expand.find('.glyphicon');
             $glyphicon.removeClass('glyphicon-chevron-up');
             $glyphicon.addClass('glyphicon-chevron-down');
         }
@@ -153,10 +138,6 @@ export class IpfsTab {
             this.ui.$publishDialogPrimary.focus();
         }
     }
-    private onBsModalHide() {
-    }
-    private onBsModalHidden() {
-    }
     private async onPrimaryClick() {
         const $nav = this.ui.$publishDialogIpfsNav;
         if (!$nav.find('a').hasClass('active')) {
@@ -184,65 +165,26 @@ export class IpfsTab {
             return;
         }
         {
-            $(this).trigger('publishing');
+            const command = new PublishBlog({ meta: {
+                name: this.title,
+                description: this.description,
+                authors: this.authors,
+                emails: this.emails,
+                keywords: this.keywords
+            }});
+            $(command).on(
+                'publishing', this.onPublishing.bind(this));
+            $(command).on(
+                'published', this.onPublished.bind(this));
+            $(command).on(
+                'certifying', this.onCertifying.bind(this));
+            $(command).on(
+                'certified', this.onCertified.bind(this));
+            $(command).on(
+                'rejected', this.onRejected.bind(this)
+            );
+            Commands.me.run(command);
         }
-        {
-            const head = TemplateDialog.me.getHead({ title: this.ed.title });
-            const body = this.ui.$viewer.contents().find('body').html();
-            this.publish(this.ipfs_gateway, await html(head, body));
-        }
-    }
-    private publish(ipfs_gateway: string, content: string) {
-        const buffer = Buffer.from(content);
-        IPFS.me(async (ipfs: any) => {
-            for await (const item of ipfs.add(buffer)) {
-                if (this.certifiable) {
-                    this.certify(ipfs_gateway, `${item.cid}`).then(({
-                        tx, cert
-                    }) => {
-                        $(this).trigger('certified', {
-                            tx, cert, post_url
-                        });
-                    }).catch((ex) => {
-                        $(this).trigger('rejected');
-                        console.error('[nft]', ex);
-                    });
-                } else {
-                    $(this).trigger('published');
-                }
-                const post_url = `${ipfs_gateway}/${item.cid}`;
-                const tab = window.open(post_url, '_same');
-                if (tab && tab.focus) tab.focus();
-                gateway.set(ipfs_gateway);
-            }
-        });
-    }
-    private get certifiable() {
-        return this.eth && this.eth.enabled && this.eth.supported;
-    }
-    private async certify(ipfs_gateway: string, cid: string) {
-        $(this).trigger('certifying');
-        const content_url = `${ipfs_gateway}/${cid}`;
-        const cert_meta: PdfCertificateMeta = {
-            name: this.title,
-            description: this.description,
-            authors: this.authors,
-            emails: this.emails,
-            keywords: this.keywords,
-            content: content_url,
-            image: await this.image_url(ipfs_gateway, content_url)
-        };
-        const buffer = Buffer.from(JSON.stringify(cert_meta, null, 2));
-        return IPFS.me().then(async (ipfs: any) => {
-            for await (const item of ipfs.add(buffer)) {
-                const cert_url = `${ipfs_gateway}/${item.cid}`;
-                const tx = await this.eth.nft(cert_url);
-                if (tx) return {
-                    cert: { meta: cert_meta, url: cert_url }, tx
-                };
-            }
-            throw null;
-        });
     }
     private onPublishing() {
         this.ui.$publishDialogPrimary.removeClass('btn-success');
@@ -256,6 +198,7 @@ export class IpfsTab {
         this.ui.$publishDialogPrimary.prop('disabled', false);
         this.ui.$publishDialogPrimary.html('Published');
         this.ui.$publishDialog.modal('hide');
+        gateway.set(this.ipfs_gateway);
     }
     private onCertifying() {
         spin(this.ui.$publishDialogPrimary[0], 'Certifying');
@@ -299,18 +242,6 @@ export class IpfsTab {
             return list.split(',').map(w => w.trim()).filter(w => w);
         }
         return [];
-    }
-    private image_url(ipfs_gateway: string, ipfs_url: string) {
-        return new Promise<string>((resolve) => {
-            QRCode(ipfs_url).then((svg) => {
-                const buffer = Buffer.from(svg);
-                IPFS.me().then(async (ipfs: any) => {
-                    for await (const item of ipfs.add(buffer)) {
-                        resolve(`${ipfs_gateway}/${item.cid}`);
-                    }
-                });
-            });
-        });
     }
     private get keywords() {
         const list = this.ui.$publishDialogIpfsMetaKeywords.val();
