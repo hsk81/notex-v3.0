@@ -8,6 +8,7 @@
         <link rel="icon" href="/static/ico/favicon.ico"/>
         {% block title %}<title>{{ title }}</title>{% endblock %}
         <script>window.debug = Boolean({{ 1 if debug else 0 }});</script>
+        {% if not debug %}{% include 'analytics.html' %}{% endif %}
         {% if debug %}
         <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-4.5.0.min.css"/>
         <link rel="stylesheet" href="/static/css/lib/highlight/default-10.0.3.min.css"/>
