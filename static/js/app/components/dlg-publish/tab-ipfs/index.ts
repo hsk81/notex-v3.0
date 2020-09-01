@@ -140,7 +140,10 @@ export class IpfsTab {
     }
     private async onPrimaryClick() {
         const $nav = this.ui.$publishDialogIpfsNav;
-        if (!$nav.find('a').hasClass('active')) {
+        const active = $nav.find('a').hasClass('active');
+        const $expand = this.ui.$publishDialogExpandIpfs;
+        const expanded = $expand.data('state') === 'expanded';
+        if (!active) {
             return;
         }
         if (!this.ipfs_gateway) {
@@ -150,14 +153,14 @@ export class IpfsTab {
             });
             return;
         }
-        if (this.eth && this.eth.enabled && !this.title) {
+        if (expanded && !this.title) {
             const $el = this.ui.$publishDialogIpfsMetaTitle
             $el.addClass('is-invalid').focus().off('blur').on('blur', () => {
                 if (this.title) $el.removeClass('is-invalid');
             });
             return;
         }
-        if (this.eth && this.eth.enabled && !this.description) {
+        if (expanded && !this.description) {
             const $el = this.ui.$publishDialogIpfsMetaDescription;
             $el.addClass('is-invalid').focus().off('blur').on('blur', () => {
                 if (this.title) $el.removeClass('is-invalid');
@@ -165,13 +168,15 @@ export class IpfsTab {
             return;
         }
         {
-            const command = new PublishBlog({ meta: {
-                name: this.title,
-                description: this.description,
-                authors: this.authors,
-                emails: this.emails,
-                keywords: this.keywords
-            }});
+            const command = new PublishBlog({
+                altKey: !expanded, meta: expanded ? {
+                    name: this.title,
+                    description: this.description,
+                    authors: this.authors,
+                    emails: this.emails,
+                    keywords: this.keywords
+                } : undefined
+            });
             $(command).on(
                 'publishing', this.onPublishing.bind(this));
             $(command).on(
@@ -209,7 +214,12 @@ export class IpfsTab {
     }) {
         this.ui.$publishDialogPrimary.addClass('btn-success');
         this.ui.$publishDialogPrimary.prop('disabled', false);
-        this.ui.$publishDialogPrimary.html('Certified');
+        if (data.tx) {
+            this.ui.$publishDialogPrimary.html('Certified');
+        } else {
+            this.ui.$publishDialogPrimary.html('Published');
+            this.ui.$publishDialog.modal('hide');
+        }
         PdfCertificate.print(data);
     }
     private onRejected() {
