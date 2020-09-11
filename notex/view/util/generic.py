@@ -53,7 +53,9 @@ def get_domain():
 def get_description(view):
 
     base = '{0}'.format(view.capitalize())
-    if view == 'editor':
+    if view == 'home':
+        return ARGs.get('DESCRIPTION_HOME', base)
+    elif view == 'editor':
         return ARGs.get('DESCRIPTION_EDITOR', base)
     else:
         return ARGs.get('DESCRIPTION', base)
@@ -61,7 +63,9 @@ def get_description(view):
 def get_keywords(view, domain):
 
     base = [domain.lower()]
-    if view == 'editor':
+    if view == 'home':
+        return ARGs.get('KEYWORDS_HOME', base + ['home'])
+    elif view == 'editor':
         return ARGs.get('KEYWORDS_EDITOR', base + ['editor'])
     else:
         return ARGs.get('KEYWORDS', base)
