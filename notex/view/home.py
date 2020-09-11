@@ -28,7 +28,9 @@ def home(path=None):
     def memoized(*args, **kwargs):
 
         html = os.path.join('home', path) if path is not None else 'home'
-        return generic(html, i18n=get(detect('en')))
+        return generic(html, i18n=get(detect('en')), title=ARGs.get(
+            'TITLE_HOME', 'Censorship Free Blogging and Publishing'
+        ))
 
     if path is not None:
         name = 'views.home:{0}.html:{1}'.format(path, detect('en'))

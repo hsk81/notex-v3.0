@@ -9,7 +9,7 @@
     <meta name="description" content="{{ description }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/static/ico/favicon.ico" />
-    {% block title %}<title>{{ domain|capitalize }}&nbsp;·&nbsp;Censorship Free Blogging</title>{% endblock %}
+    {% block title %}<title>{{ domain|capitalize }}&nbsp;·&nbsp;{{ title }}</title>{% endblock %}
     <script>window.debug = Boolean({{ 1 if debug else 0 }});</script>
     {% if not debug %}{% include 'analytics.html' %}{% endif %}
     <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-4.5.0.min.css" />
