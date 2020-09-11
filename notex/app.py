@@ -7,6 +7,7 @@ from bottle import Bottle
 from notex.view.components import app_components
 from notex.view.debug import app_debug
 from notex.view.editor import app_edit
+from notex.view.home import app_home
 from notex.view.i18n import app_i18n
 from notex.view.index import app_index
 from notex.view.ipfs import app_ipfs
@@ -19,6 +20,7 @@ from notex import ARGs
 ###############################################################################
 
 app_main = Bottle()
+app_main.merge(app_home)
 app_main.merge(app_components)
 app_main.merge(app_edit)
 app_main.merge(app_i18n)

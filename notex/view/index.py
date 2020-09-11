@@ -19,7 +19,7 @@ app = app_index
     expiry=rdb.NEVER, name='view.index', unless=lambda: ARGs.debug())
 def index(*args, **kwargs):
 
-    return redirect('/editor')
+    return redirect('/home')
 
 ###############################################################################
 ###############################################################################
