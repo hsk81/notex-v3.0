@@ -28,7 +28,9 @@ def editor(path=None):
     def memoized(*args, **kwargs):
 
         html = os.path.join('editor', path) if path is not None else 'editor'
-        return generic(html, i18n=get(detect('en')))
+        return generic(html, i18n=get(detect('en')), title=ARGs.get(
+            'TITLE_EDITOR', 'Markdown Editor'
+        ))
 
     if path is not None:
         name = 'views.editor:{0}.html:{1}'.format(path, detect('en'))
