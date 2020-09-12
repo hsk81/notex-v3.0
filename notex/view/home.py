@@ -29,7 +29,7 @@ def home(path=None):
 
         html = os.path.join('home', path) if path is not None else 'home'
         return generic(html, i18n=get(detect('en')), title=ARGs.get(
-            'TITLE_HOME', 'Censorship Free Blogging and Publishing'
+            'TITLE_HOME', 'Censorship Free Intellectual Property Platform'
         ))
 
     if path is not None:

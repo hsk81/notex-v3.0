@@ -25,7 +25,7 @@
     {% block navigation %}
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark font-weight-bold">
-            <a class="navbar-brand" href="#" style="font-family: Habibi, serif;">
+            <a class="navbar-brand" href="#" style="font-family: Habibi, serif;" tabindex="-1">
                 <img src="/static/ico/quill.svg" width="30" height="30" class="d-inline-block align-top" alt="quill"
                     loading="lazy" style="filter: invert(1)">NoTex
             </a>
@@ -38,10 +38,13 @@
                         <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#blogging">Blogging</a>
+                        <a class="nav-link" href="#ip-platform">IP Platform</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#preview">Preview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#plugins">Plugins</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#publication">Publication</a>
@@ -96,12 +99,14 @@
                 margin: 3em auto;
                 max-width: 1240px;
             }
+
             hr {
                 border: 1px solid #343a40;
                 border-radius: 1px;
                 margin: 3em auto;
-                width: 39%;
+                width: 85%;
             }
+
             .two-card {
                 align-items: center;
                 display: grid;
@@ -110,109 +115,145 @@
                 justify-items: center;
                 margin: auto 3em;
             }
-            @media screen and (max-width: 768px) {
-                .two-card {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: 1fr;
-                }
-                .two-card .rhs h2 {
-                    margin-top: 1em;
-                }
-            }
+
             .two-card h2 {
                 font-weight: bold;
                 text-align: center;
             }
+
             .two-card p {
                 font-size: larger;
                 text-align: justify;
             }
+
             .two-card img {
                 box-shadow: 0 6px 28px 0 rgba(24, 52, 117, 0.2);
                 border-radius: 0.25em;
                 height: auto;
                 width: 100%;
             }
+
+            @media screen and (max-width: 768px) {
+                .two-card {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1fr;
+                    margin: auto 2em;
+                }
+
+                .two-card .rhs h2 {
+                    margin-top: 1em;
+                }
+
+                .two-card p {
+                    font-size: medium;
+                }
+            }
         </style>
-        <div class="two-card" id="blogging">
+        <div class="two-card" id="ip-platform">
             <div class="lhs">
-                <h2>Censorship Free Blogging</h2>
-                <p>NoTex is a blogging and general publishing platform, that allows you to express your thoughts
-                    absolutely freely without any compromises.</p>
-                <p>Thanks to a revolutionary technology called IPFS you are enabled to publish anything and everything
-                    without NoTex being able to block you!</p>
+                <h2>Intellectual Property Platform</h2>
+                <p>NoTex is a global censorship resistant blogging and intellectual property (IP) platform, that allows
+                    you
+                    to freely express yourself <em>and</em> to protect your thoughts or ideas.</p>
+                <p>Thanks to revolutionary technology you are enabled to publish anything without NoTex
+                    being able to block you &ndash; while offering IP protection!</p>
                 <p>Also, it does <em>not</em> require a login and hence an identification of your person. It protects
-                    your privacy further by <em>not</em> storing in any way data in a centralized cloud environment.</p>
+                    your privacy further by <em>not</em> storing any data in a centralized location.</p>
             </div>
             <div class="rhs">
-                <img src="/static/png/notex/empty-editor.png">
+                <img src="/static/png/notex/markdown-editor.png" alt="Markdown Editor">
             </div>
+        </div>
+        <hr>
+        <div style="font-family: sans-serif; text-align: center;">
+            <a class="btn btn-primary btn-lg" href="/editor" target="_blank">
+                Get Started
+            </a>
         </div>
         <hr>
         <div class="two-card" id="preview">
             <div class="lhs">
-                <img src="/static/png/notex/instant-preview.png">
+                <img src="/static/png/notex/instant-preview.png" alt="Instant Preview">
             </div>
             <div class="rhs">
                 <h2>Instant Preview</h2>
-                <p>At its core NoTex is simply an editor, that allows you to draft your content using an intuitive
-                    syntax called Markdown. If you don't know Markdown do not worry, because there is a toolbar that
-                    supports you while composing a document.</p>
+                <p>At its core, NoTex is an advanced editor, that allows you to draft your content using an intuitive
+                    syntax, which you do not even need to learn thanks to easy to use toolbars.</p>
                 <p>While writing, your content is displayed in a preview panel, allowing you to get a quick impression
                     of how your final blog post or publication will look alike. This includes fancy renderings of simple
                     or complicated mathematical formulae.</p>
             </div>
         </div>
         <hr>
-        <div class="two-card" id="publication">
+        <div class="two-card" id="plugins">
             <div class="lhs">
-                <h2>One-Click Publication</h2>
-                <p>You can publish your blog posts with a single click by hitting the blue publish button, and your
-                    content will be made available to the general public (via an IPFS <em>gateway</em>).</p>
-                <p>If you want to, you are free &ndash; but <em>not</em> obligated &ndash; to provide metadata like a
-                    <em>title</em>, <em>description</em>, <em>author(s)</em>, <em>email(s)</em> or <em>keyword(s)</em>.
+                <h2>Rich Plugin Ecosystem</h2>
+                <p>Thanks to a seamless browser integration, you can take advantage of Chrome's vast number of
+                    productivity
+                    <a href="https://chrome.google.com/webstore/category/extensions">extensions</a> or Firefox's
+                    <a href="https://addons.mozilla.org">add-ons</a>.
                 </p>
-                <p>NoTex also supports publishing to Blogger.com, which however is <em>not</em> censorship resistant,
-                    and has its own terms and conditions.</p>
+                <p>For example, by enabling the Grammarly <a
+                        href="https://chrome.google.com/webstore/detail/grammarly-for-chrome/kbfnbcaeplbcioakkpcpgfkobkghlhen">extension</a>
+                    or <a href="https://addons.mozilla.org/en-US/firefox/addon/grammarly-1/">add-on</a> you can get
+                    state-of-the-art grammar and spell-check suggestions.</p>
             </div>
             <div class="rhs">
-                <img src="/static/png/notex/one-click-publication.png">
+                <img src="/static/png/notex/grammarly-plugin.png" alt="Grammarly Plugins">
+            </div>
+        </div>
+        <hr>
+        <div class="two-card" id="publication">
+            <div class="lhs">
+                <img src="/static/png/notex/one-click-publication.png" alt="One-Click Publication">
+            </div>
+            <div class="rhs">
+                <h2>One-Click Publication</h2>
+                <p>You can publish your blog posts and ideas with a single click, and your content will immediately be
+                    made available to the general public &ndash; via a so-called <em>gateway</em>.
+                </p>
+                <p>If you want to, you can also provide metadata like a <em>title</em>, <em>description</em>,
+                    <em>author(s)</em>, <em>email(s)</em>, or <em>keyword(s)</em>.
+                </p>
+                <p>Further, NoTex also supports publishing to Blogger.com, which however is not censorship resistant.
+                </p>
             </div>
         </div>
         <hr>
         <div class="two-card" id="delivery">
             <div class="lhs">
-                <img src="/static/png/notex/unstoppable-delivery.png">
-            </div>
-            <div class="rhs">
                 <h2>Unstoppable Delivery</h2>
-                <p>Once published (via an IPFS gateway) you can share your blog post with anybody on the internet via
-                    the URL address.</p>
-                <p>Depending on the IPFS gateway you have chosen to publish with, your content <em>might</em> get
-                    deleted or even deliberately censored &ndash; which is outside of NoTex's control!</p>
-                <p>However, by installing the IPFS <a href="https://ipfs.io/#install">desktop application</a> and
-                    <em>pinning</em> your content any IPFS compatible browser will be able to access your original blog
-                    post.</p>
-                <p>Also, by enabling the IPFS Companion <a
+                <p>Once published you can share your blog posts or intellectual property with anybody on the internet
+                    via the URL address.
+                </p>
+                <p>Depending on the gateway you have chosen to publish with, your content <em>might</em> get deleted or
+                    even deliberately censored &ndash; which is outside of NoTex's control!</p>
+                <p>However, by installing a <a href="https://ipfs.io/#install">desktop application</a> and
+                    <em>pinning</em> your content, any compatible browser will be able to access your original post.</p>
+                <p>Also, by enabling the so-called <em>IPFS Companion</em> <a
                         href="https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch">plugin</a>
                     for Chrome or <a href="https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/">add-on</a>
-                    for Firefox, both browsers will become IPFS friendly.</p>
+                    for Firefox, both browsers will become resistant to censorship.</p>
+            </div>
+            <div class="rhs">
+                <img src="/static/png/notex/unstoppable-delivery.png" alt="Unstoppable Delivery">
             </div>
         </div>
         <hr>
         <div class="two-card" id="certification">
             <div class="lhs">
+                <img src="/static/png/notex/blockchain-certification.png" alt="Blockchain Certification">
+            </div>
+            <div class="rhs">
                 <h2>Blockchain Certification</h2>
                 <p>If you have an Ethereum (or Avalanche) compatible wallet like <a
                         href="https://metamask.io/">Metamask</a> installed, then you can have your content certified on
-                    the corresponding blockchain &ndash; in exchange for a nominal (i.e. almost free) fee, directly paid
-                    to the blockchain network.</p>
-                <p>The resulting PDF certificate links to a so called <em>non-fungible token</em> (NFT), witnessing that
-                    it was indeed <em>you</em> who has published the blog post. This enables the protection of your
-                    rights on your <em>intellectual property</em> and even makes your blog post tradable!</p>
-            </div>
-            <div class="rhs">
-                <img src="/static/png/notex/blockchain-certification.png">
+                    the corresponding blockchain &ndash; in exchange for a nominal fee directly paid to the blockchain
+                    network.</p>
+                <p>The resulting PDF certificate links to a so-called <em>non-fungible token</em> (NFT), witnessing that
+                    it was indeed <em>you</em> who has made the publication. This enables the protection of your rights
+                    on your intellectual property and even makes your blog posts <em>tradable</em> &ndash; in effect
+                    creating a global IP market!</p>
             </div>
         </div>
         <hr>
