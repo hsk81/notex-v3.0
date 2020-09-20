@@ -34,7 +34,7 @@ export const html = async (head: string, body: string) => {
 }
 export const gateway = {
     get: function (
-        value = 'https://ipfs.io/ipfs'
+        value = 'https://ipfs.notex.ch/ipfs'
     ) {
         const normalize = (url?: string) => {
             if (typeof url === 'string') {
