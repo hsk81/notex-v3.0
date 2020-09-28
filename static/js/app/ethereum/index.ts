@@ -84,8 +84,10 @@ export class Ethereum {
                     return true; // ETH Mainnet
                 case '0x2a':
                     return true; // ETH Kovan
+                case '0xa86a':
+                    return true; // AVA Mainnet
                 case '0xa866':
-                    return true; // AVA Denali
+                    return true; // AVA Everest
                 default:
                     return false;
             }

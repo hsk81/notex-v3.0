@@ -12,19 +12,23 @@ export class NtxCertificate {
                 return '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18';
             case '0x2a': // ETH Kovan
                 return '0x436e85c85600a9060456610f679543eaafe59f1f';
-            case '0xa866': // AVAX Everest
+            case '0xa86a': // AVA Mainnet
+                return '0x436e85c85600a9060456610f679543eaafe59f1f';
+            case '0xa866': // AVA Everest
                 return '0x317e4FAb05e6D398B6693E11724bfAe69D35CD4D';
             default:
                 return undefined;
         }
     }
-    public static explorer(address: string) {
-        if (address) switch (address.toLowerCase()) {
-            case '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18': // ETH Mainnet
+    public static explorer(chain_id: string) {
+        if (chain_id) switch (chain_id.toLowerCase()) {
+            case '0x1': // ETH Mainnet
                 return 'https://etherscan.io';
-            case '0x436e85c85600a9060456610f679543eaafe59f1f': // ETH Kovan
+            case '0x2a': // ETH Kovan
                 return 'https://kovan.etherscan.io';
-            case '0x317e4FAb05e6D398B6693E11724bfAe69D35CD4D': // AVAX Everest
+            case '0xa86a': // AVA Mainnet
+                return 'https://cchain.explorer.avax.network';
+            case '0xa866': // AVA Everest
                 return 'https://cchain.explorer.avax.network';
             default:
                 return undefined;

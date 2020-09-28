@@ -1,5 +1,6 @@
 import { NtxCertificate } from '../../ethereum/ntx-certificate';
 import { TransactionReceipt } from '@npm/web3-core';
+import { Ethereum } from '../../ethereum/index';
 import { QRCode } from '../../qr-code/index';
 
 export class PdfCertificate {
@@ -72,11 +73,16 @@ export class PdfCertificate {
         this.$pdf_body.find('#cert-url>.value>span').text(value);
     }
     private static async setTxUrl(tx?: TransactionReceipt) {
-        if (tx) {
-            const explorer = NtxCertificate.explorer(tx.to);
-            const tx_url = `${explorer}/tx/${tx.transactionHash}`;
-            this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
-            this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);
+        if (tx && this.eth_supported) {
+            const chain_id = await this.eth.chainId;
+            if (chain_id) {
+                const explorer = NtxCertificate.explorer(chain_id);
+                const tx_url = `${explorer}/tx/${tx.transactionHash}`;
+                this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
+                this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);
+            } else {
+                this.$pdf_body.find('#tx-hash').remove();
+            }
         } else {
             this.$pdf_body.find('#tx-hash').remove();
         }
@@ -89,6 +95,12 @@ export class PdfCertificate {
     }
     private static get $pdf() {
         return $('#nft-certificate') as JQuery<HTMLFrameElement>;
+    }
+    private static get eth_supported() {
+        return this.eth && this.eth.enabled && this.eth.supported;
+    }
+    private static get eth() {
+        return Ethereum.me;
     }
 };
 export type PdfCertificateMeta = {
