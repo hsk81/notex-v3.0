@@ -58,7 +58,8 @@ export class IPFS {
         if (this._me === undefined) {
             this._me = new Promise((resolve) => {
                 require(['@npm/ipfs'], (Ipfs: any) => {
-                    Ipfs.create({ silent: false }).then(resolve);
+                    const repo = String(Math.random() + Date.now());
+                    Ipfs.create({ repo }).then(resolve);
                 });
             });
         }
@@ -69,4 +70,5 @@ export class IPFS {
     }
     private static _me: Promise<any>;
 }
+window.IPFS = IPFS;
 export default IPFS;
