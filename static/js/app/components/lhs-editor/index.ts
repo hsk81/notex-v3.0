@@ -341,11 +341,10 @@ export class LhsEditor {
                         const reader = new FileReader();
                         reader.onload = async function () {
                             const buffer = Buffer.from(reader.result as ArrayBuffer);
-                            for await (const item of ipfs.add(buffer)) {
-                                const name = ev_files[i].name;
-                                const hash = item.cid.toString();
-                                ins_image(name, hash);
-                            }
+                            const item = await ipfs.add(buffer);
+                            const name = ev_files[i].name;
+                            const hash = item.cid.toString();
+                            ins_image(name, hash);
                         };
                         reader.readAsArrayBuffer(ev_files[i]);
                     }
