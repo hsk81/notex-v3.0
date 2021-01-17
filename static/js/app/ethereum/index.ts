@@ -10,7 +10,6 @@ export class Ethereum {
     }
     private constructor(provider: any) {
         provider.on('chainChanged', this.onChainChanged.bind(this));
-        provider.on('chainIdChanged', this.onChainChanged.bind(this));
         provider.on('accountsChanged', this.onAccountsChanged.bind(this));
         this._provider = provider;
     }
