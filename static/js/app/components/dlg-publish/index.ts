@@ -1,6 +1,6 @@
 import { BlogTab } from "./tab-blog/index";
 import { IpfsTab } from "./tab-ipfs/index";
-import { Ui } from "../../ui/index";
+import { Ui, Popover } from "../../ui/index";
 
 import { LhsEditor } from "../lhs-editor/index";
 import { Ethereum } from "../../ethereum/index";
@@ -16,8 +16,14 @@ export class PublishDialog {
     }
     public constructor() {
         this.ui.$publishDialog.find('[data-toggle="popover"]')
-            .on('blur', (ev) => $(ev.target).closest('button').popover('hide'))
-            .on('click', (ev) => $(ev.target).closest('button').popover('toggle'));
+            .on('blur', (ev) => {
+                const button = $(ev.target).closest('button') as Popover<HTMLButtonElement>;
+                button.popover('hide');
+            })
+            .on('click', (ev) => {
+                const button = $(ev.target).closest('button') as Popover<HTMLButtonElement>;
+                button.popover('toggle');
+            });
         this.ui.$publishDialog.on(
             'show.bs.modal', this.onBsModalShow.bind(this));
         this.ui.$publishDialog.on(

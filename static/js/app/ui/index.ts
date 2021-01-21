@@ -1,5 +1,11 @@
-export type JQueryEx<T = HTMLElement> = Omit<JQuery, 'button'> & {
-    button: (action: string) => JQueryEx<T>;
+export type Button<T extends HTMLButtonElement> = JQuery<T> & {
+    button: (...args: any[]) => Button<T>;
+};
+export type Modal<T extends HTMLDialogElement> = JQuery<T> & {
+    modal: (...args: any[]) => void;
+};
+export type Popover<T extends HTMLElement> = JQuery<T> & {
+    popover: (...args: any[]) => void;
 };
 export class Ui {
     public static get me(): Ui {
@@ -75,7 +81,7 @@ export class Ui {
         return this.$lhsToolbarOuter.find('>.toolbar-inner');
     }
     public get $publishDialog() {
-        return $('#publish-dlg');
+        return $('#publish-dlg') as Modal<HTMLDialogElement>;
     }
     public get $publishDialogBlogNav() {
         return this.$publishDialog.find('.blog-nav');
@@ -183,7 +189,7 @@ export class Ui {
         return this.$publishDialog.find('#metamask-help');
     }
     public get $publishDialogPrimary() {
-        return this.$publishDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
+        return this.$publishDialog.find('.btn-primary') as Button<HTMLButtonElement>;
     }
     public get $rhs() {
         return $('.rhs');
@@ -236,7 +242,7 @@ export class Ui {
         return this.$rhsToolbarOuter.find('>.toolbar-inner');
     }
     public get $templateDialog() {
-        return $('#template-dlg');
+        return $('#template-dlg') as Modal<HTMLDialogElement>;
     }
     public get $templateDialogItem() {
         return this.$templateDialog.find('a.list-group-item');
@@ -245,7 +251,7 @@ export class Ui {
         return this.$templateDialog.find('a.list-group-item.active');
     }
     public get $templateDialogPrimary() {
-        return this.$templateDialog.find('.btn-primary') as JQueryEx<HTMLButtonElement>;
+        return this.$templateDialog.find('.btn-primary') as Button<HTMLButtonElement>;
     }
     public get $toolbar() {
         return $('.toolbar');

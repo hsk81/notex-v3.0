@@ -186,8 +186,7 @@ export class IpfsTab {
             $(command).on(
                 'certified', this.onCertified.bind(this));
             $(command).on(
-                'rejected', this.onRejected.bind(this)
-            );
+                'rejected', this.onRejected.bind(this));
             Commands.me.run(command);
         }
     }

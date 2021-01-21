@@ -1,7 +1,7 @@
 import { LhsEditor } from "../lhs-editor/index";
 import { UiMode } from "../lhs-editor/ui-mode";
 import * as uiMode from "../lhs-editor/ui-mode";
-import { Ui } from "../../ui/index";
+import { Ui, Popover } from "../../ui/index";
 
 import { buffered } from "../../decorator/buffered";
 import { trace } from "../../decorator/trace";
@@ -40,10 +40,22 @@ export class LhsFooter {
     }
     private events() {
         this.ui.$lhsFooter.find('[data-toggle="popover"]')
-            .on('blur', (ev) => $(ev.target).popover('hide'))
-            .on('click', (ev) => $(ev.target).popover('toggle'))
-            .on('keydown', (ev) => $(ev.target).popover('hide'))
-            .on('keypress', (ev) => $(ev.target).popover('hide'));
+            .on('blur', (ev) => {
+                const el = $(ev.target) as Popover<HTMLElement>;
+                el.popover('hide');
+            })
+            .on('click', (ev) => {
+                const el = $(ev.target) as Popover<HTMLElement>;
+                el.popover('toggle');
+            })
+            .on('keydown', (ev) => {
+                const el = $(ev.target) as Popover<HTMLElement>;
+                el.popover('hide');
+            })
+            .on('keypress', (ev) => {
+                const el = $(ev.target) as Popover<HTMLElement>;
+                el.popover('hide');
+            });
         this.ui.$lhsFooterSwitch
             .on('click', this.onSwitchClick.bind(this));
         this.ui.$lhsFooterCliFind

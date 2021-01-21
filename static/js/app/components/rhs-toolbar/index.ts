@@ -90,15 +90,17 @@ export class RhsToolbar {
         this.scroll.refresh();
     }
     @buffered
-    private onRefreshClick(ev: JQueryEventObject) {
-        Commands.me.run(new RefreshView(ev));
+    private onRefreshClick(ev: JQuery.Event) {
+        Commands.me.run(new RefreshView(ev as {
+            altKey: boolean
+        }));
     }
     @buffered
     private onLockScrollingClick() {
         Commands.me.run(new ToggleScrolling());
     }
     @buffered
-    private onPublishClick(ev: JQueryEventObject) {
+    private onPublishClick(ev: JQuery.Event) {
         Commands.me.run(new PublishBlog(ev));
     }
     private onPrintClick() {
