@@ -14,8 +14,8 @@ export class NtxCertificate {
                 return '0x436e85c85600a9060456610f679543eaafe59f1f';
             case '0xa86a': // AVA Mainnet
                 return '0x436e85c85600a9060456610f679543eaafe59f1f';
-            case '0xa866': // AVA Everest
-                return '0x317e4FAb05e6D398B6693E11724bfAe69D35CD4D';
+            case '0xa869': // AVA Fuji
+                return '0x31d3A166E25983c81d5DD64Dc7D0B7a570Ee2Ff6';
             default:
                 return undefined;
         }
@@ -28,8 +28,8 @@ export class NtxCertificate {
                 return 'https://kovan.etherscan.io';
             case '0xa86a': // AVA Mainnet
                 return 'https://cchain.explorer.avax.network';
-            case '0xa866': // AVA Everest
-                return 'https://cchain.explorer.avax.network';
+            case '0xa869': // AVA Fuji
+                return 'https://cchain.explorer.avax-test.network';
             default:
                 return undefined;
         }

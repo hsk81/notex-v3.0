@@ -85,8 +85,8 @@ export class Ethereum {
                     return true; // ETH Kovan
                 case '0xa86a':
                     return true; // AVA Mainnet
-                case '0xa866':
-                    return true; // AVA Everest
+                case '0xa869':
+                    return true; // AVA Fuji
                 default:
                     return false;
             }
