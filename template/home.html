@@ -19,7 +19,6 @@
 {% endblock %}
 
 {% block body_all %}
-
 <body>
     {% block body %}
     {% block navigation %}
@@ -85,7 +84,7 @@
                     </li>
                 </ul>
                 <a class="btn btn-primary d-lg-inline-block mb-3 mb-md-0 ml-md-3" href="/editor" target="_blank">
-                    Get Started
+                    Get&nbsp;Started
                 </a>
             </div>
         </nav>
@@ -93,7 +92,7 @@
     {% endblock %}
     {% block content %}
     <div id="content">
-        <style>
+        <style scoped>
             #content {
                 font-family: Habibi, serif;
                 margin: 3em auto;
@@ -164,13 +163,44 @@
                 <img src="/static/png/notex/markdown-editor.png" alt="Markdown Editor">
             </div>
         </div>
-        <hr>
-        <div style="font-family: sans-serif; text-align: center;">
-            <a class="btn btn-primary btn-lg" href="/editor" target="_blank">
-                Get Started
-            </a>
+        <hr style="margin-bottom: 2em;">
+        {% set user_segments %}
+        <div class="container" style="text-align: center;">
+            <div class="row align-items-center font-weight-bold">
+                <div class="col d-sm-inline" style="display: none;">
+                    <figure>
+                        <img src="/static/svg/glyphicon/glyphicons-basic-44-user-group.svg" width="96" height="96">
+                        <figcaption>Bloggers</figcaption>
+                    </figure>
+                </div>
+                <div class="col d-md-inline" style="display: none;">
+                    <figure>
+                        <img src="/static/svg/glyphicon/glyphicons-basic-68-education.svg" width="96" height="96">
+                        <figcaption>Educators</figcaption>
+                    </figure>
+                </div>
+                <div class="col" style="font-family: sans-serif;">
+                    <a class="btn btn-primary btn-lg"  style="border: 5px double;" href="/editor" target="_blank">
+                        Get&nbsp;Started
+                    </a>
+                </div>
+                <div class="col d-sm-inline" style="display: none;">
+                    <figure>
+                        <img src="/static/svg/glyphicon/glyphicons-basic-588-book-open-text.svg" width="96" height="96">
+                        <figcaption>Authors</figcaption>
+                    </figure>
+                </div>
+                <div class="col d-md-inline" style="display: none;">
+                    <figure>
+                        <img src="/static/svg/glyphicon/glyphicons-basic-590-newspaper.svg" width="96" height="96">
+                        <figcaption>Journalists</figcaption>
+                    </figure>
+                </div>
+            </div>
         </div>
-        <hr>
+        {% endset %}
+        {{ user_segments }}
+        <hr style="margin-top: 2em;">
         <div class="two-card" id="preview">
             <div class="lhs">
                 <img src="/static/png/notex/instant-preview.png" alt="Instant Preview">
@@ -178,7 +208,7 @@
             <div class="rhs">
                 <h2>Instant Preview</h2>
                 <p>At its core, NoTex is an advanced editor, that allows you to draft your content using an intuitive
-                    syntax, which you do not even need to learn thanks to easy to use toolbars.</p>
+                    syntax, which you do not need to learn thanks to easy to use toolbars.</p>
                 <p>While writing, your content is displayed in a preview panel, allowing you to get a quick impression
                     of how your final blog post or publication will look alike. This includes fancy renderings of simple
                     or complicated mathematical formulae.</p>
@@ -196,7 +226,7 @@
                 <p>For example, by enabling the Grammarly <a
                         href="https://chrome.google.com/webstore/detail/grammarly-for-chrome/kbfnbcaeplbcioakkpcpgfkobkghlhen">extension</a>
                     or <a href="https://addons.mozilla.org/en-US/firefox/addon/grammarly-1/">add-on</a> you can get
-                    state-of-the-art grammar and spell-check suggestions.</p>
+                    state-of-the-art grammar and spell-checking suggestions.</p>
             </div>
             <div class="rhs">
                 <img src="/static/png/notex/grammarly-plugin.png" alt="Grammarly Plugins">
@@ -228,8 +258,10 @@
                 </p>
                 <p>Depending on the gateway you have chosen to publish with, your content <em>might</em> get deleted or
                     even deliberately censored &ndash; which is outside of NoTex's control!</p>
-                <p>However, by installing a <a href="https://ipfs.io/#install">desktop application</a> and
-                    <em>pinning</em> your content, any compatible browser will be able to access your original post.</p>
+                <p>However, by installing the <a href="https://ipfs.io/#install">desktop application</a> for a system called
+                    <em>IPFS</em> and then <em>pinning</em> your content, any compatible browser will be able to access your
+                    original post.
+                </p>
                 <p>Also, by enabling the so-called <em>IPFS Companion</em> <a
                         href="https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch">plugin</a>
                     for Chrome or <a href="https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/">add-on</a>
@@ -256,12 +288,9 @@
                     creating a global IP market!</p>
             </div>
         </div>
-        <hr>
-        <div style="font-family: sans-serif; text-align: center;">
-            <a class="btn btn-primary btn-lg" href="/editor" target="_blank">
-                Get Started
-            </a>
-        </div>
+        <hr style="margin-bottom: 2em;">
+        {{ user_segments }}
+        <hr style="margin-top: 2em;">
     </div>
     {% endblock %}
     <script src="/static/js/lib/jquery/jquery-2.2.4.min.js"></script>
