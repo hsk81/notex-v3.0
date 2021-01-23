@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup (
     name='notex',
-    version='3.1.1',
+    version='4.0.0',
     description='Markdown editor',
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
