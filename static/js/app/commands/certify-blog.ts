@@ -1,3 +1,4 @@
+import { NtxCertificateFactory } from "../ethereum/ntx-certificate-factory";
 import { PdfCertificateMeta } from "../components/pdf-certificate/index";
 import { Ethereum } from "../ethereum/index";
 import { Command } from "./index";
@@ -38,8 +39,15 @@ export class CertifyBlog implements Command {
         const item = await ipfs.add({ content });
         const cert_url = `${ipfs_gateway}/${item.cid}`;
         if (this.eth_supported) {
-            const tx = await this.eth.nft(cert_url);
-            if (tx) return {
+            const author = await this.eth.address;
+            if (!author) throw null;
+            const chain_id = await this.eth.chainId;
+            if (!chain_id) throw null;
+            const ntxc = await NtxCertificateFactory.create(chain_id);
+            if (!ntxc) throw null;
+            const tx = await ntxc.publish(author, cert_url);
+            if (!tx) throw null;
+            return {
                 cert: { meta: this.meta, url: cert_url }, tx
             };
         } else {
@@ -47,7 +55,6 @@ export class CertifyBlog implements Command {
                 cert: { meta: this.meta, url: cert_url }, tx: undefined
             };
         }
-        throw null;
     }
     private image_url(
         ipfs_gateway: string, ipfs_url: string

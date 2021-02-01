@@ -1,4 +1,3 @@
-import { NtxCertificate } from '../../ethereum/ntx-certificate';
 import { TransactionReceipt } from '@npm/web3-core';
 import { Ethereum } from '../../ethereum/index';
 import { QRCode } from '../../qr-code/index';
@@ -74,9 +73,8 @@ export class PdfCertificate {
     }
     private static async setTxUrl(tx?: TransactionReceipt) {
         if (tx && this.eth_supported) {
-            const chain_id = await this.eth.chainId;
-            if (chain_id) {
-                const explorer = NtxCertificate.explorer(chain_id);
+            const explorer = await this.eth.explorer;
+            if (explorer) {
                 const tx_url = `${explorer}/tx/${tx.transactionHash}`;
                 this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
                 this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);

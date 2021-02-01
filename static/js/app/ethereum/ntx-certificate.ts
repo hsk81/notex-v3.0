@@ -1,80 +1,131 @@
-import { Contract } from '@npm/web3-eth-contract';
-import { PromiEvent } from '@npm/web3-core';
-import { TransactionReceipt } from '@npm/web3-core';
-export { TransactionReceipt };
-
-import { MyWeb3 } from "./my-web3";
+import { AbiItem } from "@npm/web3-utils";
+import { Contract } from "@npm/web3-eth-contract";
+import { PromiEvent } from "@npm/web3-core";
+import { TransactionReceipt } from "@npm/web3-core";
+import { WebThree } from "./web-three";
 
 export class NtxCertificate {
-    public static address(chain_id: string) {
-        if (chain_id) switch (chain_id.toLowerCase()) {
-            case '0x1': // ETH Mainnet
-                return '0x3db17b20d4f4313248f004dbfce2c8e5e8517b18';
-            case '0x2a': // ETH Kovan
-                return '0x436e85c85600a9060456610f679543eaafe59f1f';
-            case '0xa86a': // AVA Mainnet
-                return '0x436e85c85600a9060456610f679543eaafe59f1f';
-            case '0xa869': // AVA Fuji
-                return '0x31d3A166E25983c81d5DD64Dc7D0B7a570Ee2Ff6';
-            default:
-                return undefined;
+    public constructor(address: string) {
+        this._address = address;
+    }
+    public async publish(author: string, tokenURI: string) {
+        const contract = await this.contract();
+        if (contract) {
+            const tx = await contract.methods.publish(author, tokenURI).send({
+                from: author
+            });
+            return tx as PromiEvent<TransactionReceipt>;
         }
     }
-    public static explorer(chain_id: string) {
-        if (chain_id) switch (chain_id.toLowerCase()) {
-            case '0x1': // ETH Mainnet
-                return 'https://etherscan.io';
-            case '0x2a': // ETH Kovan
-                return 'https://kovan.etherscan.io';
-            case '0xa86a': // AVA Mainnet
-                return 'https://cchain.explorer.avax.network';
-            case '0xa869': // AVA Fuji
-                return 'https://cchain.explorer.avax-test.network';
-            default:
-                return undefined;
-        }
-    }
-    public constructor(chain_id: string) {
-        this._chain_id = chain_id;
-    }
-    public async publish(author: string, uri: string) {
-        if (author && uri) {
-            const contract = await this.contract();
-            if (contract) {
-                const tx = contract.methods.publish(author, uri).send({
-                    from: author
-                });
-                return tx as PromiEvent<TransactionReceipt>;
+    public async balanceOf(address: string) {
+        const contract = await this.contract();
+        if (contract) {
+            const balance = await contract.methods.balanceOf(address).call();
+            try {
+                return parseInt(balance);
+            } catch (ex) {
+                console.warn(ex);
             }
         }
     }
+    public async tokenByIndex(index: number) {
+        const contract = await this.contract();
+        if (contract) {
+            const id = await contract.methods.tokenOfOwnerByIndex(index).call()
+            if (typeof id === 'string') {
+                return id;
+            }
+        }
+    }
+    public async tokenOfOwnerByIndex(owner: string, index: number) {
+        const contract = await this.contract();
+        if (contract) {
+            const id = await contract.methods.tokenOfOwnerByIndex(owner, index).call()
+            if (typeof id === 'string') {
+                return id;
+            }
+        }
+    }
+    public async tokens(owner: string, options?: {
+        page?: number, page_size?: number
+    }) {
+        const balance = await this.balanceOf(owner);
+        if (typeof balance === 'number') {
+            const indices = this.indices({
+                ...options, length: balance
+            });
+            const tokens = indices.map(
+                (index) => this.tokenOfOwnerByIndex(owner, index)
+            );
+            return await Promise.all(tokens);
+        };
+    }
+    public async tokenURI(token_id: string) {
+        const contract = await this.contract();
+        if (contract) {
+            const uri = await contract.methods.tokenURI(token_id).call();
+            if (typeof uri === 'string') {
+                return uri;
+            }
+        }
+    }
+    public async tokenURIs(owner: string, options?: {
+        page?: number, page_size?: number
+    }) {
+        const tokens = await this.tokens(owner, options);
+        if (tokens) {
+            const uris = tokens.map(
+                (id) => id && this.tokenURI(id)
+            );
+            return await Promise.all(uris);
+        }
+    }
+    private indices(options: {
+        page?: number, page_size?: number, length: number
+    }) {
+        const {
+            length, page, page_size
+        } = {
+            length: options.length,
+            page: options.page ?? 0,
+            page_size: options.page_size ?? options.length,
+        };
+        const [start, end] = [
+            page_size * page, page_size * (page + 1)
+        ];
+        const array = Array<number>(
+            start < length ? page_size : 0
+        );
+        return [...array.keys()]
+            .map((index) => start + index)
+            .slice(0, end <= length ? end : length % page_size);
+    }
     private async contract() {
         if (this._contract === undefined) {
-            const eth = await this.eth;
+            const eth = await WebThree.me.eth;
             if (eth) {
-                const abi = await NtxCertificate.abi();
+                const abi = await this.abi();
                 if (abi) {
-                    const address = NtxCertificate.address(this._chain_id);
+                    const address = this._address;
                     if (address) {
-                        this._contract = new eth.Contract(abi, address);
+                        this._contract = window.CONTRACT = new eth.Contract(
+                            abi, address
+                        );
                     }
                 }
             }
         }
         return this._contract;
     }
-    private get eth() {
-        return MyWeb3.me.eth;
-    }
-    private static async abi() {
+    private async abi() {
         if (this._abi === undefined) {
-            const url = '/static/js/app/ethereum/ntx-certificate.abi.json';
+            const url = "/static/js/app/ethereum/ntx-certificate.abi.json";
             this._abi = await fetch(url).then((res) => res.json());
         }
         return this._abi;
     }
+    private _abi?: AbiItem;
+    private _address: string;
     private _contract?: Contract;
-    private _chain_id: string;
-    private static _abi: any;
 };
 export default NtxCertificate;

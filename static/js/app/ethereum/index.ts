@@ -1,5 +1,4 @@
-export { TransactionReceipt } from './ntx-certificate';
-import { NtxCertificate } from './ntx-certificate';
+export { TransactionReceipt } from '@npm/web3-core';
 
 export class Ethereum {
     public static get me() {
@@ -27,7 +26,7 @@ export class Ethereum {
     public enable() {
         return new Promise((resolve) => {
             if (this.provider) {
-                Title.reuseOriginal();
+                DocTitle.reuseOriginal();
                 this.provider.sendAsync({
                     method: 'eth_requestAccounts'
                 }, (
@@ -43,7 +42,7 @@ export class Ethereum {
                         console.error(error);
                         resolve(undefined);
                     }
-                    Title.reuseCurrent();
+                    DocTitle.reuseCurrent();
                 });
             } else {
                 resolve(undefined);
@@ -55,6 +54,26 @@ export class Ethereum {
             this._enabled = false;
             $(this).trigger('disconnected', true);
         }
+    }
+    public get chainId() {
+        return new Promise<string | undefined>((resolve) => {
+            if (this.provider) {
+                this.provider.sendAsync({
+                    method: 'eth_chainId'
+                }, (
+                    error: any, rpc: any
+                ) => {
+                    if (rpc && rpc.result && rpc.result.length) {
+                        resolve(`0x${parseInt(rpc.result).toString(16)}`);
+                    } else {
+                        console.error(error);
+                        resolve(undefined);
+                    }
+                });
+            } else {
+                resolve(undefined);
+            }
+        });
     }
     public get address() {
         return new Promise<string | undefined>((resolve) => {
@@ -92,38 +111,26 @@ export class Ethereum {
             }
         });
     }
-    public get chainId() {
-        return new Promise<string | undefined>((resolve) => {
-            if (this.provider) {
-                this.provider.sendAsync({
-                    method: 'eth_chainId'
-                }, (
-                    error: any, rpc: any
-                ) => {
-                    if (rpc && rpc.result && rpc.result.length) {
-                        resolve(`0x${parseInt(rpc.result).toString(16)}`);
-                    } else {
-                        console.error(error);
+    public get explorer() {
+        return new Promise<string | undefined>(async (resolve) => {
+            const chain_id = await this.chainId;
+            if (chain_id) {
+                switch (chain_id.toLowerCase()) {
+                    case '0x1': // ETH Mainnet
+                        resolve('https://etherscan.io');
+                    case '0x2a': // ETH Kovan
+                        resolve('https://kovan.etherscan.io');
+                    case '0xa86a': // AVA Mainnet
+                        resolve('https://cchain.explorer.avax.network');
+                    case '0xa869': // AVA Fuji
+                        resolve('https://cchain.explorer.avax-test.network');
+                    default:
                         resolve(undefined);
-                    }
-                });
+                }
             } else {
                 resolve(undefined);
             }
         });
-    }
-    public async nft(uri: string) {
-        if (uri) {
-            const author = await this.address;
-            if (author) {
-                const chain_id = await this.chainId;
-                if (chain_id) {
-                    return new NtxCertificate(chain_id).publish(
-                        author, uri
-                    );
-                }
-            }
-        }
     }
     // public logs(address: string) {
     //     window.SUBSCRIPTION = this.eth.then((eth) => eth.subscribe(
@@ -155,7 +162,7 @@ export class Ethereum {
     private _provider: any;
     private static _me: Ethereum;
 }
-class Title {
+class DocTitle {
     public static reuseOriginal() {
         this._title_previous = document.title;
         document.title = this._title_original;

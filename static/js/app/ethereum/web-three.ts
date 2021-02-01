@@ -1,10 +1,10 @@
 declare const require: Function;
 import Web3 from '@npm/web3';
 
-export class MyWeb3 {
+export class WebThree {
     public static get me() {
         if (this._me === undefined && window.ethereum) {
-            this._me = new MyWeb3(window.ethereum);
+            this._me = new WebThree(window.ethereum);
         }
         return this._me;
     }
@@ -22,6 +22,6 @@ export class MyWeb3 {
         });
     }
     private _provider: any;
-    private static _me: MyWeb3;
+    private static _me: WebThree;
 };
-export default MyWeb3;
+export default WebThree;
