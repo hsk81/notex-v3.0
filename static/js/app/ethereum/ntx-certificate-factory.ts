@@ -11,13 +11,13 @@ export class NtxCertificateFactory {
     private static async address(chain_id: string) {
         switch (chain_id.toLowerCase()) {
             case '0x1': // ETH Mainnet
-                return '0x3db17B20D4f4313248f004DbFCe2C8e5E8517B18' as string;
+                return '0x465937cA0e97A52F7647F4F4F5563BdCaC9F5EAc' as string;
             case '0x2a': // ETH Kovan
-                return '0x436e85c85600a9060456610f679543EAAFe59f1f' as string;
+                return '0x465937cA0e97A52F7647F4F4F5563BdCaC9F5EAc' as string;
             case '0xa86a': // AVA Mainnet
-                return '0x436e85c85600a9060456610f679543EAAFe59f1f' as string;
+                return '0x465937cA0e97A52F7647F4F4F5563BdCaC9F5EAc' as string;
             case '0xa869': // AVA Fuji
-                return '0x31d3A166E25983c81d5DD64Dc7D0B7a570Ee2Ff6' as string;
+                return '0x465937cA0e97A52F7647F4F4F5563BdCaC9F5EAc' as string;
             default:
                 return undefined;
         }
