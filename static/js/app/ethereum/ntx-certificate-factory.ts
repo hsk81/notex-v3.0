@@ -23,12 +23,12 @@ export class NtxCertificateFactory {
         }
     }
 }
-(() => {
-    new Promise(async (resolve) => {
-        const chain_id = await Ethereum.me.chainId;
-        if (chain_id) {
-            resolve(await NtxCertificateFactory.create(chain_id));
-        }
-    });
-})();
+// (() => {
+//     new Promise(async (resolve) => {
+//         const chain_id = await Ethereum.me.chainId;
+//         if (chain_id) {
+//             resolve(await NtxCertificateFactory.create(chain_id));
+//         }
+//     });
+// })();
 export default NtxCertificateFactory;
