@@ -27,13 +27,13 @@ pip-selfcheck.json
 
 ## css
 
-static/css/**/*.css
-static/css/**/*.css.map
-static/css/**/*.css.gz
+static/**/*.css
+static/**/*.css.map
+static/**/*.css.gz
 
-static/js/app/**/*.css
-static/js/app/**/*.css.map
-static/js/app/**/*.css.gz
+template/**/*.css
+template/**/*.css.map
+template/**/*.css.gz
 
 ## javascript
 

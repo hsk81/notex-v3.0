@@ -1,7 +1,7 @@
 {
   "baseUrl": "./static/js/app",
-  "out": "./static/build/app.js",
-  "name": "app",
+  "out": "./static/build/app-editor.js",
+  "name": "app-editor",
   "paths": {
     "@npm/buffer":
       "../../../static/js/lib/buffer/buffer-5.6.0.min",

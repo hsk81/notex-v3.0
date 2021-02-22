@@ -1,0 +1,21 @@
+<footer>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item text-white-50">
+                    <span>&copy;</span>
+                    <span class="d-sm-inline" style="display: none;">{{ today.strftime ('%Y') }}</span>
+                    <span>{{ domain|capitalize|replace('Notex', 'NoTex') }}</span>
+                </li>
+            </ul>
+            <ul class="navbar-nav d-flex flex-row ml-auto">
+                <li class="nav-item">
+                    {% include 'footer/twitter.html' %}
+                </li>
+                <li class="nav-item">
+                    {% include 'footer/slack.html' %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+</footer>

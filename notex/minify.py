@@ -41,7 +41,7 @@ def css_minify(tgt_path):
     minify(tgt_path,
         'static/js/lib/codemirror.lib/codemirror.css')
     minify(tgt_path,
-        'static/css/app/editor.css')
+        'static/css/lib/fonts/glyphicons.css')
 
     zipify(tgt_path)
 
@@ -155,7 +155,7 @@ def js_minify(tgt_path):
     concat(tmp_path,
         'static/js/lib/require/require-2.3.6.min.js')
 
-    optimy(tmp_path, 'amd.json')
+    optimy(tmp_path, 'amd-editor.json')
     minify(tgt_path, tmp_path)
     os.remove(tmp_path)
     zipify(tgt_path)

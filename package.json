@@ -32,13 +32,13 @@
         "url": "git@bitbucket.org:hsk81/notex.git"
     },
     "scripts": {
-        "prebuild": "./prepack.sh && npx tsc -b && npx sass ./static --no-source-map",
+        "prebuild": "./prepack.sh && npx tsc -b && npx sass ./static ./template --no-source-map",
         "build": "./notex/minify.py",
-        "predebug": "./prepack.sh && npx tsc -b && npx sass ./static --no-source-map",
+        "predebug": "./prepack.sh && npx tsc -b && npx sass ./static ./template --no-source-map",
         "debug": "source ./bin/activate && DEBUG=1 gunicorn -c config.py wsgi:app",
         "prestart": "source ./bin/activate && npm run build",
         "start": "source ./bin/activate && DEBUG=0 gunicorn -c config.py wsgi:app --preload",
-        "watch": "npx tsc -w & npx sass ./static --watch"
+        "watch": "npx tsc -w & npx sass ./static ./template --watch"
     },
     "engines": {
         "node": "^13.5.0"

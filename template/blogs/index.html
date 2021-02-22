@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+{% block title %}
+<title>{{ domain|capitalize }}&nbsp;·&nbsp;{{ title }}</title>
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-4.5.0.min.css" />
+<link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Habibi&display=swap"/>
+{% endblock %}
+
+{% block body %}
+<style scoped>{% include 'blogs/index.css' %}</style>
+{% block header %}
+{% include 'header/index.html' %}
+{% endblock %}
+{% block content %}
+<div id="content">
+    <div class="one-card" id="blogs">
+        <div class="container list-group">
+            <div class="row">
+                <div class="col">
+                    <p class="list-group-item"><em>no certified publications yet</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{% include 'footer/index.html' %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/lib/jquery/jquery-2.2.4.min.js"></script>
+<script src="/static/js/lib/bootstrap/bootstrap-4.5.0.min.js"></script>
+<script src="/static/js/lib/require/require-2.3.6.min.js" data-main="/static/js/app/app-blogs.js"></script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,52 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark font-weight-bold">
+        <a class="navbar-brand" href="#" style="font-family: Habibi, serif;" tabindex="-1">
+            <img src="/static/ico/quill-white.svg" width="30" height="30" class="d-inline-block align-top"
+                alt="quill" loading="lazy">NoTex
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-nav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#ip-platform">IP Platform</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#preview">Preview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#plugins">Plugins</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#publication">Publication</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#delivery">Delivery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home#certification">Certification</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/blogs">Blogs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item">
+                    {% include 'header/twitter.html' %}
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    {% include 'header/slack.html' %}
+                </li>
+            </ul>
+            <a class="btn btn-primary d-lg-inline-block mb-3 mb-md-0 ml-md-3" href="/editor" target="_blank">
+                Get&nbsp;Started
+            </a>
+        </div>
+    </nav>
+</header>

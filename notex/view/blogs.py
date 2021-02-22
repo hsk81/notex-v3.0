@@ -13,31 +13,31 @@ import os.path
 ###############################################################################
 ###############################################################################
 
-app_publications = Bottle()
-app = app_publications
+app_blogs = Bottle()
+app = app_blogs
 
 ###############################################################################
 ###############################################################################
 
-@app.get('/publications/<path:path>.html')
-@app.get('/publications')
-def publications(path=None):
+@app.get('/blogs/<path:path>.html')
+@app.get('/blogs')
+def blogs(path=None):
 
     @rdb.memoize(
         expiry=rdb.NEVER, unless=lambda: ARGs.debug() or aaa.current)
     def memoized(*args, **kwargs):
 
-        html = os.path.join('publications', path) \
-            if path is not None else 'publications'
-        return generic(html, i18n=get(detect('en')), title=ARGs.get(
-            'TITLE_PUBLICATIONS',
-            'Censorship Free Intellectual Property Platform: Publications'
-        ))
+        html = os.path.join('blogs', path) if path is not None else 'blogs'
+        return generic(
+            html + '/index', i18n=get(detect('en')), title=ARGs.get(
+                'TITLE_BLOGS', 'List of Certified Publications'
+            )
+        )
 
     if path is not None:
-        name = 'views.publications:{0}.html:{1}'.format(path, detect('en'))
+        name = 'views.blogs:{0}.html:{1}'.format(path, detect('en'))
     else:
-        name = 'views.publications:{0}'.format(detect('en'))
+        name = 'views.blogs:{0}'.format(detect('en'))
 
     return memoized(name=name)
 

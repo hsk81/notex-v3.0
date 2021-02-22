@@ -3,12 +3,12 @@ import { Ethereum } from './ethereum/index';
 import { trace } from './decorator/trace';
 
 @trace
-export class Publications {
-    public static get me(): Publications {
-        if (window.PUBLICATIONS === undefined) {
-            window.PUBLICATIONS = new Publications();
+export class Blogs {
+    public static get me(): Blogs {
+        if (window.APP_BLOGS === undefined) {
+            window.APP_BLOGS = new Blogs();
         }
-        return window.PUBLICATIONS;
+        return window.APP_BLOGS;
     }
     public constructor() {
         Promise.resolve().then(this.initialized);
@@ -22,8 +22,8 @@ export class Publications {
                 if (address) {
                     let urls = await ntxc.tokenURIs(address);
                     if (urls && urls.length) {
-                        const $pubs = $('#publications');
-                        const $list = $pubs.find('.list-group');
+                        const $blogs = $('#blogs');
+                        const $list = $blogs.find('.list-group');
                         $list.empty();
                         for (const url of urls.filter(u => u)) {
                             const $row = $('<div>', { 'class': 'row' });
@@ -42,4 +42,4 @@ export class Publications {
         }
     }
 }
-export default Publications.me;
+export default Blogs.me;

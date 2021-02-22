@@ -1,0 +1,36 @@
+/* ============================================================================
+ * HTML, Body:
+ * ========================================================================= */
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+/* ============================================================================
+ * Content:
+ * ========================================================================= */
+
+ #content {
+    font-family: Habibi, serif;
+    margin: 2em auto;
+    max-width: 1240px;
+    min-height: calc(100% - 176px);
+    text-align: center;
+}
+
+.one-card {
+    align-items: center;
+    justify-items: center;
+    margin: auto 3em;
+}
+
+.one-card a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ========================================================================= */

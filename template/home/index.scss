@@ -1,0 +1,70 @@
+/* ============================================================================
+ * HTML, Body:
+ * ========================================================================= */
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+/* ============================================================================
+ * Content:
+ * ========================================================================= */
+
+ #content {
+    font-family: Habibi, serif;
+    margin: 2em auto;
+    max-width: 1240px;
+}
+
+hr {
+    border: 1px solid #343a40;
+    border-radius: 1px;
+    margin: 3em auto;
+    width: 85%;
+}
+
+.two-card {
+    align-items: center;
+    display: grid;
+    grid-column-gap: 3em;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    margin: auto 3em;
+}
+
+.two-card h2 {
+    font-weight: bold;
+    text-align: center;
+}
+
+.two-card p {
+    font-size: larger;
+    text-align: justify;
+}
+
+.two-card img {
+    box-shadow: 0 6px 28px 0 rgba(24, 52, 117, 0.2);
+    border-radius: 0.25em;
+    height: auto;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .two-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        margin: auto 2em;
+    }
+
+    .two-card .rhs h2 {
+        margin-top: 1em;
+    }
+
+    .two-card p {
+        font-size: medium;
+    }
+}
+
+/* ========================================================================= */
