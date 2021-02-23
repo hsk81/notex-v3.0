@@ -14,20 +14,15 @@ body {
 
  #content {
     font-family: Habibi, serif;
-    margin: 2em auto;
+    margin: 1em auto;
     max-width: 1240px;
-    min-height: calc(100% - 176px);
-    text-align: center;
+    min-height: calc(100% - 144px);
 }
 
-.one-card {
-    align-items: center;
-    justify-items: center;
-    margin: auto 3em;
-}
-
-.one-card a {
+table#blogs p {
     display: block;
+    margin: 0;
+    max-width: 16em;;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

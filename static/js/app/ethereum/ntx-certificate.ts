@@ -75,9 +75,13 @@ export class NtxCertificate {
         const tokens = await this.tokens(owner, options);
         if (tokens) {
             const uris = tokens.map(
-                (id) => id && this.tokenURI(id)
+                (id) => this.tokenURI(id as string)
             );
-            return await Promise.all(uris);
+            const values = await Promise.all(uris);
+            return values.map((v, i) => ({
+                id: tokens[i] as string,
+                value: v as string
+            }));
         }
     }
     private indices(options: {
