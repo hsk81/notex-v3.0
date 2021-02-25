@@ -12,7 +12,9 @@ export class Blogs {
         return window.APP_BLOGS;
     }
     public constructor() {
-        Promise.resolve().then(this.initialized);
+        Promise.resolve()
+            .then(this.initialized.bind(this))
+            .then(this.events.bind(this));
     }
     private async initialized() {
         const chain_id = await Ethereum.me.chainId;
@@ -23,15 +25,12 @@ export class Blogs {
                 if (address) {
                     let uris = await ntxc.tokenURIs(address);
                     if (uris && uris.length) {
-                        const $blogs = $('table#blogs');
-                        const $thead = $blogs.find('thead');
-                        const n_cols = $thead.find('th').length;
-                        const n_cols_visible = $thead.find('th:visible').length;
-                        const $tbody = $blogs.find('tbody');
+                        const n_cols = this.$colums.length;
+                        const n_cols_visible = this.$thead.find('th:visible').length;
                         for (const uri of uris.sort((lhs, rhs) => {
                             return parseInt(lhs.id) > parseInt(rhs.id) ? +1 : -1;
                         })) {
-                            await timeout(200, fetch(uri.value)).then((res) => {
+                            await timeout(600, fetch(uri.value)).then((res) => {
                                 return res.json();
                             }).then((certificate: PdfCertificateMeta) => {
                                 if (!certificate.content) {
@@ -39,9 +38,9 @@ export class Blogs {
                                         certificate
                                     )}`);
                                 }
-                                $tbody.append(row(uri, certificate));
+                                this.$tbody.append(row(uri, certificate));
                             }).catch((reason) => {
-                                $tbody.append(row(uri, {
+                                this.$tbody.append(row(uri, {
                                     authors: [],
                                     content: '',
                                     description: '',
@@ -52,7 +51,7 @@ export class Blogs {
                                 }));
                                 console.error(reason);
                             }).finally(() => {
-                                $tbody.find('tr#placeholder').remove();
+                                this.$tbody.find('tr#placeholder').remove();
                             });
                             function row(
                                 uri: { id: string, value: string }, certificate: PdfCertificateMeta
@@ -91,7 +90,7 @@ export class Blogs {
                                     </td>`);
                                 }
                                 cols.push(`<td>
-                                    <button title="Burn Certificate" type="button" class="btn btn-outline-danger btn-sm" disabled>
+                                    <button title="Burn Certificate" type="button" class="btn btn-outline-danger btn-sm burn">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -106,6 +105,53 @@ export class Blogs {
                 }
             }
         }
+    }
+    private events() {
+        const $buttons = this.$tbody.find('button.burn');
+        $buttons.on('click', this.on_burn_click.bind(this));
+    }
+    private async on_burn_click(ev: JQuery.ClickEvent) {
+        const $row = $(ev.target).closest('tr');
+        const cert_id = $row.attr('id');
+        if (this.eth && cert_id) try {
+            const author = await this.eth.address;
+            if (!author) throw null;
+            const chain_id = await this.eth.chainId;
+            if (!chain_id) throw null;
+            const ntxc = await NtxCertificateFactory.create(chain_id);
+            if (!ntxc) throw null;
+            const tx = await ntxc.burn(author, cert_id);
+            if (!tx) throw null;
+            $row.remove();
+        } catch (ex) {
+            console.error(ex)
+        } finally {
+            if (this.$rows.length === 0) {
+                this.$tbody.append($(`<tr id="placeholder">
+                    <td scope="row" colspan="100%" style="text-align: center;">
+                        <em>no certified publications yet</em>
+                    </td>
+                </tr>`));
+            }
+        }
+    }
+    private get $table() {
+        return $('table#blogs');;
+    }
+    private get $thead() {
+        return this.$table.find('>thead');
+    }
+    private get $tbody() {
+        return this.$table.find('>tbody');
+    }
+    private get $colums() {
+        return this.$thead.find('>tr>th');
+    }
+    private get $rows() {
+        return this.$tbody.find('>tr');
+    }
+    private get eth() {
+        return Ethereum.me;
     }
 }
 function timeout<T>(ms: number, promise: Promise<T>) {

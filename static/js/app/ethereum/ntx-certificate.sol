@@ -16,16 +16,22 @@ contract NTXCertificate is ERC721 {
     constructor() public ERC721("NTXCertificate", "NTXC") {}
 
     function publish(address author, string memory tokenURI)
-        public
-        returns (uint256)
+        public returns (uint256)
     {
         _tokenIds.increment();
 
         uint256 id = _tokenIds.current();
-        _mint(author, id);
+        _safeMint(author, id);
         _setTokenURI(id, tokenURI);
 
         return id;
+    }
+
+    function burn(uint256 tokenId)
+        public
+    {
+        require(_isApprovedOrOwner(msg.sender, tokenId));
+        _burn(tokenId);
     }
 }
 

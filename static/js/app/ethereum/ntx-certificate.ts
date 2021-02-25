@@ -8,11 +8,20 @@ export class NtxCertificate {
     public constructor(address: string) {
         this._address = address;
     }
-    public async publish(author: string, tokenURI: string) {
+    public async publish(from: string, token_uri: string) {
         const contract = await this.contract();
         if (contract) {
-            const tx = await contract.methods.publish(author, tokenURI).send({
-                from: author
+            const tx = await contract.methods.publish(from, token_uri).send({
+                from
+            });
+            return tx as PromiEvent<TransactionReceipt>;
+        }
+    }
+    public async burn(from: string, token_id: string) {
+        const contract = await this.contract();
+        if (contract) {
+            const tx = await contract.methods.burn(token_id).send({
+                from
             });
             return tx as PromiEvent<TransactionReceipt>;
         }
