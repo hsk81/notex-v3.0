@@ -39,7 +39,6 @@ export class Ethereum {
                         }
                         resolve(rpc.result[0]);
                     } else {
-                        console.error(error);
                         resolve(undefined);
                     }
                     DocTitle.reuseCurrent();
@@ -66,7 +65,6 @@ export class Ethereum {
                     if (rpc && rpc.result && rpc.result.length) {
                         resolve(`0x${parseInt(rpc.result).toString(16)}`);
                     } else {
-                        console.error(error);
                         resolve(undefined);
                     }
                 });
@@ -86,7 +84,6 @@ export class Ethereum {
                     if (rpc && rpc.result && rpc.result.length) {
                         resolve(rpc.result[0]);
                     } else {
-                        console.error(error);
                         resolve(undefined);
                     }
                 });

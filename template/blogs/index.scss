@@ -12,20 +12,58 @@ body {
  * Content:
  * ========================================================================= */
 
- #content {
-    font-family: Habibi, serif;
+#content {
     margin: 1em auto;
     max-width: 1240px;
     min-height: calc(100% - 144px);
+    text-align: center;
+}
+
+table#blogs p,
+table#blogs em {
+    font-family: Habibi, serif;
 }
 
 table#blogs p {
     display: block;
     margin: 0;
-    max-width: 16em;;
+    max-width: 10em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* ========================================================================= */
+table#blogs {
+    tr.wallet-mm td {
+        text-align: center;
+    }
+    tr.wallet-mm td .btn-group {
+        width: 100%;
+    }
+    tr.wallet-mm td button.lhs {
+        max-width: 54px;
+    }
+    tr.wallet-mm td button.rhs {
+        max-width: 54px;
+    }
+    tr#wallet-network-wrong td button.lhs,
+    tr#wallet-network-wrong td button.mid {
+        pointer-events: all !important;
+        cursor: not-allowed;
+    }
+}
+
+/* ============================================================================
+ * Popover dialogs:
+ * ========================================================================= */
+
+ .popover {
+    .popover-header {
+      text-align: center;
+    }
+    .popover-body {
+      text-align: justify;
+    }
+  }
+
+  /* ========================================================================= */
