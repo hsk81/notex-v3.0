@@ -10,14 +10,14 @@
 {% endblock %}
 
 {% block body %}
-<style scoped>{% include 'blogs/index.css' %}</style>
+<style scoped>{% include 'nfts/index.css' %}</style>
 {% block header %}
 {% include 'header/index.html' %}
 {% endblock %}
 {% block content %}
 <div id="content">
     <div class="table-responsive">
-        <table id="blogs" class="table table-striped table-hover mx-auto w-auto">
+        <table id="nfts" class="table table-striped table-hover mx-auto w-auto">
             <thead class="table-light">
                 <tr>
                     <th scope="col"><p>ID</p></th>
@@ -61,6 +61,6 @@
 {% block scripts %}
 <script src="/static/js/lib/jquery/jquery-2.2.4.min.js"></script>
 <script src="/static/js/lib/bootstrap/bootstrap-4.5.0.min.js"></script>
-<script src="/static/js/lib/require/require-2.3.6.min.js" data-main="/static/js/app/app-blogs.js"></script>
+<script src="/static/js/lib/require/require-2.3.6.min.js" data-main="/static/js/app/app-nfts.js"></script>
 {% endblock %}
 {% endblock %}

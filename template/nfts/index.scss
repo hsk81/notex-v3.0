@@ -19,12 +19,12 @@ body {
     text-align: center;
 }
 
-table#blogs p,
-table#blogs em {
+table#nfts p,
+table#nfts em {
     font-family: Habibi, serif;
 }
 
-table#blogs p {
+table#nfts p {
     display: block;
     margin: 0;
     max-width: 10em;
@@ -33,7 +33,7 @@ table#blogs p {
     white-space: nowrap;
 }
 
-table#blogs {
+table#nfts {
     tr.wallet-mm td {
         text-align: center;
     }

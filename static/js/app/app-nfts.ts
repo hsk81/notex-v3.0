@@ -6,12 +6,12 @@ import { Popover } from './ui/index';
 import { trace } from './decorator/trace';
 
 @trace
-export class Blogs {
-    public static get me(): Blogs {
-        if (window.APP_BLOGS === undefined) {
-            window.APP_BLOGS = new Blogs();
+export class NFTs {
+    public static get me(): NFTs {
+        if (window.APP_NFTS === undefined) {
+            window.APP_NFTS = new NFTs();
         }
-        return window.APP_BLOGS;
+        return window.APP_NFTS;
     }
     public constructor() {
         Promise.resolve()
@@ -91,7 +91,7 @@ export class Blogs {
         for (const uri of uris.sort((lhs, rhs) => {
             return parseInt(lhs.id) > parseInt(rhs.id) ? +1 : -1;
         })) {
-            await timeout(600, fetch(uri.value)).then((res) => {
+            await timeout(3000, fetch(uri.value)).then((res) => {
                 return res.json();
             }).then((certificate: PdfCertificateMeta) => {
                 if (!certificate.content) {
@@ -215,7 +215,7 @@ export class Blogs {
         }
     }
     private get $table() {
-        return $('table#blogs');;
+        return $('table#nfts');;
     }
     private get $thead() {
         return this.$table.find('>thead');
@@ -253,4 +253,4 @@ function timeout<T>(ms: number, promise: Promise<T>) {
         });
     });
 }
-export default Blogs.me;
+export default NFTs.me;

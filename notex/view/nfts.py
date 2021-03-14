@@ -13,31 +13,31 @@ import os.path
 ###############################################################################
 ###############################################################################
 
-app_blogs = Bottle()
-app = app_blogs
+app_nfts = Bottle()
+app = app_nfts
 
 ###############################################################################
 ###############################################################################
 
-@app.get('/blogs/<path:path>.html')
-@app.get('/blogs')
-def blogs(path=None):
+@app.get('/nfts/<path:path>.html')
+@app.get('/nfts')
+def nfts(path=None):
 
     @rdb.memoize(
         expiry=rdb.NEVER, unless=lambda: ARGs.debug() or aaa.current)
     def memoized(*args, **kwargs):
 
-        html = os.path.join('blogs', path) if path is not None else 'blogs'
+        html = os.path.join('nfts', path) if path is not None else 'nfts'
         return generic(
             html + '/index', i18n=get(detect('en')), title=ARGs.get(
-                'TITLE_BLOGS', 'List of Certified Publications'
+                'TITLE_NFTS', 'List of Certified Publications'
             )
         )
 
     if path is not None:
-        name = 'views.blogs:{0}.html:{1}'.format(path, detect('en'))
+        name = 'views.nfts:{0}.html:{1}'.format(path, detect('en'))
     else:
-        name = 'views.blogs:{0}'.format(detect('en'))
+        name = 'views.nfts:{0}'.format(detect('en'))
 
     return memoized(name=name)
 
