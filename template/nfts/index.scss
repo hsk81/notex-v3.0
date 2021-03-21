@@ -16,7 +16,10 @@ body {
     margin: 1em auto;
     max-width: 1240px;
     min-height: calc(100% - 144px);
-    text-align: center;
+}
+
+table#nfts {
+    min-width: 41%;
 }
 
 table#nfts p,
@@ -27,7 +30,6 @@ table#nfts em {
 table#nfts p {
     display: block;
     margin: 0;
-    max-width: 10em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

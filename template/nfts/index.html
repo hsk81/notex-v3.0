@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="/static/css/lib/fonts/glyphicons.css"/>
+<link rel="stylesheet" href="/static/css/lib/fonts/glyphicons.css" />
 <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-4.5.0.min.css" />
 <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Habibi&display=swap" />
 {% endblock %}
@@ -17,39 +17,22 @@
 {% block content %}
 <div id="content">
     <div class="table-responsive">
-        <table id="nfts" class="table table-striped table-hover mx-auto w-auto">
+        <table id="nfts" class="table table-hover mx-auto w-auto">
             <thead class="table-light">
                 <tr>
                     <th scope="col"><p>ID</p></th>
                     <th scope="col" class="d-none d-sm-table-cell"><p>QR Code</p></th>
                     <th scope="col"><p>Name</p></th>
-                    <th scope="col"><p>Description</p></th>
-                    <th scope="col" class="d-none d-sm-table-cell"><p>Author(s)</p></th>
-                    <th scope="col" class="d-none d-sm-table-cell"><p>Email(s)</p></th>
-                    <th scope="col" class="d-none d-sm-table-cell"><p>Keyword(s)</p></th>
+                    <th scope="col" class="d-none d-sm-table-cell"><p>Description</p></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr id="placeholder">
+                <tr id="placeholder" style="background-color: whitesmoke;">
                     <td scope="row" colspan="100%" style="text-align: center;">
-                        <em>no certified publications yet</em>
+                        <em>no certified publications yet; <a href="/editor" target="_blank">compose</a>?</em>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <th scope="row"><a href="" target="_blank">1</a></th>
-                    <th class="d-none d-sm-table-cell">
-                        <img class="" src="" class="img-thumbnail" alt="QR Code">
-                    </th>
-                    <td><p>Leonhard Euler</p></td>
-                    <td><p>Swiss Mathematician</p></td>
-                    <td class="d-none d-sm-table-cell"><p>Anonymous</p></td>
-                    <td class="d-none d-sm-table-cell"><p>anonymous@wikipedia.org</p></td>
-                    <td class="d-none d-sm-table-cell"><p>leonhard, euler, swiss, mathematician</p></td>
-                    <td>
-                        <button title="Burn Certificate" type="button" class="btn btn-outline-danger btn-sm" disabled>..</button>
-                    </td>
-                </tr> -->
             </tbody>
         </table>
     </div>
