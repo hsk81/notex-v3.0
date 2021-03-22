@@ -3,7 +3,7 @@
     "description": "editor",
     "license": "GPL-3.0",
     "dependencies": {
-        "ipfs": "^0.54.4",
+        "ipfs": "^0.53.2",
         "markdown-it": "^12.0.4",
         "markdown-it-abbr": "^1.0.4",
         "markdown-it-anchor": "^7.1.0",
