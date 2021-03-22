@@ -8,6 +8,7 @@ __author__ = 'hsk81'
 
 import amd
 import gzip
+import hashlib
 import os
 import rcssmin
 import subprocess
@@ -20,6 +21,18 @@ def concat(tgt_path, src_path, flag='a', func=lambda s: s):
     with open(src_path, 'r') as inp_file:
         with open(tgt_path, flag) as out_file:
             out_file.write(func(inp_file.read()))
+
+def hashify(tgt_path, algorithm='sha1'):
+
+    with open(tgt_path, 'rb') as tgt_file:
+        tgt_text = tgt_file.read()
+        tgt_hash = getattr(hashlib, algorithm)(tgt_text).hexdigest()
+        tgt_root, tgt_ext = os.path.splitext(tgt_path)
+        sha_path = '{0}-{1}{2}'.format(tgt_root, tgt_hash, tgt_ext)
+        with open(sha_path, 'wb') as sha_file:
+            sha_file.write(tgt_text)
+
+    return sha_path
 
 def zipify(tgt_path):
 
@@ -43,7 +56,7 @@ def css_minify(tgt_path):
     minify(tgt_path,
         'static/css/lib/fonts/glyphicons.css')
 
-    zipify(tgt_path)
+    zipify(hashify(tgt_path))
 
 def js_minify(tgt_path):
     tmp_path = tgt_path + '.tmp'
@@ -52,7 +65,7 @@ def js_minify(tgt_path):
         concat(tgt_path, amd.optimize(amd_conf), flag=flag)
 
     def minify(tgt_path, src_path):
-        subprocess.call(['npx', 'terser', '-co', tgt_path, src_path])
+        subprocess.run(['npx', 'terser', '-co', tgt_path, src_path])
 
     concat(tmp_path,
         'static/js/lib/jquery/jquery-2.2.4.min.js', 'w')
@@ -158,7 +171,7 @@ def js_minify(tgt_path):
     optimy(tmp_path, 'amd-editor.json')
     minify(tgt_path, tmp_path)
     os.remove(tmp_path)
-    zipify(tgt_path)
+    zipify(hashify(tgt_path))
 
 ###############################################################################
 ###############################################################################

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/static/js/lib/codemirror.lib/codemirror.css"/>
 <link rel="stylesheet" href="/static/css/lib/fonts/glyphicons.css"/>
 {% else %}
-<link rel="stylesheet" href="/static/build/all.css"/>
+<link rel="stylesheet" href="/static/build/{{ bundle['all.css'] }}"/>
 {% endif %}
 {% endblock %}
 
@@ -72,6 +72,6 @@
 <script src="/static/js/lib/codemirror/mode/vbscript/vbscript.js"></script>
 <script src="/static/js/lib/require/require-2.3.6.min.js" data-main="/static/js/app/app-editor.js"></script>
 {% else %}
-<script src="/static/build/all.js" data-main="/static/js/app/app-editor.js"></script>
+<script src="/static/build/{{ bundle['all.js'] }}" data-main="/static/js/app/app-editor.js"></script>
 {% endif %}
 {% endblock %}

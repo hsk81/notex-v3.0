@@ -8,7 +8,8 @@ from notex.view.util.generic import generic
 from notex.view.util.i18n import detect, get
 from notex import ARGs
 
-import os.path
+import os
+import re
 
 ###############################################################################
 ###############################################################################
@@ -18,6 +19,19 @@ app = app_edit
 
 ###############################################################################
 ###############################################################################
+
+def match(pattern, names, default=None):
+
+    names = list(filter(lambda name: re.match(pattern, name), names))
+    return names[0] if len(names) > 0 else default
+
+def bundles(path='./static/build'):
+
+    names = os.listdir(path)
+    return {
+        'all.js': match('all-([^.]+).js$', names, default='all.js'),
+        'all.css': match('all-([^.]+).css$', names, default='all.css')
+    }
 
 @app.get('/editor/<path:path>.html')
 @app.get('/editor')
@@ -29,9 +43,8 @@ def editor(path=None):
 
         html = os.path.join('editor', path) if path is not None else 'editor'
         return generic(
-            html + '/index', i18n=get(detect('en')), title=ARGs.get(
-                'TITLE_EDITOR', 'Markdown Editor'
-            )
+            html + '/index', bundle=bundles(), i18n=get(detect('en')),
+            title=ARGs.get('TITLE_EDITOR', 'Markdown Editor')
         )
 
     if path is not None:
