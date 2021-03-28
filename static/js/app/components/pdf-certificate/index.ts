@@ -3,30 +3,30 @@ import { Ethereum } from '../../ethereum/index';
 import { QRCode } from '../../qr-code/index';
 
 export class PdfCertificate {
-    public static print(data: {
-        cert: { meta: PdfCertificateMeta, url: string },
-        post_url: string, tx?: TransactionReceipt
-    }) {
+    public static print(
+        cert: { meta: PdfCertificateMeta, url: string, id?: string },
+        tx?: TransactionReceipt
+    ) {
         $.get(this.pdf_html).done(async (html: string) => {
             const head = html.match(/<head>([^]+)<\/head>/im);
             this.$pdf_head.html(head ? head[0] : '');
             const body = html.match(/<body>([^]+)<\/body>/im);
             this.$pdf_body.html(body ? body[0] : '');
             {
-                this.setTitle(data.tx?.events?.Transfer.returnValues.tokenId);
-                this.setId(data.tx?.events?.Transfer.returnValues.tokenId);
-                this.setName(data.cert.meta.name);
-                this.setDescription(data.cert.meta.description);
-                this.setAuthors(data.cert.meta.authors);
-                this.setEmails(data.cert.meta.emails);
-                this.setKeywords(data.cert.meta.keywords);
+                this.setTitle(cert.id);
+                this.setId(cert.id);
+                this.setName(cert.meta.name);
+                this.setDescription(cert.meta.description);
+                this.setAuthors(cert.meta.authors);
+                this.setEmails(cert.meta.emails);
+                this.setKeywords(cert.meta.keywords);
             }
             await Promise.all([
-                this.setContentUrl(data.cert.meta.content as string),
-                this.setCertUrl(data.cert.url),
-                this.setTxUrl(data.tx)
+                this.setContentUrl(cert.meta.content as string),
+                this.setCertUrl(cert.url),
+                this.setTxUrl(tx)
             ]);
-            if (this.$pdf[0].contentWindow) {
+            if (this.$pdf && this.$pdf[0] && this.$pdf[0].contentWindow) {
                 const original = window.document.title;
                 window.document.title = this.getTitle();
                 this.$pdf[0].contentWindow.print();
@@ -72,7 +72,7 @@ export class PdfCertificate {
         this.$pdf_body.find('#cert-url>.value>span').text(value);
     }
     private static async setTxUrl(tx?: TransactionReceipt) {
-        if (tx && this.eth_supported) {
+        if (tx && tx.transactionHash && this.eth_supported) {
             const explorer = await this.eth.explorer;
             if (explorer) {
                 const tx_url = `${explorer}/tx/${tx.transactionHash}`;
@@ -95,7 +95,7 @@ export class PdfCertificate {
         return $('#nft-certificate') as JQuery<HTMLFrameElement>;
     }
     private static get eth_supported() {
-        return this.eth && this.eth.enabled && this.eth.supported;
+        return this.eth && this.eth.supported;
     }
     private static get eth() {
         return Ethereum.me;

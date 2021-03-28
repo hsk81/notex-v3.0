@@ -219,7 +219,9 @@ export class IpfsTab {
             this.ui.$publishDialogPrimary.html('Published');
             this.ui.$publishDialog.modal('hide');
         }
-        PdfCertificate.print(data);
+        PdfCertificate.print({
+            ...data.cert, id: data.tx?.events?.Transfer.returnValues.tokenId
+        }, data.tx);
     }
     private onRejected() {
         this.ui.$publishDialogPrimary.addClass('btn-danger');

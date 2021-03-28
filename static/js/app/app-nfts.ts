@@ -1,5 +1,5 @@
+import { PdfCertificate, PdfCertificateMeta } from './components/pdf-certificate/index';
 import { NtxCertificateFactory } from './ethereum/ntx-certificate-factory';
-import { PdfCertificateMeta } from './components/pdf-certificate';
 import { Ethereum } from './ethereum/index';
 import { Popover } from './ui/index';
 
@@ -116,25 +116,25 @@ export class NFTs {
             });
         }
         function get_nft_main(
-            uri: { id: string, value: string }, certificate: PdfCertificateMeta
+            uri: { id: string, value: string }, cert: PdfCertificateMeta
         ) {
             const cols = [`<tr class="nft-main" id="${uri.id}">`];
-            if (certificate.content) {
+            if (cert.content) {
                 cols.push(`<td scope="row">
-                    <a href="${certificate.content}" target="_blank">#${uri.id}</a>
+                    <a href="${cert.content}" target="_blank">#${uri.id}</a>
                 </td>`);
-                cols.push(`<td class="d-none d-sm-table-cell">${certificate.image
-                    ? `<img src="${certificate.image}" style="border-radius: 0.25em;" alt="QR Code">`
+                cols.push(`<td class="d-none d-sm-table-cell">${cert.image
+                    ? `<img src="${cert.image}" style="border-radius: 0.25em;" alt="QR Code">`
                     : ''
-                }</td>`);
+                    }</td>`);
                 cols.push(`<td>
-                    <p title="${certificate.name}" style="max-width:15em;">
-                        <a href="${certificate.content}" target="_blank">${certificate.name}</a>
+                    <p title="${cert.name}" style="max-width:15em;">
+                        <a href="${cert.content}" target="_blank">${cert.name}</a>
                     </p>
                 </td>`);
                 cols.push(`<td>
-                    <p title="${certificate.description}" class="d-none d-sm-table-cell" style="max-width:20em;">
-                        ${certificate.description}
+                    <p title="${cert.description}" class="d-none d-sm-table-cell" style="max-width:20em;">
+                        ${cert.description}
                     </p>
                 </td>`);
             } else {
@@ -152,8 +152,14 @@ export class NFTs {
                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                 </svg>
             </button>`);
-            if (certificate.content) {
-                cols.push(`<button title="Expand" type="button" class="btn btn-outline-dark btn-sm toggle d-none d-sm-table-cell">
+            if (cert.content) {
+                cols.push(`<button title="Print" type="button" class="btn btn-outline-dark btn-sm print" data-cert-id="${uri.id}" data-cert-url="${uri.value}" data-cert="${JSON.stringify(cert).replace(/"/g, "'")}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+                    </svg>
+                </button>`);
+                cols.push(`<button title="Expand" type="button" class="btn btn-outline-dark btn-sm toggle d-none d-sm-table-cell mt-1 float-right" style="margin-right: 3.5px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                     </svg>
@@ -210,28 +216,12 @@ export class NFTs {
         $install.on('click', this.on_install_click.bind(this));
         const $connect = this.$wallet_connect.find('.lhs,.mid');
         $connect.on('click', this.on_connect_click.bind(this));
-        const burn = this.$tbody.find('button.burn');
-        burn.on('click', this.on_burn_click.bind(this));
-        const toggle = this.$tbody.find('button.toggle');
-        toggle.on('click', this.on_toggle_click.bind(this));
-    }
-    private async on_toggle_click(ev: JQuery.ClickEvent) {
-        const $row = $(ev.target).closest('tr');
-        const $toggle = $row.find('button.toggle');
-        const state = $row.data('state');
-        if (state !== 'expanded') {
-            $row.nextAll('.nft-extra').slice(0, 3).show();
-            $toggle.find('svg.bi-chevron-down').hide();
-            $toggle.find('svg.bi-chevron-up').show();
-            $toggle.attr('title', 'Collapse');
-            $row.data('state', 'expanded');
-        } else {
-            $row.nextAll('.nft-extra').slice(0, 3).hide();
-            $toggle.find('svg.bi-chevron-down').show();
-            $toggle.find('svg.bi-chevron-up').hide();
-            $toggle.attr('title', 'Expand');
-            $row.data('state', '');
-        }
+        const $burn = this.$tbody.find('button.burn');
+        $burn.on('click', this.on_burn_click.bind(this));
+        const $toggle = this.$tbody.find('button.toggle');
+        $toggle.on('click', this.on_toggle_click.bind(this));
+        const $print = this.$tbody.find('button.print');
+        $print.on('click', this.on_print_click.bind(this));
     }
     private on_install_click(ev: JQuery.ClickEvent) {
         const tab = window.open('https://metamask.io/', '_black');
@@ -265,6 +255,39 @@ export class NFTs {
                     </td>
                 </tr>`));
             }
+        }
+    }
+    private on_print_click(ev: JQuery.ClickEvent) {
+        const $row = $(ev.target).closest('tr');
+        const $print = $row.find('button.print');
+        const cert = $print.data('cert') as string;
+        const id = $print.data('cert-id') as string;
+        const url = $print.data('cert-url') as string;
+        try {
+            const meta = JSON.parse(cert.replace(/'/g, '"'));
+            PdfCertificate.print({ meta, id, url }, {
+                transactionHash: null /** @todo: id => tx-hash? */
+            } as any);
+        } catch (ex) {
+            console.error(ex);
+        }
+    }
+    private on_toggle_click(ev: JQuery.ClickEvent) {
+        const $row = $(ev.target).closest('tr');
+        const $toggle = $row.find('button.toggle');
+        const state = $row.data('state');
+        if (state !== 'expanded') {
+            $row.nextAll('.nft-extra').slice(0, 3).show();
+            $toggle.find('svg.bi-chevron-down').hide();
+            $toggle.find('svg.bi-chevron-up').show();
+            $toggle.attr('title', 'Collapse');
+            $row.data('state', 'expanded');
+        } else {
+            $row.nextAll('.nft-extra').slice(0, 3).hide();
+            $toggle.find('svg.bi-chevron-down').show();
+            $toggle.find('svg.bi-chevron-up').hide();
+            $toggle.attr('title', 'Expand');
+            $row.data('state', '');
         }
     }
     private get $table() {
