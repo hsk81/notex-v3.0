@@ -1,14 +1,13 @@
-import { NtxCertificate } from "./ntx-certificate";
-import { Ethereum } from "./index";
+import { NtxCertificate } from './ntx-certificate';
 
 export class NtxCertificateFactory {
-    public static async create(chain_id: string) {
-        const address = await this.address(chain_id);
-        if (address) {
-            return window.NTXC = new NtxCertificate(address);
+    public static create(chain_id: string) {
+        const contract = this.contract(chain_id);
+        if (contract) {
+            return window.NTXC = new NtxCertificate(contract);
         }
     }
-    private static async address(chain_id: string) {
+    public static contract(chain_id: string) {
         switch (chain_id.toLowerCase()) {
             case '0x1': // ETH Mainnet
                 return '0x5B6c68D3d11A74c243c464E617D269CD792E60e8' as string;

@@ -1,11 +1,9 @@
-import { TransactionReceipt } from '@npm/web3-core';
 import { Ethereum } from '../../ethereum/index';
 import { QRCode } from '../../qr-code/index';
 
 export class PdfCertificate {
     public static print(
-        cert: { meta: PdfCertificateMeta, url: string, id?: string },
-        tx?: TransactionReceipt
+        cert: { meta: PdfCertificateMeta, url: string, id?: string }
     ) {
         $.get(this.pdf_html).done(async (html: string) => {
             const head = html.match(/<head>([^]+)<\/head>/im);
@@ -24,7 +22,7 @@ export class PdfCertificate {
             await Promise.all([
                 this.setContentUrl(cert.meta.content as string),
                 this.setCertUrl(cert.url),
-                this.setTxUrl(tx)
+                this.setTokenUrl(cert.id)
             ]);
             if (this.$pdf && this.$pdf[0] && this.$pdf[0].contentWindow) {
                 const original = window.document.title;
@@ -64,20 +62,31 @@ export class PdfCertificate {
         this.$pdf_body.find('.keywords>.value>span').text(value.join(', '));
     }
     private static async setContentUrl(value: string) {
-        this.$pdf_body.find('#content-url>.qrcode').html(await QRCode(value));
-        this.$pdf_body.find('#content-url>.value>span').text(value);
+        this.$pdf_body.find('#content-url>.qrcode').html(
+            await QRCode(value)
+        );
+        this.$pdf_body.find('#content-url>.value>span').text(
+            value.replace(/^https?:\/\//i, '')
+        );
     }
     private static async setCertUrl(value: string) {
-        this.$pdf_body.find('#cert-url>.qrcode').html(await QRCode(value));
-        this.$pdf_body.find('#cert-url>.value>span').text(value);
+        this.$pdf_body.find('#cert-url>.qrcode').html(
+            await QRCode(value)
+        );
+        this.$pdf_body.find('#cert-url>.value>span').text(
+            value.replace(/^https?:\/\//i, '')
+        );
     }
-    private static async setTxUrl(tx?: TransactionReceipt) {
-        if (tx && tx.transactionHash && this.eth_supported) {
-            const explorer = await this.eth.explorer;
-            if (explorer) {
-                const tx_url = `${explorer}/tx/${tx.transactionHash}`;
-                this.$pdf_body.find('#tx-hash>.qrcode').html(await QRCode(tx_url));
-                this.$pdf_body.find('#tx-hash>.value>span').text(tx.transactionHash);
+    private static async setTokenUrl(id?: string) {
+        if (id && this.eth_supported) {
+            const token_url = await this.eth.tokenUrl(id);
+            if (token_url) {
+                this.$pdf_body.find('#tx-hash>.qrcode').html(
+                    await QRCode(token_url)
+                );
+                this.$pdf_body.find('#tx-hash>.value>span').text(
+                    token_url.replace(/^https?:\/\//i, '')
+                );
             } else {
                 this.$pdf_body.find('#tx-hash').remove();
             }

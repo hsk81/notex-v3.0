@@ -89,7 +89,7 @@ export class NFTs {
         if (!this.eth) return;
         const chain_id = await this.eth.chainId;
         if (!chain_id) return;
-        const ntxc = await NtxCertificateFactory.create(chain_id);
+        const ntxc = NtxCertificateFactory.create(chain_id);
         if (!ntxc) return;
         const address = await this.eth.address;
         if (!address) return;
@@ -278,7 +278,7 @@ export class NFTs {
             if (!author) throw null;
             const chain_id = await this.eth.chainId;
             if (!chain_id) throw null;
-            const ntxc = await NtxCertificateFactory.create(chain_id);
+            const ntxc = NtxCertificateFactory.create(chain_id);
             if (!ntxc) throw null;
             const tx = await ntxc.burn(author, cert_id);
             if (!tx) throw null;
@@ -305,9 +305,7 @@ export class NFTs {
         const url = $print.data('cert-url') as string;
         try {
             const meta = JSON.parse(cert.replace(/'/g, '"'));
-            PdfCertificate.print({ meta, id, url }, {
-                transactionHash: null /** @todo: id => tx-hash? */
-            } as any);
+            PdfCertificate.print({ meta, url, id });
         } catch (ex) {
             console.error(ex);
         }

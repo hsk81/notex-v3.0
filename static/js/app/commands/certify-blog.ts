@@ -43,7 +43,7 @@ export class CertifyBlog implements Command {
             if (!author) throw null;
             const chain_id = await this.eth.chainId;
             if (!chain_id) throw null;
-            const ntxc = await NtxCertificateFactory.create(chain_id);
+            const ntxc = NtxCertificateFactory.create(chain_id);
             if (!ntxc) throw null;
             const tx = await ntxc.publish(author, cert_url);
             if (!tx) throw null;

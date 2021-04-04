@@ -1,3 +1,4 @@
+import { NtxCertificateFactory } from './ntx-certificate-factory';
 export { TransactionReceipt } from '@npm/web3-core';
 
 export class Ethereum {
@@ -114,18 +115,42 @@ export class Ethereum {
             if (chain_id) {
                 switch (chain_id.toLowerCase()) {
                     case '0x1': // ETH Mainnet
-                        resolve('https://etherscan.io');
+                        return resolve('https://etherscan.io');
                     case '0x2a': // ETH Kovan
-                        resolve('https://kovan.etherscan.io');
+                        return resolve('https://kovan.etherscan.io');
                     case '0xa86a': // AVA Mainnet
-                        resolve('https://cchain.explorer.avax.network');
+                        return resolve('https://cchain.explorer.avax.network');
                     case '0xa869': // AVA Fuji
-                        resolve('https://cchain.explorer.avax-test.network');
+                        return resolve('https://cchain.explorer.avax-test.network');
                     default:
-                        resolve(undefined);
+                        return resolve(undefined);
+                }
+            } else {
+                return resolve(undefined);
+            }
+        });
+    }
+    public tokenUrl(id: string) {
+        return new Promise<string | undefined>(async (resolve) => {
+            const chain_id = await this.chainId;
+            if (chain_id) {
+                const contract = NtxCertificateFactory.contract(chain_id);
+                const explorer = await this.explorer;
+                switch (chain_id.toLowerCase()) {
+                    case '0x1': // ETH Mainnet
+                        return resolve(`${explorer}/token/${contract}?a=${id}`);
+                    case '0x2a': // ETH Kovan
+                        return resolve(`${explorer}/token/${contract}?a=${id}`);
+                    case '0xa86a': // AVA Mainnet
+                        return resolve(`${explorer}/tokens/${contract}/instance/${id}`);
+                    case '0xa869': // AVA Fuji
+                        return resolve(`${explorer}/tokens/${contract}/instance/${id}`);
+                    default:
+                        return resolve(undefined);
                 }
             } else {
                 resolve(undefined);
+                return;
             }
         });
     }
