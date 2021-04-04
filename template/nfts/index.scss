@@ -13,15 +13,14 @@ body {
  * ========================================================================= */
 
 #content {
-    margin: 1em auto;
     max-width: 1240px;
-    min-height: calc(100% - 160px);
+    min-height: calc(100% - 144px);
     font-family: Habibi, serif;
 }
 
-#content > h2 {
+#content h2 {
     font-weight: bold;
-    margin-top: 1em;
+    margin: 1em 0;
     text-align: center;
 }
 
@@ -71,16 +70,17 @@ table#nfts {
         border-left: 3px double rgb(222, 226, 230);
     }
     tr.nft-extra table {
+        td.col-1st {
+            text-align: left;
+        }
+        td.col-2nd {
+            text-align: left;
+        }
         td.col-3rd {
             border-top: none;
         }
     }
-    a.qr-code > img {
-        background-color: white;
-        border: 1px solid rgb(52, 58, 64);
-        border-radius: 0.2rem;
-    }
-    margin: 1em auto;
+    margin: 0 auto;
     max-width: calc(67% - 2em);
 }
 

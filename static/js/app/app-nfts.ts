@@ -137,11 +137,6 @@ export class NFTs {
                 cols.push(`<td class="col-2nd nft-name">
                     <p title="${cert.name}">
                         <a href="${cert.content}" target="_blank">${cert.name}</a>
-                        ${cert.image
-                            ? `<a href="${cert.image}" title="QR Code" class="qr-code d-none d-sm-inline float-right" target="_blank">
-                                <img src="${cert.image}" width=34 height=31>
-                               </a>`
-                            : ''}
                     </p>
                 </td>`);
                 cols.push(`<td class="col-3rd nft-button">
@@ -190,13 +185,12 @@ export class NFTs {
                         </p>
                     </td>`);
                     rows.push(`<td class="col-3rd nft-button">
-                        <button
-                            title="Print" type="button" class="btn btn-outline-dark btn-sm print"
-                            data-cert="${JSON.stringify(cert).replace(/"/g, "'")}"
-                            data-cert-id="${uri.id}" data-cert-url="${uri.value}"
+                        <a title="QR Code" class="btn btn-outline-dark m-0 p-0"
+                           style="background-color: white" role="button"
+                           href="${cert.image}" target="_blank"
                         >
-                            ${svg_printer}
-                        </button>
+                            <img src="${cert.image}" width=32 height=29>
+                        </a>
                     </td>`);
                     rows.push(`</tr>`);
                 } {
@@ -209,10 +203,11 @@ export class NFTs {
                     </td>`);
                     rows.push(`<td class="col-3rd nft-button">
                         <button
-                            title="Burn" type="button" class="btn btn-outline-danger btn-sm burn"
-                            data-cert-id="${uri.id}"
+                            title="Print" type="button" class="btn btn-outline-dark btn-sm print"
+                            data-cert="${JSON.stringify(cert).replace(/"/g, "'")}"
+                            data-cert-id="${uri.id}" data-cert-url="${uri.value}"
                         >
-                            ${svg_trash}
+                            ${svg_printer}
                         </button>
                     </td>`);
                     rows.push(`</tr>`);
@@ -224,7 +219,14 @@ export class NFTs {
                             ${cert.emails?.join(', ') ?? ''}
                         </p>
                     </td>`);
-                    rows.push(`<td class="col-3rd nft-button">&nbsp;</td>`);
+                    rows.push(`<td class="col-3rd nft-button">
+                        <button
+                            title="Burn" type="button" class="btn btn-outline-danger btn-sm burn"
+                            data-cert-id="${uri.id}"
+                        >
+                            ${svg_trash}
+                        </button>
+                    </td>`);
                     rows.push(`</tr>`);
                 } {
                     rows.push(`<tr>`);
