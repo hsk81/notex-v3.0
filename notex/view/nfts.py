@@ -30,7 +30,7 @@ def nfts(path=None):
         html = os.path.join('nfts', path) if path is not None else 'nfts'
         return generic(
             html + '/index', i18n=get(detect('en')), title=ARGs.get(
-                'TITLE_NFTS', 'List of Certified Publications'
+                'TITLE_NFTS', 'Certified Publications'
             )
         )
 

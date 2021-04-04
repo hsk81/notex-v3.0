@@ -15,16 +15,18 @@ body {
 #content {
     margin: 1em auto;
     max-width: 1240px;
-    min-height: calc(100% - 144px);
+    min-height: calc(100% - 160px);
+    font-family: Habibi, serif;
+}
+
+#content > h2 {
+    font-weight: bold;
+    margin-top: 1em;
+    text-align: center;
 }
 
 table#nfts {
     min-width: 41%;
-}
-
-table#nfts p,
-table#nfts em {
-    font-family: Habibi, serif;
 }
 
 table#nfts p {
@@ -52,6 +54,34 @@ table#nfts {
     tr#wallet-network-wrong td button.mid {
         pointer-events: all !important;
         cursor: not-allowed;
+    }
+}
+
+table#nfts {
+    th.col-1st, td.col-1st {
+        width: 2em;
+    }
+    th.col-2nd, td.col-2nd {
+        max-width: 10em;
+    }
+    th.col-3rd, td.col-3rd {
+        width: 2em;
+    }
+    td.col-3rd {
+        border-left: 3px double rgb(222, 226, 230);
+    }
+    tr.nft-extra table {
+        td.col-3rd {
+            border-top: none;
+        }
+    }
+    margin: 1em auto;
+    max-width: calc(67% - 2em);
+}
+
+@media (max-width: 767.98px) {
+    table#nfts {
+        max-width: calc(100% - 2em);
     }
 }
 

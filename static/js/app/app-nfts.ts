@@ -3,6 +3,10 @@ import { NtxCertificateFactory } from './ethereum/ntx-certificate-factory';
 import { Ethereum } from './ethereum/index';
 import { Popover } from './ui/index';
 
+import { chevron_down as svg_chevron_down } from './assets/svg/index';
+import { chevron_up as svg_chevron_up } from './assets/svg/index';
+import { printer as svg_printer } from './assets/svg/index';
+import { trash as svg_trash } from './assets/svg/index';
 import { trace } from './decorator/trace';
 
 @trace
@@ -24,17 +28,22 @@ export class NFTs {
     }
     private async check_connection() {
         const lhs = () => {
-            return `<button type="button" class="btn btn-outline-dark lhs">
+            return `<button type="button"
+                class="btn btn-outline-dark lhs"
+            >
                 <img src="/static/ico/metamask.png">
             </button>`;
         };
         const mid = (text: string) => {
-            return `<button type="button" class="btn btn-outline-dark mid">
+            return `<button type="button"
+                class="btn btn-outline-dark mid"
+            >
                 <span>${text}</span>
             </button>`;
         };
         const rhs = () => {
-            return `<button type="button" class="btn btn-outline-dark rhs" tabindex="-1" title="Why the fox?"
+            return `<button type="button"
+                class="btn btn-outline-dark rhs" tabindex="-1" title="Why the fox?"
                 data-container="body" data-toggle="popover" data-placement="right" data-trigger="focus"
                 data-content="This fox allows you to list your digital NoTex certificates (ERC-721 NFTs). Click to install and connect to an Ethereum or Avalanche compatible wallet!"
             >
@@ -89,7 +98,7 @@ export class NFTs {
         for (const uri of uris.sort((lhs, rhs) => {
             return parseInt(lhs.id) > parseInt(rhs.id) ? +1 : -1;
         })) {
-            await timeout(3000, fetch(uri.value)).then((res) => {
+            await timeout(900, fetch(uri.value)).then((res) => {
                 return res.json();
             }).then((certificate: PdfCertificateMeta) => {
                 if (!certificate.content) {
@@ -118,94 +127,114 @@ export class NFTs {
         function get_nft_main(
             uri: { id: string, value: string }, cert: PdfCertificateMeta
         ) {
-            const cols = [`<tr class="nft-main" id="${uri.id}">`];
+            const cols = [
+                `<tr class="nft-main">`
+            ];
             if (cert.content) {
-                cols.push(`<td scope="row">
+                cols.push(`<td class="col-1st nft-id">
                     <a href="${cert.content}" target="_blank">#${uri.id}</a>
                 </td>`);
-                cols.push(`<td class="d-none d-sm-table-cell">${cert.image
-                    ? `<img src="${cert.image}" style="border-radius: 0.25em;" alt="QR Code">`
-                    : ''
-                    }</td>`);
-                cols.push(`<td>
-                    <p title="${cert.name}" style="max-width:15em;">
-                        <a href="${cert.content}" target="_blank">${cert.name}</a>
+                cols.push(`<td class="col-2nd nft-name">
+                    <p title="${cert.name}">
+                        <a href="${cert.content}" target="_blank">${cert.name} ${cert.name}</a>
                     </p>
                 </td>`);
-                cols.push(`<td>
-                    <p title="${cert.description}" class="d-none d-sm-table-cell" style="max-width:20em;">
-                        ${cert.description}
-                    </p>
+                cols.push(`<td class="col-3rd nft-button">
+                    <button title="Expand" type="button"
+                        class="btn btn-outline-dark btn-sm toggle"
+                    >
+                        ${svg_chevron_down}${svg_chevron_up}
+                    </button>
                 </td>`);
             } else {
-                cols.push(`<th scope="row">
-                    <a class="btn-link disabled" target="_blank">${uri.id}</a>
-                </th>`);
-                cols.push(`<td colspan="3">
-                    <em style="display: block; text-align: center;">publication metadata not available</em>
+                cols.push(`<td class="col-1st nft-id">
+                    <a class="btn-link disabled" target="_blank">#${uri.id}</a>
+                </td>`);
+                cols.push(`<td class="col-2nd nft-na">
+                    <em>
+                        publication not available
+                    </em>
+                </td>`);
+                cols.push(`<td class="col-3rd nft-button">
+                    <button
+                        title="Burn" type="button" class="btn btn-outline-danger btn-sm burn"
+                        data-cert-id="${uri.id}"
+                    >
+                        ${svg_trash}
+                    </button>
                 </td>`);
             }
-            cols.push(`<td style="max-width:100px;">`);
-            cols.push(`<button title="Burn" type="button" class="btn btn-outline-danger btn-sm burn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                </svg>
-            </button>`);
-            if (cert.content) {
-                cols.push(`<button title="Print" type="button" class="btn btn-outline-dark btn-sm print" data-cert-id="${uri.id}" data-cert-url="${uri.value}" data-cert="${JSON.stringify(cert).replace(/"/g, "'")}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
-                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
-                        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
-                    </svg>
-                </button>`);
-                cols.push(`<button title="Expand" type="button" class="btn btn-outline-dark btn-sm toggle d-none d-sm-table-cell mt-1 float-right" style="margin-right: 3.5px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16" style="display: none;">
-                        <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                    </svg>
-                </button>`);
-            }
-            cols.push(`</td>`);
             cols.push(`</tr>`);
             return cols.join('\n');
         }
         function get_nft_extra(
-            uri: { id: string, value: string }, certificate: PdfCertificateMeta
+            uri: { id: string, value: string }, cert: PdfCertificateMeta
         ) {
-            if (certificate.content) {
+            if (cert.content) {
                 const rows = [];
-                rows.push(`<tr class="nft-extra nft-authors" style="display: none;">`);
-                rows.push(`<td colspan="2">
-                    <p style="font-weight: bold; text-align: right;">Author(s):</p>
-                </td>`);
-                rows.push(`<td colspan="3">
-                    <p title="${certificate.authors?.join(', ') ?? ''}" style="max-width: 38em;">
-                        ${certificate.authors?.join(', ') ?? ''}
-                    </p>
-                </td>`);
-                rows.push(`</tr>`);
-                rows.push(`<tr class="nft-extra nft-emails" style="display: none;">`);
-                rows.push(`<td colspan="2">
-                    <p style="font-weight: bold; text-align: right;">Email(s):</p>
-                </td>`);
-                rows.push(`<td colspan="3">
-                    <p title="${certificate.emails?.join(', ') ?? ''}" style="max-width: 38em;">
-                        ${certificate.emails?.join(', ') ?? ''}
-                    </p>
-                </td>`);
-                rows.push(`</tr>`);
-                rows.push(`<tr class="nft-extra nft-keywords" style="display: none;">`);
-                rows.push(`<td colspan="2">
-                    <p style="font-weight: bold; text-align: right;">Keyword(s):</p>
-                </td>`);
-                rows.push(`<td colspan="3">
-                    <p title="${certificate.keywords?.join(', ') ?? ''}" style="max-width: 38em;">
-                        ${certificate.keywords?.join(', ') ?? ''}
-                    </p>
-                </td>`);
+                rows.push(`<tr class="nft-extra" style="display: none;">`);
+                rows.push(`<td colspan="3" style="margin: 0; padding: 0; border-top: none;">`);
+                rows.push(`<table class="table" style="margin: 0; padding: 0;">`)
+                rows.push(`<tbody>`);
+                {
+                    rows.push(`<tr>`);
+                    rows.push(`<td class="col-1st nft-label">Description</td>`);
+                    rows.push(`<td class="col-2nd nft-label-value">
+                        <p title="${cert.description}">
+                            ${cert.description}
+                        </p>
+                    </td>`);
+                    rows.push(`<td class="col-3rd nft-button">
+                        <button
+                            title="Print" type="button" class="btn btn-outline-dark btn-sm print"
+                            data-cert="${JSON.stringify(cert).replace(/"/g, "'")}"
+                            data-cert-id="${uri.id}" data-cert-url="${uri.value}"
+                        >
+                            ${svg_printer}
+                        </button>
+                    </td>`);
+                    rows.push(`</tr>`);
+                } {
+                    rows.push(`<tr>`);
+                    rows.push(`<td class="col-1st nft-label">Author(s)</td>`);
+                    rows.push(`<td class="col-2nd nft-label-value">
+                        <p title="${cert.authors?.join(', ') ?? ''}">
+                            ${cert.authors?.join(', ') ?? ''}
+                        </p>
+                    </td>`);
+                    rows.push(`<td class="col-3rd nft-button">
+                        <button
+                            title="Burn" type="button" class="btn btn-outline-danger btn-sm burn"
+                            data-cert-id="${uri.id}"
+                        >
+                            ${svg_trash}
+                        </button>
+                    </td>`);
+                    rows.push(`</tr>`);
+                } {
+                    rows.push(`<tr>`);
+                    rows.push(`<td class="col-1st nft-label">Email(s)</td>`);
+                    rows.push(`<td class="col-2nd nft-label-value">
+                        <p title="${cert.emails?.join(', ') ?? ''}">
+                            ${cert.emails?.join(', ') ?? ''}
+                        </p>
+                    </td>`);
+                    rows.push(`<td class="col-3rd nft-button">&nbsp;</td>`);
+                    rows.push(`</tr>`);
+                } {
+                    rows.push(`<tr>`);
+                    rows.push(`<td class="col-1st nft-label">Keyword(s)</td>`);
+                    rows.push(`<td class="col-2nd nft-label-value">
+                        <p title="${cert.keywords?.join(', ') ?? ''}">
+                            ${cert.keywords?.join(', ') ?? ''}
+                        </p>
+                    </td>`);
+                    rows.push(`<td class="col-3rd nft-button">&nbsp;</td>`);
+                    rows.push(`</tr>`);
+                }
+                rows.push(`</tbody>`);
+                rows.push(`</table>`)
+                rows.push(`</td>`);
                 rows.push(`</tr>`);
                 return rows.join('\n');
             }
@@ -233,8 +262,10 @@ export class NFTs {
         });
     }
     private async on_burn_click(ev: JQuery.ClickEvent) {
-        const $row = $(ev.target).closest('tr');
-        const cert_id = $row.attr('id');
+        const $row_1 = $(ev.target).closest('tr.nft-extra');
+        const $row_2 = $(ev.target).closest('tr');
+        const $burn = $row_2.find('button.burn');
+        const cert_id = $burn.data('cert-id');
         if (this.eth && cert_id) try {
             const author = await this.eth.address;
             if (!author) throw null;
@@ -244,14 +275,16 @@ export class NFTs {
             if (!ntxc) throw null;
             const tx = await ntxc.burn(author, cert_id);
             if (!tx) throw null;
-            $row.remove();
+            $row_1.prev('tr').remove();
+            $row_1.remove();
+            $row_2.remove();
         } catch (ex) {
             console.error(ex)
         } finally {
             if (this.$rows.length === 0) {
                 this.$tbody.append($(`<tr id="placeholder">
                     <td scope="row" colspan="100%" style="text-align: center;">
-                        <em>no certified publications yet</em>
+                        <em>no certified publications yet; <a href="/editor" target="_blank">compose</a>?</em>
                     </td>
                 </tr>`));
             }
@@ -277,13 +310,13 @@ export class NFTs {
         const $toggle = $row.find('button.toggle');
         const state = $row.data('state');
         if (state !== 'expanded') {
-            $row.nextAll('.nft-extra').slice(0, 3).show();
+            $row.next('.nft-extra').show();
             $toggle.find('svg.bi-chevron-down').hide();
             $toggle.find('svg.bi-chevron-up').show();
             $toggle.attr('title', 'Collapse');
             $row.data('state', 'expanded');
         } else {
-            $row.nextAll('.nft-extra').slice(0, 3).hide();
+            $row.next('.nft-extra').hide();
             $toggle.find('svg.bi-chevron-down').show();
             $toggle.find('svg.bi-chevron-up').hide();
             $toggle.attr('title', 'Expand');
