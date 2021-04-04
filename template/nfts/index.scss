@@ -75,6 +75,11 @@ table#nfts {
             border-top: none;
         }
     }
+    a.qr-code > img {
+        background-color: white;
+        border: 1px solid rgb(52, 58, 64);
+        border-radius: 0.2rem;
+    }
     margin: 1em auto;
     max-width: calc(67% - 2em);
 }

@@ -38,13 +38,13 @@ export class NFTs {
             return `<button type="button"
                 class="btn btn-outline-dark mid"
             >
-                <span>${text}</span>
+                <span style="font-family: sans-serif;">${text}</span>
             </button>`;
         };
         const rhs = () => {
             return `<button type="button"
                 class="btn btn-outline-dark rhs" tabindex="-1" title="Why the fox?"
-                data-container="body" data-toggle="popover" data-placement="right" data-trigger="focus"
+                data-container="body" data-toggle="popover" data-placement="left" data-trigger="focus"
                 data-content="This fox allows you to list your digital NoTex certificates (ERC-721 NFTs). Click to install and connect to an Ethereum or Avalanche compatible wallet!"
             >
                 <span class="glyphicon glyphicon-question-sign"></span>
@@ -136,7 +136,12 @@ export class NFTs {
                 </td>`);
                 cols.push(`<td class="col-2nd nft-name">
                     <p title="${cert.name}">
-                        <a href="${cert.content}" target="_blank">${cert.name} ${cert.name}</a>
+                        <a href="${cert.content}" target="_blank">${cert.name}</a>
+                        ${cert.image
+                            ? `<a href="${cert.image}" title="QR Code" class="qr-code d-none d-sm-inline float-right" target="_blank">
+                                <img src="${cert.image}" width=34 height=31>
+                               </a>`
+                            : ''}
                     </p>
                 </td>`);
                 cols.push(`<td class="col-3rd nft-button">
