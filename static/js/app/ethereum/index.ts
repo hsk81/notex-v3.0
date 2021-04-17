@@ -25,25 +25,49 @@ export class Ethereum {
         return this._enabled;
     }
     public enable() {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
             if (this.provider) {
                 DocTitle.reuseOriginal();
-                this.provider.sendAsync({
-                    method: 'eth_requestAccounts'
-                }, (
-                    error: any, rpc: any
-                ) => {
-                    if (rpc && rpc.result && rpc.result.length) {
+                if (await this.suggest('avalanche')) try {
+                    await this.provider.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0xa86a',
+                            chainName: 'Avalanche Mainnet',
+                            nativeCurrency: {
+                                name: 'AVAX',
+                                symbol: 'AVAX',
+                                decimals: 18
+                            },
+                            rpcUrls: [
+                                'https://api.avax.network/ext/bc/C/rpc'
+                            ],
+                            blockExplorerUrls: [
+                                'https://cchain.explorer.avax.network/'
+                            ]
+                        }]
+                    });
+                } catch (ex) {
+                    await this.suggest('avalanche', false);
+                    console.error(ex);
+                }
+                try {
+                    const accounts = await this.provider.request({
+                        method: 'eth_requestAccounts'
+                    });
+                    if (accounts && accounts.length) {
                         if (!this._enabled) {
                             this._enabled = true;
                             $(this).trigger('connected', true);
                         }
-                        resolve(rpc.result[0]);
+                        resolve(accounts[0]);
                     } else {
                         resolve(undefined);
                     }
-                    DocTitle.reuseCurrent();
-                });
+                } catch (ex) {
+                    resolve(undefined);
+                }
+                DocTitle.reuseCurrent();
             } else {
                 resolve(undefined);
             }
@@ -56,38 +80,36 @@ export class Ethereum {
         }
     }
     public get chainId() {
-        return new Promise<string | undefined>((resolve) => {
-            if (this.provider) {
-                this.provider.sendAsync({
+        return new Promise<string | undefined>(async (resolve) => {
+            if (this.provider) try {
+                const chain_id = await this.provider.request({
                     method: 'eth_chainId'
-                }, (
-                    error: any, rpc: any
-                ) => {
-                    if (rpc && rpc.result && rpc.result.length) {
-                        resolve(`0x${parseInt(rpc.result).toString(16)}`);
-                    } else {
-                        resolve(undefined);
-                    }
                 });
+                if (chain_id && chain_id.length) {
+                    resolve(`0x${parseInt(chain_id).toString(16)}`);
+                } else {
+                    resolve(undefined);
+                }
+            } catch (ex) {
+                resolve(undefined);
             } else {
                 resolve(undefined);
             }
         });
     }
     public get address() {
-        return new Promise<string | undefined>((resolve) => {
-            if (this.provider) {
-                this.provider.sendAsync({
+        return new Promise<string | undefined>(async (resolve) => {
+            if (this.provider) try {
+                const accounts = await this.provider.request({
                     method: 'eth_accounts'
-                }, (
-                    error: any, rpc: any
-                ) => {
-                    if (rpc && rpc.result && rpc.result.length) {
-                        resolve(rpc.result[0]);
-                    } else {
-                        resolve(undefined);
-                    }
                 });
+                if (accounts && accounts.length) {
+                    resolve(accounts[0]);
+                } else {
+                    resolve(undefined);
+                }
+            } catch (ex) {
+                resolve(undefined);
             } else {
                 resolve(undefined);
             }
@@ -154,29 +176,32 @@ export class Ethereum {
             }
         });
     }
-    // public logs(address: string) {
-    //     window.SUBSCRIPTION = this.eth.then((eth) => eth.subscribe(
-    //             'logs', { address }, (error: any, result: any) => {
-    //                 console.log('[logs]', error, result);
-    //             }
-    //         )
-    //         .on('data', (log) => {
-    //             console.log('[logs:data]', log);
-    //         })
-    //         .on('changed', (log) => {
-    //             console.log('[logs:changed]', log);
-    //         })
-    //     );
-    // }
-    // public sogl() {
-    //     if (window.SUBSCRIPTION !== undefined) {
-    //         window.SUBSCRIPTION.unsubscribe((
-    //             error: any, success: boolean
-    //         ) => {
-    //             if (success) console.log('[=ok=]');
-    //         })
-    //     }
-    // }
+    private async suggest(
+        network: 'avalanche' | 'ethereum', value?: boolean
+    ) {
+        window.SUGGEST = { ...window.SUGGEST };
+        if (typeof value === 'boolean') {
+            return window.SUGGEST[network] = value;
+        }
+        if (typeof window.SUGGEST[network] === 'boolean') {
+            return window.SUGGEST[network];
+        };
+        switch (network) {
+            case 'avalanche':
+                value = await this.isAvalanche === false;
+                break;
+            case 'ethereum':
+                value = await this.isEthereum === false;
+                break;
+        }
+        return window.SUGGEST[network] = value;
+    }
+    private get isAvalanche() {
+        return this.chainId.then((id) => id === '0xa86a' || id === '0xa869');
+    }
+    private get isEthereum() {
+        return this.chainId.then((id) => id === '0x1' || id === '0x2a');
+    }
     private get provider() {
         return this._provider;
     }
