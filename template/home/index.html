@@ -4,8 +4,11 @@
 {% endblock %}
 
 {% block head %}
+<link rel="preload" href="//fonts.googleapis.com/css2?family=Habibi&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Habibi&display=swap"/>
+</noscript>
 <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap-4.5.0.min.css"/>
-<link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Habibi&display=swap"/>
 {% endblock %}
 
 {% block body %}
@@ -39,13 +42,15 @@
         <div class="row align-items-center font-weight-bold">
             <div class="col d-sm-inline" style="display: none;">
                 <figure>
-                    <img src="/static/svg/glyphicon/glyphicons-basic-44-user-group.svg" width="96" height="96">
+                    <img src="/static/svg/glyphicon/glyphicons-basic-44-user-group.svg"
+                         width="96" height="96" alt="Bloggers">
                     <figcaption>Bloggers</figcaption>
                 </figure>
             </div>
             <div class="col d-md-inline" style="display: none;">
                 <figure>
-                    <img src="/static/svg/glyphicon/glyphicons-basic-68-education.svg" width="96" height="96">
+                    <img src="/static/svg/glyphicon/glyphicons-basic-68-education.svg"
+                         width="96" height="96" alt="Educators">
                     <figcaption>Educators</figcaption>
                 </figure>
             </div>
@@ -56,13 +61,15 @@
             </div>
             <div class="col d-sm-inline" style="display: none;">
                 <figure>
-                    <img src="/static/svg/glyphicon/glyphicons-basic-588-book-open-text.svg" width="96" height="96">
+                    <img src="/static/svg/glyphicon/glyphicons-basic-588-book-open-text.svg"
+                         width="96" height="96" alt=Authors>
                     <figcaption>Authors</figcaption>
                 </figure>
             </div>
             <div class="col d-md-inline" style="display: none;">
                 <figure>
-                    <img src="/static/svg/glyphicon/glyphicons-basic-590-newspaper.svg" width="96" height="96">
+                    <img src="/static/svg/glyphicon/glyphicons-basic-590-newspaper.svg"
+                         width="96" height="96" alt="Journalists">
                     <figcaption>Journalists</figcaption>
                 </figure>
             </div>
