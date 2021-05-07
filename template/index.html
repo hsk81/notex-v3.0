@@ -7,7 +7,7 @@
         <meta name="keywords" content="{{ keywords|join(',') }}"/>
         <meta name="description" content="{{ description }}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="icon" href="/static/ico/favicon.ico"/>
+        <link rel="icon" href="/static/ico/quill-auto.svg"/>
         {% block title %}<title>{{ title }}</title>{% endblock %}
         <script>window.debug = Boolean({{ 1 if debug else 0 }});</script>
         {% if not debug %}{% include 'analytics.html' %}{% endif %}
