@@ -28,7 +28,7 @@ if ARGs.debug():
 app = SessionMiddleware(app, {
     'session.auto': True,
     'session.cookie_expires': ARGs.get('SESSION_EXPIRY', True),
-    'session.encrypt_key': ARGs.get('SESSION_KEY', 'secret'),
+    'session.encrypt_key': ARGs.get('SESSION_KEY', None),
     'session.httponly': True,
     'session.timeout': ARGs.get('SESSION_TIMEOUT', None),
     'session.type': 'cookie',

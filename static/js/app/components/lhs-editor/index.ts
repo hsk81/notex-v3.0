@@ -8,7 +8,7 @@ import { Lingua } from "../../spell-checker/spell-checker";
 import { Overlay } from "../../spell-checker/spell-checker";
 import { SpellChecker } from "../../spell-checker/spell-checker";
 
-import { IPFS, Buffer } from "../../ipfs/index";
+import { IPFS } from "../../ipfs/index";
 import { gateway } from "../../ipfs/index";
 
 import { traceable } from "../../decorator/trace";
@@ -340,8 +340,7 @@ export class LhsEditor {
                     ) {
                         const reader = new FileReader();
                         reader.onload = async function () {
-                            const buffer = Buffer.from(reader.result as ArrayBuffer);
-                            const item = await ipfs.add(buffer);
+                            const item = await ipfs.add(reader.result);
                             const name = ev_files[i].name;
                             const hash = item.cid.toString();
                             ins_image(name, hash);

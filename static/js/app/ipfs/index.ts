@@ -1,6 +1,4 @@
 import { cookie } from '../cookie/cookie';
-export { Buffer } from '@npm/buffer';
-declare const require: Function;
 
 export const html = async (head: string, body: string) => {
     const link_1 = /<link\s+rel="icon"\s+href(="")?\s*\/?>/gi;
@@ -57,10 +55,8 @@ export class IPFS {
     ) {
         if (this._me === undefined) {
             this._me = new Promise((resolve) => {
-                require(['@npm/ipfs'], (Ipfs: any) => {
-                    const repo = String(Math.random() + Date.now());
-                    Ipfs.create({ repo }).then(resolve);
-                });
+                const repo = String(Math.random() + Date.now());
+                window.Ipfs.create({ repo }).then(resolve);
             });
         }
         if (callback !== undefined) {
@@ -68,7 +64,6 @@ export class IPFS {
         }
         return await this._me;
     }
-    private static _me: Promise<any>;
 }
 window.IPFS = IPFS;
 export default IPFS;

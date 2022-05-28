@@ -78,7 +78,7 @@ export class PdfCertificate {
         );
     }
     private static async setTokenUrl(id?: string) {
-        if (id && this.eth_supported) {
+        if (id && await this.eth_supported) {
             const token_url = await this.eth.tokenUrl(id);
             if (token_url) {
                 this.$pdf_body.find('#tx-hash>.qrcode').html(

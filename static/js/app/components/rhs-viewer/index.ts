@@ -78,7 +78,7 @@ export class RhsViewer {
                     id: 'cached', class: 'viewer', frameborder: '0',
                     style: 'visibility:hidden'
                 });
-                const window = this.ui.$rhsCached.get(0).contentWindow;
+                const window = this.ui.$rhsCached.get(0)?.contentWindow;
                 if (window) window.PATCH = () => this.patch();
             default:
                 const { userAgent: agent } = navigator;

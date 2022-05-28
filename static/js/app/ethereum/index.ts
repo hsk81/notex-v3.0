@@ -43,7 +43,7 @@ export class Ethereum {
                                 'https://api.avax.network/ext/bc/C/rpc'
                             ],
                             blockExplorerUrls: [
-                                'https://cchain.explorer.avax.network/'
+                                'https://snowtrace.io/'
                             ]
                         }]
                     });
@@ -141,9 +141,9 @@ export class Ethereum {
                     case '0x2a': // ETH Kovan
                         return resolve('https://kovan.etherscan.io');
                     case '0xa86a': // AVA Mainnet
-                        return resolve('https://cchain.explorer.avax.network');
+                        return resolve('https://snowtrace.io');
                     case '0xa869': // AVA Fuji
-                        return resolve('https://cchain.explorer.avax-test.network');
+                        return resolve('https://testnet.snowtrace.io');
                     default:
                         return resolve(undefined);
                 }
@@ -164,9 +164,9 @@ export class Ethereum {
                     case '0x2a': // ETH Kovan
                         return resolve(`${explorer}/token/${contract}?a=${id}`);
                     case '0xa86a': // AVA Mainnet
-                        return resolve(`${explorer}/tokens/${contract}/instance/${id}`);
+                        return resolve(`${explorer}/token/${contract}?a=${id}`);
                     case '0xa869': // AVA Fuji
-                        return resolve(`${explorer}/tokens/${contract}/instance/${id}`);
+                        return resolve(`${explorer}/token/${contract}?a=${id}`);
                     default:
                         return resolve(undefined);
                 }

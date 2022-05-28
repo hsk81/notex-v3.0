@@ -1,16 +1,14 @@
-declare const require: Function;
-
 export function QRCode(
     value: string, options = { type: 'svg' }
 ) {
     return new Promise<string>((resolve) => {
-        require(['@npm/qrcode'], (QRCode: any) => {
-            QRCode.toString(value, options, (
-                error: any, text: string
-            ) => {
-                resolve(text);
-            })
-        });
-    })
+        window.QRCode.toString(value, options, (
+            error: any, text: string
+        ) => {
+            resolve(text.replace(
+                /^<svg/, '<svg style="margin:auto"'
+            ));
+        })
+    });
 };
 export default QRCode;

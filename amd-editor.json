@@ -3,8 +3,6 @@
   "out": "./static/build/app-editor.js",
   "name": "app-editor",
   "paths": {
-    "@npm/buffer":
-      "../../../static/js/lib/buffer/buffer-5.6.0.min",
     "@npm/markdown-it":
       "../../../node_modules/markdown-it/dist/markdown-it.min",
     "@npm/markdown-it-abbr":
@@ -29,8 +27,6 @@
       "../../../static/js/lib/markdown-it/markdown-it-sup-2.0.0.min",
     "@npm/markdown-it-video":
       "../../../node_modules/markdown-it-video/dist/markdown-it-video.min",
-    "@npm/qrcode":
-      "../../../node_modules/qrcode/build/qrcode.min",
     "@npm/web3":
       "../../../node_modules/web3/dist/web3.min"
   },
