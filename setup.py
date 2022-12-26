@@ -13,6 +13,7 @@ setup (
     author='Hasan Karahan',
     author_email='hasan.karahan@blackhan.com',
     url='https://hsk81@bitbucket.org/hsk81/notex.git',
+    py_modules=['notex'],
     install_requires=[
         'Beaker>=1.11.0',
         'bottle>=0.12.21',
