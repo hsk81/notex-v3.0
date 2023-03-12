@@ -1,10 +1,11 @@
 import { NtxCertificateFactory } from './ntx-certificate-factory';
 export { TransactionReceipt } from '@npm/web3-core';
+import { Blockchain } from './blockchain';
 
 export class Ethereum {
     public static get me() {
         if (this._me === undefined && window.ethereum) {
-            this._me = window.ETHEREUM = new Ethereum(window.ethereum);
+            this._me = window.ETHEREUM = new Ethereum(Blockchain.provider);
         }
         return this._me;
     }
@@ -18,7 +19,7 @@ export class Ethereum {
             $(this).trigger('disconnected', true);
         }
     }
-    private onChainChanged(chain_id: string) {
+    private onChainChanged() {
         window.location.reload();
     }
     public get enabled(): boolean {
