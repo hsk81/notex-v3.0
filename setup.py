@@ -15,16 +15,16 @@ setup (
     url='https://hsk81@bitbucket.org/hsk81/notex.git',
     py_modules=['notex'],
     install_requires=[
-        'Beaker>=1.11.0',
-        'bottle>=0.12.21',
+        'Beaker>=1.12.1',
+        'bottle>=0.12.25',
         'compressinja>=0.0.2',
-        'gevent>=21.12.0',
+        'gevent>=22.10.2',
         'gunicorn>=20.1.0',
         'Jinja2>=3.1.2',
-        'rcssmin>=1.1.0',
-        'redis>=4.3.1',
-        'ujson>=5.3.0',
-        'Werkzeug>=2.1.2'
+        'rcssmin>=1.1.1',
+        'redis>=4.5.1',
+        'ujson>=5.7.0',
+        'Werkzeug>=2.2.3'
     ],
 )
 
