@@ -73,7 +73,7 @@ And finally, navigate again to `http://localhost:8000` to interact with the edit
 [Markdown]: https://daringfireball.net/projects/markdown
 [MathJax]: https://www.mathjax.org
 [Node.js]: https://nodejs.org
-[NoTex]: https://www.notex.ch/editor
+[NoTex]: https://www.notexeditor.com/editor
 [Python]: https://www.python.org
 [Redis]: https://redis.io
 [virtualenv]: https://pypi.org/project/virtualenv
