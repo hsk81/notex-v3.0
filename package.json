@@ -44,5 +44,5 @@
         "start": "source ./bin/activate && DEBUG=0 gunicorn -c config.py wsgi:app --preload",
         "watch": "npx tsc -w & npx sass ./static ./template --watch"
     },
-    "version": "4.8.19"
+    "version": "4.8.20"
 }
