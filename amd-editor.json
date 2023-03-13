@@ -3,6 +3,10 @@
   "out": "./static/build/app-editor.js",
   "name": "app-editor",
   "paths": {
+    "ethers":
+      "../../../node_modules/ethers/dist/ethers.umd",
+    "@metamask/detect-provider":
+      "../../../node_modules/@metamask/detect-provider/dist/detect-provider.min",
     "@npm/markdown-it":
       "../../../node_modules/markdown-it/dist/markdown-it.min",
     "@npm/markdown-it-abbr":
@@ -26,9 +30,7 @@
     "@npm/markdown-it-sup":
       "../../../static/js/lib/markdown-it/markdown-it-sup-2.0.0.min",
     "@npm/markdown-it-video":
-      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min",
-    "@npm/web3":
-      "../../../node_modules/web3/dist/web3.min"
+      "../../../node_modules/markdown-it-video/dist/markdown-it-video.min"
   },
   "optimize": "none"
 }

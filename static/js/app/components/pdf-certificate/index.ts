@@ -3,7 +3,7 @@ import { QRCode } from '../../qr-code/index';
 
 export class PdfCertificate {
     public static print(
-        cert: { meta: PdfCertificateMeta, url: string, id?: string }
+        cert: { meta: PdfCertificateMeta, url: string, id?: number }
     ) {
         $.get(this.pdf_html).done(async (html: string) => {
             const head = html.match(/<head>([^]+)<\/head>/im);
@@ -40,10 +40,10 @@ export class PdfCertificate {
     private static getTitle() {
         return this.$pdf_head.find('title').text();
     }
-    private static setTitle(value?: string) {
+    private static setTitle(value?: number) {
         this.$pdf_head.find('title').text(`NTXCertificate #${value||'N/A'}`);
     }
-    private static setId(value?: string) {
+    private static setId(value?: number) {
         this.$pdf_body.find('.id>.value>span').text(value||'N/A');
     }
     private static setName(value: string) {
@@ -77,7 +77,7 @@ export class PdfCertificate {
             value.replace(/^https?:\/\//i, '')
         );
     }
-    private static async setTokenUrl(id?: string) {
+    private static async setTokenUrl(id?: number) {
         if (id && await this.eth_supported) {
             const token_url = await this.eth.tokenUrl(id);
             if (token_url) {

@@ -3,7 +3,6 @@ import { Ui } from "../../../ui/index";
 
 import { PdfCertificateMeta } from "../../pdf-certificate/index";
 import { PdfCertificate } from "../../pdf-certificate/index";
-import { TransactionReceipt } from "../../../ethereum/index";
 import { Ethereum } from "../../../ethereum/index";
 import { gateway } from "../../../ipfs/index";
 
@@ -209,17 +208,17 @@ export class IpfsTab {
     }
     private onCertified(ev: JQuery.Event, data: {
         cert: { meta: PdfCertificateMeta, url: string },
-        post_url: string, tx?: TransactionReceipt
+        post_url: string, tokenId?: number
     }) {
         this.ui.$publishDialogPrimary.addClass('btn-success');
         this.ui.$publishDialogPrimary.prop('disabled', false);
-        if (data.tx) {
+        if (data.tokenId) {
             this.ui.$publishDialogPrimary.html('Certified');
         } else {
             this.ui.$publishDialogPrimary.html('Published');
             this.ui.$publishDialog.modal('hide');
         }
-        const id = data.tx?.events?.Transfer.returnValues.tokenId;
+        const id = data.tokenId;
         PdfCertificate.print({ ...data.cert, id });
     }
     private onRejected() {

@@ -73,6 +73,20 @@ def npm_qrcode(any, name='qrcode', ext='js'):
     root = os.path.normpath('node_modules/{0}'.format(name))
     return static_file(path, root=root)
 
+@app.get('/<any:path>/ethers.<ext:re:[^/]+>')
+def ethers(any, name='ethers', ext='js'):
+
+    path = 'dist/{0}.umd.{1}'.format(name, ext.replace('umd.', ''))
+    root = os.path.normpath('node_modules/{0}'.format(name))
+    return static_file(path, root=root)
+
+@app.get('/<any:path>/@metamask/detect-provider.<ext:re:[^/]+>')
+def metamask(any, name='@metamask/detect-provider', ext='js'):
+
+    path = 'dist/detect-provider.min.{0}'.format(ext)
+    root = os.path.normpath('node_modules/{0}'.format(name))
+    return static_file(path, root=root)
+
 ###############################################################################
 
 @app.get('/<any:path>/@npm/<name:re:[^/.]+>/<path:path>.<ext:re:[^/]+>')

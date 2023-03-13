@@ -96,7 +96,7 @@ export class NFTs {
         let uris = await ntxc.tokenURIs(address);
         if (!uris || !uris.length) return;
         for (const uri of uris.sort((lhs, rhs) => {
-            return parseInt(lhs.id) > parseInt(rhs.id) ? +1 : -1;
+            return lhs.id > rhs.id ? +1 : -1;
         })) {
             await timeout(900, fetch(uri.value)).then((res) => {
                 return res.json();
@@ -125,7 +125,7 @@ export class NFTs {
             });
         }
         function get_nft_main(
-            uri: { id: string, value: string }, cert: PdfCertificateMeta
+            uri: { id: bigint, value: string }, cert: PdfCertificateMeta
         ) {
             const cols = [
                 `<tr class="nft-main">`
@@ -168,7 +168,7 @@ export class NFTs {
             return cols.join('\n');
         }
         function get_nft_extra(
-            uri: { id: string, value: string }, cert: PdfCertificateMeta
+            uri: { id: bigint, value: string }, cert: PdfCertificateMeta
         ) {
             if (cert.content) {
                 const rows = [];
@@ -274,13 +274,11 @@ export class NFTs {
         const $burn = $row_2.find('button.burn');
         const cert_id = $burn.data('cert-id');
         if (this.eth && cert_id) try {
-            const author = await this.eth.address;
-            if (!author) throw null;
             const chain_id = await this.eth.chainId;
             if (!chain_id) throw null;
             const ntxc = NtxCertificateFactory.create(chain_id);
             if (!ntxc) throw null;
-            const tx = await ntxc.burn(author, cert_id);
+            const tx = await ntxc.burn(cert_id);
             if (!tx) throw null;
             $row_1.prev('tr').remove();
             $row_1.remove();
@@ -305,7 +303,7 @@ export class NFTs {
         const url = $print.data('cert-url') as string;
         try {
             const meta = JSON.parse(cert.replace(/'/g, '"'));
-            PdfCertificate.print({ meta, url, id });
+            PdfCertificate.print({ meta, url, id: parseInt(id) });
         } catch (ex) {
             console.error(ex);
         }

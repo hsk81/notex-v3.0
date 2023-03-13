@@ -1,18 +1,18 @@
-import * as markdownit from '@npm/markdown-it';
-import * as markdownitAbbr from '@npm/markdown-it-abbr';
-import * as markdownitAnchor from '@npm/markdown-it-anchor';
-import * as markdownitDecorate from '@npm/markdown-it-decorate';
-import * as markdownitEmoji from '@npm/markdown-it-emoji';
-import * as markdownitFigure from '@npm/markdown-it-figure';
-import * as markdownitFootnote from '@npm/markdown-it-footnote';
-import * as markdownitMark from '@npm/markdown-it-mark';
-import * as markdownitMath from '@npm/markdown-it-math';
-import * as markdownitSub from '@npm/markdown-it-sub';
-import * as markdownitSup from '@npm/markdown-it-sup';
-import * as markdownitVideo from '@npm/markdown-it-video';
+import markdownit from '@npm/markdown-it';
+import markdownitAbbr from '@npm/markdown-it-abbr';
+import markdownitAnchor from '@npm/markdown-it-anchor';
+import markdownitDecorate from '@npm/markdown-it-decorate';
+import markdownitEmoji from '@npm/markdown-it-emoji';
+import markdownitFigure from '@npm/markdown-it-figure';
+import markdownitFootnote from '@npm/markdown-it-footnote';
+import markdownitMark from '@npm/markdown-it-mark';
+import markdownitMath from '@npm/markdown-it-math';
+import markdownitSub from '@npm/markdown-it-sub';
+import markdownitSup from '@npm/markdown-it-sup';
+import markdownitVideo from '@npm/markdown-it-video';
 
-import * as markdownitTitle from './markdown-it-title';
-import * as markdownitScript from './markdown-it-script';
+import markdownitTitle from './markdown-it-title';
+import markdownitScript from './markdown-it-script';
 
 declare const hljs: any;
 
@@ -100,10 +100,10 @@ export class MarkdownIt {
             this._mdi.use(markdownitVideo);
         }
         if (markdownitTitle) {
-            this._mdi.use(markdownitTitle.default);
+            this._mdi.use(markdownitTitle);
         }
         if (markdownitScript) {
-            this._mdi.use(markdownitScript.default);
+            this._mdi.use(markdownitScript);
         }
     }
     /**

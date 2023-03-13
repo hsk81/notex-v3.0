@@ -17,10 +17,10 @@ export class CertifyBlog implements Command {
     public async redo() {
         $(this).trigger('certifying');
         this.certify(`${gateway.get()}`).then(({
-            cert, tx
+            cert, tokenId
         }) => {
             $(this).trigger('certified', {
-                cert, post_url: `${gateway.get()}/${this.item.cid}`, tx
+                cert, post_url: `${gateway.get()}/${this.item.cid}`, tokenId
             });
         }).catch((ex) => {
             $(this).trigger('rejected');
@@ -45,14 +45,14 @@ export class CertifyBlog implements Command {
             if (!chain_id) throw null;
             const ntxc = NtxCertificateFactory.create(chain_id);
             if (!ntxc) throw null;
-            const tx = await ntxc.publish(author, cert_url);
-            if (!tx) throw null;
+            const id = await ntxc.publish(cert_url, author);
+            if (!id) throw null;
             return {
-                cert: { meta: this.meta, url: cert_url }, tx
+                cert: { meta: this.meta, url: cert_url }, tokenId: id
             };
         } else {
             return {
-                cert: { meta: this.meta, url: cert_url }, tx: undefined
+                cert: { meta: this.meta, url: cert_url }, tokenId: undefined
             };
         }
     }
