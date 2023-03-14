@@ -11,11 +11,11 @@ function setup_env () {
             git submodule update --init
         fi
         if [ $PY3 ] ; then
-            virtualenv . --prompt="[$1]" --python=/usr/bin/python3
+            virtualenv . --prompt="$1" --python=/usr/bin/python3
         elif [ $PY2 ] ; then
-            virtualenv . --prompt="[$1]" --python=/usr/bin/python2
+            virtualenv . --prompt="$1" --python=/usr/bin/python2
         else
-            virtualenv . --prompt="[$1]" --python=/usr/bin/python
+            virtualenv . --prompt="$1" --python=/usr/bin/python
         fi
     fi
 }
