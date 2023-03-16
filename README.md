@@ -78,5 +78,3 @@ And finally, navigate again to `http://localhost:8000` to interact with the edit
 [Redis]: https://redis.io
 [virtualenv]: https://pypi.org/project/virtualenv
 [TypeScript]: https://www.typescriptlang.org
-
-<style>p { text-align: justify }</style>
